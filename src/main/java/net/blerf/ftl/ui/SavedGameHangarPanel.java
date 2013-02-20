@@ -28,6 +28,7 @@ import javax.swing.SwingConstants;
 import net.blerf.ftl.model.ShipLayout;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
+import net.blerf.ftl.parser.SavedGameParser.SystemType;
 import net.blerf.ftl.ui.FieldEditorPanel;
 import net.blerf.ftl.ui.FTLFrame;
 import net.blerf.ftl.ui.StatusbarMouseListener;
@@ -164,19 +165,19 @@ public class SavedGameHangarPanel extends JPanel {
 		int response = JOptionPane.showConfirmDialog(frame, nag, "Change Player Ship", JOptionPane.YES_NO_OPTION);
 		if ( response != JOptionPane.YES_OPTION ) return;
 
-		ArrayList<String> systemIds = new ArrayList<String>();
-		systemIds.add( SystemBlueprint.ID_SHIELDS );
-		systemIds.add( SystemBlueprint.ID_ENGINES );
-		systemIds.add( SystemBlueprint.ID_OXYGEN );
-		systemIds.add( SystemBlueprint.ID_WEAPONS );
-		systemIds.add( SystemBlueprint.ID_DRONE_CTRL );
-		systemIds.add( SystemBlueprint.ID_MEDBAY );
-		systemIds.add( SystemBlueprint.ID_PILOT );
-		systemIds.add( SystemBlueprint.ID_SENSORS );
-		systemIds.add( SystemBlueprint.ID_DOORS );
-		systemIds.add( SystemBlueprint.ID_TELEPORTER );
-		systemIds.add( SystemBlueprint.ID_CLOAKING );
-		systemIds.add( SystemBlueprint.ID_ARTILLERY );
+		ArrayList<SystemType> systemIds = new ArrayList<SystemType>();
+		systemIds.add( SystemType.SHIELDS );
+		systemIds.add( SystemType.ENGINES );
+		systemIds.add( SystemType.OXYGEN );
+		systemIds.add( SystemType.WEAPONS );
+		systemIds.add( SystemType.DRONE_CTRL );
+		systemIds.add( SystemType.MEDBAY );
+		systemIds.add( SystemType.PILOT );
+		systemIds.add( SystemType.SENSORS );
+		systemIds.add( SystemType.DOORS );
+		systemIds.add( SystemType.TELEPORTER );
+		systemIds.add( SystemType.CLOAKING );
+		systemIds.add( SystemType.ARTILLERY );
 
 		ShipLayout shipLayout = DataManager.get().getShipLayout( shipBlueprint.getLayout() );
 
@@ -184,7 +185,7 @@ public class SavedGameHangarPanel extends JPanel {
 
 		// Systems.
 		int reservePowerCapacity = 0;
-		for (String systemId : systemIds) {
+		for (SystemType systemId : systemIds) {
 			SavedGameParser.SystemState systemState = new SavedGameParser.SystemState( systemId );
 
 			// Set capacity for systems that're initially present.
@@ -192,10 +193,10 @@ public class SavedGameHangarPanel extends JPanel {
 			if ( systemRoom != null ) {
 				Boolean start = systemRoom[0].getStart();
 				if ( start == null || start.booleanValue() == true ) {
-					SystemBlueprint systemBlueprint = DataManager.get().getSystem( systemId );
+					SystemBlueprint systemBlueprint = DataManager.get().getSystem( systemId.getId() );
 					systemState.setCapacity( systemBlueprint.getStartPower() );
 
-					if ( SystemBlueprint.isSubsystem( systemId ) ) {
+					if ( systemId.isSubsystem(  ) ) {
 						systemState.setPower( systemState.getCapacity() );
 					} else {
 						reservePowerCapacity += systemState.getCapacity();
