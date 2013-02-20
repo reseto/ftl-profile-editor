@@ -150,7 +150,9 @@ public class FTLProfileEditor {
 			// Linux - Steam
 			new File( xdgDataHome +"/Steam/SteamApps/common/FTL Faster Than Light/data/resources" ),
 			// OSX
-			new File( "/Applications/FTL.app/Contents/Resources" )
+			new File( "/Applications/FTL.app/Contents/Resources" ),
+			// OSX - Steam
+			new File( System.getProperty("user.home") + "/Library/Application Support/Steam/SteamApps/common/FTL Faster Than Light/FTL.app/Contents/Resources" )
 		};
 
 		File ftlPath = null;
@@ -190,8 +192,12 @@ public class FTLProfileEditor {
 				File f = fc.getSelectedFile();
 				if ( f.getName().equals("data.dat") )
 					ftlPath = f.getParentFile();
-				else if ( f.getName().endsWith(".app") && f.isDirectory() && new File(f,"Resources").exists() )
-					ftlPath = new File(f, "Resources");
+				else if ( f.getName().endsWith(".app") && f.isDirectory() ) {
+					File contentsPath = new File(f, "Contents");
+					if(contentsPath.exists() && contentsPath.isDirectory() && new File(contentsPath, "Resources").exists())
+						ftlPath = new File(contentsPath, "Resources");
+				}
+					
 				log.trace( "User selected: " + ftlPath.getAbsolutePath() );
 			} else {
 				log.trace( "User cancelled FTL dats path selection" );
