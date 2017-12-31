@@ -119,8 +119,8 @@ public class SavedGameSectorMapPanel extends JPanel {
 	private static final int GRID_GEN_ROW_H = 103;
 
 	// mapHolderPanel Layers
-	private static final Integer MAP_LAYER = new Integer( 10 );
-	private static final Integer MISC_SELECTION_LAYER = new Integer( 50 );
+	private static final Integer MAP_LAYER = 10;
+	private static final Integer MISC_SELECTION_LAYER = 50;
 	// mapPanel Layers
 	//private static final Integer BEACON_LAYER = new Integer(10);
 	//private static final Integer MISC_BOX_LAYER = new Integer(15);
@@ -548,7 +548,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 			String questId = questSprite.getQuestId();
 			int beaconId = mapLayout.getBeaconId( questSprite );
 			if ( beaconId != -1 && questId != null && questId.length() > 0 ) {
-				gameState.getQuestEventMap().put( questSprite.getQuestId(), new Integer( beaconId ) );
+				gameState.getQuestEventMap().put( questSprite.getQuestId(), beaconId);
 			}
 		}
 
@@ -1505,7 +1505,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 			editorPanel.getInt( SPRITE_Y ).setEnabled( true );
 			editorPanel.getInt( SPRITE_ROT ).setEnabled( true );
 
-			editorPanel.getSpinner( VISIT_COUNT ).setValue( new Integer( beaconRef.get().getVisitCount() ) );
+			editorPanel.getSpinner( VISIT_COUNT ).setValue(beaconRef.get().getVisitCount());
 
 			editorPanel.getCombo( STARS_IMAGE ).addItem( beaconRef.get().getBgStarscapeImageInnerPath() );
 			editorPanel.getCombo( STARS_IMAGE ).setSelectedItem( beaconRef.get().getBgStarscapeImageInnerPath() );
@@ -1781,7 +1781,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 				}
 
 				if ( editorPanel.parseSpinnerInt( VISIT_COUNT ) == 0 ) {
-					editorPanel.getSpinner( VISIT_COUNT ).setValue( new Integer( 1 ) );
+					editorPanel.getSpinner( VISIT_COUNT ).setValue(1);
 				}
 
 				for ( int i=0; i < listCombos.length; i++ ) {

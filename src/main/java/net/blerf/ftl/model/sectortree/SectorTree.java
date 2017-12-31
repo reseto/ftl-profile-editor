@@ -94,7 +94,7 @@ public class SectorTree {
 
 			for ( int r=0; r < columnDots.size(); r++ ) {
 				boolean visited = columnDots.get( r ).isVisited();
-				result.add( new Boolean( visited ) );
+				result.add(visited);
 			}
 		}
 

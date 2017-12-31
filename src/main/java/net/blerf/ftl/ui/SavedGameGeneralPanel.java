@@ -603,7 +603,7 @@ public class SavedGameGeneralPanel extends JPanel {
 		try { gameState.setUnknownNu( unknownsPanel.parseInt( TOP_NU ) ); }
 		catch ( NumberFormatException e ) {}
 
-		try { gameState.setUnknownXi( new Integer( unknownsPanel.parseInt( TOP_XI ) ) ); }
+		try { gameState.setUnknownXi(unknownsPanel.parseInt(TOP_XI)); }
 		catch ( NumberFormatException e ) {}
 
 		gameState.setAutofire( unknownsPanel.getBoolean( TOP_AUTOFIRE ).isSelected() );

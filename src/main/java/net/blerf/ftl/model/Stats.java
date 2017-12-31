@@ -95,7 +95,7 @@ public class Stats {
 	}
 
 	public void setIntRecord( StatType type, int n ) {
-		intMap.put( type, new Integer( n ) );
+		intMap.put( type, n);
 	}
 	public int getIntRecord( StatType type ) {
 		if ( !intMap.containsKey( type ) )

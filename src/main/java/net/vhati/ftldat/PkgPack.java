@@ -441,7 +441,7 @@ public class PkgPack extends AbstractPack {
 			bigByteBuf.position( entry.innerPathOffset );
 			entry.innerPath = readNullTerminatedString( bigByteBuf );
 
-			pathToIndexMap.put( entry.innerPath, new Integer( i ) );
+			pathToIndexMap.put( entry.innerPath, i);
 		}
 	}
 
@@ -841,7 +841,7 @@ public class PkgPack extends AbstractPack {
 
 		pathToIndexMap.clear();
 		for ( PkgEntry entry : entryList ) {
-			pathToIndexMap.put( entry.innerPath, new Integer( pathToIndexMap.size() ) );
+			pathToIndexMap.put( entry.innerPath, pathToIndexMap.size());
 		}
 
 		// Update the header.

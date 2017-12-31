@@ -122,7 +122,7 @@ public class SavedGameParser extends Parser {
 			int stateVarCount = readInt( in );
 			for ( int i=0; i < stateVarCount; i++ ) {
 				String stateVarId = readString( in );
-				Integer stateVarValue = new Integer( readInt( in ) );
+				Integer stateVarValue = readInt(in);
 				gameState.setStateVar( stateVarId, stateVarValue );
 			}
 
@@ -171,7 +171,7 @@ public class SavedGameParser extends Parser {
 			int sectorVisitationCount = readInt( in );
 			List<Boolean> route = new ArrayList<Boolean>();
 			for ( int i=0; i < sectorVisitationCount; i++ ) {
-				route.add( new Boolean( readBool( in ) ) );
+				route.add(readBool(in));
 			}
 			gameState.setSectorVisitation( route );
 
@@ -246,7 +246,7 @@ public class SavedGameParser extends Parser {
 				gameState.setUnknownNu( readInt( in ) );
 
 				if ( gameState.getNearbyShipState() != null ) {
-					gameState.setUnknownXi( new Integer(readInt( in )) );
+					gameState.setUnknownXi(readInt(in));
 				}
 
 				gameState.setAutofire( readBool( in ) );
@@ -533,7 +533,7 @@ public class SavedGameParser extends Parser {
 			// Example: Boss' artillery.
 			//
 			// In FTL 1.01-1.03.3 the boss wasn't a nearby ship outside of combat,
-			// So this never occurred. TODO: There may also have been changes in 
+			// So this never occurred. TODO: There may also have been changes in
 			// 1.5.4 to allow multi-room systems on non-boss ships.
 
 			ShipBlueprint.SystemList.SystemRoom[] rooms = shipBlueprint.getSystemList().getSystemRoom( systemType );
@@ -925,7 +925,7 @@ public class SavedGameParser extends Parser {
 			int tintCount = readInt( in );
 			List<Integer> spriteTintIndeces = new ArrayList<Integer>();
 			for ( int i=0; i < tintCount; i++ ) {
-				spriteTintIndeces.add( new Integer(readInt( in )) );
+				spriteTintIndeces.add(readInt(in));
 			}
 			crew.setSpriteTintIndeces( spriteTintIndeces );
 
@@ -1321,9 +1321,9 @@ public class SavedGameParser extends Parser {
 			beacon.setBgSpritePosY( readInt( in ) );
 			beacon.setBgSpriteRotation( readInt( in ) );
 		}
-		
+
 		beacon.setSeen( readBool( in ) );
-		
+
 		boolean enemyPresent = readBool( in );
 		beacon.setEnemyPresent( enemyPresent );
 		if ( enemyPresent ) {
@@ -1365,7 +1365,7 @@ public class SavedGameParser extends Parser {
 		}
 
 		return beacon;
-		
+
 	}
 
 	public void writeBeacon( OutputStream out, BeaconState beacon, int fileFormat ) throws IOException {
@@ -1439,7 +1439,7 @@ public class SavedGameParser extends Parser {
 			writeInt( out, store.getDroneParts() );
 		}
 	}
-	
+
 	private StoreShelf readStoreShelf( InputStream in, int fileFormat ) throws IOException {
 		StoreShelf shelf = new StoreShelf();
 
@@ -1514,7 +1514,7 @@ public class SavedGameParser extends Parser {
 		int choiceCount = readInt( in );
 		List<Integer> choiceList = new ArrayList<Integer>();
 		for ( int i=0; i < choiceCount; i++ ) {
-			choiceList.add( new Integer(readInt( in )) );
+			choiceList.add(readInt(in));
 		}
 		encounter.setChoiceList( choiceList );
 
@@ -2288,7 +2288,7 @@ public class SavedGameParser extends Parser {
 		 * See StateVar enums for known vars and descriptions.
 		 */
 		public void setStateVar( String stateVarId, int stateVarValue ) {
-			stateVars.put( stateVarId, new Integer(stateVarValue) );
+			stateVars.put( stateVarId, stateVarValue);
 		}
 
 		/**
@@ -2535,7 +2535,7 @@ public class SavedGameParser extends Parser {
 		 * @param visited true if visited, false otherwise
 		 */
 		public void setSectorVisited( int sector, boolean visited ) {
-			sectorVisitationList.set( sector, new Boolean(visited) );
+			sectorVisitationList.set( sector, visited);
 		}
 
 		/**
@@ -2586,7 +2586,7 @@ public class SavedGameParser extends Parser {
 		public List<BeaconState> getBeaconList() { return beaconList; }
 
 		public void addQuestEvent( String questEventId, int questBeaconId ) {
-			questEventMap.put( questEventId, new Integer(questBeaconId) );
+			questEventMap.put( questEventId, questBeaconId);
 		}
 
 		public Map<String, Integer> getQuestEventMap() {
@@ -3379,7 +3379,7 @@ public class SavedGameParser extends Parser {
 		 * @param breachHealth 0-100.
 		 */
 		public void setBreach( int x, int y, int breachHealth ) {
-			breachMap.put( new Point( x, y ), new Integer(breachHealth) );
+			breachMap.put( new Point( x, y ), breachHealth);
 		}
 
 		public Map<Point, Integer> getBreachMap() { return breachMap; }
@@ -6360,7 +6360,7 @@ public class SavedGameParser extends Parser {
 		 * @param n the number of crew in that room
 		 */
 		public void setPreviousOccupancy( int roomId, int n ) {
-			occupancyMap.put( new Integer( roomId ), new Integer( n ) );
+			occupancyMap.put(roomId, n);
 		}
 
 		public Map<Integer, Integer> getOccupancyMap() {
@@ -10023,7 +10023,7 @@ public class SavedGameParser extends Parser {
 			hackingPodInfo.setExtensionAnim( readAnim( in ) );
 			extendedInfo = hackingPodInfo;
 		}
-		else if ( DroneType.COMBAT.equals( droneType ) || 
+		else if ( DroneType.COMBAT.equals( droneType ) ||
 		          DroneType.BEAM.equals( droneType ) ) {
 
 			ZigZagDronePodInfo zigPodInfo = new ZigZagDronePodInfo();

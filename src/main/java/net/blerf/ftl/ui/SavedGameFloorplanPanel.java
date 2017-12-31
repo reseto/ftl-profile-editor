@@ -123,21 +123,21 @@ public class SavedGameFloorplanPanel extends JPanel {
 
 	private static final Logger log = LoggerFactory.getLogger( SavedGameFloorplanPanel.class );
 
-	private static final Integer WEAPON_LAYER = new Integer(5);
-	private static final Integer BASE_LAYER = new Integer(10);
-	private static final Integer FLOOR_LAYER = new Integer(11);
-	private static final Integer ROOM_LAYER = new Integer(12);
-	private static final Integer DECOR_LAYER = new Integer(13);
-	private static final Integer WALL_LAYER = new Integer(15);
-	private static final Integer SYSTEM_LAYER = new Integer(16);
-	private static final Integer BREACH_LAYER = new Integer(17);
-	private static final Integer FIRE_LAYER = new Integer(18);
-	private static final Integer CREW_LAYER = new Integer(19);
-	private static final Integer DOOR_LAYER = new Integer(20);
-	private static final Integer DRONE_LAYER = new Integer(21);
-	private static final Integer DEFAULT_SELECTION_LAYER = new Integer(50);
-	private static final Integer MISC_SELECTION_LAYER = new Integer(55);
-	private static final Integer SQUARE_SELECTION_LAYER = new Integer(60);
+	private static final Integer WEAPON_LAYER = 5;
+	private static final Integer BASE_LAYER = 10;
+	private static final Integer FLOOR_LAYER = 11;
+	private static final Integer ROOM_LAYER = 12;
+	private static final Integer DECOR_LAYER = 13;
+	private static final Integer WALL_LAYER = 15;
+	private static final Integer SYSTEM_LAYER = 16;
+	private static final Integer BREACH_LAYER = 17;
+	private static final Integer FIRE_LAYER = 18;
+	private static final Integer CREW_LAYER = 19;
+	private static final Integer DOOR_LAYER = 20;
+	private static final Integer DRONE_LAYER = 21;
+	private static final Integer DEFAULT_SELECTION_LAYER = 50;
+	private static final Integer MISC_SELECTION_LAYER = 55;
+	private static final Integer SQUARE_SELECTION_LAYER = 60;
 	private static final int squareSize = 35;
 	private static final int tileEdge = 1;
 	private static final int jambLength = 5;
@@ -799,14 +799,14 @@ public class SavedGameFloorplanPanel extends JPanel {
 				int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
 
 				Rectangle roomRect = new Rectangle( roomX, roomY, squaresH*squareSize, squaresV*squareSize );
-				roomRegionRoomIdMap.put( roomRect, new Integer(i) );
+				roomRegionRoomIdMap.put( roomRect, i);
 
 				for ( int s=0; s < squaresH*squaresV; s++ ) {
 					int squareX = roomX + tileEdge + (s%squaresH)*squareSize;
 					int squareY = roomY + tileEdge + (s/squaresH)*squareSize;
 					Rectangle squareRect = new Rectangle( squareX, squareY, squareSize, squareSize );
-					squareRegionRoomIdMap.put( squareRect, new Integer( i ) );
-					squareRegionSquareIdMap.put( squareRect, new Integer( s ) );
+					squareRegionRoomIdMap.put( squareRect, i);
+					squareRegionSquareIdMap.put( squareRect, s);
 				}
 			}
 			// Find squares that don't allow crew in them (medbay's slot, same as clonebay).
@@ -1269,7 +1269,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 
 			int breachX = roomLocX + squareId%squaresH + shipLayout.getOffsetX();
 			int breachY = roomLocY + squareId/squaresV + shipLayout.getOffsetY();
-			breachMap.put( new Point(breachX, breachY), new Integer(breachSprite.getHealth()) );
+			breachMap.put( new Point(breachX, breachY), breachSprite.getHealth());
 		}
 
 		// Fires.
@@ -1787,11 +1787,11 @@ public class SavedGameFloorplanPanel extends JPanel {
 		// If the image doesn't have enough rows for all levels, let the rest be null.
 
 		for ( int i=0; i < levelCount && (i+1)*h <= bigImage.getHeight(); i++ ) {
-			closedImages.put( new Integer(i), bigImage.getSubimage(chop, i*h, w-chop*2, h) );
-			openImages.put( new Integer(i), bigImage.getSubimage(4*w+chop, i*h, w-chop*2, h) );
+			closedImages.put(i, bigImage.getSubimage(chop, i*h, w-chop*2, h) );
+			openImages.put(i, bigImage.getSubimage(4*w+chop, i*h, w-chop*2, h) );
 		}
 
-		DoorSprite doorSprite = new DoorSprite( doorRef, closedImages, openImages, new Integer( level ), doorCoord );
+		DoorSprite doorSprite = new DoorSprite( doorRef, closedImages, openImages, level, doorCoord );
 		doorSprite.setSize( doorSprite.getPreferredSize() );
 		doorSprite.setLocation( centerX - doorSprite.getPreferredSize().width/2, centerY - doorSprite.getPreferredSize().height/2 );
 		doorSprites.add( doorSprite );

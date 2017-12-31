@@ -389,7 +389,7 @@ public class FieldEditorPanel extends JPanel {
 
 		for ( JSpinner valueSpinner : spinnerMap.values() ) {
 			// Set number spinners to zero (There may be other kinds of spinners).
-			Integer defaultInt = new Integer( 0 );
+			Integer defaultInt = 0;
 			SpinnerModel spinnerModel = valueSpinner.getModel();
 			if ( spinnerModel instanceof SpinnerNumberModel ) {
 				SpinnerNumberModel numberModel = ((SpinnerNumberModel)spinnerModel);

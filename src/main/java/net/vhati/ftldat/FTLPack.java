@@ -211,7 +211,7 @@ public class FTLPack extends AbstractPack {
 			if ( pathToIndexMap.containsKey( entry.innerPath ) ) {
 				throw new IOException( "InnerPath occurs more than once: "+ entry.innerPath );
 			}
-			pathToIndexMap.put( entry.innerPath, new Integer( i ) );
+			pathToIndexMap.put( entry.innerPath, i);
 		}
 	}
 
@@ -504,7 +504,7 @@ public class FTLPack extends AbstractPack {
 
 		for ( int i=0; i < tmpEntries.size(); i++ ) {
 			DatEntry entry = tmpEntries.get ( i );
-			pathToIndexMap.put( entry.innerPath, new Integer( i ) );
+			pathToIndexMap.put( entry.innerPath, i);
 
 			// Write the header index.
 			raf.seek( getHeaderIndexPosition( i ) );
