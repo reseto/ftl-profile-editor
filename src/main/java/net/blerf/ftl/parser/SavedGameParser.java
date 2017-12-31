@@ -3644,10 +3644,9 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
-			result.append( String.format( "Name: %s\n", name ) );
-			result.append( String.format( "Race: %s\n", race ) );
-			return result.toString();
+			String result = String.format("Name: %s\n", name) +
+					String.format("Race: %s\n", race);
+			return result;
 		}
 	}
 
@@ -4915,11 +4914,8 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
 
-			result.append( String.format( "Fire HP: %3d, Ignition: %3d%%, Extinguishment: %2d\n", fireHealth, ignitionProgress, extinguishmentProgress ) );
-
-			return result.toString();
+			return String.format("Fire HP: %3d, Ignition: %3d%%, Extinguishment: %2d\n", fireHealth, ignitionProgress, extinguishmentProgress);
 		}
 	}
 
@@ -5051,12 +5047,10 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Open: %-5b, Walking Through: %-5b\n", open, walkingThrough) +
+					String.format("Full HP: %3d, Current HP: %3d, Nominal HP: %3d, Delta?: %3d, Epsilon?: %3d\n", currentMaxHealth, health, nominalHealth, unknownDelta, unknownEpsilon);
 
-			result.append( String.format( "Open: %-5b, Walking Through: %-5b\n", open, walkingThrough ) );
-			result.append( String.format( "Full HP: %3d, Current HP: %3d, Nominal HP: %3d, Delta?: %3d, Epsilon?: %3d\n", currentMaxHealth, health, nominalHealth, unknownDelta, unknownEpsilon ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -5106,20 +5100,18 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Current Position:  %8d,%8d (%9.03f,%9.03f)\n", currentPosX, currentPosY, currentPosX / 1000f, currentPosY / 1000f) +
+					String.format("Speed?:            %8d\n", speed) +
+					String.format("Goal Position:     %8d,%8d (%9.03f,%9.03f)\n", goalPosX, goalPosY, goalPosX / 1000f, goalPosY / 1000f) +
+					String.format("Arrived?:          %8b\n", arrived) +
+					String.format("Done?:             %8b\n", done) +
+					String.format("Lifetime?:         %8d\n", lifetime) +
+					String.format("SuperFreeze?:      %8b\n", superFreeze) +
+					String.format("Locking Room?:     %8d\n", lockingRoom) +
+					String.format("Anim Direction?:   %8d\n", animDirection) +
+					String.format("Shard Progress?:   %8d\n", shardProgress);
 
-			result.append( String.format( "Current Position:  %8d,%8d (%9.03f,%9.03f)\n", currentPosX, currentPosY, currentPosX/1000f, currentPosY/1000f ) );
-			result.append( String.format( "Speed?:            %8d\n", speed ) );
-			result.append( String.format( "Goal Position:     %8d,%8d (%9.03f,%9.03f)\n", goalPosX, goalPosY, goalPosX/1000f, goalPosY/1000f ) );
-			result.append( String.format( "Arrived?:          %8b\n", arrived ) );
-			result.append( String.format( "Done?:             %8b\n", done ) );
-			result.append( String.format( "Lifetime?:         %8d\n", lifetime ) );
-			result.append( String.format( "SuperFreeze?:      %8b\n", superFreeze ) );
-			result.append( String.format( "Locking Room?:     %8d\n", lockingRoom ) );
-			result.append( String.format( "Anim Direction?:   %8d\n", animDirection ) );
-			result.append( String.format( "Shard Progress?:   %8d\n", shardProgress ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -6079,20 +6071,18 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Surrender Offered:   %7b\n", surrendered) +
+					String.format("Escaping:            %7b\n", escaping) +
+					String.format("Destroyed?:          %7b\n", destroyed) +
+					String.format("Surrender Threshold: %7d (Hull amount when surrender is offered)\n", surrenderThreshold) +
+					String.format("Escape Threshold:    %7d (Hull amount when escape begins)\n", escapeThreshold) +
+					String.format("Escape Ticks:        %7d (Decrements to 0)\n", escapeTicks) +
+					String.format("Stalemate Triggered?:%7b\n", stalemateTriggered) +
+					String.format("Stalemate Ticks?:    %7d\n", stalemateTicks) +
+					String.format("Boarding Attempts?:  %7d\n", boardingAttempts) +
+					String.format("Boarders Needed?:    %7d\n", boardersNeeded);
 
-			result.append( String.format( "Surrender Offered:   %7b\n", surrendered ) );
-			result.append( String.format( "Escaping:            %7b\n", escaping ) );
-			result.append( String.format( "Destroyed?:          %7b\n", destroyed ) );
-			result.append( String.format( "Surrender Threshold: %7d (Hull amount when surrender is offered)\n", surrenderThreshold ) );
-			result.append( String.format( "Escape Threshold:    %7d (Hull amount when escape begins)\n", escapeThreshold ) );
-			result.append( String.format( "Escape Ticks:        %7d (Decrements to 0)\n", escapeTicks ) );
-			result.append( String.format( "Stalemate Triggered?:%7b\n", stalemateTriggered ) );
-			result.append( String.format( "Stalemate Ticks?:    %7d\n", stalemateTicks ) );
-			result.append( String.format( "Boarding Attempts?:  %7d\n", boardingAttempts ) );
-			result.append( String.format( "Boarders Needed?:    %7d\n", boardersNeeded ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -6238,15 +6228,13 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Alpha?:            %7d\n", unknownAlpha) +
+					String.format("Stray Rock Ticks?: %7d\n", strayRockTicks) +
+					String.format("Gamma?:            %7d\n", unknownGamma) +
+					String.format("Bkg Drift Ticks:   %7d\n", bgDriftTicks) +
+					String.format("Current Target?:   %7d\n", currentTarget);
 
-			result.append( String.format( "Alpha?:            %7d\n", unknownAlpha ) );
-			result.append( String.format( "Stray Rock Ticks?: %7d\n", strayRockTicks ) );
-			result.append( String.format( "Gamma?:            %7d\n", unknownGamma ) );
-			result.append( String.format( "Bkg Drift Ticks:   %7d\n", bgDriftTicks ) );
-			result.append( String.format( "Current Target?:   %7d\n", currentTarget ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -6473,16 +6461,14 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Playing:           %7b\n", playing) +
+					String.format("Looping?:          %7b\n", looping) +
+					String.format("Current Frame:     %7d\n", currentFrame) +
+					String.format("Progress Ticks:    %7d\n", progressTicks) +
+					String.format("Scale:             %7d (%5.03f)\n", scale, scale / 1000f) +
+					String.format("X,Y?:                %5d,%5d\n", x, y);
 
-			result.append( String.format( "Playing:           %7b\n", playing ) );
-			result.append( String.format( "Looping?:          %7b\n", looping ) );
-			result.append( String.format( "Current Frame:     %7d\n", currentFrame ) );
-			result.append( String.format( "Progress Ticks:    %7d\n", progressTicks ) );
-			result.append( String.format( "Scale:             %7d (%5.03f)\n", scale, scale/1000f ) );
-			result.append( String.format( "X,Y?:                %5d,%5d\n", x, y ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -6561,14 +6547,12 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("SystemId:                 %s\n", SystemType.CLONEBAY.toString()) +
+					String.format("Build Ticks:            %7d (For the current dead crew being cloned)\n", buildTicks) +
+					String.format("Build Ticks Goal:       %7d\n", buildTicksGoal) +
+					String.format("DoomTicks:              %7d (If unpowered, dead crew are lost at 3000)\n", doomTicks);
 
-			result.append( String.format( "SystemId:                 %s\n", SystemType.CLONEBAY.toString() ) );
-			result.append( String.format( "Build Ticks:            %7d (For the current dead crew being cloned)\n", buildTicks ) );
-			result.append( String.format( "Build Ticks Goal:       %7d\n", buildTicksGoal ) );
-			result.append( String.format( "DoomTicks:              %7d (If unpowered, dead crew are lost at 3000)\n", doomTicks ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -6631,14 +6615,12 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("SystemId:                 %s\n", SystemType.BATTERY.toString()) +
+					String.format("Active:                   %5b\n", active) +
+					String.format("Battery Power in Use:     %5d\n", usedBattery) +
+					String.format("Discharge Ticks:          %5d\n", dischargeTicks);
 
-			result.append( String.format( "SystemId:                 %s\n", SystemType.BATTERY.toString() ) );
-			result.append( String.format( "Active:                   %5b\n", active ) );
-			result.append( String.format( "Battery Power in Use:     %5d\n", usedBattery ) );
-			result.append( String.format( "Discharge Ticks:          %5d\n", dischargeTicks ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -6783,20 +6765,18 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("SystemId:                 %s\n", SystemType.SHIELDS.toString()) +
+					String.format("Shield Layers:            %5d (Currently filled bubbles)\n", shieldLayers) +
+					String.format("Energy Shield Layers:     %5d\n", energyShieldLayers) +
+					String.format("Energy Shield Max:        %5d (Layers when fully charged)\n", energyShieldLayers) +
+					String.format("Shield Recharge Ticks:    %5d\n", shieldRechargeTicks) +
+					"\n" +
+					String.format("Shield Drop Anim:   Play: %-5b, Ticks: %4d\n", shieldDropAnimOn, shieldDropAnimTicks) +
+					String.format("Shield Raise Anim:  Play: %-5b, Ticks: %4d\n", shieldRaiseAnimOn, shieldRaiseAnimTicks) +
+					String.format("Energy Shield Anim: Play: %-5b, Ticks: %4d\n", energyShieldAnimOn, energyShieldAnimTicks) +
+					String.format("Lambda?, Mu?:           %7d,%7d (Some kind of coord?)\n", unknownLambda, unknownMu);
 
-			result.append( String.format( "SystemId:                 %s\n", SystemType.SHIELDS.toString() ) );
-			result.append( String.format( "Shield Layers:            %5d (Currently filled bubbles)\n", shieldLayers ) );
-			result.append( String.format( "Energy Shield Layers:     %5d\n", energyShieldLayers ) );
-			result.append( String.format( "Energy Shield Max:        %5d (Layers when fully charged)\n", energyShieldLayers ) );
-			result.append( String.format( "Shield Recharge Ticks:    %5d\n", shieldRechargeTicks ) );
-			result.append( "\n" );
-			result.append( String.format( "Shield Drop Anim:   Play: %-5b, Ticks: %4d\n", shieldDropAnimOn, shieldDropAnimTicks ) );
-			result.append( String.format( "Shield Raise Anim:  Play: %-5b, Ticks: %4d\n", shieldRaiseAnimOn, shieldRaiseAnimTicks ) );
-			result.append( String.format( "Energy Shield Anim: Play: %-5b, Ticks: %4d\n", energyShieldAnimOn, energyShieldAnimTicks ) );
-			result.append( String.format( "Lambda?, Mu?:           %7d,%7d (Some kind of coord?)\n", unknownLambda, unknownMu ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -6857,15 +6837,13 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("SystemId:                 %s\n", SystemType.CLOAKING.toString()) +
+					String.format("Alpha?:                 %7d\n", unknownAlpha) +
+					String.format("Beta?:                  %7d\n", unknownBeta) +
+					String.format("Cloak Ticks Goal:       %7d\n", cloakTicksGoal) +
+					String.format("Cloak Ticks:            %7s\n", (cloakTicks == Integer.MIN_VALUE ? "MIN" : cloakTicks));
 
-			result.append( String.format( "SystemId:                 %s\n", SystemType.CLOAKING.toString() ) );
-			result.append( String.format( "Alpha?:                 %7d\n", unknownAlpha ) );
-			result.append( String.format( "Beta?:                  %7d\n", unknownBeta ) );
-			result.append( String.format( "Cloak Ticks Goal:       %7d\n", cloakTicksGoal ) );
-			result.append( String.format( "Cloak Ticks:            %7s\n", (cloakTicks==Integer.MIN_VALUE ? "MIN" : cloakTicks) ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -7087,13 +7065,11 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("SystemId:                 %s\n", SystemType.MIND.toString()) +
+					String.format("Mind Ctrl Ticks:        %7d\n", mindControlTicks) +
+					String.format("Mind Ctrl Ticks Goal:   %7d\n", mindControlTicksGoal);
 
-			result.append( String.format( "SystemId:                 %s\n", SystemType.MIND.toString() ) );
-			result.append( String.format( "Mind Ctrl Ticks:        %7d\n", mindControlTicks ) );
-			result.append( String.format( "Mind Ctrl Ticks Goal:   %7d\n", mindControlTicksGoal ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -7637,24 +7613,22 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Hull Damage:       %7d\n", hullDamage) +
+					String.format("ShieldPiercing:    %7d\n", shieldPiercing) +
+					String.format("Fire Chance:       %7d\n", fireChance) +
+					String.format("Breach Chance:     %7d\n", breachChance) +
+					String.format("Ion Damage:        %7d\n", ionDamage) +
+					String.format("System Damage:     %7d\n", systemDamage) +
+					String.format("Personnel Damage:  %7d\n", personnelDamage) +
+					String.format("Hull Buster:       %7b (2x Hull damage vs systemless rooms)\n", hullBuster) +
+					String.format("Owner Id?:         %7d\n", ownerId) +
+					String.format("Self Id?:          %7d\n", selfId) +
+					String.format("Lockdown:          %7b\n", lockdown) +
+					String.format("Crystal Shard:     %7b\n", crystalShard) +
+					String.format("Stun Chance:       %7d\n", stunChance) +
+					String.format("Stun Amount:       %7d\n", stunAmount);
 
-			result.append( String.format( "Hull Damage:       %7d\n", hullDamage ) );
-			result.append( String.format( "ShieldPiercing:    %7d\n", shieldPiercing ) );
-			result.append( String.format( "Fire Chance:       %7d\n", fireChance ) );
-			result.append( String.format( "Breach Chance:     %7d\n", breachChance ) );
-			result.append( String.format( "Ion Damage:        %7d\n", ionDamage ) );
-			result.append( String.format( "System Damage:     %7d\n", systemDamage ) );
-			result.append( String.format( "Personnel Damage:  %7d\n", personnelDamage ) );
-			result.append( String.format( "Hull Buster:       %7b (2x Hull damage vs systemless rooms)\n", hullBuster ) );
-			result.append( String.format( "Owner Id?:         %7d\n", ownerId ) );
-			result.append( String.format( "Self Id?:          %7d\n", selfId ) );
-			result.append( String.format( "Lockdown:          %7b\n", lockdown ) );
-			result.append( String.format( "Crystal Shard:     %7b\n", crystalShard ) );
-			result.append( String.format( "Stun Chance:       %7d\n", stunChance ) );
-			result.append( String.format( "Stun Amount:       %7d\n", stunAmount ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -8005,29 +7979,27 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Type:               Beam Info\n") +
+					String.format("Firing Ship End:    %8d,%8d (%9.03f,%9.03f) (Off-screen endpoint of line from weapon)\n", firingShipEndX, firingShipEndY, firingShipEndX / 1000f, firingShipEndY / 1000f) +
+					String.format("Target Ship Source: %8d,%8d (%9.03f,%9.03f) (Off-screen endpoint of line drawn toward swath)\n", targetShipSourceX, targetShipSourceY, targetShipSourceX / 1000f, targetShipSourceY / 1000f) +
+					String.format("Target Ship End:    %8d,%8d (%9.03f,%9.03f) (On-screen endpoint of line drawn toward swath)\n", targetShipEndX, targetShipEndY, targetShipEndX / 1000f, targetShipEndY / 1000f) +
+					String.format("Beta?:              %8d,%8d (%9.03f,%9.03f)\n", unknownBetaX, unknownBetaY, unknownBetaX / 1000f, unknownBetaY / 1000f) +
+					String.format("Swath End:          %8d,%8d (%9.03f,%9.03f)\n", swathEndX, swathEndY, swathEndX / 1000f, swathEndY / 1000f) +
+					String.format("Swath Start:        %8d,%8d (%9.03f,%9.03f)\n", swathStartX, swathStartY, swathStartX / 1000f, swathStartY / 1000f) +
+					String.format("Gamma?:             %8d\n", unknownGamma) +
+					String.format("Swath Length:       %8d (%9.03f)\n", swathLength, swathLength / 1000f) +
+					String.format("Delta?:             %8d\n", unknownDelta) +
+					String.format("Epsilon?:           %8d,%8d (%9.03f,%9.03f)\n", unknownEpsilonX, unknownEpsilonY, unknownEpsilonX / 1000f, unknownEpsilonY / 1000f) +
+					String.format("Zeta?:              %8d\n", unknownZeta) +
+					String.format("Eta?:               %8d\n", unknownEta) +
+					String.format("Theta?:             %8d\n", unknownTheta) +
+					String.format("Iota?:              %8b\n", unknownIota) +
+					String.format("Kappa?:             %8b\n", unknownKappa) +
+					String.format("Lambda?:            %8b\n", unknownLambda) +
+					String.format("Mu?:                %8b\n", unknownMu) +
+					String.format("Nu?:                %8b\n", unknownNu);
 
-			result.append( String.format( "Type:               Beam Info\n" ) );
-			result.append( String.format( "Firing Ship End:    %8d,%8d (%9.03f,%9.03f) (Off-screen endpoint of line from weapon)\n", firingShipEndX, firingShipEndY, firingShipEndX/1000f, firingShipEndY/1000f ) );
-			result.append( String.format( "Target Ship Source: %8d,%8d (%9.03f,%9.03f) (Off-screen endpoint of line drawn toward swath)\n", targetShipSourceX, targetShipSourceY, targetShipSourceX/1000f, targetShipSourceY/1000f ) );
-			result.append( String.format( "Target Ship End:    %8d,%8d (%9.03f,%9.03f) (On-screen endpoint of line drawn toward swath)\n", targetShipEndX, targetShipEndY, targetShipEndX/1000f, targetShipEndY/1000f ) );
-			result.append( String.format( "Beta?:              %8d,%8d (%9.03f,%9.03f)\n", unknownBetaX, unknownBetaY, unknownBetaX/1000f, unknownBetaY/1000f ) );
-			result.append( String.format( "Swath End:          %8d,%8d (%9.03f,%9.03f)\n", swathEndX, swathEndY, swathEndX/1000f, swathEndY/1000f ) );
-			result.append( String.format( "Swath Start:        %8d,%8d (%9.03f,%9.03f)\n", swathStartX, swathStartY, swathStartX/1000f, swathStartY/1000f ) );
-			result.append( String.format( "Gamma?:             %8d\n", unknownGamma ) );
-			result.append( String.format( "Swath Length:       %8d (%9.03f)\n", swathLength, swathLength/1000f ) );
-			result.append( String.format( "Delta?:             %8d\n", unknownDelta ) );
-			result.append( String.format( "Epsilon?:           %8d,%8d (%9.03f,%9.03f)\n", unknownEpsilonX, unknownEpsilonY, unknownEpsilonX/1000f, unknownEpsilonY/1000f ) );
-			result.append( String.format( "Zeta?:              %8d\n", unknownZeta ) );
-			result.append( String.format( "Eta?:               %8d\n", unknownEta ) );
-			result.append( String.format( "Theta?:             %8d\n", unknownTheta ) );
-			result.append( String.format( "Iota?:              %8b\n", unknownIota ) );
-			result.append( String.format( "Kappa?:             %8b\n", unknownKappa ) );
-			result.append( String.format( "Lambda?:            %8b\n", unknownLambda ) );
-			result.append( String.format( "Mu?:                %8b\n", unknownMu ) );
-			result.append( String.format( "Nu?:                %8b\n", unknownNu ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -8126,16 +8098,14 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Type:               Bomb Info\n") +
+					String.format("Alpha?:             %7d\n", unknownAlpha) +
+					String.format("Fuse Ticks:         %7d (Explodes at 0)\n", fuseTicks) +
+					String.format("Gamma?:             %7d\n", unknownGamma) +
+					String.format("Delta?:             %7d\n", unknownDelta) +
+					String.format("Arrived:            %7b\n", arrived);
 
-			result.append( String.format( "Type:               Bomb Info\n" ) );
-			result.append( String.format( "Alpha?:             %7d\n", unknownAlpha ) );
-			result.append( String.format( "Fuse Ticks:         %7d (Explodes at 0)\n", fuseTicks ) );
-			result.append( String.format( "Gamma?:             %7d\n", unknownGamma ) );
-			result.append( String.format( "Delta?:             %7d\n", unknownDelta ) );
-			result.append( String.format( "Arrived:            %7b\n", arrived ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -8184,13 +8154,11 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Type:               Laser/Burst Info\n") +
+					String.format("Alpha?:             %7d\n", unknownAlpha) +
+					String.format("Spin:               %7d\n", spin);
 
-			result.append( String.format( "Type:               Laser/Burst Info\n" ) );
-			result.append( String.format( "Alpha?:             %7d\n", unknownAlpha ) );
-			result.append( String.format( "Spin:               %7d\n", spin ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -8856,14 +8824,12 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Last Waypoint:      %7d,%7d\n", lastWaypointX, lastWaypointY) +
+					String.format("TransitTicks:       %7d\n", transitTicks) +
+					String.format("Exhaust Angle:      %7d\n", exhaustAngle) +
+					String.format("Epsilon?:           %7d\n", unknownEpsilon);
 
-			result.append( String.format( "Last Waypoint:      %7d,%7d\n", lastWaypointX, lastWaypointY ) );
-			result.append( String.format( "TransitTicks:       %7d\n", transitTicks ) );
-			result.append( String.format( "Exhaust Angle:      %7d\n", exhaustAngle ) );
-			result.append( String.format( "Epsilon?:           %7d\n", unknownEpsilon ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -8971,18 +8937,16 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("Alpha?:             %7d\n", unknownAlpha) +
+					String.format("Beta?:              %7d\n", unknownBeta) +
+					String.format("Gamma?:             %7d\n", unknownGamma) +
+					String.format("Delta?:             %7d\n", unknownDelta) +
+					String.format("Body Health:        %7d\n", bodyHealth) +
+					String.format("Body Position:      %7d,%7d\n", bodyX, bodyY) +
+					String.format("Body Room Id:       %7d\n", bodyRoomId) +
+					String.format("Body Room Square:   %7d\n", bodyRoomSquare);
 
-			result.append( String.format( "Alpha?:             %7d\n", unknownAlpha ) );
-			result.append( String.format( "Beta?:              %7d\n", unknownBeta ) );
-			result.append( String.format( "Gamma?:             %7d\n", unknownGamma ) );
-			result.append( String.format( "Delta?:             %7d\n", unknownDelta ) );
-			result.append( String.format( "Body Health:        %7d\n", bodyHealth ) );
-			result.append( String.format( "Body Position:      %7d,%7d\n", bodyX, bodyY ) );
-			result.append( String.format( "Body Room Id:       %7d\n", bodyRoomId ) );
-			result.append( String.format( "Body Room Square:   %7d\n", bodyRoomSquare ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -9033,11 +8997,8 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
 
-			result.append( String.format( "Alpha?:             %7d\n", unknownAlpha ) );
-
-			return result.toString();
+			return String.format("Alpha?:             %7d\n", unknownAlpha);
 		}
 	}
 
@@ -9285,20 +9246,15 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
+			String result = String.format("DroneId:           %s\n", droneId) +
+					"\nDrone Pod...\n" +
+					dronePod.toString().replaceAll("(^|\n)(.+)", "$1  $2") +
+					"\n" +
+					String.format("Alpha?:            %3d\n", unknownAlpha) +
+					String.format("Beta?:             %3d\n", unknownBeta) +
+					String.format("Gamma?:            %3d\n", unknownGamma);
 
-			result.append( String.format( "DroneId:           %s\n", droneId ) );
-
-			result.append( "\nDrone Pod...\n" );
-			result.append( dronePod.toString().replaceAll( "(^|\n)(.+)", "$1  $2" ) );
-
-			result.append( "\n" );
-
-			result.append( String.format( "Alpha?:            %3d\n", unknownAlpha ) );
-			result.append( String.format( "Beta?:             %3d\n", unknownBeta ) );
-			result.append( String.format( "Gamma?:            %3d\n", unknownGamma ) );
-
-			return result.toString();
+			return result;
 		}
 	}
 
@@ -9731,11 +9687,8 @@ public class SavedGameParser extends Parser {
 
 		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
 
-			result.append( String.format( "X,Y: %3d,%3d\n", x, y ) );
-
-			return result.toString();
+			return String.format("X,Y: %3d,%3d\n", x, y);
 		}
 	}
 

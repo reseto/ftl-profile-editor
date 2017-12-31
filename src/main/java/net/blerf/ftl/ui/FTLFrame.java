@@ -801,18 +801,17 @@ public class FTLFrame extends JFrame implements Statusbar {
 
 					if ( exception != null ) {
 						if ( hexBuf.length() > 0 ) {
-							StringBuilder errBuf = new StringBuilder();
-							errBuf.append( "Your saved game could not be interpreted correctly.<br/>" );
-							errBuf.append( "<br/>" );
-							errBuf.append( "To submit a bug report, you can use <a href='"+ bugReportUrl +"'>GitHub</a>.<br/>");
-							errBuf.append( "Or post to the FTL forums <a href='"+ forumThreadUrl +"'>here</a>.<br/>" );
-							errBuf.append( "<br/>" );
-							errBuf.append( "On GitHub, set the issue title as \"SavedGame Parser Error\".<br/>" );
-							errBuf.append( "<br/>" );
-							errBuf.append( "I will fix the problem and release a new version as soon as I can.<br/>" );
-							errBuf.append( "<br/><br/>" );
-							errBuf.append( "Copy (Ctrl-A, Ctrl-C) the following text, including \"[ code ] tags\"." );
-							errBuf.append( "<br/><br/>" );
+							String errBuf = "Your saved game could not be interpreted correctly.<br/>" +
+									"<br/>" +
+									"To submit a bug report, you can use <a href='" + bugReportUrl + "'>GitHub</a>.<br/>" +
+									"Or post to the FTL forums <a href='" + forumThreadUrl + "'>here</a>.<br/>" +
+									"<br/>" +
+									"On GitHub, set the issue title as \"SavedGame Parser Error\".<br/>" +
+									"<br/>" +
+									"I will fix the problem and release a new version as soon as I can.<br/>" +
+									"<br/><br/>" +
+									"Copy (Ctrl-A, Ctrl-C) the following text, including \"[ code ] tags\"." +
+									"<br/><br/>";
 
 							StringBuilder reportBuf = new StringBuilder();
 							reportBuf.append( "[code]\n" );
@@ -833,7 +832,7 @@ public class FTLFrame extends JFrame implements Statusbar {
 							reportBuf.append( hexBuf );
 							reportBuf.append( "\n[/code]\n" );
 
-							JDialog failDialog = createBugReportDialog( "SavedGame Parser Error", errBuf.toString(), reportBuf.toString() );
+							JDialog failDialog = createBugReportDialog( "SavedGame Parser Error", errBuf, reportBuf.toString() );
 							failDialog.setVisible( true );
 						}
 					}
