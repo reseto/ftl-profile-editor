@@ -1,6 +1,5 @@
 package net.blerf.ftl.xml;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;

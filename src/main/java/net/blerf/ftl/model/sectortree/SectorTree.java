@@ -1,6 +1,5 @@
 package net.blerf.ftl.model.sectortree;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 

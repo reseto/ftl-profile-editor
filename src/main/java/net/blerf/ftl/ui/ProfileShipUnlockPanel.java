@@ -7,10 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.slf4j.Logger;
@@ -129,7 +126,7 @@ public class ProfileShipUnlockPanel extends JPanel {
 		panel.setLayout( new BoxLayout(panel, BoxLayout.X_AXIS) );
 		panel.setBorder( BorderFactory.createTitledBorder( shipClass ) );
 
-		List<Achievement> shipAchs = DataManager.get().getShipAchievements( variantAShip );		
+		List<Achievement> shipAchs = DataManager.get().getShipAchievements( variantAShip );
 		if ( shipAchs != null ) {
 			for ( Achievement shipAch : shipAchs ) {
 				if ( shipAch.isVictory() || shipAch.isQuest() ) continue;
@@ -147,7 +144,7 @@ public class ProfileShipUnlockPanel extends JPanel {
 		else {
 			return null;
 		}
-		
+
 		return panel;
 	}
 

@@ -3,12 +3,10 @@ package net.blerf.ftl.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import org.slf4j.Logger;
@@ -78,7 +76,7 @@ public class ProfileGeneralAchievementsPanel extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setBorder( BorderFactory.createTitledBorder( title ) );
 		panel.setLayout( new BoxLayout( panel, BoxLayout.X_AXIS ) );
-		
+
 		// TODO: Magic number 7.
 		for ( int i=0; i < 7; i++ ) {
 			Achievement ach = achievements.get( i+offset );
@@ -93,7 +91,7 @@ public class ProfileGeneralAchievementsPanel extends JPanel {
 			generalAchBoxes.put( ach, box );
 			panel.add( box );
 		}
-		
+
 		return panel;
 	}
 

@@ -1,10 +1,8 @@
 package net.blerf.ftl.ui;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,10 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.slf4j.Logger;
@@ -379,7 +375,7 @@ public class ProfileShipStatsPanel extends JPanel implements ActionListener {
 		Stats stats = p.getStats();
 
 		List<Score> newBest = new ArrayList<Score>();
-		
+
 		for ( Map.Entry<String, List<Score>> entry : allBestMap.entrySet() ) {
 			if ( entry.getValue() == null ) continue;
 			for ( Score s : entry.getValue() ) {
