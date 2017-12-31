@@ -139,8 +139,8 @@ public class SavedGameGeneralPanel extends JPanel {
 		cargoPanel = new FieldEditorPanel( false );
 		cargoPanel.setBorder( BorderFactory.createTitledBorder( "Cargo" ) );
 
-		for ( int i=0; i < cargoSlots.length; i++ ) {
-			cargoPanel.addRow( cargoSlots[i], FieldEditorPanel.ContentType.COMBO );
+		for (String cargoSlot : cargoSlots) {
+			cargoPanel.addRow(cargoSlot, FieldEditorPanel.ContentType.COMBO);
 		}
 		cargoPanel.addBlankRow();
 		cargoPanel.addFillRow();
@@ -513,13 +513,12 @@ public class SavedGameGeneralPanel extends JPanel {
 		catch ( NumberFormatException e ) {}
 
 		gameState.getCargoIdList().clear();
-		for ( int i=0; i < cargoSlots.length; i++ ) {
-			Object cargoObj = cargoPanel.getCombo( cargoSlots[i] ).getSelectedItem();
-			if ( cargoObj instanceof WeaponBlueprint ) {
-				gameState.addCargoItemId( ((WeaponBlueprint)cargoObj).getId() );
-			}
-			else if ( cargoObj instanceof DroneBlueprint ) {
-				gameState.addCargoItemId( ((DroneBlueprint)cargoObj).getId() );
+		for (String cargoSlot : cargoSlots) {
+			Object cargoObj = cargoPanel.getCombo(cargoSlot).getSelectedItem();
+			if (cargoObj instanceof WeaponBlueprint) {
+				gameState.addCargoItemId(((WeaponBlueprint) cargoObj).getId());
+			} else if (cargoObj instanceof DroneBlueprint) {
+				gameState.addCargoItemId(((DroneBlueprint) cargoObj).getId());
 			}
 		}
 

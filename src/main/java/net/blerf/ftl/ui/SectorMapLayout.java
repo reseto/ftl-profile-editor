@@ -165,20 +165,19 @@ public class SectorMapLayout implements LayoutManager2 {
 			comp.setLocation( beaconX, beaconY );
 		}
 
-		for ( int i=0; i < miscBoxList.size(); i++ ) {
-			Component comp = miscBoxList.get( i );
-			SectorMapConstraints compC = constraintsMap.get( comp );
+        for (Component comp : miscBoxList) {
+            SectorMapConstraints compC = constraintsMap.get(comp);
 
-			if ( compC.getBeaconId() < beaconList.size() ) {
-				Component beaconComp = beaconList.get( compC.getBeaconId() );
+            if (compC.getBeaconId() < beaconList.size()) {
+                Component beaconComp = beaconList.get(compC.getBeaconId());
 
-				int miscBoxX = beaconComp.getX() + beaconComp.getWidth()/2;
-				int miscBoxY = beaconComp.getY() - beaconComp.getHeight()/3 - comp.getPreferredSize().height/2;
+                int miscBoxX = beaconComp.getX() + beaconComp.getWidth() / 2;
+                int miscBoxY = beaconComp.getY() - beaconComp.getHeight() / 3 - comp.getPreferredSize().height / 2;
 
-				comp.setSize( comp.getPreferredSize() );
-				comp.setLocation( miscBoxX, miscBoxY );
-			}
-		}
+                comp.setSize(comp.getPreferredSize());
+                comp.setLocation(miscBoxX, miscBoxY);
+            }
+        }
 
 		if ( playerShipComp != null ) {
 			Component comp = playerShipComp;

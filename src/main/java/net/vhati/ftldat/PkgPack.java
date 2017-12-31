@@ -367,8 +367,8 @@ public class PkgPack extends AbstractPack {
 
 		raf.seek( 0 );
 		raf.setLength( 0 );
-		for ( int i=0; i < signature.length; i++ ) {
-			raf.writeByte( signature[i] );
+		for (int aSignature : signature) {
+			raf.writeByte(aSignature);
 		}
 		writeBigUShort( HEADER_SIZE );
 		writeBigUShort( ENTRY_SIZE );
@@ -382,9 +382,9 @@ public class PkgPack extends AbstractPack {
 		raf.seek( 0 );
 
 		// Check the file signature.
-		for ( int i=0; i < signature.length; i++ ) {
-			if ( raf.readUnsignedByte() != signature[i] ) {
-				throw new IOException( "Unexpected file signature" );
+		for (int aSignature : signature) {
+			if (raf.readUnsignedByte() != aSignature) {
+				throw new IOException("Unexpected file signature");
 			}
 		}
 
@@ -808,23 +808,21 @@ public class PkgPack extends AbstractPack {
 		// Move data toward the top.
 		long pendingDataOffset = neededMinDataOffset;
 
-		for ( int i=0; i < tmpEntries.size(); i++ ) {
-			PkgEntry entry = tmpEntries.get ( i );
-
-			if ( pendingDataOffset != entry.dataOffset ) {
+		for (PkgEntry entry : tmpEntries) {
+			if (pendingDataOffset != entry.dataOffset) {
 				long totalBytes = entry.dataSize;
 				long bytesRemaining = totalBytes;
 				byte[] buf = new byte[4096];
 				int len;
-				while ( bytesRemaining > 0 ) {
-					raf.seek( entry.dataOffset + totalBytes - bytesRemaining );
-					len = raf.read( buf, 0, (int)Math.min( buf.length, bytesRemaining ) );
-					if ( len == -1 ) {
-						throw new IOException( "EOF prematurely reached reading innerPath: "+ entry.innerPath );
+				while (bytesRemaining > 0) {
+					raf.seek(entry.dataOffset + totalBytes - bytesRemaining);
+					len = raf.read(buf, 0, (int) Math.min(buf.length, bytesRemaining));
+					if (len == -1) {
+						throw new IOException("EOF prematurely reached reading innerPath: " + entry.innerPath);
 					}
 
-					raf.seek( pendingDataOffset + totalBytes - bytesRemaining );
-					raf.write( buf, 0, len );
+					raf.seek(pendingDataOffset + totalBytes - bytesRemaining);
+					raf.write(buf, 0, len);
 					bytesRemaining -= len;
 				}
 

@@ -1039,29 +1039,29 @@ public class SavedGameFloorplanPanel extends JPanel {
 		for ( SystemType systemType : SystemType.values() ) {
 			int[] roomIds = shipBlueprint.getSystemList().getRoomIdBySystemType( systemType );
 			if ( roomIds != null ) {
-				for ( int i=0; i < roomIds.length; i++ ) {
-					EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo( roomIds[i] );
+				for (int roomId : roomIds) {
+					EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo(roomId);
 					int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
 					int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
-					int roomX = originX + roomLocX*squareSize;
-					int roomY = originY + roomLocY*squareSize;
+					int roomX = originX + roomLocX * squareSize;
+					int roomY = originY + roomLocY * squareSize;
 					int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
 					int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
-					int systemX = roomX + tileEdge + squaresH*squareSize/2;
-					int systemY = roomY + tileEdge + squaresV*squareSize/2;
+					int systemX = roomX + tileEdge + squaresH * squareSize / 2;
+					int systemY = roomY + tileEdge + squaresV * squareSize / 2;
 
-					SystemState systemState = shipState.getSystem( systemType );
-					if ( systemState == null ) break;  // TODO: Support systems that aren't on the shipState.
+					SystemState systemState = shipState.getSystem(systemType);
+					if (systemState == null) break;  // TODO: Support systems that aren't on the shipState.
 
-					SpriteReference<SystemState> systemRef = new SpriteReference<SystemState>( new SystemState( systemState ) );
-					systemRefs.add( systemRef );
+					SpriteReference<SystemState> systemRef = new SpriteReference<SystemState>(new SystemState(systemState));
+					systemRefs.add(systemRef);
 
-					SystemRoomSprite systemRoomSprite = new SystemRoomSprite( systemRef );
-					systemRoomSprite.setSize( systemRoomSprite.getPreferredSize() );
-					systemRoomSprite.setLocation( systemX - systemRoomSprite.getPreferredSize().width/2, systemY - systemRoomSprite.getPreferredSize().height/2);
-					systemRoomSprites.add( systemRoomSprite );
-					shipPanel.add( systemRoomSprite, SYSTEM_LAYER );
+					SystemRoomSprite systemRoomSprite = new SystemRoomSprite(systemRef);
+					systemRoomSprite.setSize(systemRoomSprite.getPreferredSize());
+					systemRoomSprite.setLocation(systemX - systemRoomSprite.getPreferredSize().width / 2, systemY - systemRoomSprite.getPreferredSize().height / 2);
+					systemRoomSprites.add(systemRoomSprite);
+					shipPanel.add(systemRoomSprite, SYSTEM_LAYER);
 				}
 			}
 		}
@@ -2381,10 +2381,10 @@ public class SavedGameFloorplanPanel extends JPanel {
 			public void run() {
 				shipAugmentIdList.clear();
 
-				for ( int i=0; i < augSlots.length; i++ ) {
-					Object augObj = editorPanel.getCombo(augSlots[i]).getSelectedItem();
-					if ( augObj instanceof AugBlueprint )
-						shipAugmentIdList.add( ((AugBlueprint)augObj).getId() );
+				for (String augSlot : augSlots) {
+					Object augObj = editorPanel.getCombo(augSlot).getSelectedItem();
+					if (augObj instanceof AugBlueprint)
+						shipAugmentIdList.add(((AugBlueprint) augObj).getId());
 				}
 				clearSidePanel();
 			}
@@ -2416,8 +2416,8 @@ public class SavedGameFloorplanPanel extends JPanel {
 				}
 			}
 		};
-		for ( int i=0; i < augSlots.length; i++ ) {
-			editorPanel.getCombo(augSlots[i]).addActionListener( augListener );
+		for (String augSlot : augSlots) {
+			editorPanel.getCombo(augSlot).addActionListener(augListener);
 		}
 
 		showSidePanel();

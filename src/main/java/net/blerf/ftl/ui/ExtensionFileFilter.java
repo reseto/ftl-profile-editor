@@ -35,9 +35,9 @@ public class ExtensionFileFilter extends FileFilter {
 		if ( exts == null ) return true;
 
 		String filename = file.getName();
-		for ( int i=0; i < exts.length; i++ ) {
-			if ( filename.endsWith( exts[i] ) ) return true;
-		}
+        for (String ext : exts) {
+            if (filename.endsWith(ext)) return true;
+        }
 		return false;
 	}
 

@@ -449,8 +449,8 @@ public class SavedGameSectorMapPanel extends JPanel {
 		List<GeneratedBeacon> genBeacons = newGenMap.getGeneratedBeaconList();
 		List<Point> newLocations = new ArrayList<Point>( genBeacons.size() );
 
-		for ( int i=0; i < genBeacons.size(); i++ ) {
-			newLocations.add( genBeacons.get( i ).getLocation() );
+		for (GeneratedBeacon genBeacon : genBeacons) {
+			newLocations.add(genBeacon.getLocation());
 		}
 		mapLayout.setBeaconLocations( newLocations );
 		mapLayout.setBeaconRegionSize( newGenMap.getPreferredSize() );
@@ -593,8 +593,8 @@ public class SavedGameSectorMapPanel extends JPanel {
 		List<GeneratedBeacon> genBeacons = newGenMap.getGeneratedBeaconList();
 		List<Point> newLocations = new ArrayList<Point>( genBeacons.size() );
 
-		for ( int i=0; i < genBeacons.size(); i++ ) {
-			newLocations.add( genBeacons.get( i ).getLocation() );
+		for (GeneratedBeacon genBeacon1 : genBeacons) {
+			newLocations.add(genBeacon1.getLocation());
 		}
 		mapLayout.setBeaconLocations( newLocations );
 		mapLayout.setBeaconRegionSize( newGenMap.getPreferredSize() );
@@ -1133,8 +1133,8 @@ public class SavedGameSectorMapPanel extends JPanel {
 					List<GeneratedBeacon> genBeacons = newGenMap.getGeneratedBeaconList();
 					List<Point> newLocations = new ArrayList<Point>( genBeacons.size() );
 
-					for ( int i=0; i < genBeacons.size(); i++ ) {
-						newLocations.add( genBeacons.get( i ).getLocation() );
+					for (GeneratedBeacon genBeacon : genBeacons) {
+						newLocations.add(genBeacon.getLocation());
 					}
 					mapLayout.setBeaconLocations( newLocations );
 					mapLayout.setBeaconRegionSize( newGenMap.getPreferredSize() );
