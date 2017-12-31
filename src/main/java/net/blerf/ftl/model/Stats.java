@@ -100,7 +100,7 @@ public class Stats {
 	public int getIntRecord( StatType type ) {
 		if ( !intMap.containsKey( type ) )
 			log.error( "No int record found for type: "+ type );
-		return intMap.get( type ).intValue();
+		return intMap.get(type);
 	}
 
 	public void setMostShipsDefeated( int n ) { setIntRecord( StatType.MOST_SHIPS_DEFEATED, n ); }

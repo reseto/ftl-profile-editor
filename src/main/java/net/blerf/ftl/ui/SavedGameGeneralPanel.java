@@ -449,7 +449,7 @@ public class SavedGameGeneralPanel extends JPanel {
 			unknownsPanel.setStringAndReminder( TOP_EPSILON, gameState.getUnknownEpsilon() );
 			unknownsPanel.setIntAndReminder( TOP_MU, gameState.getUnknownMu() );
 			unknownsPanel.setIntAndReminder( TOP_NU, gameState.getUnknownNu() );
-			unknownsPanel.setIntAndReminder( TOP_XI, (gameState.getUnknownXi() != null ? gameState.getUnknownXi().intValue() : 0) );
+			unknownsPanel.setIntAndReminder( TOP_XI, (gameState.getUnknownXi() != null ? gameState.getUnknownXi() : 0) );
 			unknownsPanel.setBoolAndReminder( TOP_AUTOFIRE, gameState.getAutofire() );
 
 			SavedGameParser.EncounterState enc = gameState.getEncounter();

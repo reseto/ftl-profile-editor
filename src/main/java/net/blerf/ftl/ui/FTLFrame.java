@@ -1198,7 +1198,7 @@ public class FTLFrame extends JFrame implements Statusbar {
 		StringBuilder releaseBuf = new StringBuilder();
 
 		for ( Map.Entry<Integer, List<String>> releaseEntry : historyMap.entrySet() ) {
-			if ( releaseEntry.getKey().intValue() <= sinceVersion ) break;
+			if (releaseEntry.getKey() <= sinceVersion ) break;
 
 			releaseBuf.setLength( 0 );
 

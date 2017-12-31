@@ -73,7 +73,7 @@ public class SectorTree {
 			List<SectorDot> columnDots = dotColumns.get( c );
 
 			for ( int r=0; r < columnDots.size(); r++ ) {
-				boolean visited = route.get( dotsSoFar + r ).booleanValue();
+				boolean visited = route.get(dotsSoFar + r);
 				columnDots.get( r ).setVisited( visited );
 			}
 
@@ -432,7 +432,7 @@ public class SectorTree {
 				boolean visited = false;
 
 				if ( dotsSoFar < route.size() ) {
-					visited = route.get( dotsSoFar ).booleanValue();
+					visited = route.get(dotsSoFar);
 				}
 
 				dot.setVisited( visited );

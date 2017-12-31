@@ -482,7 +482,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 		// Quests.
 		for ( Map.Entry<String, Integer> entry : gameState.getQuestEventMap().entrySet() ) {
 			String questEventId = entry.getKey();
-			int questBeaconId = entry.getValue().intValue();
+			int questBeaconId = entry.getValue();
 
 			QuestSprite questSprite = new QuestSprite( questEventId );
 			SectorMapConstraints questC = new SectorMapConstraints( SectorMapConstraints.MISC_BOX );

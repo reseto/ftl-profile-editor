@@ -88,9 +88,9 @@ public class SectorTreeEditPanel extends JLayeredPane implements SectorTreeListe
 					JLabel sourceLbl = (JLabel)source;
 
 					Integer columnInt = peekLblMap.get( sourceLbl );
-					if ( columnInt == null || columnInt.intValue() >= getPreviewPanel().getSectorTree().getColumnsCount() ) return;
+					if ( columnInt == null || columnInt >= getPreviewPanel().getSectorTree().getColumnsCount() ) return;
 
-					setPeekColumn( columnInt.intValue() );
+					setPeekColumn(columnInt);
 				}
 				else if ( source instanceof NextDotReticle ) {
 					NextDotReticle sourceReticle = (NextDotReticle)source;
@@ -118,10 +118,10 @@ public class SectorTreeEditPanel extends JLayeredPane implements SectorTreeListe
 
 				JButton sourceBtn = (JButton)source;
 				Integer columnInt = rollbackBtnMap.get( sourceBtn );
-				if ( columnInt == null || columnInt.intValue() >= getPreviewPanel().getSectorTree().getColumnsCount() ) return;
+				if ( columnInt == null || columnInt >= getPreviewPanel().getSectorTree().getColumnsCount() ) return;
 
 				SectorTree tree = getPreviewPanel().getSectorTree();
-				tree.truncateSectorVisitation( columnInt.intValue() );
+				tree.truncateSectorVisitation(columnInt);
 				tree.fireVisitationChanged();
 			}
 		};
@@ -283,7 +283,7 @@ public class SectorTreeEditPanel extends JLayeredPane implements SectorTreeListe
 
 		for ( Map.Entry<JButton,Integer> entry : rollbackBtnMap.entrySet() ) {
 			JButton rollbackBtn = entry.getKey();
-			int c = entry.getValue().intValue();
+			int c = entry.getValue();
 			rollbackBtn.setEnabled( (c < lastVisitedColumn) );
 		}
 
@@ -333,7 +333,7 @@ public class SectorTreeEditPanel extends JLayeredPane implements SectorTreeListe
 	public void setPeekColumn( int column ) {
 		for ( Map.Entry<JLabel,Integer> entry : titleLblMap.entrySet() ) {
 			JLabel titleLbl = entry.getKey();
-			int titleCol = entry.getValue().intValue();
+			int titleCol = entry.getValue();
 			titleLbl.setVisible( (column == titleCol) );
 		}
 	}

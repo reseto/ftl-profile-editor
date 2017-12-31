@@ -380,7 +380,7 @@ public class FTLPack extends AbstractPack {
 			throw new FileNotFoundException( "InnerPath does not exist: "+ innerPath );
 		}
 
-		int entryIndex = pathToIndexMap.get( innerPath ).intValue();
+		int entryIndex = pathToIndexMap.get(innerPath);
 		DatEntry entry = entryList.get( entryIndex );
 
 		raf.seek( entry.dataOffset );
@@ -408,7 +408,7 @@ public class FTLPack extends AbstractPack {
 			throw new FileNotFoundException( "InnerPath does not exist: "+ innerPath );
 		}
 
-		int entryIndex = pathToIndexMap.get( innerPath ).intValue();
+		int entryIndex = pathToIndexMap.get(innerPath);
 		pathToIndexMap.remove( innerPath );
 		DatEntry removedEntry = entryList.set( entryIndex, null );
 
@@ -438,7 +438,7 @@ public class FTLPack extends AbstractPack {
 			throw new FileNotFoundException( "InnerPath does not exist: "+ innerPath );
 		}
 
-		int entryIndex = pathToIndexMap.get( innerPath ).intValue();
+		int entryIndex = pathToIndexMap.get(innerPath);
 		DatEntry entry = entryList.get( entryIndex );
 
 		// Create a stream that can only see this region.

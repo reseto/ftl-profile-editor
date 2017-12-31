@@ -334,7 +334,7 @@ public class SavedGameParser extends Parser {
 		writeInt( out, gameState.getStateVars().size() );
 		for ( Map.Entry<String, Integer> entry : gameState.getStateVars().entrySet() ) {
 			writeString( out, entry.getKey() );
-			writeInt( out, entry.getValue().intValue() );
+			writeInt( out, entry.getValue());
 		}
 
 		writeShip( out, gameState.getPlayerShipState(), fileFormat );
@@ -372,7 +372,7 @@ public class SavedGameParser extends Parser {
 
 		writeInt( out, gameState.getSectorVisitation().size() );
 		for ( Boolean visited : gameState.getSectorVisitation() ) {
-			writeBool( out, visited.booleanValue() );
+			writeBool( out, visited);
 		}
 
 		writeInt( out, gameState.getSectorNumber() );
@@ -386,7 +386,7 @@ public class SavedGameParser extends Parser {
 		writeInt( out, gameState.getQuestEventMap().size() );
 		for ( Map.Entry<String, Integer> entry : gameState.getQuestEventMap().entrySet() ) {
 			writeString( out, entry.getKey() );
-			writeInt( out, entry.getValue().intValue() );
+			writeInt( out, entry.getValue());
 		}
 
 		writeInt( out, gameState.getDistantQuestEventList().size() );
@@ -440,7 +440,7 @@ public class SavedGameParser extends Parser {
 			writeInt( out, gameState.getUnknownNu() );
 
 			if ( gameState.getNearbyShipState() != null ) {
-				writeInt( out, gameState.getUnknownXi().intValue() );
+				writeInt( out, gameState.getUnknownXi());
 			}
 
 			writeBool( out, gameState.getAutofire() );
@@ -454,7 +454,7 @@ public class SavedGameParser extends Parser {
 
 			writeInt( out, flagship.getOccupancyMap().size() );
 			for (Map.Entry<Integer, Integer> entry : flagship.getOccupancyMap().entrySet()) {
-				int occupantCount = entry.getValue().intValue();
+				int occupantCount = entry.getValue();
 				writeInt( out, occupantCount );
 			}
 		}
@@ -612,8 +612,8 @@ public class SavedGameParser extends Parser {
 		int roomCount = shipLayout.getRoomCount();
 		for ( int r=0; r < roomCount; r++ ) {
 			EnumMap<ShipLayout.RoomInfo, Integer> roomInfo = shipLayout.getRoomInfo( r );
-			int squaresH = roomInfo.get(ShipLayout.RoomInfo.SQUARES_H).intValue();
-			int squaresV = roomInfo.get(ShipLayout.RoomInfo.SQUARES_V).intValue();
+			int squaresH = roomInfo.get(ShipLayout.RoomInfo.SQUARES_H);
+			int squaresV = roomInfo.get(ShipLayout.RoomInfo.SQUARES_V);
 
 			// Room states are stored in roomId order.
 			shipState.addRoom( readRoom( in, squaresH, squaresV, fileFormat ) );
@@ -634,8 +634,8 @@ public class SavedGameParser extends Parser {
 			ShipLayout.DoorCoordinate doorCoord = entry.getKey();
 			EnumMap<ShipLayout.DoorInfo,Integer> doorInfo = entry.getValue();
 
-			if ( doorInfo.get(ShipLayout.DoorInfo.ROOM_ID_A).intValue() == -1 ||
-			     doorInfo.get(ShipLayout.DoorInfo.ROOM_ID_B).intValue() == -1 ) {
+			if (doorInfo.get(ShipLayout.DoorInfo.ROOM_ID_A) == -1 ||
+					doorInfo.get(ShipLayout.DoorInfo.ROOM_ID_B) == -1 ) {
 				vacuumDoorMap.put( doorCoord, doorInfo );
 				continue;
 			}
@@ -823,8 +823,8 @@ public class SavedGameParser extends Parser {
 		int roomCount = shipLayout.getRoomCount();
 		for ( int r=0; r < roomCount; r++ ) {
 			EnumMap<ShipLayout.RoomInfo, Integer> roomInfo = shipLayout.getRoomInfo( r );
-			int squaresH = roomInfo.get(ShipLayout.RoomInfo.SQUARES_H).intValue();
-			int squaresV = roomInfo.get(ShipLayout.RoomInfo.SQUARES_V).intValue();
+			int squaresH = roomInfo.get(ShipLayout.RoomInfo.SQUARES_H);
+			int squaresV = roomInfo.get(ShipLayout.RoomInfo.SQUARES_V);
 
 			RoomState room = shipState.getRoom( r );
 			writeRoom( out, room, squaresH, squaresV, fileFormat );
@@ -834,7 +834,7 @@ public class SavedGameParser extends Parser {
 		for ( Map.Entry<Point, Integer> entry : shipState.getBreachMap().entrySet() ) {
 			writeInt( out, entry.getKey().x );
 			writeInt( out, entry.getKey().y );
-			writeInt( out, entry.getValue().intValue() );
+			writeInt( out, entry.getValue());
 		}
 
 		// Doors are defined in the layout text file, but their
@@ -848,8 +848,8 @@ public class SavedGameParser extends Parser {
 			ShipLayout.DoorCoordinate doorCoord = entry.getKey();
 			EnumMap<ShipLayout.DoorInfo,Integer> doorInfo = entry.getValue();
 
-			if ( doorInfo.get(ShipLayout.DoorInfo.ROOM_ID_A).intValue() == -1 ||
-			     doorInfo.get(ShipLayout.DoorInfo.ROOM_ID_B).intValue() == -1 ) {
+			if (doorInfo.get(ShipLayout.DoorInfo.ROOM_ID_A) == -1 ||
+					doorInfo.get(ShipLayout.DoorInfo.ROOM_ID_B) == -1 ) {
 				vacuumDoorMap.put( doorCoord, doorInfo );
 				continue;
 			}
@@ -1005,7 +1005,7 @@ public class SavedGameParser extends Parser {
 
 			writeInt( out, crew.getSpriteTintIndeces().size() );
 			for ( Integer tintInt : crew.getSpriteTintIndeces() ) {
-				writeInt( out, tintInt.intValue() );
+				writeInt( out, tintInt);
 			}
 
 			writeBool( out, crew.isMindControlled() );
@@ -1535,7 +1535,7 @@ public class SavedGameParser extends Parser {
 
 		writeInt( out, encounter.getChoiceList().size() );
 		for ( Integer choiceInt : encounter.getChoiceList() ) {
-			writeInt( out, choiceInt.intValue() );
+			writeInt( out, choiceInt);
 		}
 	}
 
@@ -1663,7 +1663,7 @@ public class SavedGameParser extends Parser {
 
 		writeInt( out, flagship.getOccupancyMap().size() );
 		for (Map.Entry<Integer, Integer> entry : flagship.getOccupancyMap().entrySet()) {
-			int occupantCount = entry.getValue().intValue();
+			int occupantCount = entry.getValue();
 			writeInt( out, occupantCount );
 		}
 	}
@@ -2306,7 +2306,7 @@ public class SavedGameParser extends Parser {
 		 */
 		public int getStateVar( String stateVarId ) {
 			Integer result = stateVars.get( stateVarId );
-			return result.intValue();
+			return result;
 		}
 
 		public Map<String, Integer> getStateVars() { return stateVars; }
@@ -2761,7 +2761,7 @@ public class SavedGameParser extends Parser {
 
 			result.append( "\nState Vars...\n" );
 			for ( Map.Entry<String, Integer> entry : stateVars.entrySet() ) {
-				result.append( String.format( "%-16s %4d\n", entry.getKey() +":", entry.getValue().intValue() ) );
+				result.append( String.format( "%-16s %4d\n", entry.getKey() +":", entry.getValue()) );
 			}
 
 			result.append( "\nPlayer Ship...\n" );
@@ -2814,7 +2814,7 @@ public class SavedGameParser extends Parser {
 			result.append( "\nQuests...\n" );
 			for ( Map.Entry<String, Integer> entry : questEventMap.entrySet() ) {
 				String questEventId = entry.getKey();
-				int questBeaconId = entry.getValue().intValue();
+				int questBeaconId = entry.getValue();
 				result.append( String.format( "QuestEventId: %s, BeaconId: %d\n", questEventId, questBeaconId ) );
 			}
 
@@ -2954,13 +2954,13 @@ public class SavedGameParser extends Parser {
 				ShipBlueprint.SystemList.SystemRoom[] systemRoom = shipBlueprint.getSystemList().getSystemRoom( systemType );
 				if ( systemRoom != null ) {
 					Boolean start = systemRoom[0].getStart();
-					if ( start == null || start.booleanValue() == true ) {
+					if ( start == null || start == true ) {
 						SystemBlueprint systemBlueprint = DataManager.get().getSystem( systemType.getId() );
 						systemState.setCapacity( systemBlueprint.getStartPower() );
 
 						// The optional room max attribute caps randomly generated ships' system capacity.
 						if ( systemRoom[0].getMaxPower() != null ) {
-							systemState.setCapacity( systemRoom[0].getMaxPower().intValue() );
+							systemState.setCapacity(systemRoom[0].getMaxPower());
 						}
 
 						if ( systemType.isSubsystem() ) {
@@ -2983,8 +2983,8 @@ public class SavedGameParser extends Parser {
 			getRoomList().clear();
 			for ( int r=0; r < shipLayout.getRoomCount(); r++ ) {
 				EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo(r);
-				int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-				int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+				int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+				int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 				RoomState roomState = new RoomState();
 				for ( int s=0; s < squaresH*squaresV; s++ ) {
@@ -3562,7 +3562,7 @@ public class SavedGameParser extends Parser {
 				else { result.append( ",\n" ); }
 
 				Point breachCoord = entry.getKey();
-				int breachHealth = entry.getValue().intValue();
+				int breachHealth = entry.getValue();
 
 				result.append( String.format( "BreachId: %2d, Raw Coords: %2d,%2d (-Layout Offset: %2d,%2d)\n", ++breachId, breachCoord.x, breachCoord.y, breachCoord.x-shipLayout.getOffsetX(), breachCoord.y-shipLayout.getOffsetY() ) );
 				result.append( String.format( "  Breach HP: %3d\n", breachHealth ) );
@@ -6378,8 +6378,8 @@ public class SavedGameParser extends Parser {
 
 			result.append( "\nOccupancy of Last Seen Flagship...\n" );
 			for ( Map.Entry<Integer, Integer> entry : occupancyMap.entrySet() ) {
-				int roomId = entry.getKey().intValue();
-				int occupantCount = entry.getValue().intValue();
+				int roomId = entry.getKey();
+				int occupantCount = entry.getValue();
 
 				result.append( String.format( "Room Id: %2d, Crew: %d\n", roomId, occupantCount ) );
 			}

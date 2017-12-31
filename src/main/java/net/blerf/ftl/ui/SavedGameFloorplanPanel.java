@@ -791,12 +791,12 @@ public class SavedGameFloorplanPanel extends JPanel {
 			squareRegionSquareIdMap.clear();
 			for ( int i=0; i < shipLayout.getRoomCount(); i++ ) {
 				EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo( i );
-				int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-				int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+				int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+				int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 				int roomX = originX + roomLocX*squareSize;
 				int roomY = originY + roomLocY*squareSize;
-				int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-				int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+				int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+				int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 				Rectangle roomRect = new Rectangle( roomX, roomY, squaresH*squareSize, squaresV*squareSize );
 				roomRegionRoomIdMap.put( roomRect, i);
@@ -824,12 +824,12 @@ public class SavedGameFloorplanPanel extends JPanel {
 					log.trace( String.format( "Found a blocked region: roomId: %2d, squareId: %d", badRoomId, badSquareId ) );
 
 					EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo( badRoomId );
-					int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-					int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+					int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+					int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 					int roomX = originX + roomLocX*squareSize;
 					int roomY = originY + roomLocY*squareSize;
-					int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-					int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+					int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+					int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 					int squareX = roomX + tileEdge + (badSquareId%squaresH)*squareSize;
 					int squareY = roomY + tileEdge + (badSquareId/squaresH)*squareSize;
@@ -909,12 +909,12 @@ public class SavedGameFloorplanPanel extends JPanel {
 
 				int roomId = systemRoom.getRoomId();
 				EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo( roomId );
-				int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-				int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+				int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+				int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 				int roomX = originX + roomLocX*squareSize;
 				int roomY = originY + roomLocY*squareSize;
-				int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-				int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+				int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+				int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 				// TODO: Looks like when medbay omits img, it's "room_medbay.png".
 
@@ -961,7 +961,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		// TODO: Magic number (when null: it's omitted in autoBlueprints.xml).
 		// In-game GUI shows 2 or 3.
 		int blueprintDroneSlots = 3;
-		if ( shipBlueprint.getDroneSlots() != null ) blueprintDroneSlots = shipBlueprint.getDroneSlots().intValue();
+		if ( shipBlueprint.getDroneSlots() != null ) blueprintDroneSlots = shipBlueprint.getDroneSlots();
 
 		int actualDroneSlots = droneList.size();
 		if ( blueprintDroneSlots >= droneList.size() ) {
@@ -1018,12 +1018,12 @@ public class SavedGameFloorplanPanel extends JPanel {
 		// Add rooms.
 		for ( int i=0; i < shipLayout.getRoomCount(); i++ ) {
 			EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo(i);
-			int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-			int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+			int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+			int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 			int roomX = originX + roomLocX*squareSize;
 			int roomY = originY + roomLocY*squareSize;
-			int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-			int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+			int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+			int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 			int oxygen = shipState.getRoom(i).getOxygen();
 
 			SpriteReference<RoomState> roomRef = new SpriteReference<RoomState>( new RoomState( shipState.getRoom( i ) ) );
@@ -1041,12 +1041,12 @@ public class SavedGameFloorplanPanel extends JPanel {
 			if ( roomIds != null ) {
 				for ( int i=0; i < roomIds.length; i++ ) {
 					EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo( roomIds[i] );
-					int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-					int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+					int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+					int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 					int roomX = originX + roomLocX*squareSize;
 					int roomY = originY + roomLocY*squareSize;
-					int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-					int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+					int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+					int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 					int systemX = roomX + tileEdge + squaresH*squareSize/2;
 					int systemY = roomY + tileEdge + squaresV*squareSize/2;
@@ -1084,25 +1084,25 @@ public class SavedGameFloorplanPanel extends JPanel {
 			for ( Map.Entry<Rectangle, Integer> regionEntry : squareRegionRoomIdMap.entrySet() ) {
 				if ( regionEntry.getKey().contains( breachX, breachY ) ) {
 					squareRect = regionEntry.getKey();
-					roomId = regionEntry.getValue().intValue();
+					roomId = regionEntry.getValue();
 					break;
 				}
 			}
 			if ( squareRegionSquareIdMap.containsKey( squareRect ) )
-				squareId = squareRegionSquareIdMap.get( squareRect ).intValue();
+				squareId = squareRegionSquareIdMap.get(squareRect);
 
-			addBreachSprite( breachX, breachY, roomId, squareId, breachEntry.getValue().intValue() );
+			addBreachSprite( breachX, breachY, roomId, squareId, breachEntry.getValue());
 		}
 
 		// Add fires.
 		for ( int i=0; i < shipLayout.getRoomCount(); i++ ) {
 			EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo(i);
-			int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-			int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+			int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+			int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 			int roomX = originX + roomLocX*squareSize;
 			int roomY = originY + roomLocY*squareSize;
-			int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-			int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+			int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+			int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 			RoomState roomState = shipState.getRoom(i);
 			for ( int s=0; s < squaresH*squaresV; s++ ) {
@@ -1146,12 +1146,12 @@ public class SavedGameFloorplanPanel extends JPanel {
 				// TODO: Place living crew at their real spriteX/spriteY.
 
 				EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo( crewState.getRoomId() );
-				int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-				int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+				int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+				int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 				int roomX = originX + roomLocX*squareSize;
 				int roomY = originY + roomLocY*squareSize;
-				int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-				int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+				int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+				int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 				crewX = roomX + tileEdge + (crewState.getRoomSquare()%squaresH)*squareSize + squareSize/2;
 				crewY = roomY + tileEdge + (crewState.getRoomSquare()/squaresH)*squareSize + squareSize/2;
@@ -1262,10 +1262,10 @@ public class SavedGameFloorplanPanel extends JPanel {
 			int squareId = breachSprite.getSquareId();
 
 			EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo( roomId );
-			int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-			int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
-			int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-			int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+			int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+			int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
+			int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+			int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 			int breachX = roomLocX + squareId%squaresH + shipLayout.getOffsetX();
 			int breachY = roomLocY + squareId/squaresV + shipLayout.getOffsetY();
@@ -1851,12 +1851,12 @@ public class SavedGameFloorplanPanel extends JPanel {
 
 		for ( int i=0; i < shipLayout.getRoomCount(); i++ ) {
 			EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo(i);
-			int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-			int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+			int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+			int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 			int roomX = originX + roomLocX*squareSize;
 			int roomY = originY + roomLocY*squareSize;
-			int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-			int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+			int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+			int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 			// Draw floor lines within rooms.
 			wallG.setColor( floorCrackColor );
@@ -2001,7 +2001,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 
 		for ( Map.Entry<Rectangle, Integer> regionEntry : roomRegionRoomIdMap.entrySet() ) {
 			if ( regionEntry.getKey().contains( centerX, centerY ) ) {
-				result = regionEntry.getValue().intValue();
+				result = regionEntry.getValue();
 			}
 		}
 
@@ -2133,7 +2133,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		Rectangle roomRect = null;
 
 		for ( Map.Entry<Rectangle, Integer> regionEntry : roomRegionRoomIdMap.entrySet() ) {
-			if ( regionEntry.getValue().intValue() == roomId ) {
+			if (regionEntry.getValue() == roomId ) {
 				roomRect = regionEntry.getKey();
 				break;
 			}
@@ -2957,7 +2957,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		int maxSystemCapacity = systemBlueprint.getMaxPower();
 		Integer maxPowerOverride = shipBlueprint.getSystemList().getSystemRoom( systemRef.get().getSystemType() )[0].getMaxPower();
 		if ( maxPowerOverride != null ) {
-			maxSystemCapacity = maxPowerOverride.intValue();
+			maxSystemCapacity = maxPowerOverride;
 		}
 
 		final int batteryCapacity = getBatteryPoolCapacity();
@@ -3950,12 +3950,12 @@ public class SavedGameFloorplanPanel extends JPanel {
 					int[] droneSystemRoomId = shipBlueprint.getSystemList().getRoomIdBySystemType( SystemType.DRONE_CTRL );
 					if ( droneSystemRoomId != null ) {
 						EnumMap<ShipLayout.RoomInfo, Integer> roomInfoMap = shipLayout.getRoomInfo( droneSystemRoomId[0] );
-						int roomLocX = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_X ).intValue();
-						int roomLocY = roomInfoMap.get( ShipLayout.RoomInfo.LOCATION_Y ).intValue();
+						int roomLocX = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_X);
+						int roomLocY = roomInfoMap.get(ShipLayout.RoomInfo.LOCATION_Y);
 						int roomX = originX + roomLocX*squareSize;
 						int roomY = originY + roomLocY*squareSize;
-						int squaresH = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_H ).intValue();
-						int squaresV = roomInfoMap.get( ShipLayout.RoomInfo.SQUARES_V ).intValue();
+						int squaresH = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_H);
+						int squaresV = roomInfoMap.get(ShipLayout.RoomInfo.SQUARES_V);
 
 						for ( int s=0; s < squaresH*squaresV; s++ ) {
 							int squareX = roomX + tileEdge + (s%squaresH)*squareSize;
@@ -4509,7 +4509,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		public int getRoomId() {
 			int roomId = -1;
 			if ( squareRegionRoomIdMap.containsKey( currentRect ) ) {
-				roomId = squareRegionRoomIdMap.get( currentRect ).intValue();
+				roomId = squareRegionRoomIdMap.get(currentRect);
 			}
 			return roomId;
 		}
@@ -4517,7 +4517,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		public int getSquareId() {
 			int squareId = -1;
 			if ( squareRegionSquareIdMap.containsKey( currentRect ) ) {
-				squareId = squareRegionSquareIdMap.get( currentRect ).intValue();
+				squareId = squareRegionSquareIdMap.get(currentRect);
 			}
 			return squareId;
 		}

@@ -66,7 +66,7 @@ public class ShipLayout {
 	public int getRoomCount() {
 		try {
 			Integer lastKey = roomMap.lastKey();
-			return lastKey.intValue()+1;
+			return lastKey +1;
 		}
 		catch ( NoSuchElementException e ) {
 			return 0;
