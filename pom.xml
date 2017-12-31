@@ -59,7 +59,7 @@
 			<version>1.48</version>  <!-- Since 1.55, requires Java 7. Since 1.58, Java 8. -->
 		</dependency>
 	</dependencies>
-  
+
 	<build>
 	<plugins>
 		<plugin>
@@ -67,9 +67,8 @@
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>3.1</version>
 			<configuration>
-				<source>1.6</source>
-				<target>1.6</target>
-				<compilerArgument>-Xlint:unchecked</compilerArgument>
+				<source>${jdk.version}</source>
+				<target>${jdk.version}</target>
 			</configuration>
 		</plugin>
 		<plugin>
@@ -138,5 +137,5 @@
 		</plugin>
 	</plugins>
   </build>
-  
+
 </project>
