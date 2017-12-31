@@ -3910,8 +3910,10 @@ public class SavedGameParser extends Parser {
 		 * For preserved dead crew, which have no body, this lingers, or may be
 		 * (0,0).
 		 */
-		public void setSpriteX( int n ) { spriteX = n; };
-		public void setSpriteY( int n ) { spriteY = n; };
+		public void setSpriteX( int n ) { spriteX = n; }
+
+		public void setSpriteY( int n ) { spriteY = n; }
+
 		public int getSpriteX() { return spriteX; }
 		public int getSpriteY() { return spriteY; }
 
@@ -6089,7 +6091,7 @@ public class SavedGameParser extends Parser {
 
 
 	public static enum HazardVulnerability {
-		PLAYER_SHIP, NEARBY_SHIP, BOTH_SHIPS;
+		PLAYER_SHIP, NEARBY_SHIP, BOTH_SHIPS
 	}
 
 	public static class EnvironmentState {
@@ -7118,7 +7120,7 @@ public class SavedGameParser extends Parser {
 
 
 	public static enum ProjectileType {
-		BEAM, BOMB, LASER_OR_BURST, MISSILE, ROCK_OR_EXPLOSION, INVALID;
+		BEAM, BOMB, LASER_OR_BURST, MISSILE, ROCK_OR_EXPLOSION, INVALID
 	}
 
 
@@ -7129,7 +7131,7 @@ public class SavedGameParser extends Parser {
 	 * OwnerId (-1, 0, 1)
 	 */
 	public static enum Affiliation {
-		OTHER, PLAYER_SHIP, NEARBY_SHIP;
+		OTHER, PLAYER_SHIP, NEARBY_SHIP
 	}
 
 

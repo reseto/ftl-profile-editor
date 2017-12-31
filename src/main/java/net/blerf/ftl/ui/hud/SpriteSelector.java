@@ -21,8 +21,8 @@ import javax.swing.SwingUtilities;
 public class SpriteSelector extends JComponent {
 	private SpriteCriteria defaultCriteria = new SpriteCriteria();
 
-	private ArrayList<List<? extends JComponent>> spriteLists = new ArrayList<List<? extends JComponent>>();;
-	private SpriteCriteria spriteCriteria = defaultCriteria;
+	private ArrayList<List<? extends JComponent>> spriteLists = new ArrayList<List<? extends JComponent>>();
+    private SpriteCriteria spriteCriteria = defaultCriteria;
 	private SpriteSelectionCallback callback = null;
 	private Point mousePoint = new Point( -1, -1 );
 	private JComponent currentSprite = null;
