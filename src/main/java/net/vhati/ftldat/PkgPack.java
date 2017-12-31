@@ -574,7 +574,7 @@ public class PkgPack extends AbstractPack {
 	 */
 	@Override
 	public void add( String innerPath, InputStream is ) throws IOException {
-		if ( innerPath.indexOf( "\\" ) != -1 ) {
+		if (innerPath.contains("\\")) {
 			throw new IllegalArgumentException( "InnerPath contains backslashes: "+ innerPath );
 		}
 		if ( pathToIndexMap.containsKey( innerPath ) ) {
@@ -667,7 +667,7 @@ public class PkgPack extends AbstractPack {
 
 	@Override
 	public void remove( String innerPath ) throws FileNotFoundException, IOException {
-		if ( innerPath.indexOf( "\\" ) != -1 ) {
+		if (innerPath.contains("\\")) {
 			throw new IllegalArgumentException( "InnerPath contains backslashes: "+ innerPath );
 		}
 		if ( !pathToIndexMap.containsKey( innerPath ) ) {
@@ -689,7 +689,7 @@ public class PkgPack extends AbstractPack {
 
 	@Override
 	public boolean contains( String innerPath ) {
-		if ( innerPath.indexOf( "\\" ) != -1 ) {
+		if (innerPath.contains("\\")) {
 			throw new IllegalArgumentException( "InnerPath contains backslashes: "+ innerPath );
 		}
 		return pathToIndexMap.containsKey( innerPath );
@@ -697,7 +697,7 @@ public class PkgPack extends AbstractPack {
 
 	@Override
 	public InputStream getInputStream( String innerPath ) throws FileNotFoundException, IOException {
-		if ( innerPath.indexOf( "\\" ) != -1 ) {
+		if (innerPath.contains("\\")) {
 			throw new IllegalArgumentException( "InnerPath contains backslashes: "+ innerPath );
 		}
 		if ( !pathToIndexMap.containsKey( innerPath ) ) {
