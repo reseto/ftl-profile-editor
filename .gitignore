@@ -13,3 +13,4 @@ ftl-profile-editor.log
 target/
 
 log4j2-test.xml
+profile-editor-log.txt
