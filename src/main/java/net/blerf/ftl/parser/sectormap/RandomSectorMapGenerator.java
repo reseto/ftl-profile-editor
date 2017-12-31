@@ -82,7 +82,7 @@ public class RandomSectorMapGenerator {
 					if ( n % 5 == 0 ) {
 						z++;
 
-						if ( (int)(skipInclusiveCount / z) > 4 ) {  // Skip this cell.
+						if ( skipInclusiveCount / z > 4 ) {  // Skip this cell.
 							skipInclusiveCount++;
 							continue;
 						}
@@ -142,7 +142,7 @@ public class RandomSectorMapGenerator {
 						if ( n % 5 == 0 ) {
 							z++;
 
-							if ( (int)(skipInclusiveCount / z) > 4 ) {  // Skip this cell.
+							if ( skipInclusiveCount / z > 4 ) {  // Skip this cell.
 								skipInclusiveCount++;
 								continue;
 							}

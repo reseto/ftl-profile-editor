@@ -931,7 +931,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 
 			// Draw walls and floor crevices.
 			BufferedImage wallImage = gc.createCompatibleImage( shipChassis.getImageBounds().w, shipChassis.getImageBounds().h, Transparency.BITMASK );
-			Graphics2D wallG = (Graphics2D)wallImage.createGraphics();
+			Graphics2D wallG = wallImage.createGraphics();
 			drawWalls( wallG, originX, originY, shipLayout );
 			wallG.dispose();
 			wallLbl.setIcon( new ImageIcon( wallImage ) );
