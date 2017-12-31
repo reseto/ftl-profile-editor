@@ -3757,7 +3757,7 @@ public class SavedGameParser extends Parser {
 			cloneReady = srcCrew.getCloneReady();
 
 			for ( Integer colorIndex : srcCrew.getSpriteTintIndeces() ) {
-				spriteTintIndeces.add( new Integer( colorIndex ) );
+				spriteTintIndeces.add(colorIndex);
 			}
 
 			mindControlled = srcCrew.isMindControlled();

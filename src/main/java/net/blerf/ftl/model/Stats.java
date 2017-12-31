@@ -72,7 +72,7 @@ public class Stats {
 		}
 
 		for ( Map.Entry<StatType, Integer> entry : srcStats.getIntRecordMap().entrySet() ) {
-			intMap.put( entry.getKey(), new Integer( entry.getValue() ) );
+			intMap.put( entry.getKey(), entry.getValue());
 		}
 	}
 
