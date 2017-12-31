@@ -173,8 +173,8 @@ public class SpriteSelector extends JComponent {
 
 
 
-	public static interface SpriteSelectionCallback {
+	public interface SpriteSelectionCallback {
 		/** Responds to a clicked sprite, returning true to continue selecting. */
-		public boolean spriteSelected( SpriteSelector spriteSelector, JComponent sprite );
+		boolean spriteSelected(SpriteSelector spriteSelector, JComponent sprite);
 	}
 }

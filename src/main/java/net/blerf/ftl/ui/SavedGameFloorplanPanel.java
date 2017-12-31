@@ -4619,6 +4619,6 @@ public class SavedGameFloorplanPanel extends JPanel {
 
 	public interface SquareSelectionCallback {
 		/** Responds to a clicked square, returning true to continue selecting. */
-		public boolean squareSelected( SquareSelector squareSelector, int roomId, int squareId );
+		boolean squareSelected(SquareSelector squareSelector, int roomId, int squareId);
 	}
 }

@@ -7,7 +7,7 @@ import net.blerf.ftl.ui.SpriteReference;
  * A sprite which represents a SpriteReference's nested object.
  */
 public interface ReferenceSprite<T> {
-	public SpriteReference<T> getReference();
+	SpriteReference<T> getReference();
 
-	public void referenceChanged();
+	void referenceChanged();
 }
