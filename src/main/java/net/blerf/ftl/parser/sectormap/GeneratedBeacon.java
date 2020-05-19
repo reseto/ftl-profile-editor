@@ -1,6 +1,7 @@
 package net.blerf.ftl.parser.sectormap;
 
 import java.awt.Point;
+import net.blerf.ftl.xml.FTLEvent;
 
 
 /**
@@ -18,6 +19,7 @@ public class GeneratedBeacon {
 	protected int throbTicks = 0;
 	protected int x = 0;
 	protected int y = 0;
+	protected FTLEvent event = null;
 
 	/**
 	 * Sets time elapsed while this beacon's 'under attack' throbber
@@ -39,4 +41,12 @@ public class GeneratedBeacon {
 	 */
 	public void setLocation( int newX, int newY ) { x = newX; y = newY; }
 	public Point getLocation() { return new Point( x, y ); }
+
+	/**
+	 * Sets the event for this beacon
+	 */
+	public void setEvent( FTLEvent newEvent ) { event = newEvent; }
+	public FTLEvent getEvent() { return event; }
+
+
 }

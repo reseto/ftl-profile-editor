@@ -41,6 +41,7 @@ import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.Encounters;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
+import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.SectorData;
 import net.blerf.ftl.xml.SectorDescription;
@@ -55,7 +56,7 @@ import net.blerf.ftl.xml.WeaponBlueprint;
 
 
 public class DefaultDataManager extends DataManager {
-	
+
 	private static final Logger log = LoggerFactory.getLogger( DefaultDataManager.class );
 
 	private List<String> stdPlayerShipBaseIds;
@@ -714,7 +715,7 @@ public class DefaultDataManager extends DataManager {
 		}
 	}
 
-	@Override	
+	@Override
 	public boolean hasResourceInputStream( String innerPath ) {
 		AbstractPack pack = packContainer.getPackFor( innerPath );
 		if ( pack != null && pack.contains( innerPath ) ) {
@@ -724,7 +725,7 @@ public class DefaultDataManager extends DataManager {
 		}
 	}
 
-	@Override	
+	@Override
 	public InputStream getResourceInputStream( String innerPath ) throws IOException {
 		AbstractPack pack = packContainer.getPackFor( innerPath );
 		if ( pack != null ) {
@@ -1129,6 +1130,27 @@ public class DefaultDataManager extends DataManager {
 		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
 			FTLEventList tmpEventList = entry.getValue().getEventListById( id );
 			if ( tmpEventList != null ) result = tmpEventList;
+		}
+		return result;
+	}
+
+	/**
+	 * Returns an TextList with a given id.
+	 * All event xml files are searched.
+	 */
+	@Override
+	public TextList getTextListById( String id, boolean dlcEnabled ) {
+		Map<String, Encounters> events = null;
+		if ( dlcEnabled ) {
+			events = dlcEventsFileMap;
+		} else {
+			events = stdEventsFileMap;
+		}
+
+		TextList result = null;
+		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
+			TextList tmpTextList = entry.getValue().getTextListById( id );
+			if ( tmpTextList != null ) result = tmpTextList;
 		}
 		return result;
 	}

@@ -18,6 +18,9 @@ public class ShipEvent {
 	@XmlAttribute( name = "name" )
 	private String id;
 
+	@XmlAttribute( name = "load", required = false )
+	private String load;
+
 	@XmlAttribute( name = "auto_blueprint" )
 	private String autoBlueprintId;
 
@@ -30,6 +33,14 @@ public class ShipEvent {
 
 	public void setId( String id ) {
 		this.id = id;
+	}
+
+	public String getLoad() {
+		return load;
+	}
+
+	public void setLoad( String load ) {
+		this.load = load;
 	}
 
 	public String getAutoBlueprintId() {

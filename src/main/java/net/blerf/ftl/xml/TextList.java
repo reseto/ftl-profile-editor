@@ -9,17 +9,17 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import net.blerf.ftl.xml.FTLEvent;
+import net.blerf.ftl.xml.NamedText;
 
 
-@XmlRootElement(name = "eventList")
+@XmlRootElement(name = "textList")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FTLEventList {
+public class TextList {
 	@XmlAttribute(name = "name")
 	private String id;
 
-	@XmlElement(name = "event", required = false)
-	private List<FTLEvent> eventList;
+	@XmlElement(name = "text", required = false)
+	private List<NamedText> textList;
 
 	public String getId() {
 		return id;
@@ -29,12 +29,12 @@ public class FTLEventList {
 		this.id = id;
 	}
 
-	public List<FTLEvent> getEventList() {
-		return eventList;
+	public List<NamedText> getTextList() {
+		return textList;
 	}
 
-	public void setEventList( List<FTLEvent> eventList ) {
-		this.eventList = eventList;
+	public void setTextList( List<NamedText> textList ) {
+		this.textList = textList;
 	}
 
 	@Override
