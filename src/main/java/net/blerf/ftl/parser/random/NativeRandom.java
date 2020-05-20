@@ -4,6 +4,9 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.blerf.ftl.parser.random.RandRNG;
 
 
@@ -15,6 +18,7 @@ import net.blerf.ftl.parser.random.RandRNG;
  * random results for a given seed.
  */
 public class NativeRandom implements RandRNG {
+	private static final Logger log = LoggerFactory.getLogger( NativeRandom.class );
 
 	protected int seed = 1;
 	protected String name = null;
@@ -34,8 +38,12 @@ public class NativeRandom implements RandRNG {
 		seed = newSeed;
 	}
 
+	static int count = 421;
+
 	@Override
 	public int rand() {
+		log.info( String.format( "RNG call %d", count ) );
+		count++;
 		return CLibrary.INSTANCE.rand();
 	}
 

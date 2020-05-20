@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
 import net.blerf.ftl.xml.DefaultDeferredText;
 import net.blerf.ftl.xml.FTLEvent;
@@ -41,6 +42,7 @@ public class FTLEvent {
 	@XmlElement
 	private ShipEvent ship;
 
+	@XmlElement(name = "item_modify", required = false)
 	private ItemList itemList;
 
 	public static class Item {
@@ -60,6 +62,24 @@ public class FTLEvent {
 	public static class ItemList {
 		@XmlElement( name = "item" )
 		public List<Item> items;
+	}
+
+	@XmlElement(name = "autoReward", required = false)
+	private AutoReward autoReward;
+
+	@XmlAccessorType( XmlAccessType.NONE )
+	public static class AutoReward {
+		@XmlAttribute( name = "level", required = false )
+		public String level;
+
+		@XmlValue
+		public String reward;
+
+		public int scrap = 0;
+		public int resources[] = {0, 0, 0};
+		public String weapon = null;
+		public String augment = null;
+		public String drone = null;
 	}
 
 	public String getId() {
@@ -124,6 +144,14 @@ public class FTLEvent {
 
 	public void setShip( ShipEvent ship ) {
 		this.ship = ship;
+	}
+
+	public AutoReward getAutoReward() {
+		return autoReward;
+	}
+
+	public void setAutoReward( AutoReward autoReward ) {
+		this.autoReward = autoReward;
 	}
 
 	@Override

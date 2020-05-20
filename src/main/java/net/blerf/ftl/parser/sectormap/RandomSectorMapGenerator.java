@@ -18,6 +18,7 @@ import net.blerf.ftl.xml.TextList;
 
 import net.blerf.ftl.parser.sectormap.GeneratedBeacon;
 import net.blerf.ftl.parser.sectormap.GeneratedSectorMap;
+import net.blerf.ftl.parser.sectormap.RandomEvent;
 import net.blerf.ftl.parser.random.RandRNG;
 
 
@@ -61,6 +62,22 @@ public class RandomSectorMapGenerator {
 	public static final double ISOLATION_THRESHOLD = 165d;
 
 	public String sectorId = "STANDARD_SPACE";
+	public int sectorNumber = 0;
+	public int difficulty = 1; // between 0 and 2
+
+	public static class EmptyBeacon {
+		public int id;
+		public int x;
+		public int y;
+		public FTLEvent event;
+	}
+
+	public static class NebulaRect {
+		public int x;
+		public int y;
+		public int w;
+		public int h;
+	}
 
 	/**
 	 * Generates the sector map.
@@ -201,32 +218,26 @@ public class RandomSectorMapGenerator {
 				throw new IllegalStateException( String.format( "No valid map was produced after %d attempts!?", generations ) );
 			}
 
+			RandomEvent.setSectorNumber(sectorNumber);
+			RandomEvent.setDifficulty(difficulty);
+
 			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
 
 			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
 
-			// List<DefaultDeferredText> titlesDeferred = tmpDesc.getNameList().names;
-			// List<String> titleList = new ArrayList<String>( titlesDeferred.size() );
-			// for ( DefaultDeferredText t : titlesDeferred ) {
-			// 	titleList.add( t.getTextValue() );
-			// }
-			// Sector tmpSector = new Sector( tmpDesc.isUnique(), tmpDesc.getMinSector(), tmpDesc.getId(), titleList );
-			// result.add( tmpSector );
-
-
 			/* Generate starting beacon position: 0x4e7b95 */
-			n = rng.rand() & 3;
+			int startingBeacon = rng.rand() & 3;
 
 			/* Generate starting beacon event: 0x4e7f57 */
 			String startEvent = tmpDesc.getStartEvent();
 
-			genBeaconList.get(n).event = loadEventId(startEvent, rng);
+			genBeaconList.get(startingBeacon).event = RandomEvent.loadEventId(startEvent, rng);
 
 			/* Generate ending beacon position: two rands at 0x4e8032 and 0x4e804d */
 			int r, c;
 			do {
-				r = rng.rand() & 3; // 0x4a3681
-				c = (rng.rand() & 1) + 4; // 0x4a3681
+				r = rng.rand() & 3;
+				c = (rng.rand() & 1) + 4;
 				if ( false ) { // Some condition
 					if ( false ) { // Some other condition
 						c = (rng.rand() & 1) + 3;
@@ -239,10 +250,167 @@ public class RandomSectorMapGenerator {
 			} while ((c*4+r) >= genBeaconList.size());
 
 			/* Generate ending beacon event ("FINISH_BEACON") */
-			genBeaconList.get(c*4+r).event = loadEventId("FINISH_BEACON", rng);
+			genBeaconList.get(c*4+r).event = RandomEvent.loadEventId("FINISH_BEACON", rng);
 
+			/* Place NEBULA beacons first */
+			List<SectorDescription.EventDistribution> eventDistribution = tmpDesc.getEventDistributions();
 
-			/* Place NEBULA beacons? */
+			/* Build the list of all nebula beacons */
+			List<String> nebulaEvents = new ArrayList<String>();
+
+			for (SectorDescription.EventDistribution ed : eventDistribution) {
+				if (ed.name.startsWith("NEBULA")) {
+					int m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
+
+					for (int i=0; i<m; i++)
+						nebulaEvents.add(ed.name);
+				}
+			}
+
+			log.info( String.format( "Generate %d nebula events", nebulaEvents.size() ) );
+
+			/* Build a list of empty beacons */
+			List<EmptyBeacon> emptyBeacons = new ArrayList<EmptyBeacon>();
+
+			for (int bb = 0; bb < genBeaconList.size(); bb++) {
+				GeneratedBeacon curBeacon = genBeaconList.get(bb);
+
+				EmptyBeacon e = new EmptyBeacon();
+				e.id = bb;
+				e.x = curBeacon.x;
+				e.y = curBeacon.y;
+				e.event = curBeacon.event;
+
+				emptyBeacons.add(e);
+			}
+
+			/* Hardcoded list of nebula models */
+			int nebulaModelListW[] = {119, 67, 89, 117};
+			int nebulaModelListH[] = {63, 110, 67, 108};
+
+			/* Choose a random nebula model */
+			n = rng.rand() % nebulaModelListW.length;
+
+			/* If less than 4 non-nebula beacons, remove random nebulas */
+			while ((emptyBeacons.size() - nebulaEvents.size()) < 4) {
+				int k = rng.rand() % nebulaEvents.size();
+				nebulaEvents.remove(k);
+			}
+
+			/* Choose a random beacon */
+			int bId = rng.rand() % emptyBeacons.size();
+			EmptyBeacon beacon = emptyBeacons.get(bId);
+
+			log.info( String.format( "Starting nebula beacon: %d ", bId ) );
+
+			/* The nebula model is centered on the chosen beacon */
+			int modelW = nebulaModelListW[n];
+			int modelH = nebulaModelListH[n];
+			int modelX = beacon.x - modelW / 2;
+			int modelY = beacon.y - modelH / 2;
+
+			/* Number of failed attemps */
+			int failedAttempts = 0;
+
+			/* Build a list of empty beacons */
+			List<NebulaRect> nebulaRects = new ArrayList<NebulaRect>();
+
+			do {
+				boolean oneNewBeacon = false;
+
+				/* Iterate over all empty beacons */
+				int be = 0;
+				while (be < emptyBeacons.size()) {
+
+					EmptyBeacon curBeacon = emptyBeacons.get(be);
+
+					/* Check if the beacon is inside the nebula model */
+					if ( (curBeacon.x > (modelX + 5)) &&
+						 (curBeacon.x < (modelX + modelW - 5)) &&
+					     (curBeacon.y > (modelY + 5)) &&
+						 (curBeacon.y < (modelY + modelH - 5))) {
+
+						/* Check the beacon event */
+						if (curBeacon.event == null) {
+
+							/* No event in that beacon, load one nebula event */
+
+							/* Default nebula event */
+							String nebulaEvent = "NEBULA";
+
+							if (!nebulaEvents.isEmpty()) {
+								/* Choose a random nebula from the list */
+			 					int ne = rng.rand() % nebulaEvents.size();
+
+								nebulaEvent = nebulaEvents.get(ne);
+								nebulaEvents.remove(ne);
+							}
+
+							/* Load the nebula event */
+							genBeaconList.get(curBeacon.id).event = RandomEvent.loadEventId(nebulaEvent, rng);
+
+							log.info( String.format( "Nebula event at beacon %d (%d,%d)", curBeacon.id, curBeacon.x, curBeacon.y ) );
+						}
+
+						/* If finish beacon, load the FINISH_BEACON_NEBULA event instead */
+						else if (curBeacon.event.getId().equals("FINISH_BEACON")) {
+							genBeaconList.get(curBeacon.id).event = RandomEvent.loadEventId("FINISH_BEACON_NEBULA", rng);
+							log.info( String.format( "Nebula finish event at beacon %d (%d,%d)", curBeacon.id, curBeacon.x, curBeacon.y ) );
+						}
+
+						/* Remove empty beacon from list */
+						emptyBeacons.remove(be);
+
+						/* We generated at least one new beacon */
+						oneNewBeacon = true;
+					}
+					else {
+						/* Next beacon */
+						be++;
+					}
+				}
+
+				/* Update the number of failed attemps */
+				if (!oneNewBeacon)
+					failedAttempts++;
+
+				/* Insert the nebula */
+				NebulaRect nr = new NebulaRect();
+				nr.x = modelX;
+				nr.y = modelY;
+				nr.w = modelW;
+				nr.h = modelH;
+
+				nebulaRects.add(nr);
+
+				if (failedAttempts < 0x15) {
+					/* Pick an existing nebula rect */
+					n = rng.rand() % nebulaRects.size();
+					NebulaRect oldnr = nebulaRects.get(n);
+
+					/* Pick a new nebula model */
+					n = rng.rand() % nebulaModelListW.length;
+
+					/* Build the new nebula rect so that it intersects with
+					 * the chosen existing nebula
+					 */
+					modelW = nebulaModelListW[n];
+					modelH = nebulaModelListH[n];
+					modelX = oldnr.x - modelW + rng.rand() % (oldnr.w + modelW);
+					modelY = oldnr.y - modelH + rng.rand() % (oldnr.h + modelH);
+				}
+				else {
+					/* Place the new nebula around an empty beacon,
+					 * keep the current model.
+					 */
+					bId = rng.rand() % emptyBeacons.size();
+					beacon = emptyBeacons.get(bId);
+
+					modelX = beacon.x - modelW / 2;
+					modelY = beacon.y - modelH / 2;
+				}
+			}
+			while (!nebulaEvents.isEmpty());
 
 			/* Pull one random value (ranged?) */
 
@@ -310,154 +478,4 @@ public class RandomSectorMapGenerator {
 		return result;
 	}
 
-	/**
-	 * Load an event
-	 * use gdb with:
-	 *   break *0x4a2c38
-	 *   commands
-	 *   silent
-	 *   printf "load event %s\n",(char*)*$rsi
-	 *   cont
-	 *   end
-	 */
-	public FTLEvent loadEvent( FTLEvent event, RandRNG rng ) {
-		log.info( String.format( "Load event %s", event.toString() ) );
-
-		/* If there's a load attribute, load the corresponding event */
-		String load = event.getLoad();
-		if (load != null) {
-			return loadEventId(load, rng);
-		}
-
-		/* Handle text */
-		NamedText text = event.getText();
-		load = text.getLoad();
-		if (load != null) {
-			TextList list = DataManager.getInstance().getTextListById( load );
-			if (list == null) {
-				throw new UnsupportedOperationException( String.format( "Could not find text list %s", load ) );
-			}
-			List<NamedText> textList = list.getTextList();
-
-			if (textList.size() == 0) {
-				throw new UnsupportedOperationException( String.format( "No more text left in textlist %s", load ) );
-			}
-
-			int n = rng.rand() % textList.size();
-			event.setText(textList.get(n));
-		}
-
-		/* Randomize item quantities */
-		int ivar12 = 100;
-		if (false) {
-			ivar12 = 5; // random range
-		}
-
-		// 0x4a3681
-		/* Randomize missile quantity */
-		int n = rng.rand();
-		if ((n & 3) < ivar12) {
-			int p = randomizeQuantity(event, rng, "missiles");
-			if (p > 0)
-				ivar12 -= 1;
-		}
-
-		// 0x4a36cb
-		/* Randomize drone quantity */
-		n = rng.rand();
-		if ((n % 3) < ivar12) {
-			int p = randomizeQuantity(event, rng, "drones");
-			if (p > 0)
-				ivar12 -= 1;
-		}
-
-		// 0x4a371d
-		/* Randomize fuel quantity */
-		n = rng.rand();
-		if ((n & 1) < ivar12) {
-			int p = randomizeQuantity(event, rng, "fuel");
-			if (p > 0)
-				ivar12 -= 1;
-		}
-
- 		// 0x4a3764
-		/* Randomize scrap quantity */
-		rng.rand();
-		if (0 < ivar12) {
-			int p = randomizeQuantity(event, rng, "scrap");
-			if (p > 0)
-				ivar12 -= 1;
-		}
-
-		/* Browse each choice, and load the corresponding event */
-		List<Choice> choiceList = event.getChoiceList();
-		if (choiceList != null) {
-			for ( int i=0; i < choiceList.size(); i++ ) {
-				Choice choice = choiceList.get(i);
-				FTLEvent choiceEvent = choice.getEvent();
-				choice.setEvent(loadEvent(choiceEvent, rng));
-			}
-		}
-
-		// 0x4a4751
-		if (true) { // some value == -1 (so uninitialized)
-			n = rng.rand();
-			int a = 1; // some value
-			int b = 5; // some value
-			int p = n % (b + 1 - a) + a;
-		}
-
-		return event;
-	}
-
-	/**
-	 * Load an event from an event id.
-	 */
-	public FTLEvent loadEventId( String id, RandRNG rng ) {
-
-		log.info( String.format( "Load event id %s", id ) );
-
-		/* First, check if the id correspond to an event list */
-
-		FTLEventList list = DataManager.getInstance().getEventListById( id );
-		if (list != null) {
-			List<FTLEvent> eventList = list.getEventList();
-
-			int e = rng.rand() % eventList.size(); // TODO: correct formula
-			return loadEvent(eventList.get(e), rng);
-		}
-
-		/* Get the event */
-		FTLEvent event = DataManager.getInstance().getEventById( id );
-
-		return loadEvent(event, rng);
-	}
-
-	/**
-	 * Randomize an item quantity
-	 */
-	public int randomizeQuantity( FTLEvent event, RandRNG rng, String id ) {
-
-		FTLEvent.ItemList itemList = event.getItemList();
-		if (itemList == null)
-			return 0;
-
-		// log.info( String.format( "Load event id %s", id ) );
-
-		for ( int i=0; i < itemList.items.size(); i++ ) {
-			FTLEvent.Item item = itemList.items.get(i);
-			if (item.type.equals(id)) {
-				if (item.max != 0) {
-					int r = item.max + 1 - item.min;
-					item.value = (rng.rand() % r) + item.min;
-					itemList.items.set(i, item);
-					event.setItemList(itemList);
-					return item.value;
-				}
-				return 0;
-			}
-		}
-
-		return 0;
-	}
 }

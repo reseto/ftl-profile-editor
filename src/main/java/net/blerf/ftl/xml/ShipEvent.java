@@ -21,6 +21,8 @@ public class ShipEvent {
 	@XmlAttribute( name = "load", required = false )
 	private String load;
 
+	private int seed;
+
 	@XmlAttribute( name = "auto_blueprint" )
 	private String autoBlueprintId;
 
@@ -41,6 +43,14 @@ public class ShipEvent {
 
 	public void setLoad( String load ) {
 		this.load = load;
+	}
+
+	public int getSeed() {
+		return seed;
+	}
+
+	public void setSeed( int seed ) {
+		this.seed = seed;
 	}
 
 	public String getAutoBlueprintId() {
