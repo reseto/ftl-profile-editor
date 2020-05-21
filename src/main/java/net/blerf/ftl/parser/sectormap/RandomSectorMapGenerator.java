@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -258,12 +259,17 @@ public class RandomSectorMapGenerator {
 			/* Build the list of all nebula beacons */
 			List<String> nebulaEvents = new ArrayList<String>();
 
-			for (SectorDescription.EventDistribution ed : eventDistribution) {
+			Iterator<SectorDescription.EventDistribution> it = eventDistribution.iterator();
+			while (it.hasNext()) {
+				SectorDescription.EventDistribution ed = it.next();
 				if (ed.name.startsWith("NEBULA")) {
 					int m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
 
 					for (int i=0; i<m; i++)
 						nebulaEvents.add(ed.name);
+
+					/* Remove event from list */
+					it.remove();
 				}
 			}
 
@@ -412,18 +418,50 @@ public class RandomSectorMapGenerator {
 			}
 			while (!nebulaEvents.isEmpty());
 
-			/* Pull one random value (ranged?) */
+			/* Build the other beacons */
 
-			/* For each beacon type (break if no more beacon left)
-			 *     choose a random number from min to max of that type
-			 *     iterate for that number (break if no more beacon left)
-			 *         choose a random beacon (iterate until beacon is free)
-			 *         choose a random event of that type
-			 */
+			/* Build a list of beacon ids */
+			List<Integer> beaconIds = new ArrayList<Integer>();
+			for (int bb = 0; bb < genBeaconList.size(); bb++) {
+				beaconIds.add(bb);
+			}
 
-			/* For each beacon left:
-			 *     choose a random "NEUTRAL" event
-			 */
+			for (SectorDescription.EventDistribution ed : eventDistribution) {
+
+				/* Pick a random number of events from the distribution */
+				int m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
+
+				int i = 0;
+				while ((i<m) && (!beaconIds.isEmpty())) {
+					/* Choose a random empty beacon */
+					int b = rng.rand() % beaconIds.size();
+					GeneratedBeacon gb = genBeaconList.get(beaconIds.get(b));
+
+					/* Check if the beacon is empty */
+					if (gb.event == null) {
+						log.info( String.format( "Generate event %s for beacon %d", ed.name, beaconIds.get(b) ) );
+						gb.event = RandomEvent.loadEventId(ed.name, rng);
+						i++;
+					}
+
+					/* Remove the beacon id from the list */
+					beaconIds.remove(b);
+				}
+
+				if (beaconIds.isEmpty())
+					break;
+
+			}
+
+			/* Fill the remaining beacons with NEUTRAL */
+			for (int b = 0; b<beaconIds.size(); b++) {
+				GeneratedBeacon gb = genBeaconList.get(beaconIds.get(b));
+
+				/* Check if the beacon is empty */
+				if (gb.event == null) {
+					gb.event = RandomEvent.loadEventId("NEUTRAL", rng);
+				}
+			}
 
 			return genMap;
 		}
