@@ -63,6 +63,10 @@ public class ShipEvent {
 
 	@Override
 	public String toString() {
-		return ""+id;
+		if (id != null)
+			return ""+id;
+		else if (load != null)
+			return ""+load;
+		return "<null>";
 	}
 }

@@ -72,4 +72,19 @@ public class Choice {
 	public void setEvent( FTLEvent event ) {
 		this.event = event;
 	}
+
+	private StringBuilder indent(StringBuilder sb, int level) {
+		sb.append(new String(new char[level]).replaceAll("\0", "    "));
+		return sb;
+	}
+
+	public String toDescription(int level) {
+		StringBuilder sb = new StringBuilder();
+		if (text != null)
+			indent(sb, level).append("text: ").append(text.getText()).append("\n");
+		if (event != null)
+			indent(sb, level).append("event: \n").append(event.toDescription(level+1));
+
+		return sb.toString();
+	}
 }

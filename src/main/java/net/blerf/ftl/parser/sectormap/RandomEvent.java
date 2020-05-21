@@ -337,8 +337,8 @@ public final class RandomEvent {
 			float min = scrap_min[reward_level];
 			float max = scrap_max[reward_level];
 
-			int range = (int)(max*1000.0)+1 - (int)min;
-			int qint = (int)min + (rng.rand() % range);
+			int range = (int)(max*1000.0)+1 - (int)(min*1000.0);
+			int qint = (int)(min*1000.0) + (rng.rand() % range);
 
 			int q = (int)(((float)qint / 1000.0f) * ((float) sector_level * 6 + 0xf));
 			log.info( String.format( "autoReward scrap: %d", q ) );

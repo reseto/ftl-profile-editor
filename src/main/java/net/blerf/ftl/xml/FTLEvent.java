@@ -162,4 +162,57 @@ public class FTLEvent {
 			return ""+load;
 		return "<NONAME>";
 	}
+
+	private StringBuilder indent(StringBuilder sb, int level) {
+		sb.append(new String(new char[level]).replaceAll("\0", "    "));
+		return sb;
+	}
+
+	public String toDescription(int level) {
+		StringBuilder sb = new StringBuilder();
+		indent(sb, level).append("id: ");
+		if (id != null)
+			sb.append(id).append("\n");
+		else
+			sb.append("<null>\n");
+
+		if (unique)
+			indent(sb, level).append("unique: true\n");
+
+		if (text != null)
+			indent(sb, level).append("text: ").append(text.getText()).append("\n");
+
+		if (ship != null)
+			indent(sb, level).append("ship: ").append(ship.toString()).append("\n");
+
+		if (itemList != null)
+			for (Item i : itemList.items)
+				indent(sb, level).append("item_modify: ").append(i.type).append(" with quantity ").append(i.value).append("\n");
+
+		if (autoReward != null) {
+			indent(sb, level).append("autoreward level ").append(autoReward.level).append(" and reward ").append(autoReward.reward).append(":\n");
+			indent(sb, level+1).append("scrap: ").append(autoReward.scrap).append("\n");
+			indent(sb, level+1).append("fuel: ").append(autoReward.resources[0]).append("\n");
+			indent(sb, level+1).append("missiles: ").append(autoReward.resources[1]).append("\n");
+			indent(sb, level+1).append("droneparts: ").append(autoReward.resources[2]).append("\n");
+			if (autoReward.weapon != null)
+				indent(sb, level+1).append("weapon: ").append(autoReward.weapon).append("\n");
+			if (autoReward.augment != null)
+				indent(sb, level+1).append("augment: ").append(autoReward.augment).append("\n");
+			if (autoReward.drone != null)
+				indent(sb, level+1).append("drone: ").append(autoReward.drone).append("\n");
+		}
+
+		sb.append("\n");
+
+		if (choiceList != null) {
+			for (Choice c : choiceList) {
+				indent(sb, level).append("choice:\n");
+				sb.append(c.toDescription(level+1));
+			}
+		}
+
+		return sb.toString();
+	}
+
 }

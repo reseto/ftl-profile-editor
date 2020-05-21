@@ -1159,11 +1159,18 @@ public class SavedGameSectorMapPanel extends JPanel {
 
 					List<GeneratedBeacon> genBeacons = newGenMap.getGeneratedBeaconList();
 					List<Point> newLocations = new ArrayList<Point>( genBeacons.size() );
+					List<String> newDescriptions = new ArrayList<String>( genBeacons.size() );
 
 					for ( GeneratedBeacon genBeacon : genBeacons ) {
 						newLocations.add( genBeacon.getLocation() );
+						FTLEvent e = genBeacon.getEvent();
+						if (e != null)
+							newDescriptions.add( e.toDescription(0) );
+						else
+							newDescriptions.add( "" );
 					}
 					mapLayout.setBeaconLocations( newLocations );
+					mapLayout.setBeaconDescriptions( newDescriptions );
 					mapLayout.setBeaconRegionSize( newGenMap.getPreferredSize() );
 
 					mapPanel.revalidate();
@@ -1458,6 +1465,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 
 		int beaconId = mapLayout.getBeaconId( beaconRef.getSprite( BeaconSprite.class ) );
 		String title = String.format( "Beacon %02d", beaconId );
+		String description = mapLayout.getBeaconDescription( beaconId );
 
 		final FieldEditorPanel editorPanel = new FieldEditorPanel( false );
 		editorPanel.addRow( VISIT_COUNT, FieldEditorPanel.ContentType.SPINNER );
@@ -1834,6 +1842,10 @@ public class SavedGameSectorMapPanel extends JPanel {
 			}
 		});
 
+		addSidePanelSeparator( 6 );
+
+		addSidePanelNote(description);
+
 		editorPanel.setMaximumSize( editorPanel.getPreferredSize() );
 		showSidePanel();
 	}
@@ -2131,7 +2143,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 	 *
 	 * FTL 1.03.3: "img/map/map_box_[...].png" (128x64, extra black
 	 * bottom/right margins).
-	 * 
+	 *
 	 * FTL 1.5.13: "img/map/map_box_[...].png" (80x40, as before but without
 	 * those margins).
 	 *
