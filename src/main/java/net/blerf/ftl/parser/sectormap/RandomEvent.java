@@ -403,6 +403,27 @@ public final class RandomEvent {
 		if (choiceList != null) {
 			for ( int i=0; i < choiceList.size(); i++ ) {
 				Choice choice = choiceList.get(i);
+
+				/* Load text it any */
+				NamedText cText = choice.getText();
+				if (cText != null) {
+					load = cText.getLoad();
+					if (load != null) {
+						TextList list = DataManager.getInstance().getTextListById( load );
+						if (list == null) {
+							throw new UnsupportedOperationException( String.format( "Could not find text list %s", load ) );
+						}
+						List<NamedText> textList = list.getTextList();
+
+						if (textList.size() == 0) {
+							throw new UnsupportedOperationException( String.format( "No more text left in textlist %s", load ) );
+						}
+
+						n = rng.rand() % textList.size();
+						choice.setText(textList.get(n));
+					}
+				}
+
 				FTLEvent choiceEvent = choice.getEvent();
 				log.info( String.format( "Will load choice %s", choiceEvent.toString() ) );
 
