@@ -20,7 +20,7 @@ import net.blerf.ftl.xml.ShipEvent;
 
 @XmlRootElement( name = "event" )
 @XmlAccessorType( XmlAccessType.FIELD )
-public class FTLEvent {
+public class FTLEvent implements Cloneable {
 	@XmlAttribute( name = "name", required = false )
 	private String id;
 
@@ -45,7 +45,7 @@ public class FTLEvent {
 	@XmlElement(name = "item_modify", required = false)
 	private ItemList itemList;
 
-	public static class Item {
+	public static class Reward {
 		@XmlAttribute
 		public String type;
 
@@ -61,10 +61,10 @@ public class FTLEvent {
 	@XmlAccessorType( XmlAccessType.FIELD )
 	public static class ItemList {
 		@XmlElement( name = "item" )
-		public List<Item> items;
+		public List<Reward> items;
 	}
 
-	@XmlElement(name = "autoReward", required = false)
+	@XmlElement
 	private AutoReward autoReward;
 
 	@XmlAccessorType( XmlAccessType.NONE )
@@ -80,6 +80,147 @@ public class FTLEvent {
 		public String weapon = null;
 		public String augment = null;
 		public String drone = null;
+	}
+
+	@XmlElement
+	private CrewMember crewMember;
+
+	@XmlAccessorType( XmlAccessType.NONE )
+	public static class CrewMember {
+		@XmlAttribute
+		public int amount = 0;
+
+		@XmlAttribute( name = "class" )
+		public String id = null;
+
+		@XmlAttribute
+		public int weapons = -1;
+
+		@XmlAttribute
+		public int shields = -1;
+
+		@XmlAttribute
+		public int pilot = -1;
+
+		@XmlAttribute
+		public int engines = -1;
+
+		@XmlAttribute
+		public int combat = -1;
+
+		@XmlAttribute
+		public int repair = -1;
+
+		@XmlAttribute
+		public int all_skills = -1;
+
+		@XmlValue
+		public String name = null;
+	}
+
+	@XmlElement
+	private Item weapon = null;
+
+	@XmlElement
+	private Item augment = null;
+
+	@XmlElement
+	private Item drone = null;
+
+	@XmlAccessorType( XmlAccessType.NONE )
+	public static class Item {
+		@XmlAttribute
+		public String name = null;
+	}
+
+	public Object clone() {
+		FTLEvent o = null;
+		try {
+			o = (FTLEvent)super.clone();
+		} catch(CloneNotSupportedException cnse) {
+			cnse.printStackTrace(System.err);
+		}
+
+		o.id = id;
+		o.load = load;
+		o.unique = unique;
+
+		if (text != null) {
+			o.text = (NamedText)text.clone();
+		}
+
+		if (choiceList != null) {
+			o.choiceList = new ArrayList<Choice>(choiceList.size());
+			for (Choice c : choiceList) {
+				Choice newC = new Choice();
+				newC.setHidden(c.getHidden());
+				newC.setReq(c.getReq());
+				newC.setLevel(c.getLevel());
+				if (c.getText() != null)
+					newC.setText((NamedText)c.getText().clone());
+				if (c.getEvent() != null)
+					newC.setEvent((FTLEvent)c.getEvent().clone());
+				o.choiceList.add(newC);
+			}
+		}
+		if (ship != null) {
+			o.ship = new ShipEvent();
+			o.ship.setId(ship.getId());
+			o.ship.setLoad(ship.getLoad());
+			o.ship.setAutoBlueprintId(ship.getAutoBlueprintId());
+		}
+
+		if (itemList != null) {
+			ItemList il = new ItemList();
+			ItemList oil = o.getItemList();
+
+			il.items = new ArrayList<Reward>(oil.items.size());
+			for (Reward i : oil.items) {
+				Reward newI = new Reward();
+				newI.type = i.type;
+				newI.min = i.min;
+				newI.max = i.max;
+				il.items.add(newI);
+			}
+			o.setItemList(il);
+		}
+
+		if (autoReward != null) {
+			o.autoReward = new AutoReward();
+			o.autoReward.level = autoReward.level;
+			o.autoReward.reward = autoReward.reward;
+		}
+
+		if (crewMember != null) {
+			o.crewMember = new CrewMember();
+			o.crewMember.amount = crewMember.amount;
+			o.crewMember.id = crewMember.id;
+			o.crewMember.weapons = crewMember.weapons;
+			o.crewMember.shields = crewMember.shields;
+			o.crewMember.pilot = crewMember.pilot;
+			o.crewMember.engines = crewMember.engines;
+			o.crewMember.combat = crewMember.combat;
+			o.crewMember.repair = crewMember.repair;
+			o.crewMember.all_skills = crewMember.all_skills;
+			o.crewMember.name = crewMember.name;
+		}
+
+		if (weapon != null) {
+			o.weapon = new Item();
+			o.weapon.name = weapon.name;
+		}
+
+		if (augment != null) {
+			o.augment = new Item();
+			o.augment.name = augment.name;
+		}
+
+		if (drone != null) {
+			o.drone = new Item();
+			o.drone.name = drone.name;
+		}
+
+		return o;
 	}
 
 	public String getId() {
@@ -154,6 +295,38 @@ public class FTLEvent {
 		this.autoReward = autoReward;
 	}
 
+	public CrewMember getCrewMember() {
+		return crewMember;
+	}
+
+	public void setCrewMember( CrewMember crewMember ) {
+		this.crewMember = crewMember;
+	}
+
+	public Item getWeapon() {
+		return weapon;
+	}
+
+	public void setWeapon( Item weapon ) {
+		this.weapon = weapon;
+	}
+
+	public Item getAugment() {
+		return augment;
+	}
+
+	public void setAugment( Item augment ) {
+		this.augment = augment;
+	}
+
+	public Item getDrone() {
+		return drone;
+	}
+
+	public void setDrone( Item drone ) {
+		this.drone = drone;
+	}
+
 	@Override
 	public String toString() {
 		if (id != null)
@@ -186,7 +359,7 @@ public class FTLEvent {
 			indent(sb, level).append("ship: ").append(ship.toString()).append("\n");
 
 		if (itemList != null)
-			for (Item i : itemList.items)
+			for (Reward i : itemList.items)
 				indent(sb, level).append("item_modify: ").append(i.type).append(" with quantity ").append(i.value).append("\n");
 
 		if (autoReward != null) {

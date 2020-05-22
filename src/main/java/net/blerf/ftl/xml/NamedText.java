@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @XmlRootElement( name = "text" )
 @XmlAccessorType( XmlAccessType.FIELD )
-public class NamedText {
+public class NamedText implements Cloneable {
 
 	@XmlAttribute( name = "name" )
 	private String id;
@@ -24,6 +24,21 @@ public class NamedText {
 
 	@XmlValue
 	private String text;
+
+	public Object clone() {
+		NamedText o = null;
+		try {
+			o = (NamedText)super.clone();
+		} catch(CloneNotSupportedException cnse) {
+			cnse.printStackTrace(System.err);
+		}
+
+		o.setId(getId());
+		o.setLoad(getLoad());
+		o.setText(getText());
+
+		return o;
+	}
 
 
 	public void setId( String id ) {

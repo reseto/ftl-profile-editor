@@ -221,6 +221,7 @@ public class RandomSectorMapGenerator {
 
 			RandomEvent.setSectorNumber(sectorNumber);
 			RandomEvent.setDifficulty(difficulty);
+			RandomEvent.resetUniqueSectors();
 
 			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
 
@@ -429,11 +430,16 @@ public class RandomSectorMapGenerator {
 			for (SectorDescription.EventDistribution ed : eventDistribution) {
 
 				/* Pick a random number of events from the distribution */
-				int m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
+				int m = 0;
+				if (ed.max != 0) {
+					log.info( String.format( "Generate the number of events of distribution %s", ed.name ) );
+					m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
+				}
 
 				int i = 0;
 				while ((i<m) && (!beaconIds.isEmpty())) {
 					/* Choose a random empty beacon */
+					log.info( String.format( "Choose the beacon to apply event" ) );
 					int b = rng.rand() % beaconIds.size();
 					GeneratedBeacon gb = genBeaconList.get(beaconIds.get(b));
 
@@ -459,6 +465,7 @@ public class RandomSectorMapGenerator {
 
 				/* Check if the beacon is empty */
 				if (gb.event == null) {
+					log.info( String.format( "Generate event NEUTRAL for beacon %d", beaconIds.get(b) ) );
 					gb.event = RandomEvent.loadEventId("NEUTRAL", rng);
 				}
 			}
