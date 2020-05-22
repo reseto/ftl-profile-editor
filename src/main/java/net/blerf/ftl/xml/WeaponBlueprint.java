@@ -202,7 +202,7 @@ public class WeaponBlueprint {
 	}
 
 	public int getRarity() {
-		return cost;
+		return rarity;
 	}
 
 	public void setProjectileAnimId( String projectileAnimId ) {

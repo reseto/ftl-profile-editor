@@ -276,148 +276,151 @@ public class RandomSectorMapGenerator {
 
 			log.info( String.format( "Generate %d nebula events", nebulaEvents.size() ) );
 
-			/* Build a list of empty beacons */
-			List<EmptyBeacon> emptyBeacons = new ArrayList<EmptyBeacon>();
+			if (!nebulaEvents.isEmpty()) {
 
-			for (int bb = 0; bb < genBeaconList.size(); bb++) {
-				GeneratedBeacon curBeacon = genBeaconList.get(bb);
+				/* Build a list of empty beacons */
+				List<EmptyBeacon> emptyBeacons = new ArrayList<EmptyBeacon>();
 
-				EmptyBeacon e = new EmptyBeacon();
-				e.id = bb;
-				e.x = curBeacon.x;
-				e.y = curBeacon.y;
-				e.event = curBeacon.event;
+				for (int bb = 0; bb < genBeaconList.size(); bb++) {
+					GeneratedBeacon curBeacon = genBeaconList.get(bb);
 
-				emptyBeacons.add(e);
-			}
+					EmptyBeacon e = new EmptyBeacon();
+					e.id = bb;
+					e.x = curBeacon.x;
+					e.y = curBeacon.y;
+					e.event = curBeacon.event;
 
-			/* Hardcoded list of nebula models */
-			int nebulaModelListW[] = {119, 67, 89, 117};
-			int nebulaModelListH[] = {63, 110, 67, 108};
+					emptyBeacons.add(e);
+				}
 
-			/* Choose a random nebula model */
-			n = rng.rand() % nebulaModelListW.length;
+				/* Hardcoded list of nebula models */
+				int nebulaModelListW[] = {119, 67, 89, 117};
+				int nebulaModelListH[] = {63, 110, 67, 108};
 
-			/* If less than 4 non-nebula beacons, remove random nebulas */
-			while ((emptyBeacons.size() - nebulaEvents.size()) < 4) {
-				int k = rng.rand() % nebulaEvents.size();
-				nebulaEvents.remove(k);
-			}
+				/* Choose a random nebula model */
+				n = rng.rand() % nebulaModelListW.length;
 
-			/* Choose a random beacon */
-			int bId = rng.rand() % emptyBeacons.size();
-			EmptyBeacon beacon = emptyBeacons.get(bId);
+				/* If less than 4 non-nebula beacons, remove random nebulas */
+				while ((emptyBeacons.size() - nebulaEvents.size()) < 4) {
+					int k = rng.rand() % nebulaEvents.size();
+					nebulaEvents.remove(k);
+				}
 
-			log.info( String.format( "Starting nebula beacon: %d ", bId ) );
+				/* Choose a random beacon */
+				int bId = rng.rand() % emptyBeacons.size();
+				EmptyBeacon beacon = emptyBeacons.get(bId);
 
-			/* The nebula model is centered on the chosen beacon */
-			int modelW = nebulaModelListW[n];
-			int modelH = nebulaModelListH[n];
-			int modelX = beacon.x - modelW / 2;
-			int modelY = beacon.y - modelH / 2;
+				log.info( String.format( "Starting nebula beacon: %d ", bId ) );
 
-			/* Number of failed attemps */
-			int failedAttempts = 0;
+				/* The nebula model is centered on the chosen beacon */
+				int modelW = nebulaModelListW[n];
+				int modelH = nebulaModelListH[n];
+				int modelX = beacon.x - modelW / 2;
+				int modelY = beacon.y - modelH / 2;
 
-			/* Build a list of empty beacons */
-			List<NebulaRect> nebulaRects = new ArrayList<NebulaRect>();
+				/* Number of failed attemps */
+				int failedAttempts = 0;
 
-			do {
-				boolean oneNewBeacon = false;
+				/* Build a list of empty beacons */
+				List<NebulaRect> nebulaRects = new ArrayList<NebulaRect>();
 
-				/* Iterate over all empty beacons */
-				int be = 0;
-				while (be < emptyBeacons.size()) {
+				do {
+					boolean oneNewBeacon = false;
 
-					EmptyBeacon curBeacon = emptyBeacons.get(be);
+					/* Iterate over all empty beacons */
+					int be = 0;
+					while (be < emptyBeacons.size()) {
 
-					/* Check if the beacon is inside the nebula model */
-					if ( (curBeacon.x > (modelX + 5)) &&
-						 (curBeacon.x < (modelX + modelW - 5)) &&
-					     (curBeacon.y > (modelY + 5)) &&
-						 (curBeacon.y < (modelY + modelH - 5))) {
+						EmptyBeacon curBeacon = emptyBeacons.get(be);
 
-						/* Check the beacon event */
-						if (curBeacon.event == null) {
+						/* Check if the beacon is inside the nebula model */
+						if ( (curBeacon.x > (modelX + 5)) &&
+							 (curBeacon.x < (modelX + modelW - 5)) &&
+						     (curBeacon.y > (modelY + 5)) &&
+							 (curBeacon.y < (modelY + modelH - 5))) {
 
-							/* No event in that beacon, load one nebula event */
+							/* Check the beacon event */
+							if (curBeacon.event == null) {
 
-							/* Default nebula event */
-							String nebulaEvent = "NEBULA";
+								/* No event in that beacon, load one nebula event */
 
-							if (!nebulaEvents.isEmpty()) {
-								/* Choose a random nebula from the list */
-			 					int ne = rng.rand() % nebulaEvents.size();
+								/* Default nebula event */
+								String nebulaEvent = "NEBULA";
 
-								nebulaEvent = nebulaEvents.get(ne);
-								nebulaEvents.remove(ne);
+								if (!nebulaEvents.isEmpty()) {
+									/* Choose a random nebula from the list */
+				 					int ne = rng.rand() % nebulaEvents.size();
+
+									nebulaEvent = nebulaEvents.get(ne);
+									nebulaEvents.remove(ne);
+								}
+
+								/* Load the nebula event */
+								genBeaconList.get(curBeacon.id).event = RandomEvent.loadEventId(nebulaEvent, rng);
+
+								log.info( String.format( "Nebula event at beacon %d (%d,%d)", curBeacon.id, curBeacon.x, curBeacon.y ) );
 							}
 
-							/* Load the nebula event */
-							genBeaconList.get(curBeacon.id).event = RandomEvent.loadEventId(nebulaEvent, rng);
+							/* If finish beacon, load the FINISH_BEACON_NEBULA event instead */
+							else if (curBeacon.event.getId().equals("FINISH_BEACON")) {
+								genBeaconList.get(curBeacon.id).event = RandomEvent.loadEventId("FINISH_BEACON_NEBULA", rng);
+								log.info( String.format( "Nebula finish event at beacon %d (%d,%d)", curBeacon.id, curBeacon.x, curBeacon.y ) );
+							}
 
-							log.info( String.format( "Nebula event at beacon %d (%d,%d)", curBeacon.id, curBeacon.x, curBeacon.y ) );
+							/* Remove empty beacon from list */
+							emptyBeacons.remove(be);
+
+							/* We generated at least one new beacon */
+							oneNewBeacon = true;
 						}
-
-						/* If finish beacon, load the FINISH_BEACON_NEBULA event instead */
-						else if (curBeacon.event.getId().equals("FINISH_BEACON")) {
-							genBeaconList.get(curBeacon.id).event = RandomEvent.loadEventId("FINISH_BEACON_NEBULA", rng);
-							log.info( String.format( "Nebula finish event at beacon %d (%d,%d)", curBeacon.id, curBeacon.x, curBeacon.y ) );
+						else {
+							/* Next beacon */
+							be++;
 						}
+					}
 
-						/* Remove empty beacon from list */
-						emptyBeacons.remove(be);
+					/* Update the number of failed attemps */
+					if (!oneNewBeacon)
+						failedAttempts++;
 
-						/* We generated at least one new beacon */
-						oneNewBeacon = true;
+					/* Insert the nebula */
+					NebulaRect nr = new NebulaRect();
+					nr.x = modelX;
+					nr.y = modelY;
+					nr.w = modelW;
+					nr.h = modelH;
+
+					nebulaRects.add(nr);
+
+					if (failedAttempts < 0x15) {
+						/* Pick an existing nebula rect */
+						n = rng.rand() % nebulaRects.size();
+						NebulaRect oldnr = nebulaRects.get(n);
+
+						/* Pick a new nebula model */
+						n = rng.rand() % nebulaModelListW.length;
+
+						/* Build the new nebula rect so that it intersects with
+						 * the chosen existing nebula
+						 */
+						modelW = nebulaModelListW[n];
+						modelH = nebulaModelListH[n];
+						modelX = oldnr.x - modelW + rng.rand() % (oldnr.w + modelW);
+						modelY = oldnr.y - modelH + rng.rand() % (oldnr.h + modelH);
 					}
 					else {
-						/* Next beacon */
-						be++;
+						/* Place the new nebula around an empty beacon,
+						 * keep the current model.
+						 */
+						bId = rng.rand() % emptyBeacons.size();
+						beacon = emptyBeacons.get(bId);
+
+						modelX = beacon.x - modelW / 2;
+						modelY = beacon.y - modelH / 2;
 					}
 				}
-
-				/* Update the number of failed attemps */
-				if (!oneNewBeacon)
-					failedAttempts++;
-
-				/* Insert the nebula */
-				NebulaRect nr = new NebulaRect();
-				nr.x = modelX;
-				nr.y = modelY;
-				nr.w = modelW;
-				nr.h = modelH;
-
-				nebulaRects.add(nr);
-
-				if (failedAttempts < 0x15) {
-					/* Pick an existing nebula rect */
-					n = rng.rand() % nebulaRects.size();
-					NebulaRect oldnr = nebulaRects.get(n);
-
-					/* Pick a new nebula model */
-					n = rng.rand() % nebulaModelListW.length;
-
-					/* Build the new nebula rect so that it intersects with
-					 * the chosen existing nebula
-					 */
-					modelW = nebulaModelListW[n];
-					modelH = nebulaModelListH[n];
-					modelX = oldnr.x - modelW + rng.rand() % (oldnr.w + modelW);
-					modelY = oldnr.y - modelH + rng.rand() % (oldnr.h + modelH);
-				}
-				else {
-					/* Place the new nebula around an empty beacon,
-					 * keep the current model.
-					 */
-					bId = rng.rand() % emptyBeacons.size();
-					beacon = emptyBeacons.get(bId);
-
-					modelX = beacon.x - modelW / 2;
-					modelY = beacon.y - modelH / 2;
-				}
+				while (!nebulaEvents.isEmpty());
 			}
-			while (!nebulaEvents.isEmpty());
 
 			/* Build the other beacons */
 

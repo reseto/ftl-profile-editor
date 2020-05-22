@@ -343,11 +343,8 @@ public class FTLEvent implements Cloneable {
 
 	public String toDescription(int level) {
 		StringBuilder sb = new StringBuilder();
-		indent(sb, level).append("id: ");
 		if (id != null)
-			sb.append(id).append("\n");
-		else
-			sb.append("<null>\n");
+			indent(sb, level).append("id: ").append(id).append("\n");
 
 		if (unique)
 			indent(sb, level).append("unique: true\n");
@@ -374,6 +371,31 @@ public class FTLEvent implements Cloneable {
 				indent(sb, level+1).append("augment: ").append(autoReward.augment).append("\n");
 			if (autoReward.drone != null)
 				indent(sb, level+1).append("drone: ").append(autoReward.drone).append("\n");
+		}
+
+		if (weapon != null)
+			indent(sb, level).append("weapon: ").append(weapon.name).append("\n");
+
+		if (augment != null)
+			indent(sb, level).append("augment: ").append(augment.name).append("\n");
+
+		if (drone != null)
+			indent(sb, level).append("drone: ").append(drone.name).append("\n");
+
+		if (crewMember != null) {
+			indent(sb, level).append("crew: ").append("\n");
+			indent(sb, level+1).append("amount: ").append(crewMember.amount).append("\n");
+			if (crewMember.id != null)
+				indent(sb, level+1).append("id: ").append(crewMember.id).append("\n");
+			indent(sb, level+1).append("weapons: ").append(crewMember.weapons).append("\n");
+			indent(sb, level+1).append("shields: ").append(crewMember.shields).append("\n");
+			indent(sb, level+1).append("pilot: ").append(crewMember.pilot).append("\n");
+			indent(sb, level+1).append("engines: ").append(crewMember.engines).append("\n");
+			indent(sb, level+1).append("combat: ").append(crewMember.combat).append("\n");
+			indent(sb, level+1).append("repair: ").append(crewMember.repair).append("\n");
+			indent(sb, level+1).append("all_skills: ").append(crewMember.all_skills).append("\n");
+			if (crewMember.name != null)
+				indent(sb, level+1).append("name: ").append(crewMember.name).append("\n");
 		}
 
 		sb.append("\n");

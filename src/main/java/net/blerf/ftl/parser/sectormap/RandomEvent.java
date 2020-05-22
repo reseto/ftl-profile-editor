@@ -3,6 +3,7 @@ package net.blerf.ftl.parser.sectormap;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,11 @@ import net.blerf.ftl.xml.Choice;
 import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.ShipEvent;
+import net.blerf.ftl.xml.AugBlueprint;
+import net.blerf.ftl.xml.CrewBlueprint;
+import net.blerf.ftl.xml.WeaponBlueprint;
+import net.blerf.ftl.xml.DroneBlueprint;
+
 
 
 /**
@@ -163,7 +169,7 @@ public final class RandomEvent {
 
 		/* crewMember */
 		FTLEvent.CrewMember crewMember = event.getCrewMember();
-		if (crewMember != null) {
+		if ((crewMember != null) && (crewMember.amount > 0)) {
 
 			log.info( String.format( "Generating crewMember" ) );
 
@@ -177,21 +183,31 @@ public final class RandomEvent {
 			if (crewMember.id == null)
 				crewMember.id = "random";
 
-			if (crewMember.id.equals("traitor")) {
+			CrewBlueprint cb = null;
 
+			if (crewMember.id.equals("traitor")) {
+				log.info( String.format( "Traitor with crewMember.amount > 0 ???" ) );
 			}
 			else if (crewMember.id.equals("random")) {
 				/* Pick a random race (0x47f52c) */
 				log.info( String.format( "Generating crewMember race" ) );
-				final String races[] = {"human", "engi", "mantis", "rock", "zoltan", "slug"};
-				int r = rng.rand() % 6;
-				crewMember.id = races[r];
+				cb = pickRandomCrew(rng);
+
+				crewMember.id = cb.getId();
+				log.info( String.format( "   got %s", crewMember.id ) );
+			}
+			else {
+				cb = DataManager.getInstance().getCrew(crewMember.id);
 			}
 
-			/* one rand() % range if not set. Done twice (0x4a3b82) */
-			log.info( String.format( "Generating crewMember unknown values" ) );
-			rng.rand();
-			rng.rand();
+			/* Generate layer colors (0x4a3b82) */
+			log.info( String.format( "Generating crewMember layer color" ) );
+
+			List<CrewBlueprint.SpriteTintLayer> layers = cb.getSpriteTintLayerList();
+
+			/* Draw as many random numbers as layers */
+			for (int ll = 0; ll < layers.size(); ll++)
+				rng.rand();
 
 			/* Pick a random name if not set (0x4a3bc4) */
 			if (crewMember.name.equals("")) {
@@ -238,8 +254,8 @@ public final class RandomEvent {
 		FTLEvent.Item weapon = event.getWeapon();
 		if (weapon != null) {
 			if ((weapon.name != null) && weapon.name.equals("RANDOM")) {
-				int i = rng.rand() % 42; // TODO
-				weapon.name = "TODO";
+				WeaponBlueprint wb = pickRandomWeapon(rng);
+				weapon.name = wb.getId();
 			}
 		}
 
@@ -247,8 +263,8 @@ public final class RandomEvent {
 		FTLEvent.Item augment = event.getAugment();
 		if (augment != null) {
 			if ((augment.name != null) && augment.name.equals("RANDOM")) {
-				int i = rng.rand() % 42; // TODO
-				augment.name = "TODO";
+				AugBlueprint ab = pickRandomAugment(rng);
+				augment.name = ab.getId();
 			}
 		}
 
@@ -256,8 +272,8 @@ public final class RandomEvent {
 		FTLEvent.Item drone = event.getDrone();
 		if (drone != null) {
 			if ((drone.name != null) && drone.name.equals("RANDOM")) {
-				int i = rng.rand() % 42; // TODO
-				drone.name = "TODO";
+				DroneBlueprint db = pickRandomDrone(rng);
+				drone.name = db.getId();
 			}
 		}
 
@@ -355,19 +371,21 @@ public final class RandomEvent {
 			}
 
 			if (autoReward.reward.equals("weapon")) {
-				rng.rand(); // TODO
-				autoReward.weapon = "TODO";
+				WeaponBlueprint wb = pickRandomWeapon(rng);
+				autoReward.weapon = wb.getId();
 				autoReward.scrap = autoRewardQuantity(rng, "scrap", rewardLevel, newSectorNumber);
 			}
 			else if (autoReward.reward.equals("augment")) {
-				rng.rand(); // TODO
-				autoReward.augment = "TODO";
+				AugBlueprint ab = pickRandomAugment(rng);
+				autoReward.augment = ab.getId();
 				autoReward.scrap = autoRewardQuantity(rng, "scrap", rewardLevel, newSectorNumber);
 			}
 			else if (autoReward.reward.equals("drone")) {
-				rng.rand(); // TODO
-				autoReward.drone = "TODO";
+				DroneBlueprint db = pickRandomDrone(rng);
+				autoReward.drone = db.getId();
 				autoReward.scrap = autoRewardQuantity(rng, "scrap", rewardLevel, newSectorNumber);
+				// log.info( String.format( "Random value for drone is %d", dd ) );
+				/* 1438052847 -> combat 2 */
 			}
 		}
 
@@ -385,6 +403,13 @@ public final class RandomEvent {
 				Choice choice = choiceList.get(i);
 				FTLEvent choiceEvent = choice.getEvent();
 				log.info( String.format( "Will load choice %s", choiceEvent.toString() ) );
+
+				/* Fix: in the data file, at least one event has the field
+				 * 'name' filled, where it should be 'load' instead.
+				 */
+				if (choiceEvent.getId() != null)
+					choiceEvent.setLoad(choiceEvent.getId());
+
 				choice.setEvent(loadEvent(choiceEvent, rng));
 			}
 		}
@@ -476,4 +501,142 @@ public final class RandomEvent {
 		return r;
 	}
 
+
+	/* Sum of crew rarity values */
+	private static int crewRaritySum = 0;
+
+	/**
+	 * Pick a random weapon, accounting for rarity
+	 */
+	private static CrewBlueprint pickRandomCrew( RandRNG rng ) {
+		Map<String, CrewBlueprint> crews = DataManager.getInstance().getCrews();
+
+		/* Compute sum of non-zero rarities */
+		if (crewRaritySum == 0) {
+			for (Map.Entry<String, CrewBlueprint> entry : crews.entrySet()) {
+				int r = entry.getValue().getRarity();
+				if (r != 0)
+					crewRaritySum += 6 - r;
+			}
+		}
+
+		/* Pick a crew with rarity */
+		int i = rng.rand() % crewRaritySum;
+		int j = 0;
+		for (Map.Entry<String, CrewBlueprint> entry : crews.entrySet()) {
+			int r = entry.getValue().getRarity();
+			if (r == 0)
+				continue;
+			j += 6 - r;
+			if (i < j) {
+				return entry.getValue();
+			}
+		}
+
+		throw new UnsupportedOperationException( String.format( "Could not pick random crew" ) );
+	}
+
+
+	/* Sum of weapon rarity values */
+	private static int weaponRaritySum = 0;
+
+	/**
+	 * Pick a random weapon, accounting for rarity
+	 */
+	private static WeaponBlueprint pickRandomWeapon( RandRNG rng ) {
+		Map<String, WeaponBlueprint> weapons = DataManager.getInstance().getWeapons();
+
+		/* Compute sum of non-zero rarities */
+		if (weaponRaritySum == 0) {
+			for (Map.Entry<String, WeaponBlueprint> entry : weapons.entrySet()) {
+				int r = entry.getValue().getRarity();
+				if (r != 0)
+					weaponRaritySum += 6 - r;
+			}
+		}
+
+		/* Pick a crew with rarity */
+		int i = rng.rand() % weaponRaritySum;
+		int j = 0;
+		for (Map.Entry<String, WeaponBlueprint> entry : weapons.entrySet()) {
+			int r = entry.getValue().getRarity();
+			if (r == 0)
+				continue;
+			j += 6 - r;
+			if (i < j) {
+				return entry.getValue();
+			}
+		}
+
+		throw new UnsupportedOperationException( String.format( "Could not pick random weapon" ) );
+	}
+
+
+	/* Sum of augment rarity values */
+	private static int augRaritySum = 0;
+
+	/**
+	 * Pick a random augment, accounting for rarity
+	 */
+	private static AugBlueprint pickRandomAugment( RandRNG rng ) {
+		Map<String, AugBlueprint> augs = DataManager.getInstance().getAugments();
+
+		/* Compute sum of non-zero rarities */
+		if (augRaritySum == 0) {
+			for (Map.Entry<String, AugBlueprint> entry : augs.entrySet()) {
+				int r = entry.getValue().getRarity();
+				if (r != 0)
+					augRaritySum += 6 - r;
+			}
+		}
+
+		/* Pick a crew with rarity */
+		int i = rng.rand() % augRaritySum;
+		int j = 0;
+		for (Map.Entry<String, AugBlueprint> entry : augs.entrySet()) {
+			int r = entry.getValue().getRarity();
+			if (r == 0)
+				continue;
+			j += 6 - r;
+			if (i < j) {
+				return entry.getValue();
+			}
+		}
+
+		throw new UnsupportedOperationException( String.format( "Could not pick random augment" ) );
+	}
+
+	/* Sum of drone rarity values */
+	private static int droneRaritySum = 0;
+
+	/**
+	 * Pick a random drone, accounting for rarity
+	 */
+	private static DroneBlueprint pickRandomDrone( RandRNG rng ) {
+		Map<String, DroneBlueprint> drones = DataManager.getInstance().getDrones();
+
+		/* Compute sum of non-zero rarities */
+		if (droneRaritySum == 0) {
+			for (Map.Entry<String, DroneBlueprint> entry : drones.entrySet()) {
+				int r = entry.getValue().getRarity();
+				if (r != 0)
+					droneRaritySum += (6 - r);
+			}
+		}
+
+		/* Pick a crew with rarity */
+		int i = rng.rand() % droneRaritySum;
+		int j = 0;
+		for (Map.Entry<String, DroneBlueprint> entry : drones.entrySet()) {
+			int r = entry.getValue().getRarity();
+			if (r == 0)
+				continue;
+			j += (6 - r);
+			if (i < j) {
+				return entry.getValue();
+			}
+		}
+
+		throw new UnsupportedOperationException( String.format( "Could not pick random drone" ) );
+	}
 }

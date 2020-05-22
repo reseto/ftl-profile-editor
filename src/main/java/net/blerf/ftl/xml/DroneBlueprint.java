@@ -185,7 +185,7 @@ public class DroneBlueprint {
 	}
 
 	public int getRarity() {
-		return cost;
+		return rarity;
 	}
 
 	@Override
