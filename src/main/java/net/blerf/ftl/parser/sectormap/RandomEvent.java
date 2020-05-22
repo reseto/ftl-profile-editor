@@ -206,8 +206,10 @@ public final class RandomEvent {
 			List<CrewBlueprint.SpriteTintLayer> layers = cb.getSpriteTintLayerList();
 
 			/* Draw as many random numbers as layers */
-			for (int ll = 0; ll < layers.size(); ll++)
-				rng.rand();
+			if (layers != null) {
+				for (int ll = 0; ll < layers.size(); ll++)
+					rng.rand();
+			}
 
 			/* Pick a random name if not set (0x4a3bc4) */
 			if (crewMember.name.equals("")) {

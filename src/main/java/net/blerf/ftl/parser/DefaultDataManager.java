@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -431,7 +432,7 @@ public class DefaultDataManager extends DataManager {
 				}
 			}
 
-			stdCrewIdMap = new LinkedHashMap<String, CrewBlueprint>();
+			stdCrewIdMap = new TreeMap<String, CrewBlueprint>();
 			for ( Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -439,7 +440,7 @@ public class DefaultDataManager extends DataManager {
 					stdCrewIdMap.put( crew.getId(), crew );
 				}
 			}
-			dlcCrewIdMap = new LinkedHashMap<String, CrewBlueprint>( stdCrewIdMap );
+			dlcCrewIdMap = new TreeMap<String, CrewBlueprint>( stdCrewIdMap );
 			for ( Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
