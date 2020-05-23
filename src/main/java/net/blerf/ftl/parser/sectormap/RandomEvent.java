@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import net.blerf.ftl.parser.random.RandRNG;
 import net.blerf.ftl.parser.DataManager;
 
+import net.blerf.ftl.constants.Difficulty;
+
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
 import net.blerf.ftl.xml.SectorDescription;
@@ -34,13 +36,13 @@ public final class RandomEvent {
 	private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
 
 	private static int sectorNumber = 0; // between 0 and 7
-	private static int difficulty = 1; // between 0 and 2
+	private static Difficulty difficulty = Difficulty.NORMAL; // between 0 and 2
 	private static boolean dlcEnabled = false;
 
 	private static Set<String> uniqueSectors = new HashSet<String>();
 
 	public static void setSectorNumber( int sn ) { sectorNumber = sn; }
-	public static void setDifficulty( int d ) { difficulty = d; }
+	public static void setDifficulty( Difficulty d ) { difficulty = d; }
 	public static void setDlc( boolean d ) { dlcEnabled = d; }
 
 	public static void resetUniqueSectors() { uniqueSectors.clear(); }
@@ -178,9 +180,9 @@ public final class RandomEvent {
 
 			/* Alter sector number based on difficulty */
 			int newSectorNumber = sectorNumber;
-			if (difficulty == 0)
+			if (difficulty == Difficulty.EASY)
 				newSectorNumber++;
-			if ((difficulty == 2) && (newSectorNumber > 0))
+			if ((difficulty == Difficulty.HARD) && (newSectorNumber > 0))
 				newSectorNumber--;
 
 			if (crewMember.id == null)
@@ -290,9 +292,9 @@ public final class RandomEvent {
 
 			/* Alter sector number based on difficulty */
 			int newSectorNumber = sectorNumber;
-			if (difficulty == 0)
+			if (difficulty == Difficulty.EASY)
 				newSectorNumber++;
-			if ((difficulty == 2) && (newSectorNumber > 0))
+			if ((difficulty == Difficulty.HARD) && (newSectorNumber > 0))
 				newSectorNumber--;
 
 			/* Determine reward level */

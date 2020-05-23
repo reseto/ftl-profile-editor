@@ -71,6 +71,7 @@ import org.slf4j.LoggerFactory;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
+import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.parser.SavedGameParser.BeaconState;
@@ -175,6 +176,9 @@ public class SavedGameSectorMapPanel extends JPanel {
 	private SpriteSelector miscSelector = null;
 	private ActionListener columnCtrlListener = null;
 
+	private boolean dlcEnabled = false;
+	private Difficulty difficulty = Difficulty.NORMAL;
+	private int sectorNumber = 0;
 
 	public SavedGameSectorMapPanel( FTLFrame frame ) {
 		super( new BorderLayout() );
@@ -452,6 +456,10 @@ public class SavedGameSectorMapPanel extends JPanel {
 		if ( fileFormat == 11 && !gameState.isRandomNative() ) {
 			forcedRNG = new FTL_1_6_Random( "FTL 1.6+" );
 		}
+
+		dlcEnabled = gameState.isDLCEnabled();
+		difficulty = gameState.getDifficulty();
+		sectorNumber = gameState.getSectorNumber();
 
 		sectorLayoutSeed = gameState.getSectorLayoutSeed();
 
@@ -1145,6 +1153,10 @@ public class SavedGameSectorMapPanel extends JPanel {
 
 						RandomSectorMapGenerator randomMapGen = new RandomSectorMapGenerator();
 						try {
+							randomMapGen.sectorNumber = sectorNumber;
+							randomMapGen.difficulty = difficulty;
+							randomMapGen.dlcEnabled = dlcEnabled;
+
 							newGenMap = randomMapGen.generateSectorMap( selectedRNG, fileFormat );
 						}
 						catch ( IllegalStateException e ) {

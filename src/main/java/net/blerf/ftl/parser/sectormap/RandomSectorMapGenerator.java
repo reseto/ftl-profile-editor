@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.blerf.ftl.parser.DataManager;
+import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
 import net.blerf.ftl.xml.SectorDescription;
@@ -64,7 +65,7 @@ public class RandomSectorMapGenerator {
 
 	public String sectorId = "STANDARD_SPACE";
 	public int sectorNumber = 0;
-	public int difficulty = 1; // between 0 and 2
+	public Difficulty difficulty = Difficulty.NORMAL;
 	public boolean dlcEnabled = false;
 
 	public static class EmptyBeacon {
@@ -231,7 +232,7 @@ public class RandomSectorMapGenerator {
 
 			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
 
-			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId, dlcEnabled );
+			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
 
 			/* Generate starting beacon position: 0x4e7b95 */
 			int startingBeacon = rng.rand() & 3;
@@ -248,7 +249,7 @@ public class RandomSectorMapGenerator {
 				r = rng.rand() & 3;
 				c = (rng.rand() & 1) + 4;
 				if ( false ) { // Some condition, probably last sector
-					if ( difficulty == 2 ) { // Hard
+					if ( difficulty == Difficulty.HARD ) {
 						c = (rng.rand() & 1) + 3;
 					}
 					else {
