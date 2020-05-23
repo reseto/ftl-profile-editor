@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
@@ -63,7 +64,7 @@ public class RandomSectorMapGenerator {
 	 */
 	public static final double ISOLATION_THRESHOLD = 165d;
 
-	public String sectorId = "STANDARD_SPACE";
+	public String sectorId = "NEBULA_SECTOR";
 	public int sectorNumber = 0;
 	public Difficulty difficulty = Difficulty.NORMAL;
 	public boolean dlcEnabled = false;
@@ -311,11 +312,20 @@ public class RandomSectorMapGenerator {
 				}
 
 				/* Hardcoded list of nebula models */
-				int nebulaModelListW[] = {119, 67, 89, 117};
-				int nebulaModelListH[] = {63, 110, 67, 108};
+				List<Integer> nebulaModelListW;
+				List<Integer> nebulaModelListH;
+
+				if (nebulaEvents.size() < 6) {
+					nebulaModelListW = Arrays.asList(119, 67, 89, 117);
+					nebulaModelListH = Arrays.asList(63, 110, 67, 108);
+				}
+				else {
+					nebulaModelListW = Arrays.asList(250, 200, 250);
+					nebulaModelListH = Arrays.asList(234, 250, 200);
+				}
 
 				/* Choose a random nebula model */
-				n = rng.rand() % nebulaModelListW.length;
+				n = rng.rand() % nebulaModelListW.size();
 
 				/* If less than 4 non-nebula beacons, remove random nebulas */
 				while ((emptyBeacons.size() - nebulaEvents.size()) < 4) {
@@ -330,10 +340,11 @@ public class RandomSectorMapGenerator {
 				log.info( String.format( "Starting nebula beacon: %d ", bId ) );
 
 				/* The nebula model is centered on the chosen beacon */
-				int modelW = nebulaModelListW[n];
-				int modelH = nebulaModelListH[n];
+				int modelW = nebulaModelListW.get(n);
+				int modelH = nebulaModelListH.get(n);
 				int modelX = beacon.x - modelW / 2;
 				int modelY = beacon.y - modelH / 2;
+
 
 				/* Number of failed attemps */
 				int failedAttempts = 0;
@@ -343,6 +354,7 @@ public class RandomSectorMapGenerator {
 
 				do {
 					boolean oneNewBeacon = false;
+					log.info( String.format( "Nebula rect is: (%d, %d, %d, %d) ", modelX, modelY, modelW, modelH ) );
 
 					/* Iterate over all empty beacons */
 					int be = 0;
@@ -415,13 +427,13 @@ public class RandomSectorMapGenerator {
 						NebulaRect oldnr = nebulaRects.get(n);
 
 						/* Pick a new nebula model */
-						n = rng.rand() % nebulaModelListW.length;
+						n = rng.rand() % nebulaModelListW.size();
 
 						/* Build the new nebula rect so that it intersects with
 						 * the chosen existing nebula
 						 */
-						modelW = nebulaModelListW[n];
-						modelH = nebulaModelListH[n];
+						modelW = nebulaModelListW.get(n);
+						modelH = nebulaModelListH.get(n);
 						modelX = oldnr.x - modelW + rng.rand() % (oldnr.w + modelW);
 						modelY = oldnr.y - modelH + rng.rand() % (oldnr.h + modelH);
 					}
