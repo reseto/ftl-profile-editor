@@ -305,17 +305,17 @@ public class DefaultDataManager extends DataManager {
 				sectorDescriptionIdMap.put( tmpDesc.getId(), tmpDesc );
 			}
 
-			Pattern sectorOverridePtn = Pattern.compile( "^OVERRIDE_(.*)" );
+			Pattern overridePtn = Pattern.compile( "^OVERRIDE_(.*)" );
 			stdSectorTypeIdMap = new LinkedHashMap<String, SectorType>();
 			for ( SectorType tmpType : tmpSectorData.getSectorTypes() ) {
-				if ( sectorOverridePtn.matcher( tmpType.getId() ).matches() ) continue;
+				if ( overridePtn.matcher( tmpType.getId() ).matches() ) continue;
 
 				stdSectorTypeIdMap.put( tmpType.getId(), tmpType );
 			}
 
 			dlcSectorTypeIdMap = new LinkedHashMap<String, SectorType>( stdSectorTypeIdMap );
 			for ( SectorType tmpType : tmpSectorData.getSectorTypes() ) {
-				Matcher m = sectorOverridePtn.matcher( tmpType.getId() );
+				Matcher m = overridePtn.matcher( tmpType.getId() );
 				if ( m.matches() ) {
 					String baseId = m.group( 1 );
 					dlcSectorTypeIdMap.put( baseId, tmpType );
@@ -650,7 +650,11 @@ public class DefaultDataManager extends DataManager {
 				Encounters tmpEncounters = entry.getValue();
 				List<ShipEvent> shipEventList = tmpEncounters.getShipEvents();
 				for ( ShipEvent shipEvent : shipEventList ) {
-					dlcShipEventIdMap.put( shipEvent.getId(), shipEvent );
+					Matcher m = overridePtn.matcher( shipEvent.getId() );
+					if ( m.matches() ) {
+						String baseId = m.group( 1 );
+						dlcShipEventIdMap.put( baseId, shipEvent );
+					}
 				}
 			}
 
@@ -1103,12 +1107,15 @@ public class DefaultDataManager extends DataManager {
 			events = stdEventsFileMap;
 		}
 
-		FTLEvent result = null;
+		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
+			FTLEvent tmpEvent = entry.getValue().getEventById( "OVERRIDE_" + id );
+			if ( tmpEvent != null ) return tmpEvent;
+		}
 		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
 			FTLEvent tmpEvent = entry.getValue().getEventById( id );
-			if ( tmpEvent != null ) result = tmpEvent;
+			if ( tmpEvent != null ) return tmpEvent;
 		}
-		return result;
+		return null;
 	}
 
 	/**
@@ -1127,12 +1134,15 @@ public class DefaultDataManager extends DataManager {
 			events = stdEventsFileMap;
 		}
 
-		FTLEventList result = null;
+		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
+			FTLEventList tmpEventList = entry.getValue().getEventListById( "OVERRIDE_" + id );
+			if ( tmpEventList != null ) return tmpEventList;
+		}
 		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
 			FTLEventList tmpEventList = entry.getValue().getEventListById( id );
-			if ( tmpEventList != null ) result = tmpEventList;
+			if ( tmpEventList != null ) return tmpEventList;
 		}
-		return result;
+		return null;
 	}
 
 	/**
@@ -1148,12 +1158,15 @@ public class DefaultDataManager extends DataManager {
 			events = stdEventsFileMap;
 		}
 
-		TextList result = null;
+		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
+			TextList tmpTextList = entry.getValue().getTextListById( "OVERRIDE_" + id );
+			if ( tmpTextList != null ) return tmpTextList;
+		}
 		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
 			TextList tmpTextList = entry.getValue().getTextListById( id );
-			if ( tmpTextList != null ) result = tmpTextList;
+			if ( tmpTextList != null ) return tmpTextList;
 		}
-		return result;
+		return null;
 	}
 
 	/**

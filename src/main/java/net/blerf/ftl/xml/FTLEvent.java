@@ -111,7 +111,7 @@ public class FTLEvent implements Cloneable {
 		@XmlAttribute
 		public int repair = -1;
 
-		@XmlAttribute
+		@XmlAttribute( name = "all_skills" )
 		public int all_skills = -1;
 
 		@XmlValue

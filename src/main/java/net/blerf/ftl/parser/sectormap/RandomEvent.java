@@ -203,6 +203,9 @@ public final class RandomEvent {
 			}
 			else {
 				cb = DataManager.getInstance().getCrew(crewMember.id, dlcEnabled);
+				/* Choose a random name here, that will be overwritten later? */
+				rng.rand();
+				/* TODO: apparently, we cannot generate twice the same name */
 			}
 
 			/* Generate layer colors (0x4a3b82) */
