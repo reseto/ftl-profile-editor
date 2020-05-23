@@ -415,7 +415,7 @@ public class DefaultDataManager extends DataManager {
 				}
 			}
 
-			stdAugmentIdMap = new LinkedHashMap<String, AugBlueprint>();
+			stdAugmentIdMap = new TreeMap<String, AugBlueprint>();
 			for ( Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -423,7 +423,7 @@ public class DefaultDataManager extends DataManager {
 					stdAugmentIdMap.put( augment.getId(), augment );
 				}
 			}
-			dlcAugmentIdMap = new LinkedHashMap<String, AugBlueprint>( stdAugmentIdMap );
+			dlcAugmentIdMap = new TreeMap<String, AugBlueprint>( stdAugmentIdMap );
 			for ( Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -449,7 +449,7 @@ public class DefaultDataManager extends DataManager {
 				}
 			}
 
-			stdDroneIdMap = new LinkedHashMap<String, DroneBlueprint>();
+			stdDroneIdMap = new TreeMap<String, DroneBlueprint>();
 			for ( Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -457,7 +457,7 @@ public class DefaultDataManager extends DataManager {
 					stdDroneIdMap.put( drone.getId(), drone );
 				}
 			}
-			dlcDroneIdMap = new LinkedHashMap<String, DroneBlueprint>( stdDroneIdMap );
+			dlcDroneIdMap = new TreeMap<String, DroneBlueprint>( stdDroneIdMap );
 			for ( Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -483,7 +483,7 @@ public class DefaultDataManager extends DataManager {
 				}
 			}
 
-			stdWeaponIdMap = new LinkedHashMap<String, WeaponBlueprint>();
+			stdWeaponIdMap = new TreeMap<String, WeaponBlueprint>();
 			for ( Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -491,7 +491,7 @@ public class DefaultDataManager extends DataManager {
 					stdWeaponIdMap.put( weapon.getId(), weapon );
 				}
 			}
-			dlcWeaponIdMap = new LinkedHashMap<String, WeaponBlueprint>( stdWeaponIdMap );
+			dlcWeaponIdMap = new TreeMap<String, WeaponBlueprint>( stdWeaponIdMap );
 			for ( Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 

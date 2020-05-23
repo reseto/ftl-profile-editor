@@ -65,6 +65,7 @@ public class RandomSectorMapGenerator {
 	public String sectorId = "STANDARD_SPACE";
 	public int sectorNumber = 0;
 	public int difficulty = 1; // between 0 and 2
+	public boolean dlcEnabled = false;
 
 	public static class EmptyBeacon {
 		public int id;
@@ -121,6 +122,8 @@ public class RandomSectorMapGenerator {
 						}
 					}
 					GeneratedBeacon genBeacon = new GeneratedBeacon();
+
+					genBeacon.setGridPosition( c, r );
 
 					n = rng.rand();
 					genBeacon.setThrobTicks( n % 2001 );
@@ -182,6 +185,8 @@ public class RandomSectorMapGenerator {
 						}
 						GeneratedBeacon genBeacon = new GeneratedBeacon();
 
+						genBeacon.setGridPosition( c, r );
+
 						n = rng.rand();
 						genBeacon.setThrobTicks( n % 2001 );
 
@@ -221,11 +226,12 @@ public class RandomSectorMapGenerator {
 
 			RandomEvent.setSectorNumber(sectorNumber);
 			RandomEvent.setDifficulty(difficulty);
+			RandomEvent.setDlc(dlcEnabled);
 			RandomEvent.resetUniqueSectors();
 
 			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
 
-			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
+			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId, dlcEnabled );
 
 			/* Generate starting beacon position: 0x4e7b95 */
 			int startingBeacon = rng.rand() & 3;
@@ -237,22 +243,32 @@ public class RandomSectorMapGenerator {
 
 			/* Generate ending beacon position: two rands at 0x4e8032 and 0x4e804d */
 			int r, c;
+			GeneratedBeacon endingGb = null;
 			do {
 				r = rng.rand() & 3;
 				c = (rng.rand() & 1) + 4;
-				if ( false ) { // Some condition
-					if ( false ) { // Some other condition
+				if ( false ) { // Some condition, probably last sector
+					if ( difficulty == 2 ) { // Hard
 						c = (rng.rand() & 1) + 3;
 					}
 					else {
 						c = (rng.rand() & 1) + 2;
 					}
 				}
+
 				/* Check that the position has a beacon in it, otherwise loop */
-			} while ((c*4+r) >= genBeaconList.size());
+				for (GeneratedBeacon gb : genBeaconList) {
+					/* TODO: Could be optimized because genBeaconList is ordered */
+					Point gridLoc = gb.getGridPosition();
+					if ((gridLoc.x == c) && (gridLoc.y == r)) {
+						endingGb = gb;
+						break;
+					}
+				}
+			} while (endingGb == null);
 
 			/* Generate ending beacon event ("FINISH_BEACON") */
-			genBeaconList.get(c*4+r).event = RandomEvent.loadEventId("FINISH_BEACON", rng);
+			endingGb.event = RandomEvent.loadEventId("FINISH_BEACON", rng);
 
 			/* Place NEBULA beacons first */
 			List<SectorDescription.EventDistribution> eventDistribution = tmpDesc.getEventDistributions();

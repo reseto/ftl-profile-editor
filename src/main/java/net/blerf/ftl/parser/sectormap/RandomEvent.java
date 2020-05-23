@@ -1,6 +1,7 @@
 package net.blerf.ftl.parser.sectormap;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
@@ -34,11 +35,13 @@ public final class RandomEvent {
 
 	private static int sectorNumber = 0; // between 0 and 7
 	private static int difficulty = 1; // between 0 and 2
+	private static boolean dlcEnabled = false;
 
 	private static Set<String> uniqueSectors = new HashSet<String>();
 
 	public static void setSectorNumber( int sn ) { sectorNumber = sn; }
 	public static void setDifficulty( int d ) { difficulty = d; }
+	public static void setDlc( boolean d ) { dlcEnabled = d; }
 
 	public static void resetUniqueSectors() { uniqueSectors.clear(); }
 
@@ -51,7 +54,7 @@ public final class RandomEvent {
 
 		/* First, check if the id correspond to an event list */
 
-		FTLEventList list = DataManager.getInstance().getEventListById( id );
+		FTLEventList list = DataManager.getInstance().getEventListById( id, dlcEnabled );
 		if (list != null) {
 			List<FTLEvent> eventList = list.getEventList();
 
@@ -70,7 +73,7 @@ public final class RandomEvent {
 		}
 
 		/* Get the event */
-		FTLEvent event = (FTLEvent)DataManager.getInstance().getEventById( id ).clone();
+		FTLEvent event = (FTLEvent)DataManager.getInstance().getEventById( id, dlcEnabled ).clone();
 
 		return loadEvent(event, rng);
 	}
@@ -78,12 +81,12 @@ public final class RandomEvent {
 	/**
 	 * Load an event.
 	 * To print which event is loaded on the game, use gdb with:
-	 *   break *0x4a2c38
-	 *   commands
-	 *   silent
-	 *   printf "load event %s\n",(char*)*$rsi
-	 *   cont
-	 *   end
+	    break *0x4a2c38
+	    commands
+	    silent
+	    printf "load event %s\n",(char*)*$rsi
+	    cont
+	    end
 	 */
 	public static FTLEvent loadEvent( FTLEvent event, RandRNG rng ) {
 		log.info( String.format( "Load event %s", event.toString() ) );
@@ -106,7 +109,7 @@ public final class RandomEvent {
 		if (text != null) {
 			load = text.getLoad();
 			if (load != null) {
-				TextList list = DataManager.getInstance().getTextListById( load );
+				TextList list = DataManager.getInstance().getTextListById( load, dlcEnabled );
 				if (list == null) {
 					throw new UnsupportedOperationException( String.format( "Could not find text list %s", load ) );
 				}
@@ -197,7 +200,7 @@ public final class RandomEvent {
 				log.info( String.format( "   got %s", crewMember.id ) );
 			}
 			else {
-				cb = DataManager.getInstance().getCrew(crewMember.id);
+				cb = DataManager.getInstance().getCrew(crewMember.id, dlcEnabled);
 			}
 
 			/* Generate layer colors (0x4a3b82) */
@@ -386,8 +389,6 @@ public final class RandomEvent {
 				DroneBlueprint db = pickRandomDrone(rng);
 				autoReward.drone = db.getId();
 				autoReward.scrap = autoRewardQuantity(rng, "scrap", rewardLevel, newSectorNumber);
-				// log.info( String.format( "Random value for drone is %d", dd ) );
-				/* 1438052847 -> combat 2 */
 			}
 		}
 
@@ -409,7 +410,7 @@ public final class RandomEvent {
 				if (cText != null) {
 					load = cText.getLoad();
 					if (load != null) {
-						TextList list = DataManager.getInstance().getTextListById( load );
+						TextList list = DataManager.getInstance().getTextListById( load, dlcEnabled );
 						if (list == null) {
 							throw new UnsupportedOperationException( String.format( "Could not find text list %s", load ) );
 						}
@@ -524,142 +525,178 @@ public final class RandomEvent {
 		return r;
 	}
 
+	private static class ItemRarity {
+		public String id = null;
+		public int rarity = 0;
+		public int rarityChildren = 0;
+	}
 
-	/* Sum of crew rarity values */
-	private static int crewRaritySum = 0;
+	private static List<ItemRarity> crewRarities = new ArrayList<ItemRarity>();
 
 	/**
 	 * Pick a random weapon, accounting for rarity
 	 */
 	private static CrewBlueprint pickRandomCrew( RandRNG rng ) {
-		Map<String, CrewBlueprint> crews = DataManager.getInstance().getCrews();
+		Map<String, CrewBlueprint> crews = DataManager.getInstance().getCrews(dlcEnabled);
 
-		/* Compute sum of non-zero rarities */
-		if (crewRaritySum == 0) {
+		/* Compute sum and binary tree of non-zero rarities */
+		if (crewRarities.isEmpty()) {
+
+			/* Use 1-based array */
+			crewRarities.add(new ItemRarity());
+
 			for (Map.Entry<String, CrewBlueprint> entry : crews.entrySet()) {
 				int r = entry.getValue().getRarity();
-				if (r != 0)
-					crewRaritySum += 6 - r;
+				if (r != 0) {
+					ItemRarity dr = new ItemRarity();
+					dr.id = entry.getKey();
+					dr.rarity = 6 - r;
+					dr.rarityChildren = 6 - r;
+					crewRarities.add(dr);
+				}
+			}
+
+			/* Compute the binary tree */
+			for (int i = crewRarities.size()-1; i >= 1; i--) {
+				crewRarities.get(i>>1).rarityChildren += crewRarities.get(i).rarityChildren;
 			}
 		}
 
 		/* Pick a crew with rarity */
-		int i = rng.rand() % crewRaritySum;
-		int j = 0;
-		for (Map.Entry<String, CrewBlueprint> entry : crews.entrySet()) {
-			int r = entry.getValue().getRarity();
-			if (r == 0)
-				continue;
-			j += 6 - r;
-			if (i < j) {
-				return entry.getValue();
-			}
-		}
-
-		throw new UnsupportedOperationException( String.format( "Could not pick random crew" ) );
+		String id = pickRandomBinaryTree(rng, crewRarities);
+		return crews.get(id);
 	}
 
 
-	/* Sum of weapon rarity values */
-	private static int weaponRaritySum = 0;
+	private static List<ItemRarity> weaponRarities = new ArrayList<ItemRarity>();
 
 	/**
 	 * Pick a random weapon, accounting for rarity
 	 */
 	private static WeaponBlueprint pickRandomWeapon( RandRNG rng ) {
-		Map<String, WeaponBlueprint> weapons = DataManager.getInstance().getWeapons();
+		Map<String, WeaponBlueprint> weapons = DataManager.getInstance().getWeapons(dlcEnabled);
 
-		/* Compute sum of non-zero rarities */
-		if (weaponRaritySum == 0) {
+		/* Compute sum and binary tree of non-zero rarities */
+		if (weaponRarities.isEmpty()) {
+
+			/* Use 1-based array */
+			weaponRarities.add(new ItemRarity());
+
 			for (Map.Entry<String, WeaponBlueprint> entry : weapons.entrySet()) {
 				int r = entry.getValue().getRarity();
-				if (r != 0)
-					weaponRaritySum += 6 - r;
+				if (r != 0) {
+					ItemRarity dr = new ItemRarity();
+					dr.id = entry.getKey();
+					dr.rarity = 6 - r;
+					dr.rarityChildren = 6 - r;
+					weaponRarities.add(dr);
+				}
+			}
+
+			/* Compute the binary tree */
+			for (int i = weaponRarities.size()-1; i >= 1; i--) {
+				weaponRarities.get(i>>1).rarityChildren += weaponRarities.get(i).rarityChildren;
 			}
 		}
 
-		/* Pick a crew with rarity */
-		int i = rng.rand() % weaponRaritySum;
-		int j = 0;
-		for (Map.Entry<String, WeaponBlueprint> entry : weapons.entrySet()) {
-			int r = entry.getValue().getRarity();
-			if (r == 0)
-				continue;
-			j += 6 - r;
-			if (i < j) {
-				return entry.getValue();
-			}
-		}
-
-		throw new UnsupportedOperationException( String.format( "Could not pick random weapon" ) );
+		/* Pick a weapon with rarity */
+		String id = pickRandomBinaryTree(rng, weaponRarities);
+		return weapons.get(id);
 	}
 
 
-	/* Sum of augment rarity values */
-	private static int augRaritySum = 0;
+	private static List<ItemRarity> augRarities = new ArrayList<ItemRarity>();
 
 	/**
 	 * Pick a random augment, accounting for rarity
 	 */
 	private static AugBlueprint pickRandomAugment( RandRNG rng ) {
-		Map<String, AugBlueprint> augs = DataManager.getInstance().getAugments();
+		Map<String, AugBlueprint> augs = DataManager.getInstance().getAugments(dlcEnabled);
 
-		/* Compute sum of non-zero rarities */
-		if (augRaritySum == 0) {
+		/* Compute sum and binary tree of non-zero rarities */
+		if (augRarities.isEmpty()) {
+
+			/* Use 1-based array */
+			augRarities.add(new ItemRarity());
+
 			for (Map.Entry<String, AugBlueprint> entry : augs.entrySet()) {
 				int r = entry.getValue().getRarity();
-				if (r != 0)
-					augRaritySum += 6 - r;
+				if (r != 0) {
+					ItemRarity dr = new ItemRarity();
+					dr.id = entry.getKey();
+					dr.rarity = 6 - r;
+					dr.rarityChildren = 6 - r;
+					augRarities.add(dr);
+				}
+			}
+
+			/* Compute the binary tree */
+			for (int i = augRarities.size()-1; i >= 1; i--) {
+				augRarities.get(i>>1).rarityChildren += augRarities.get(i).rarityChildren;
 			}
 		}
 
-		/* Pick a crew with rarity */
-		int i = rng.rand() % augRaritySum;
-		int j = 0;
-		for (Map.Entry<String, AugBlueprint> entry : augs.entrySet()) {
-			int r = entry.getValue().getRarity();
-			if (r == 0)
-				continue;
-			j += 6 - r;
-			if (i < j) {
-				return entry.getValue();
-			}
-		}
-
-		throw new UnsupportedOperationException( String.format( "Could not pick random augment" ) );
+		/* Pick an augment with rarity */
+		String id = pickRandomBinaryTree(rng, augRarities);
+		return augs.get(id);
 	}
 
-	/* Sum of drone rarity values */
-	private static int droneRaritySum = 0;
+	private static List<ItemRarity> droneRarities = new ArrayList<ItemRarity>();
 
 	/**
 	 * Pick a random drone, accounting for rarity
 	 */
 	private static DroneBlueprint pickRandomDrone( RandRNG rng ) {
-		Map<String, DroneBlueprint> drones = DataManager.getInstance().getDrones();
+		Map<String, DroneBlueprint> drones = DataManager.getInstance().getDrones(dlcEnabled);
 
-		/* Compute sum of non-zero rarities */
-		if (droneRaritySum == 0) {
+		/* Compute sum and binary tree of non-zero rarities */
+		if (droneRarities.isEmpty()) {
+
+			/* Use 1-based array */
+			droneRarities.add(new ItemRarity());
+
 			for (Map.Entry<String, DroneBlueprint> entry : drones.entrySet()) {
 				int r = entry.getValue().getRarity();
-				if (r != 0)
-					droneRaritySum += (6 - r);
+				if (r != 0) {
+					ItemRarity dr = new ItemRarity();
+					dr.id = entry.getKey();
+					dr.rarity = 6 - r;
+					dr.rarityChildren = 6 - r;
+					droneRarities.add(dr);
+				}
+			}
+
+			/* Compute the binary tree */
+			for (int i = droneRarities.size()-1; i >= 1; i--) {
+				droneRarities.get(i>>1).rarityChildren += droneRarities.get(i).rarityChildren;
 			}
 		}
 
-		/* Pick a crew with rarity */
-		int i = rng.rand() % droneRaritySum;
-		int j = 0;
-		for (Map.Entry<String, DroneBlueprint> entry : drones.entrySet()) {
-			int r = entry.getValue().getRarity();
-			if (r == 0)
-				continue;
-			j += (6 - r);
-			if (i < j) {
-				return entry.getValue();
-			}
-		}
-
-		throw new UnsupportedOperationException( String.format( "Could not pick random drone" ) );
+		/* Pick a drone with rarity */
+		String id = pickRandomBinaryTree(rng, droneRarities);
+		return drones.get(id);
 	}
+
+	/**
+	 * Pick a random item from a binary tree
+	 */
+	private static String pickRandomBinaryTree( RandRNG rng, List<ItemRarity> itemRarities ) {
+
+		/* Pick a value among sum of rarities */
+		int i = (rng.rand() % itemRarities.get(1).rarityChildren) + 1;
+		int j = 1;
+
+		while (i >= itemRarities.get(j).rarity) {
+			i -= itemRarities.get(j).rarity;
+			j <<= 1;
+			if (i >= itemRarities.get(j).rarityChildren) {
+				i -= itemRarities.get(j).rarityChildren;
+				j++;
+			}
+		}
+
+		return itemRarities.get(j).id;
+	}
+
+
 }

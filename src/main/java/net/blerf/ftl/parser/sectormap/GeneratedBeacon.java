@@ -17,6 +17,8 @@ import net.blerf.ftl.xml.FTLEvent;
 public class GeneratedBeacon {
 
 	protected int throbTicks = 0;
+	protected int col = 0;
+	protected int row = 0;
 	protected int x = 0;
 	protected int y = 0;
 	protected FTLEvent event = null;
@@ -33,6 +35,12 @@ public class GeneratedBeacon {
 	 */
 	public void setThrobTicks( int n ) { throbTicks = n; }
 	public int getThrobTicks() { return throbTicks; }
+
+	/**
+	 * Sets the position in the grid
+	 */
+	public void setGridPosition( int newCol, int newRow ) { col = newCol; row = newRow; }
+	public Point getGridPosition() { return new Point( col, row ); }
 
 	/**
 	 * Sets the pixel location of this beacon.
