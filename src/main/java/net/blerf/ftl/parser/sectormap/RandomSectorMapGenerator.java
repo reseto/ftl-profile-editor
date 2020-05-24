@@ -64,7 +64,7 @@ public class RandomSectorMapGenerator {
 	 */
 	public static final double ISOLATION_THRESHOLD = 165d;
 
-	public String sectorId = "NEBULA_SECTOR";
+	public String sectorId = "ENGI_HOME";
 	public int sectorNumber = 0;
 	public Difficulty difficulty = Difficulty.NORMAL;
 	public boolean dlcEnabled = false;
@@ -325,6 +325,18 @@ public class RandomSectorMapGenerator {
 					nebulaModelListH = Arrays.asList(234, 250, 200);
 				}
 
+				/* Print nebula nebula models:
+				break *0x4d6b55
+				commands
+				silent
+				printf "rect x %d\n",*(int*)($rsp+0x40)
+				printf "rect y %d\n",*(int*)($rsp+0x44)
+				printf "rect w %d\n",*(int*)($rsp+0x38)
+				printf "rect h %d\n",*(int*)($rsp+0x3c)
+				cont
+				end
+				 */
+
 				/* Choose a random nebula model */
 				n = rng.rand() % nebulaModelListW.size();
 
@@ -412,15 +424,16 @@ public class RandomSectorMapGenerator {
 					/* Update the number of failed attemps */
 					if (!oneNewBeacon)
 						failedAttempts++;
+					else {
+						/* Insert the nebula */
+						NebulaRect nr = new NebulaRect();
+						nr.x = modelX;
+						nr.y = modelY;
+						nr.w = modelW;
+						nr.h = modelH;
 
-					/* Insert the nebula */
-					NebulaRect nr = new NebulaRect();
-					nr.x = modelX;
-					nr.y = modelY;
-					nr.w = modelW;
-					nr.h = modelH;
-
-					nebulaRects.add(nr);
+						nebulaRects.add(nr);
+					}
 
 					if (failedAttempts < 0x15) {
 						/* Pick an existing nebula rect */
@@ -447,6 +460,8 @@ public class RandomSectorMapGenerator {
 
 						modelX = beacon.x - modelW / 2;
 						modelY = beacon.y - modelH / 2;
+
+						failedAttempts = 0;
 					}
 				}
 				while (!nebulaEvents.isEmpty());
