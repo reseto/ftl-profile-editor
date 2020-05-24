@@ -235,12 +235,18 @@ public class RandomSectorMapGenerator {
 			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
 
 			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
+			if (tmpDesc == null) {
+				tmpDesc = DataManager.getInstance().getSectorDescriptionById( "STANDARD_SPACE" );
+			}
 
 			/* Generate starting beacon position: 0x4e7b95 */
 			int startingBeacon = rng.rand() & 3;
 
 			/* Generate starting beacon event: 0x4e7f57 */
 			String startEvent = tmpDesc.getStartEvent();
+			if (startEvent == null) {
+				startEvent = "START_BEACON";
+			}
 
 			genBeaconList.get(startingBeacon).event = RandomEvent.loadEventId(startEvent, rng);
 
