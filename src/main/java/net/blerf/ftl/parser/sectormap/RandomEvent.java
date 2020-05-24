@@ -313,7 +313,10 @@ public final class RandomEvent {
 			else if (autoReward.level.equals("RANDOM"))
 				rewardLevel = rng.rand() % 3;
 			else
-				throw new UnsupportedOperationException( String.format( "Unknown reward level %s", autoReward.level ) );
+				/* If unknown reward, default to random.
+				 * This happens at least once with a typo (MEDIUM instead of MED)
+				 */
+				rewardLevel = rng.rand() % 3;
 
 			String resources[] = {"fuel", "missiles", "droneparts"};
 
