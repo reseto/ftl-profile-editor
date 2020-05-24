@@ -35,12 +35,14 @@ public final class RandomEvent {
 
 	private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
 
+	private static String sectorId = "NEBULA_SECTOR";
 	private static int sectorNumber = 0; // between 0 and 7
 	private static Difficulty difficulty = Difficulty.NORMAL; // between 0 and 2
 	private static boolean dlcEnabled = false;
 
 	private static Set<String> uniqueSectors = new HashSet<String>();
 
+	public static void setSectorId( String si ) { sectorId = si; }
 	public static void setSectorNumber( int sn ) { sectorNumber = sn; }
 	public static void setDifficulty( Difficulty d ) { difficulty = d; }
 	public static void setDlc( boolean d ) { dlcEnabled = d; }
@@ -550,8 +552,26 @@ public final class RandomEvent {
 			/* Use 1-based array */
 			crewRarities.add(new ItemRarity());
 
+			/* Sector data can overwrite rarities */
+			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
+			SectorDescription.RarityList rarityList = tmpDesc.getRarityList();
+			List<SectorDescription.BlueprintRarity> blueprints = null;
+			if (rarityList != null)
+				blueprints = rarityList.blueprints;
+
 			for (Map.Entry<String, CrewBlueprint> entry : crews.entrySet()) {
 				int r = entry.getValue().getRarity();
+
+				/* Check if a new rarity value is specified by sector description */
+				if (blueprints != null) {
+					for (SectorDescription.BlueprintRarity b : blueprints) {
+						if (b.id.equals(entry.getKey())) {
+							r = b.rarity;
+							log.info( String.format( "crew %s rarity %d override", b.id, b.rarity ) );
+						}
+					}
+				}
+
 				if (r != 0) {
 					ItemRarity dr = new ItemRarity();
 					dr.id = entry.getKey();
@@ -587,8 +607,25 @@ public final class RandomEvent {
 			/* Use 1-based array */
 			weaponRarities.add(new ItemRarity());
 
+			/* Sector data can overwrite rarities */
+			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
+			SectorDescription.RarityList rarityList = tmpDesc.getRarityList();
+			List<SectorDescription.BlueprintRarity> blueprints = null;
+			if (rarityList != null)
+				blueprints = rarityList.blueprints;
+
 			for (Map.Entry<String, WeaponBlueprint> entry : weapons.entrySet()) {
 				int r = entry.getValue().getRarity();
+
+				/* Check if a new rarity value is specified by sector description */
+				if (blueprints != null) {
+					for (SectorDescription.BlueprintRarity b : blueprints) {
+						if (b.id.equals(entry.getKey())) {
+							r = b.rarity;
+						}
+					}
+				}
+
 				if (r != 0) {
 					ItemRarity dr = new ItemRarity();
 					dr.id = entry.getKey();
@@ -624,8 +661,25 @@ public final class RandomEvent {
 			/* Use 1-based array */
 			augRarities.add(new ItemRarity());
 
+			/* Sector data can overwrite rarities */
+			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
+			SectorDescription.RarityList rarityList = tmpDesc.getRarityList();
+			List<SectorDescription.BlueprintRarity> blueprints = null;
+			if (rarityList != null)
+				blueprints = rarityList.blueprints;
+
 			for (Map.Entry<String, AugBlueprint> entry : augs.entrySet()) {
 				int r = entry.getValue().getRarity();
+
+				/* Check if a new rarity value is specified by sector description */
+				if (blueprints != null) {
+					for (SectorDescription.BlueprintRarity b : blueprints) {
+						if (b.id.equals(entry.getKey())) {
+							r = b.rarity;
+						}
+					}
+				}
+
 				if (r != 0) {
 					ItemRarity dr = new ItemRarity();
 					dr.id = entry.getKey();
@@ -660,8 +714,25 @@ public final class RandomEvent {
 			/* Use 1-based array */
 			droneRarities.add(new ItemRarity());
 
+			/* Sector data can overwrite rarities */
+			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
+			SectorDescription.RarityList rarityList = tmpDesc.getRarityList();
+			List<SectorDescription.BlueprintRarity> blueprints = null;
+			if (rarityList != null)
+				blueprints = rarityList.blueprints;
+
 			for (Map.Entry<String, DroneBlueprint> entry : drones.entrySet()) {
 				int r = entry.getValue().getRarity();
+
+				/* Check if a new rarity value is specified by sector description */
+				if (blueprints != null) {
+					for (SectorDescription.BlueprintRarity b : blueprints) {
+						if (b.id.equals(entry.getKey())) {
+							r = b.rarity;
+						}
+					}
+				}
+
 				if (r != 0) {
 					ItemRarity dr = new ItemRarity();
 					dr.id = entry.getKey();
@@ -688,7 +759,7 @@ public final class RandomEvent {
 	private static String pickRandomBinaryTree( RandRNG rng, List<ItemRarity> itemRarities ) {
 
 		/* Pick a value among sum of rarities */
-		int i = (rng.rand() % itemRarities.get(1).rarityChildren) + 1;
+		int i = rng.rand() % itemRarities.get(1).rarityChildren;
 		int j = 1;
 
 		while (i >= itemRarities.get(j).rarity) {

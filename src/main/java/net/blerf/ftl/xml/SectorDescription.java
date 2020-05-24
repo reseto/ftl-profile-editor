@@ -28,6 +28,8 @@ public class SectorDescription {
 
 	private TrackList trackList;
 
+	private RarityList rarityList;
+
 	@XmlElement( required = false )
 	private String startEvent;
 
@@ -44,6 +46,21 @@ public class SectorDescription {
 	public static class TrackList {
 		@XmlElement( name = "track" )
 		public List<String> tracks;
+	}
+
+	@XmlAccessorType( XmlAccessType.FIELD )
+	public static class RarityList {
+		@XmlElement( name = "blueprint" )
+		public List<BlueprintRarity> blueprints;
+	}
+
+	@XmlAccessorType( XmlAccessType.FIELD )
+	public static class BlueprintRarity {
+		@XmlAttribute( name = "name" )
+		public String id;
+
+		@XmlAttribute
+		public int rarity;
 	}
 
 	@XmlAccessorType( XmlAccessType.FIELD )
@@ -97,6 +114,14 @@ public class SectorDescription {
 
 	public TrackList getTrackList() {
 		return trackList;
+	}
+
+	public void setRarityList( RarityList rarityList ) {
+		this.rarityList = rarityList;
+	}
+
+	public RarityList getRarityList() {
+		return rarityList;
 	}
 
 	public void setStartEvent( String startEvent ) {

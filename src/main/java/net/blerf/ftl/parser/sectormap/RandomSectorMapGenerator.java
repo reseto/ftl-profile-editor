@@ -226,6 +226,7 @@ public class RandomSectorMapGenerator {
 				throw new IllegalStateException( String.format( "No valid map was produced after %d attempts!?", generations ) );
 			}
 
+			RandomEvent.setSectorId(sectorId);
 			RandomEvent.setSectorNumber(sectorNumber);
 			RandomEvent.setDifficulty(difficulty);
 			RandomEvent.setDlc(dlcEnabled);
