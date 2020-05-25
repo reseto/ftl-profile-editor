@@ -139,10 +139,10 @@ public final class RandomEvent {
 		log.info( String.format( "Item offer four random values" ) );
 
 		// 0x4a3681
-		/* Randomize missile quantity */
+		/* Randomize fuel quantity */
 		int n = rng.rand();
 		if ((n & 3) < ivar12) {
-			int p = itemOfferQuantity(event, rng, "missiles");
+			int p = itemOfferQuantity(event, rng, "fuel");
 			if (p > 0)
 				ivar12 -= 1;
 		}
@@ -157,10 +157,10 @@ public final class RandomEvent {
 		}
 
 		// 0x4a371d
-		/* Randomize fuel quantity */
+		/* Randomize missiles quantity */
 		n = rng.rand();
 		if ((n & 1) < ivar12) {
-			int p = itemOfferQuantity(event, rng, "fuel");
+			int p = itemOfferQuantity(event, rng, "missiles");
 			if (p > 0)
 				ivar12 -= 1;
 		}
