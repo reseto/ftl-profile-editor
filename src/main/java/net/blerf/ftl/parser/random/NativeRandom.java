@@ -38,7 +38,7 @@ public class NativeRandom implements RandRNG {
 		seed = newSeed;
 	}
 
-	static int count = 421;
+	static int count = 0;
 
 	@Override
 	public int rand() {

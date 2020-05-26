@@ -29,6 +29,7 @@ import net.blerf.ftl.core.EditorConfig;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.DefaultDataManager;
 import net.blerf.ftl.ui.FTLFrame;
+import net.blerf.ftl.seedsearch.SeedSearch;
 
 
 public class FTLProfileEditor {
@@ -297,6 +298,10 @@ public class FTLProfileEditor {
 
 				throw new ExitException();
 			}
+
+			SeedSearch ss = new SeedSearch();
+			ss.search();
+
 		}
 		catch ( ExitException e ) {
 			System.gc();
