@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +69,12 @@ public class RandomSectorMapGenerator {
 	public int sectorNumber = 0;
 	public Difficulty difficulty = Difficulty.NORMAL;
 	public boolean dlcEnabled = false;
+
+	private static Set<Integer> uniqueCrewNames = null;
+
+	public void setUniqueNames( Set<Integer> un ) {
+		uniqueCrewNames = un;
+	}
 
 	public static class EmptyBeacon {
 		public int id;
@@ -231,6 +238,7 @@ public class RandomSectorMapGenerator {
 			RandomEvent.setDifficulty(difficulty);
 			RandomEvent.setDlc(dlcEnabled);
 			RandomEvent.resetUniqueSectors();
+			RandomEvent.setUniqueNames(uniqueCrewNames);
 
 			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
 
@@ -290,6 +298,7 @@ public class RandomSectorMapGenerator {
 				SectorDescription.EventDistribution ed = it.next();
 				if (ed.name.startsWith("NEBULA")) {
 					int m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
+					log.info( String.format( "min %d max %d value %d", ed.min, ed.max, m ) );
 
 					for (int i=0; i<m; i++)
 						nebulaEvents.add(ed.name);

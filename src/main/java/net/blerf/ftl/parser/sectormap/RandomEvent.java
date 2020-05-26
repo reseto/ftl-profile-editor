@@ -42,6 +42,12 @@ public final class RandomEvent {
 
 	private static Set<String> uniqueSectors = new HashSet<String>();
 
+	private static Set<Integer> uniqueCrewNames = null;
+
+	public static void setUniqueNames( Set<Integer> un ) {
+		uniqueCrewNames = un;
+	}
+
 	public static void setSectorId( String si ) { sectorId = si; }
 	public static void setSectorNumber( int sn ) { sectorNumber = sn; }
 	public static void setDifficulty( Difficulty d ) { difficulty = d; }
@@ -224,7 +230,13 @@ public final class RandomEvent {
 			/* Pick a random name if not set (0x4a3bc4) */
 			if (crewMember.name.equals("")) {
 				log.info( String.format( "Generating crewMember name" ) );
-				rng.rand();
+				n = rng.rand() % 169; // TODO: Magic number, look at (sorted?) crew names
+
+				while (uniqueCrewNames.contains(n)) {
+					n = rng.rand() % 169;
+				}
+				uniqueCrewNames.add(n);
+
 				crewMember.name = "TODO";
 			}
 
