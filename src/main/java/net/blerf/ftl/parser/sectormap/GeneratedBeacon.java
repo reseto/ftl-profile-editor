@@ -17,8 +17,8 @@ import net.blerf.ftl.xml.FTLEvent;
 public class GeneratedBeacon {
 
 	protected int throbTicks = 0;
-	protected int col = 0;
-	protected int row = 0;
+	public int col = 0;
+	public int row = 0;
 	protected int x = 0;
 	protected int y = 0;
 	protected FTLEvent event = null;

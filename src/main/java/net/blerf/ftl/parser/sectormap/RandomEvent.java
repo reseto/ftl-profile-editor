@@ -35,10 +35,10 @@ public final class RandomEvent {
 
 	private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
 
-	private static String sectorId = "NEBULA_SECTOR";
+	private static String sectorId = "STANDARD_SPACE";
 	private static int sectorNumber = 0; // between 0 and 7
-	private static Difficulty difficulty = Difficulty.NORMAL; // between 0 and 2
-	private static boolean dlcEnabled = false;
+	private static Difficulty difficulty = Difficulty.EASY; // between 0 and 2
+	private static boolean dlcEnabled = true;
 
 	private static Set<String> uniqueSectors = new HashSet<String>();
 

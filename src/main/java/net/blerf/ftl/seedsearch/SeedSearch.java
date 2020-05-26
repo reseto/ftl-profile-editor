@@ -1,10 +1,13 @@
 package net.blerf.ftl.seedsearch;
 
+import java.awt.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.AbstractMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ import net.blerf.ftl.parser.random.NativeRandom;
 import net.blerf.ftl.parser.shiplayout.RandomShipLayout;
 import net.blerf.ftl.parser.sectormap.RandomSectorMapGenerator;
 import net.blerf.ftl.parser.sectormap.GeneratedSectorMap;
+import net.blerf.ftl.parser.sectormap.GeneratedBeacon;
 import net.blerf.ftl.parser.sectortree.RandomSectorTreeGenerator;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
@@ -33,7 +37,7 @@ public class SeedSearch {
 
 	private static Set<Integer> uniqueCrewNames = new HashSet<Integer>();
 
-	public void generateAll(RandRNG rng) {
+	public int generateAll(RandRNG rng) {
 
 		uniqueCrewNames.clear();
 
@@ -81,21 +85,101 @@ public class SeedSearch {
 		log.info( String.format( "Seed: %d", seed ) );
 
 		GeneratedSectorMap map = sectorMapGen.generateSectorMap(rng, 9);
+
+		int md = minDistanceMap(map, 4);
+		log.info( String.format( "Min distance is %d", md ) );
+		return md;
 	}
 
 	public void search() {
 
 		RandRNG rng = new NativeRandom( "Native" );
 
-		for (int seed=1; seed < 2; seed++) {
+		for (int seed=39; seed < 1000; seed++) {
 			log.info( String.format( "Seed %d", seed ) );
 			rng.srand( seed );
 
-			generateAll(rng);
+			int md = generateAll( rng );
+			if ((md > 0) && (md < 5)) break;
 		}
 	}
 
-	// private int minDistanceMap(GeneratedSectorMap map) {
-	//
-	// }
+	public static final double ISOLATION_THRESHOLD = 165d;
+
+	public static class BeaconDist {
+		public int id;
+		public int step;
+	}
+
+	private int minDistanceMap(GeneratedSectorMap map, int upperBound) {
+		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
+
+		GeneratedBeacon startBeacon = beaconList.get(map.startBeacon);
+		GeneratedBeacon endBeacon = beaconList.get(map.endBeacon);
+
+		if ((upperBound < 5) && (endBeacon.col == 5))
+			return -1;
+
+		if (distance(startBeacon, endBeacon) > (upperBound * ISOLATION_THRESHOLD))
+			return -1;
+
+		List<Integer> beaconDists = new ArrayList<Integer>(Collections.nCopies(beaconList.size(), -1));
+		beaconDists.set(map.startBeacon, 0);
+
+		for (int currentDist = 0; currentDist < upperBound; currentDist++) {
+			for (int bd = 0; bd < beaconDists.size(); bd++) {
+				if (beaconDists.get(bd) != currentDist)
+					continue;
+
+				GeneratedBeacon curBec = beaconList.get(bd);
+				int curRow = curBec.row;
+				int curCol = curBec.col;
+
+				for (int gb = 0; gb < beaconList.size(); gb++) {
+					if (bd == gb)
+						continue;
+
+					/* Check if beacon already in list */
+					if (beaconDists.get(gb) != -1)
+						continue;
+
+					GeneratedBeacon otherBec = beaconList.get(gb);
+
+					/* Check if the two beacons are connected */
+					if (Math.abs(otherBec.row - curRow) > 1)
+						continue;
+
+					if (Math.abs(otherBec.col - curCol) > 1)
+						continue;
+
+					if (distance(curBec, otherBec) >= ISOLATION_THRESHOLD)
+						continue;
+
+					/* Check if final beacon */
+					if (gb == map.endBeacon)
+						return currentDist+1;
+
+					/* Some more pruning to skip beacons which are too far */
+					if (Math.abs(otherBec.col - endBeacon.col) > (upperBound - (currentDist+1)))
+						continue;
+
+					if (Math.abs(otherBec.row - endBeacon.row) > (upperBound - (currentDist+1)))
+						continue;
+
+					if (distance(otherBec, endBeacon) < ((upperBound - (currentDist+1))*ISOLATION_THRESHOLD)) {
+						beaconDists.set(gb, currentDist+1);
+					}
+				}
+			}
+		}
+
+		return -1;
+	}
+
+	private double distance(GeneratedBeacon b1, GeneratedBeacon b2) {
+		Point p1 = b1.getLocation();
+		Point p2 = b2.getLocation();
+		return Math.hypot( p1.x - p2.x, p1.y - p2.y );
+	}
+
 }

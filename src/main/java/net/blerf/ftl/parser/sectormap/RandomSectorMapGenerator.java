@@ -256,6 +256,7 @@ public class RandomSectorMapGenerator {
 				startEvent = "START_BEACON";
 			}
 
+			genMap.startBeacon = startingBeacon;
 			genBeaconList.get(startingBeacon).event = RandomEvent.loadEventId(startEvent, rng);
 
 			/* Generate ending beacon position: two rands at 0x4e8032 and 0x4e804d */
@@ -274,11 +275,13 @@ public class RandomSectorMapGenerator {
 				}
 
 				/* Check that the position has a beacon in it, otherwise loop */
-				for (GeneratedBeacon gb : genBeaconList) {
+				for (int g = 0; g < genBeaconList.size(); g++) {
 					/* TODO: Could be optimized because genBeaconList is ordered */
+					GeneratedBeacon gb = genBeaconList.get(g);
 					Point gridLoc = gb.getGridPosition();
 					if ((gridLoc.x == c) && (gridLoc.y == r)) {
 						endingGb = gb;
+						genMap.endBeacon = g;
 						break;
 					}
 				}
@@ -509,6 +512,8 @@ public class RandomSectorMapGenerator {
 					/* Check if the beacon is empty */
 					if (gb.event == null) {
 						log.info( String.format( "Generate event %s for beacon %d", ed.name, beaconIds.get(b) ) );
+						Point p = gb.getLocation();
+						log.info( String.format( "Coords %d - %d", p.x, p.y ) );
 						gb.event = RandomEvent.loadEventId(ed.name, rng);
 						i++;
 					}
@@ -532,6 +537,8 @@ public class RandomSectorMapGenerator {
 					gb.event = RandomEvent.loadEventId("NEUTRAL", rng);
 				}
 			}
+
+			uniqueCrewNames.clear(); // TODO: should be kept between sectors?
 
 			return genMap;
 		}
