@@ -21,6 +21,9 @@ public class ShipEvent {
 	@XmlAttribute( name = "load", required = false )
 	private String load;
 
+	@XmlAttribute
+	private boolean hostile = false;
+
 	private int seed;
 
 	@XmlAttribute( name = "auto_blueprint" )
@@ -43,6 +46,14 @@ public class ShipEvent {
 
 	public void setLoad( String load ) {
 		this.load = load;
+	}
+
+	public boolean getHostile() {
+		return hostile;
+	}
+
+	public void setHostile( boolean hostile ) {
+		this.hostile = hostile;
 	}
 
 	public int getSeed() {

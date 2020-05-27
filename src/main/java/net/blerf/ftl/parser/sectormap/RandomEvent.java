@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.NOPLogger;
 
 import net.blerf.ftl.parser.random.RandRNG;
 import net.blerf.ftl.parser.DataManager;
@@ -33,7 +34,9 @@ import net.blerf.ftl.xml.DroneBlueprint;
  */
 public final class RandomEvent {
 
-	private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
+//	private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
+	private static final Logger log = NOPLogger.NOP_LOGGER;
+
 
 	private static String sectorId = "STANDARD_SPACE";
 	private static int sectorNumber = 0; // between 0 and 7
@@ -76,7 +79,7 @@ public final class RandomEvent {
 			do {
 				log.info( String.format( "Choose random event from eventList" ) );
 				int e = rng.rand() % eventList.size();
-				ev = loadEvent(eventList.get(e), rng);
+				ev = loadEvent((FTLEvent)eventList.get(e).clone(), rng);
 			}
 			while (ev == null);
 			return ev;
@@ -212,8 +215,13 @@ public final class RandomEvent {
 			else {
 				cb = DataManager.getInstance().getCrew(crewMember.id, dlcEnabled);
 				/* Choose a random name here, that will be overwritten later? */
-				rng.rand();
-				/* TODO: apparently, we cannot generate twice the same name */
+
+				n = rng.rand() % 169; // TODO: Magic number, look at (sorted?) crew names
+
+				while (uniqueCrewNames.contains(n)) {
+					n = rng.rand() % 169;
+				}
+				uniqueCrewNames.add(n);
 			}
 
 			/* Generate layer colors (0x4a3b82) */
@@ -387,27 +395,22 @@ public final class RandomEvent {
 				autoReward.resources[2] = autoRewardQuantity(rng, "droneparts", rewardLevel, 0);
 			}
 
+			int extraItemType = -1;
 			if (extraItem) {
-				int i = rng.rand() % 3;
-				if (i == 0)
-					autoReward.reward = "weapon";
-				else if (i == 1)
-					autoReward.reward = "drone";
-				else
-					autoReward.reward = "augment";
+				extraItemType = rng.rand() % 3;
 			}
 
-			if (autoReward.reward.equals("weapon")) {
+			if ((extraItemType == 0) || autoReward.reward.equals("weapon")) {
 				WeaponBlueprint wb = pickRandomWeapon(rng);
 				autoReward.weapon = wb.getId();
 				autoReward.scrap = autoRewardQuantity(rng, "scrap", rewardLevel, newSectorNumber);
 			}
-			else if (autoReward.reward.equals("augment")) {
+			else if ((extraItemType == 2) || autoReward.reward.equals("augment")) {
 				AugBlueprint ab = pickRandomAugment(rng);
 				autoReward.augment = ab.getId();
 				autoReward.scrap = autoRewardQuantity(rng, "scrap", rewardLevel, newSectorNumber);
 			}
-			else if (autoReward.reward.equals("drone")) {
+			else if ((extraItemType == 1) || autoReward.reward.equals("drone")) {
 				DroneBlueprint db = pickRandomDrone(rng);
 				autoReward.drone = db.getId();
 				autoReward.scrap = autoRewardQuantity(rng, "scrap", rewardLevel, newSectorNumber);

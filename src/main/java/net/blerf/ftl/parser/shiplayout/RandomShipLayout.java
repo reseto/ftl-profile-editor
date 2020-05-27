@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.NOPLogger;
 
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.random.RandRNG;
@@ -21,7 +22,8 @@ import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
  */
 public class RandomShipLayout {
 
-	private static final Logger log = LoggerFactory.getLogger( RandomShipLayout.class );
+	// private static final Logger log = LoggerFactory.getLogger( RandomShipLayout.class );
+	private static final Logger log = NOPLogger.NOP_LOGGER;
 
 	protected RandRNG rng;
 

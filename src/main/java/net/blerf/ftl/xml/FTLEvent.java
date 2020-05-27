@@ -166,6 +166,7 @@ public class FTLEvent implements Cloneable {
 		if (ship != null) {
 			o.ship = new ShipEvent();
 			o.ship.setId(ship.getId());
+			o.ship.setHostile(ship.getHostile());
 			o.ship.setLoad(ship.getLoad());
 			o.ship.setAutoBlueprintId(ship.getAutoBlueprintId());
 		}
