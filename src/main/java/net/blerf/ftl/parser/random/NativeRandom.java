@@ -44,8 +44,10 @@ public class NativeRandom implements RandRNG {
 
 	@Override
 	public int rand() {
-		log.info( String.format( "RNG call %d", count ) );
-		count++;
+		if (log.isDebugEnabled()) {
+			log.debug( String.format( "RNG call %d", count ) );
+			count++;
+		}
 		return CLibrary.INSTANCE.rand();
 	}
 

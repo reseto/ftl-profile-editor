@@ -79,7 +79,8 @@ public class RandomShipLayout {
 			square.x = square.x * 35 + 17;
 			square.y = square.y * 35 + 87;
 
-			log.info( String.format( "Room %d has coords %d - %d", square.roomId, square.x, square.y ) );
+			if (log.isDebugEnabled())
+				log.debug( String.format( "Room %d has coords %d - %d", square.roomId, square.x, square.y ) );
 			roomSquares.add(square);
 		}
 
@@ -112,7 +113,8 @@ public class RandomShipLayout {
 					if ((square1.x != square2.x) && (square1.y != square2.y)) {
 						extraSquare = new RoomSquare();
 						int rr = rng.rand();
-						log.info( String.format( "Rooms %d - %d value is %d", square1.roomId, square2.roomId, rr ) );
+						if (log.isDebugEnabled())
+							log.debug( String.format( "Rooms %d - %d value is %d", square1.roomId, square2.roomId, rr ) );
 
 						if ((rr & 0x1) == 0) {
 							extraSquare.x = square1.x;
@@ -148,7 +150,8 @@ public class RandomShipLayout {
 					}
 
 					if (isPair) {
-						log.info( String.format( "Found middle room" ) );
+						if (log.isDebugEnabled())
+							log.debug( String.format( "Found middle room" ) );
 						continue;
 					}
 

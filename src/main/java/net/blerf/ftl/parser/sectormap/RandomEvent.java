@@ -37,6 +37,7 @@ public final class RandomEvent {
 	// private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
 	private static final Logger log = NOPLogger.NOP_LOGGER;
 
+	private static boolean fast = true;
 
 	private static String sectorId = "STANDARD_SPACE";
 	private static int sectorNumber = 0; // between 0 and 7
@@ -63,7 +64,8 @@ public final class RandomEvent {
 	 */
 	public static FTLEvent loadEventId( String id, RandRNG rng ) {
 
-		log.info( String.format( "Load event id %s", id ) );
+		if (log.isDebugEnabled())
+			log.debug( String.format( "Load event id %s", id ) );
 
 		/* First, check if the id correspond to an event list */
 
@@ -77,7 +79,8 @@ public final class RandomEvent {
 			 * unique event that was already chosen.
 			 */
 			do {
-				log.info( String.format( "Choose random event from eventList" ) );
+				if (log.isDebugEnabled())
+					log.debug( String.format( "Choose random event from eventList" ) );
 				int e = rng.rand() % eventList.size();
 				ev = loadEvent((FTLEvent)eventList.get(e).clone(), rng);
 			}
@@ -102,7 +105,8 @@ public final class RandomEvent {
 	    end
 	 */
 	public static FTLEvent loadEvent( FTLEvent event, RandRNG rng ) {
-		log.info( String.format( "Load event %s", event.toString() ) );
+		if (log.isDebugEnabled())
+			log.debug( String.format( "Load event %s", event.toString() ) );
 
 		/* If unique, check if it was already chosen */
 		if (event.getUnique()) {
@@ -122,19 +126,25 @@ public final class RandomEvent {
 		if (text != null) {
 			load = text.getLoad();
 			if (load != null) {
-				TextList list = DataManager.getInstance().getTextListById( load, dlcEnabled );
-				if (list == null) {
-					throw new UnsupportedOperationException( String.format( "Could not find text list %s", load ) );
+				if (fast) {
+					rng.rand();
 				}
-				List<NamedText> textList = list.getTextList();
+				else {
+					TextList list = DataManager.getInstance().getTextListById( load, dlcEnabled );
+					if (list == null) {
+						throw new UnsupportedOperationException( String.format( "Could not find text list %s", load ) );
+					}
+					List<NamedText> textList = list.getTextList();
 
-				if (textList.size() == 0) {
-					throw new UnsupportedOperationException( String.format( "No more text left in textlist %s", load ) );
+					if (textList.size() == 0) {
+						throw new UnsupportedOperationException( String.format( "No more text left in textlist %s", load ) );
+					}
+
+					if (log.isDebugEnabled())
+						log.debug( String.format( "Choose random text from textList" ) );
+					int n = rng.rand() % textList.size();
+					event.setText(textList.get(n));
 				}
-
-				log.info( String.format( "Choose random text from textList" ) );
-				int n = rng.rand() % textList.size();
-				event.setText(textList.get(n));
 			}
 		}
 
@@ -146,7 +156,8 @@ public final class RandomEvent {
 			ivar12 = 5; // random range
 		}
 
-		log.info( String.format( "Item offer four random values" ) );
+		if (log.isDebugEnabled())
+			log.debug( String.format( "Item offer four random values" ) );
 
 		// 0x4a3681
 		/* Randomize fuel quantity */
@@ -188,7 +199,8 @@ public final class RandomEvent {
 		FTLEvent.CrewMember crewMember = event.getCrewMember();
 		if ((crewMember != null) && (crewMember.amount > 0)) {
 
-			log.info( String.format( "Generating crewMember" ) );
+			if (log.isDebugEnabled())
+				log.debug( String.format( "Generating crewMember" ) );
 
 			/* Alter sector number based on difficulty */
 			int newSectorNumber = sectorNumber;
@@ -203,15 +215,18 @@ public final class RandomEvent {
 			CrewBlueprint cb = null;
 
 			if (crewMember.id.equals("traitor")) {
-				log.info( String.format( "Traitor with crewMember.amount > 0 ???" ) );
+				if (log.isDebugEnabled())
+					log.debug( String.format( "Traitor with crewMember.amount > 0 ???" ) );
 			}
 			else if (crewMember.id.equals("random")) {
 				/* Pick a random race (0x47f52c) */
-				log.info( String.format( "Generating crewMember race" ) );
+				if (log.isDebugEnabled())
+					log.debug( String.format( "Generating crewMember race" ) );
 				cb = pickRandomCrew(rng);
 
 				crewMember.id = cb.getId();
-				log.info( String.format( "   got %s", crewMember.id ) );
+				if (log.isDebugEnabled())
+					log.debug( String.format( "   got %s", crewMember.id ) );
 			}
 			else {
 				cb = DataManager.getInstance().getCrew(crewMember.id, dlcEnabled);
@@ -226,7 +241,8 @@ public final class RandomEvent {
 			}
 
 			/* Generate layer colors (0x4a3b82) */
-			log.info( String.format( "Generating crewMember layer color" ) );
+			if (log.isDebugEnabled())
+				log.debug( String.format( "Generating crewMember layer color" ) );
 
 			List<CrewBlueprint.SpriteTintLayer> layers = cb.getSpriteTintLayerList();
 
@@ -238,7 +254,8 @@ public final class RandomEvent {
 
 			/* Pick a random name if not set (0x4a3bc4) */
 			if (crewMember.name.equals("")) {
-				log.info( String.format( "Generating crewMember name" ) );
+				if (log.isDebugEnabled())
+					log.debug( String.format( "Generating crewMember name" ) );
 				n = rng.rand() % 169; // TODO: Magic number, look at (sorted?) crew names
 
 				while (uniqueCrewNames.contains(n)) {
@@ -263,11 +280,13 @@ public final class RandomEvent {
 				int skillMin = skillMins[newSectorNumber];
 				int skillMax = skillMaxs[newSectorNumber];
 
-				log.info( String.format( "Generating crewMember skill amount" ) );
+				if (log.isDebugEnabled())
+					log.debug( String.format( "Generating crewMember skill amount" ) );
 				int skillAmount = skillMin + (rng.rand() % (skillMax + 1 - skillMin));
 
 				/* Pick two random different skills */
-				log.info( String.format( "Generating crewMember skill type" ) );
+				if (log.isDebugEnabled())
+					log.debug( String.format( "Generating crewMember skill type" ) );
 				int skillOne = rng.rand() % 6;
 				int skillTwo = rng.rand() % 6;
 				while (skillTwo == skillOne)
@@ -314,7 +333,8 @@ public final class RandomEvent {
 		FTLEvent.AutoReward autoReward = event.getAutoReward();
 		if (autoReward != null) {
 
-			log.info( String.format( "Generating autoReward with level %s and type %s", autoReward.level, autoReward.reward ) );
+			if (log.isDebugEnabled())
+				log.debug( String.format( "Generating autoReward with level %s and type %s", autoReward.level, autoReward.reward ) );
 
 			/* Alter sector number based on difficulty */
 			int newSectorNumber = sectorNumber;
@@ -421,7 +441,8 @@ public final class RandomEvent {
 		/* Ship event: generate the seed */
 		ShipEvent se = event.getShip();
 		if (se != null) {
-			log.info( String.format( "Ship seed value" ) );
+			if (log.isDebugEnabled())
+				log.debug( String.format( "Ship seed value" ) );
 			se.setSeed(rng.rand());
 		}
 
@@ -432,7 +453,8 @@ public final class RandomEvent {
 				Choice choice = choiceList.get(i);
 
 				FTLEvent choiceEvent = choice.getEvent();
-				log.info( String.format( "Will load choice %s", choiceEvent.toString() ) );
+				if (log.isDebugEnabled())
+					log.debug( String.format( "Will load choice %s", choiceEvent.toString() ) );
 
 				/* Fix: in the data file, at least one event has the field
 				 * 'name' filled, where it should be 'load' instead.
@@ -447,19 +469,25 @@ public final class RandomEvent {
 				if (cText != null) {
 					load = cText.getLoad();
 					if (load != null) {
-						TextList list = DataManager.getInstance().getTextListById( load, dlcEnabled );
-						if (list == null) {
-							throw new UnsupportedOperationException( String.format( "Could not find text list %s", load ) );
+						if (fast) {
+							rng.rand();
 						}
-						List<NamedText> textList = list.getTextList();
+						else {
+							TextList list = DataManager.getInstance().getTextListById( load, dlcEnabled );
+							if (list == null) {
+								throw new UnsupportedOperationException( String.format( "Could not find text list %s", load ) );
+							}
+							List<NamedText> textList = list.getTextList();
 
-						if (textList.size() == 0) {
-							throw new UnsupportedOperationException( String.format( "No more text left in textlist %s", load ) );
+							if (textList.size() == 0) {
+								throw new UnsupportedOperationException( String.format( "No more text left in textlist %s", load ) );
+							}
+
+							if (log.isDebugEnabled())
+								log.debug( String.format( "Choose random text from textList" ) );
+							n = rng.rand() % textList.size();
+							choice.setText(textList.get(n));
 						}
-
-						log.info( String.format( "Choose random text from textList" ) );
-						n = rng.rand() % textList.size();
-						choice.setText(textList.get(n));
 					}
 				}
 			}
@@ -467,7 +495,8 @@ public final class RandomEvent {
 
 		// 0x4a4751
 		if (true) { // some value == -1 (so uninitialized)
-			log.info( String.format( "Extra end random value" ) );
+			if (log.isDebugEnabled())
+				log.debug( String.format( "Extra end random value" ) );
 			n = rng.rand();
 			int a = 1; // some value
 			int b = 5; // some value
@@ -494,7 +523,8 @@ public final class RandomEvent {
 					item.value = (rng.rand() % r) + item.min;
 					itemList.items.set(i, item);
 					event.setItemList(itemList);
-					log.info( String.format( "Random quantity of %s is %d", id, item.value ) );
+					if (log.isDebugEnabled())
+						log.debug( String.format( "Random quantity of %s is %d", id, item.value ) );
 					return item.value;
 				}
 				return 0;
@@ -528,7 +558,8 @@ public final class RandomEvent {
 			int qint = (int)(min*1000.0f) + (rng.rand() % range);
 
 			int q = (int)(((float)qint / 1000.0f) * ((float) (sector_level * 6 + 0xf)));
-			log.info( String.format( "autoReward scrap: %d", q ) );
+			if (log.isDebugEnabled())
+				log.debug( String.format( "autoReward scrap: %d", q ) );
 			return q;
 		}
 
@@ -547,7 +578,8 @@ public final class RandomEvent {
 		}
 
 		int r = min + (rng.rand() % (max + 1 - min));
-		log.info( String.format( "autoReward %s: %d", resource, r ) );
+		if (log.isDebugEnabled())
+			log.debug( String.format( "autoReward %s: %d", resource, r ) );
 
 		return r;
 	}
@@ -587,7 +619,8 @@ public final class RandomEvent {
 					for (SectorDescription.BlueprintRarity b : blueprints) {
 						if (b.id.equals(entry.getKey())) {
 							r = b.rarity;
-							log.info( String.format( "crew %s rarity %d override", b.id, b.rarity ) );
+							if (log.isDebugEnabled())
+								log.debug( String.format( "crew %s rarity %d override", b.id, b.rarity ) );
 						}
 					}
 				}

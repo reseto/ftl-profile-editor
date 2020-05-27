@@ -103,7 +103,10 @@ public class SeedSearch {
 
 		RandRNG rng = new NativeRandom( "Native" );
 
-		for (int seed = 35804; seed < 100000; seed++) {
+		for (int seed = 49731; seed < 100000; seed++) {
+			if (0 == (seed & 0xff))
+				log.info( String.format( "Seed %d", seed ) );
+
 			rng.srand( seed );
 
 			boolean res = generateAll( rng );
@@ -189,6 +192,19 @@ public class SeedSearch {
 			GeneratedBeacon bec = beaconList.get(b);
 			FTLEvent event = bec.getEvent();
 			if (eventItem(event, "WEAPON_PREIGNITE")) {
+				ret = true;
+				break;
+			}
+		}
+
+		if (! ret)
+			return false;
+
+		ret = false;
+		for (int b : beaconPath) {
+			GeneratedBeacon bec = beaconList.get(b);
+			FTLEvent event = bec.getEvent();
+			if (eventItem(event, "BEAM_HULL")) {
 				ret = true;
 				break;
 			}
