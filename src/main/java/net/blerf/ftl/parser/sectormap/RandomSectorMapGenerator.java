@@ -299,17 +299,13 @@ public class RandomSectorMapGenerator {
 			List<String> nebulaEvents = new ArrayList<String>();
 
 			Iterator<SectorDescription.EventDistribution> it = eventDistribution.iterator();
-			while (it.hasNext()) {
-				SectorDescription.EventDistribution ed = it.next();
+			for (SectorDescription.EventDistribution ed : eventDistribution) {
 				if (ed.name.startsWith("NEBULA")) {
 					int m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
 					log.info( String.format( "min %d max %d value %d", ed.min, ed.max, m ) );
 
 					for (int i=0; i<m; i++)
 						nebulaEvents.add(ed.name);
-
-					/* Remove event from list */
-					it.remove();
 				}
 			}
 
@@ -496,6 +492,9 @@ public class RandomSectorMapGenerator {
 			}
 
 			for (SectorDescription.EventDistribution ed : eventDistribution) {
+				/* Skip nebulas */
+				if (ed.name.startsWith("NEBULA"))
+					continue;
 
 				/* Pick a random number of events from the distribution */
 				int m = 0;

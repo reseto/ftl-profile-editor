@@ -34,7 +34,7 @@ import net.blerf.ftl.xml.DroneBlueprint;
  */
 public final class RandomEvent {
 
-//	private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
+	// private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
 	private static final Logger log = NOPLogger.NOP_LOGGER;
 
 
@@ -132,6 +132,7 @@ public final class RandomEvent {
 					throw new UnsupportedOperationException( String.format( "No more text left in textlist %s", load ) );
 				}
 
+				log.info( String.format( "Choose random text from textList" ) );
 				int n = rng.rand() % textList.size();
 				event.setText(textList.get(n));
 			}
@@ -430,7 +431,18 @@ public final class RandomEvent {
 			for ( int i=0; i < choiceList.size(); i++ ) {
 				Choice choice = choiceList.get(i);
 
-				/* Load text it any */
+				FTLEvent choiceEvent = choice.getEvent();
+				log.info( String.format( "Will load choice %s", choiceEvent.toString() ) );
+
+				/* Fix: in the data file, at least one event has the field
+				 * 'name' filled, where it should be 'load' instead.
+				 */
+				if (choiceEvent.getId() != null)
+					choiceEvent.setLoad(choiceEvent.getId());
+
+				choice.setEvent(loadEvent(choiceEvent, rng));
+
+				/* Load text it any. It is done after loading the event */
 				NamedText cText = choice.getText();
 				if (cText != null) {
 					load = cText.getLoad();
@@ -445,21 +457,11 @@ public final class RandomEvent {
 							throw new UnsupportedOperationException( String.format( "No more text left in textlist %s", load ) );
 						}
 
+						log.info( String.format( "Choose random text from textList" ) );
 						n = rng.rand() % textList.size();
 						choice.setText(textList.get(n));
 					}
 				}
-
-				FTLEvent choiceEvent = choice.getEvent();
-				log.info( String.format( "Will load choice %s", choiceEvent.toString() ) );
-
-				/* Fix: in the data file, at least one event has the field
-				 * 'name' filled, where it should be 'load' instead.
-				 */
-				if (choiceEvent.getId() != null)
-					choiceEvent.setLoad(choiceEvent.getId());
-
-				choice.setEvent(loadEvent(choiceEvent, rng));
 			}
 		}
 

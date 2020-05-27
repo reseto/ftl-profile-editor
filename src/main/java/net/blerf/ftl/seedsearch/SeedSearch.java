@@ -59,7 +59,7 @@ public class SeedSearch {
 
 		/* Random ship generation */
 		int seed = rng.rand();
-		log.info( String.format( "Ship generation, seed: %d", seed ) );
+		// log.info( String.format( "Ship generation, seed: %d", seed ) );
 
 		RandomShipLayout ship = new RandomShipLayout(rng);
 		ship.setUniqueNames(uniqueCrewNames);
@@ -72,7 +72,7 @@ public class SeedSearch {
 
 		RandomSectorTreeGenerator expandedTreeGen = new RandomSectorTreeGenerator( rng );
 		seed = rng.rand();
-		log.info( String.format( "Sector tree generation, seed: %d", seed ) );
+		// log.info( String.format( "Sector tree generation, seed: %d", seed ) );
 		expandedTreeGen.generateSectorTree(seed, dlcEnabled);
 
 		/* Sector map generation */
@@ -85,7 +85,7 @@ public class SeedSearch {
 
 		seed = rng.rand();
 		rng.srand(seed);
-		log.info( String.format( "Sector map generation, seed: %d", seed ) );
+		// log.info( String.format( "Sector map generation, seed: %d", seed ) );
 
 		GeneratedSectorMap map = sectorMapGen.generateSectorMap(rng, 9);
 
@@ -105,12 +105,14 @@ public class SeedSearch {
 
 		RandRNG rng = new NativeRandom( "Native" );
 
-		for (int seed = 7662; seed < 100000; seed++) {
-			log.info( String.format( "Seed %d", seed ) );
+		for (int seed = 35804; seed < 100000; seed++) {
 			rng.srand( seed );
 
 			boolean res = generateAll( rng );
-			if (res) break;
+			if (res) {
+				log.info( String.format( "Seed %d", seed ) );
+				break;
+			}
 		}
 	}
 
@@ -304,29 +306,50 @@ public class SeedSearch {
 	}
 
 	private boolean eventItem(FTLEvent event, String item) {
+		boolean gotItem = false;
+
 		FTLEvent.Item weapon = event.getWeapon();
 		if (weapon != null && weapon.name.equals(item))
-			return true;
+			gotItem = true;
 
 		FTLEvent.Item augment = event.getAugment();
 		if (augment != null && augment.name.equals(item))
-			return true;
+			gotItem = true;
 
 		FTLEvent.Item drone = event.getDrone();
 		if (drone != null && drone.name.equals(item))
-			return true;
+			gotItem = true;
 
 		FTLEvent.AutoReward autoReward = event.getAutoReward();
 		if (autoReward != null) {
 			if (autoReward.weapon != null && autoReward.weapon.equals(item))
-				return true;
+				gotItem = true;
 
 			if (autoReward.augment != null && autoReward.augment.equals(item))
-				return true;
+				gotItem = true;
 
 			if (autoReward.drone != null && autoReward.drone.equals(item))
-				return true;
+				gotItem = true;
 		}
+
+		if (gotItem) {
+			/* Check if loosing crew */
+			FTLEvent.CrewMember cm = event.getCrewMember();
+			if ((cm != null) && (cm.amount < 0))
+				gotItem = false;
+
+			/* Check if loosing stuff */
+			FTLEvent.ItemList il = event.getItemList();
+			if (il != null) {
+				for (FTLEvent.Reward r : il.items) {
+					if (r.value < 0)
+						gotItem = false;
+				}
+			}
+		}
+
+		if (gotItem)
+			return true;
 
 		/* Browse each choice, and load the corresponding event */
 		List<Choice> choiceList = event.getChoiceList();
