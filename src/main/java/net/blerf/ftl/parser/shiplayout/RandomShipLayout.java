@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.AbstractMap;
 import java.util.Set;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,40 +30,16 @@ public class RandomShipLayout {
 
 	private static Set<Integer> uniqueCrewNames = null;
 
-	public RandomShipLayout( RandRNG rng ) {
-		this.rng = rng;
-	}
+	ShipLayout shipLayout = null;
+	List<RoomSquare> roomSquares = new ArrayList<RoomSquare>();
+	boolean squarePairs[];
 
-	public void setRNG( RandRNG newRNG ) {
-		rng = newRNG;
-	}
-
-	public RandRNG getRNG() {
-		return rng;
-	}
-
-	public void setUniqueNames( Set<Integer> un ) {
+	public RandomShipLayout(String shipLayoutId, Set<Integer> un) {
 		uniqueCrewNames = un;
-	}
 
-	public class RoomSquare {
-		public int roomId;
-		public int squareId;
-
-		/* Cell coordinates in game units */
-		public int x;
-		public int y;
-	}
-
-	public void generateShipLayout( int seed, String shipLayoutId ) {
-
-		rng.srand( seed );
-
-		// ShipLayout shipLayout = DataManager.getInstance().getShipLayout( shipLayoutId );
 		ShipLayout shipLayout = DataManager.get().getShipLayout( shipLayoutId );
 
-		/* Pick a random square in each room */
-		List<RoomSquare> roomSquares = new ArrayList<RoomSquare>();
+		/* Build a list of square in each room */
 
 		int roomCount = shipLayout.getRoomCount();
 		for ( int r=0; r < roomCount; r++ ) {
@@ -71,9 +48,37 @@ public class RandomShipLayout {
 			/* Pick a random square in the room */
 			RoomSquare square = new RoomSquare();
 			square.roomId = r;
-			square.squareId = rng.rand() % (layoutRoom.squaresH * layoutRoom.squaresV);
-			square.x = layoutRoom.locationX + square.squareId % layoutRoom.squaresH;
-			square.y = layoutRoom.locationY + square.squareId / layoutRoom.squaresH;
+			square.x = layoutRoom.locationX;
+			square.y = layoutRoom.locationY;
+			square.w = layoutRoom.squaresH;
+			square.h = layoutRoom.squaresV;
+
+			roomSquares.add(square);
+		}
+
+		squarePairs = new boolean[roomCount*roomCount];
+	}
+
+	public class RoomSquare {
+		public int roomId;
+
+		/* Cell coordinates in game units */
+		public int x;
+		public int y;
+		public int w;
+		public int h;
+	}
+
+	public void generateShipLayout( RandRNG rng, int seed ) {
+
+		rng.srand( seed );
+		int roomCount = roomSquares.size();
+
+		for ( int r=0; r < roomCount; r++ ) {
+			RoomSquare square = roomSquares.get(r);
+			int squareId = rng.rand() % (square.w * square.h);
+			square.x += squareId % square.w;
+			square.y += squareId / square.w;
 
 			/* Translate to game coordinates */
 			square.x = square.x * 35 + 17;
@@ -81,37 +86,40 @@ public class RandomShipLayout {
 
 			if (log.isDebugEnabled())
 				log.debug( String.format( "Room %d has coords %d - %d", square.roomId, square.x, square.y ) );
-			roomSquares.add(square);
 		}
 
-		List<AbstractMap.SimpleEntry<RoomSquare, RoomSquare>> squarePairs = new ArrayList<AbstractMap.SimpleEntry<RoomSquare, RoomSquare>>();
+		Arrays.fill(squarePairs, false);
 
 		for (RoomSquare square1 : roomSquares)
 			for (RoomSquare square2 : roomSquares) {
 				if (square1.roomId == square2.roomId) continue;
 
 				/* Compute euclidian distance between the two rooms */
-				double distance = Math.sqrt((square1.x - square2.x) * (square1.x - square2.x) + (square1.y - square2.y) * (square1.y - square2.y));
+				double distance = Math.hypot(square1.x - square2.x, square1.y - square2.y);
 
 				if ((int)distance < 107) {
 
-					boolean isPair = false;
 					/* Check if there is already a pair between the two squares */
-					for (AbstractMap.SimpleEntry<RoomSquare, RoomSquare> p : squarePairs) {
-						if (((p.getKey().roomId == square1.roomId) && (p.getValue().roomId == square2.roomId)) ||
-							((p.getKey().roomId == square2.roomId) && (p.getValue().roomId == square1.roomId))) {
-							isPair = true;
-							break;
-						}
-					}
+					boolean isPair = squarePairs[square2.roomId*roomCount+square1.roomId];
 
 					if (isPair) continue;
 
+					/* The following code is only useful the first time we
+					 * enconter a pair. When we are processing the swapped pair,
+					 * we can skip most of it
+					 */
+					if (square2.roomId < square1.roomId) {
+						/* Pair is swapped, only call the rng if necessary */
+						if ((square1.x != square2.x) && (square1.y != square2.y)) {
+							rng.rand();
+						}
+						continue;
+					}
+
 					/* If the two squares are not aligned,
 					 * generate a Square from coords of the two squares */
-					RoomSquare extraSquare = null;
 					if ((square1.x != square2.x) && (square1.y != square2.y)) {
-						extraSquare = new RoomSquare();
+						RoomSquare extraSquare = new RoomSquare();
 						int rr = rng.rand();
 						if (log.isDebugEnabled())
 							log.debug( String.format( "Rooms %d - %d value is %d", square1.roomId, square2.roomId, rr ) );
@@ -124,20 +132,12 @@ public class RandomShipLayout {
 							extraSquare.x = square2.x;
 							extraSquare.y = square1.y;
 						}
-					}
 
-					/* Detect if there is a third square between the pairs */
-					isPair = false;
-					for (RoomSquare square3 : roomSquares) {
-						if (square3.roomId == square1.roomId) continue;
-						if (square3.roomId == square2.roomId) continue;
-						if (extraSquare == null) {
-							if (middleSquare(square1, square2, square3)) {
-								isPair = true;
-								break;
-							}
-						}
-						else {
+						/* Detect if there is a third square between the pairs */
+						isPair = false;
+						for (RoomSquare square3 : roomSquares) {
+							if (square3.roomId == square1.roomId) continue;
+							if (square3.roomId == square2.roomId) continue;
 							if (middleSquare(square1, extraSquare, square3)) {
 								isPair = true;
 								break;
@@ -147,16 +147,16 @@ public class RandomShipLayout {
 								break;
 							}
 						}
-					}
 
-					if (isPair) {
-						if (log.isDebugEnabled())
-							log.debug( String.format( "Found middle room" ) );
-						continue;
-					}
+						if (isPair) {
+							if (log.isDebugEnabled())
+								log.debug( String.format( "Found middle room" ) );
+							continue;
+						}
 
-					/* Insert the square pair */
-					squarePairs.add(new AbstractMap.SimpleEntry<RoomSquare, RoomSquare>(square1, square2));
+						/* Insert the square pair */
+						squarePairs[square1.roomId*roomCount+square2.roomId] = true;
+					}
 				}
 			}
 

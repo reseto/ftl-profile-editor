@@ -40,6 +40,8 @@ public class SeedSearch {
 
 	private static Set<Integer> uniqueCrewNames = new HashSet<Integer>();
 
+	RandomShipLayout ship = new RandomShipLayout("kestral", uniqueCrewNames);
+
 	/* Generate a whole seed, and look at the sector map for a valid path.
 	 * Returns if one was found.
 	 */
@@ -61,9 +63,7 @@ public class SeedSearch {
 		int seed = rng.rand();
 		// log.info( String.format( "Ship generation, seed: %d", seed ) );
 
-		RandomShipLayout ship = new RandomShipLayout(rng);
-		ship.setUniqueNames(uniqueCrewNames);
-		ship.generateShipLayout(seed, "kestral");
+		ship.generateShipLayout(rng, seed);
 
 		/* Sector tree generation */
 		rng.rand();
