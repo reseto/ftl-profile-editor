@@ -89,15 +89,13 @@ public class SeedSearch {
 
 		GeneratedSectorMap map = sectorMapGen.generateSectorMap(rng, 9);
 
-		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
-		List<Integer> beaconDists = new ArrayList<Integer>(Collections.nCopies(beaconList.size(), -1));
-
-		int md = minDistanceMap(map, beaconDists, 4);
-
-		if (md < 0)
+		/* Check if generation finished early */
+		if (map == null)
 			return false;
 
-		return bfsStart(map, beaconDists);
+		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
+
+		return bfsStart(map);
 	}
 
 	/* Iterate for each seed value and look at a valid path */
@@ -118,92 +116,21 @@ public class SeedSearch {
 
 	public static final double ISOLATION_THRESHOLD = 165d;
 
-	public static class BeaconDist {
-		public int id;
-		public int step;
-	}
-
-	private int minDistanceMap(GeneratedSectorMap map, List<Integer> beaconDists, int upperBound) {
-		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
-
-		GeneratedBeacon startBeacon = beaconList.get(map.startBeacon);
-		GeneratedBeacon endBeacon = beaconList.get(map.endBeacon);
-
-		if ((upperBound < 5) && (endBeacon.col == 5))
-			return -1;
-
-		if (distance(startBeacon, endBeacon) > (upperBound * ISOLATION_THRESHOLD))
-			return -1;
-
-		beaconDists.set(map.startBeacon, 0);
-
-		for (int currentDist = 0; currentDist < upperBound; currentDist++) {
-			for (int bd = 0; bd < beaconDists.size(); bd++) {
-				if (beaconDists.get(bd) != currentDist)
-					continue;
-
-				GeneratedBeacon curBec = beaconList.get(bd);
-				int curRow = curBec.row;
-				int curCol = curBec.col;
-
-				for (int gb = 0; gb < beaconList.size(); gb++) {
-					if (bd == gb)
-						continue;
-
-					/* Check if beacon already in list */
-					if (beaconDists.get(gb) != -1)
-						continue;
-
-					GeneratedBeacon otherBec = beaconList.get(gb);
-
-					/* Check if the two beacons are connected */
-					if (Math.abs(otherBec.row - curRow) > 1)
-						continue;
-
-					if (Math.abs(otherBec.col - curCol) > 1)
-						continue;
-
-					if (distance(curBec, otherBec) >= ISOLATION_THRESHOLD)
-						continue;
-
-					/* Check if final beacon */
-					if (gb == map.endBeacon) {
-						beaconDists.set(gb, currentDist+1);
-						return currentDist+1;
-					}
-
-					/* Some more pruning to skip beacons which are too far */
-					if (Math.abs(otherBec.col - endBeacon.col) > (upperBound - (currentDist+1)))
-						continue;
-
-					if (Math.abs(otherBec.row - endBeacon.row) > (upperBound - (currentDist+1)))
-						continue;
-
-					if (distance(otherBec, endBeacon) < ((upperBound - (currentDist+1))*ISOLATION_THRESHOLD)) {
-						beaconDists.set(gb, currentDist+1);
-					}
-				}
-			}
-		}
-
-		return -1;
-	}
-
 	private double distance(GeneratedBeacon b1, GeneratedBeacon b2) {
 		Point p1 = b1.getLocation();
 		Point p2 = b2.getLocation();
 		return Math.hypot( p1.x - p2.x, p1.y - p2.y );
 	}
 
-	private boolean bfsStart(GeneratedSectorMap map, List<Integer> beaconDists) {
+	private boolean bfsStart(GeneratedSectorMap map) {
 		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
 
 		List<Integer> beaconPath = new ArrayList<Integer>(5);
 
-		return bfs(map, beaconDists, map.startBeacon, beaconPath);
+		return bfs(map, map.startBeacon, beaconPath);
 	}
 
-	private boolean bfs(GeneratedSectorMap map, List<Integer> beaconDists, int currentBeacon, List<Integer> beaconPath) {
+	private boolean bfs(GeneratedSectorMap map, int currentBeacon, List<Integer> beaconPath) {
 		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
 
 		GeneratedBeacon endBeacon = beaconList.get(map.endBeacon);
@@ -217,7 +144,7 @@ public class SeedSearch {
 			return false;
 
 		/* Register the beacon in the list */
-		int currentDist = beaconDists.get(currentBeacon);
+		int currentDist = gb.distance;
 		if (beaconPath.size() == currentDist)
 			beaconPath.add(currentBeacon);
 		else
@@ -233,11 +160,11 @@ public class SeedSearch {
 		int curCol = gb.col;
 
 		boolean res = false;
-		for (int bd = 0; bd < beaconDists.size(); bd++) {
-			if (beaconDists.get(bd) != (currentDist+1))
-				continue;
-
+		for (int bd = 0; bd < beaconList.size(); bd++) {
 			GeneratedBeacon otherBec = beaconList.get(bd);
+
+			if (otherBec.distance != (currentDist+1))
+				continue;
 
 			/* Check if the two beacons are connected */
 			if (Math.abs(otherBec.row - curRow) > 1)
@@ -249,7 +176,7 @@ public class SeedSearch {
 			if (distance(gb, otherBec) >= ISOLATION_THRESHOLD)
 				continue;
 
-			res = res || bfs(map, beaconDists, bd, beaconPath);
+			res = res || bfs(map, bd, beaconPath);
 		}
 		return res;
 	}

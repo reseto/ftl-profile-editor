@@ -23,6 +23,9 @@ public class GeneratedBeacon {
 	protected int y = 0;
 	protected FTLEvent event = null;
 
+	/* Distance from begin to finish, or -1 if not part of an optimal path */
+	public int distance = -1;
+
 	/**
 	 * Sets time elapsed while this beacon's 'under attack' throbber
 	 * oscillates.

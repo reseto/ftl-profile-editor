@@ -277,8 +277,7 @@ public class RandomSectorMapGenerator {
 				}
 
 				/* Check that the position has a beacon in it, otherwise loop */
-				for (int g = 0; g < genBeaconList.size(); g++) {
-					/* TODO: Could be optimized because genBeaconList is ordered */
+				for (int g = genBeaconList.size() - 1; g >= 0; g--) {
 					GeneratedBeacon gb = genBeaconList.get(g);
 					Point gridLoc = gb.getGridPosition();
 					if ((gridLoc.x == c) && (gridLoc.y == r)) {
@@ -288,6 +287,10 @@ public class RandomSectorMapGenerator {
 					}
 				}
 			} while (endingGb == null);
+
+			/* If no path of four jumps possible, return */
+			if (minDistanceMap(genMap, 4) == -1)
+				return null;
 
 			/* Generate ending beacon event ("FINISH_BEACON") */
 			endingGb.event = RandomEvent.loadEventId("FINISH_BEACON", rng);
@@ -575,7 +578,7 @@ public class RandomSectorMapGenerator {
 				Point aLoc = a.getLocation();
 				Point bLoc = b.getLocation();
 
-				double d = Math.hypot( aLoc.x - bLoc.x, aLoc.y - bLoc.y );
+				double d = distance(a, b);
 				if ( !measured ) {
 					minDist = d;
 					measured = true;
@@ -592,6 +595,84 @@ public class RandomSectorMapGenerator {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Computes the distance of each beacon to the start beacon, if on a path
+	 * of max upperBound jumps from start to finish.
+	 * If no path of upperBound jumps, the distance of the finish beacon will be -1
+	 */
+	private int minDistanceMap(GeneratedSectorMap map, int upperBound) {
+		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
+
+		GeneratedBeacon startBeacon = beaconList.get(map.startBeacon);
+		GeneratedBeacon endBeacon = beaconList.get(map.endBeacon);
+
+		if ((upperBound < 5) && (endBeacon.col == 5))
+			return -1;
+
+		if (distance(startBeacon, endBeacon) > (upperBound * ISOLATION_THRESHOLD))
+			return -1;
+
+		startBeacon.distance = 0;
+
+		for (int currentDist = 0; currentDist < upperBound; currentDist++) {
+			for (int bd = 0; bd < beaconList.size(); bd++) {
+				GeneratedBeacon curBec = beaconList.get(bd);
+
+				if (curBec.distance != currentDist)
+					continue;
+
+				int curRow = curBec.row;
+				int curCol = curBec.col;
+
+				for (int gb = 0; gb < beaconList.size(); gb++) {
+					if (bd == gb)
+						continue;
+
+					GeneratedBeacon otherBec = beaconList.get(gb);
+
+					/* Check if beacon already processed */
+					if (otherBec.distance != -1)
+						continue;
+
+					/* Check if the two beacons are connected */
+					if (Math.abs(otherBec.row - curRow) > 1)
+						continue;
+
+					if (Math.abs(otherBec.col - curCol) > 1)
+						continue;
+
+					if (distance(curBec, otherBec) >= ISOLATION_THRESHOLD)
+						continue;
+
+					/* Check if final beacon */
+					if (gb == map.endBeacon) {
+						otherBec.distance = currentDist + 1;
+						return currentDist + 1;
+					}
+
+					/* Some more pruning to skip beacons which are too far */
+					if (Math.abs(otherBec.col - endBeacon.col) > (upperBound - (currentDist+1)))
+						continue;
+
+					if (Math.abs(otherBec.row - endBeacon.row) > (upperBound - (currentDist+1)))
+						continue;
+
+					if (distance(otherBec, endBeacon) < ((upperBound - (currentDist+1))*ISOLATION_THRESHOLD)) {
+						otherBec.distance = currentDist + 1;
+					}
+				}
+			}
+		}
+
+		return -1;
+	}
+
+	private double distance(GeneratedBeacon b1, GeneratedBeacon b2) {
+		Point p1 = b1.getLocation();
+		Point p2 = b2.getLocation();
+		return Math.hypot( p1.x - p2.x, p1.y - p2.y );
 	}
 
 }
