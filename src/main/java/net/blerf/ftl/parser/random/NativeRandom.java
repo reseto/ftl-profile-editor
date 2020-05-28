@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.NOPLogger;
 
 import net.blerf.ftl.parser.random.RandRNG;
+import net.blerf.ftl.parser.random.NativeRandomJNI;
 
 
 /**
