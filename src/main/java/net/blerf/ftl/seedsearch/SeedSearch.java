@@ -103,8 +103,8 @@ public class SeedSearch {
 
 		RandRNG rng = new NativeRandom( "Native" );
 
-		for (int seed = 49731; seed < 100000; seed++) {
-			if (0 == (seed & 0xff))
+		for (int seed = 0; seed < 100000000; seed++) {
+			if (0 == (seed & 0x3ff))
 				log.info( String.format( "Seed %d", seed ) );
 
 			rng.srand( seed );

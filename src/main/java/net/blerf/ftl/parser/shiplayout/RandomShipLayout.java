@@ -48,10 +48,10 @@ public class RandomShipLayout {
 			/* Pick a random square in the room */
 			RoomSquare square = new RoomSquare();
 			square.roomId = r;
-			square.x = layoutRoom.locationX;
-			square.y = layoutRoom.locationY;
-			square.w = layoutRoom.squaresH;
-			square.h = layoutRoom.squaresV;
+			square.roomX = layoutRoom.locationX;
+			square.roomY = layoutRoom.locationY;
+			square.roomW = layoutRoom.squaresH;
+			square.roomH = layoutRoom.squaresV;
 
 			roomSquares.add(square);
 		}
@@ -62,11 +62,15 @@ public class RandomShipLayout {
 	public class RoomSquare {
 		public int roomId;
 
-		/* Cell coordinates in game units */
+		/* Room coordinates */
+		public int roomX;
+		public int roomY;
+		public int roomW;
+		public int roomH;
+
+		/* Square coordinates in game units */
 		public int x;
 		public int y;
-		public int w;
-		public int h;
 	}
 
 	public void generateShipLayout( RandRNG rng, int seed ) {
@@ -76,9 +80,9 @@ public class RandomShipLayout {
 
 		for ( int r=0; r < roomCount; r++ ) {
 			RoomSquare square = roomSquares.get(r);
-			int squareId = rng.rand() % (square.w * square.h);
-			square.x += squareId % square.w;
-			square.y += squareId / square.w;
+			int squareId = rng.rand() % (square.roomW * square.roomH);
+			square.x = square.roomX + squareId % square.roomW;
+			square.y = square.roomY + squareId / square.roomW;
 
 			/* Translate to game coordinates */
 			square.x = square.x * 35 + 17;
