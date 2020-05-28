@@ -172,12 +172,12 @@ public class RandomSectorMapGenerator {
 			genMap.setPreferredSize( new Dimension( 640, 488 ) );  // TODO: Magic numbers.
 
 			int n;
-			int generations = 0;
+			// int generations = 0;
 
 			n = rng.rand();
 			genMap.setRebelFleetFudge( n % 250 + 50 );
 
-			while ( generations < 50 ) {
+			// while ( generations < 50 ) {
 				List<GeneratedBeacon> genBeaconList = new ArrayList<GeneratedBeacon>();
 				int skipInclusiveCount = 0;
 				int z = 0;
@@ -219,22 +219,22 @@ public class RandomSectorMapGenerator {
 				}
 
 				genMap.setGeneratedBeaconList( genBeaconList );
-				generations++;
+				// generations++;
 
-				boolean isolation = calculateIsolation( genMap );
-				if ( isolation  ) {
-					if (log.isDebugEnabled())
-						log.debug( String.format( "Re-rolling sector map because attempt #%d has isolated beacons (threshold dist %5.2f): %5.2f", generations, ISOLATION_THRESHOLD, isolation ) );
-					genMap.setGeneratedBeaconList( null );
-				}
-				else {
-					break;  // Success!
-				}
-			}
+				// boolean isolation = calculateIsolation( genMap );
+				// if ( isolation  ) {
+				// 	if (log.isDebugEnabled())
+				// 		log.debug( String.format( "Re-rolling sector map because attempt #%d has isolated beacons (threshold dist %5.2f): %5.2f", generations, ISOLATION_THRESHOLD, isolation ) );
+				// 	genMap.setGeneratedBeaconList( null );
+				// }
+				// else {
+				// 	break;  // Success!
+				// }
+			// }
 
-			if ( genMap.getGeneratedBeaconList() == null ) {
-				throw new IllegalStateException( String.format( "No valid map was produced after %d attempts!?", generations ) );
-			}
+			// if ( genMap.getGeneratedBeaconList() == null ) {
+			// 	throw new IllegalStateException( String.format( "No valid map was produced after %d attempts!?", generations ) );
+			// }
 
 			RandomEvent.setSectorId(sectorId);
 			RandomEvent.setSectorNumber(sectorNumber);
@@ -243,7 +243,7 @@ public class RandomSectorMapGenerator {
 			RandomEvent.resetUniqueSectors();
 			RandomEvent.setUniqueNames(uniqueCrewNames);
 
-			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
+			// List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
 
 			SectorDescription tmpDesc = DataManager.getInstance().getSectorDescriptionById( sectorId );
 			if (tmpDesc == null) {

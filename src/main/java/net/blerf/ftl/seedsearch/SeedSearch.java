@@ -103,7 +103,14 @@ public class SeedSearch {
 
 		RandRNG rng = new NativeRandom( "Native" );
 
-		for (int seed = 0; seed < 100000000; seed++) {
+		/* 20677891
+		 * 40823384
+
+		 *
+		 * 68861792
+		 */
+
+		for (int seed = 186900480; seed < 500000000; seed++) {
 			if (0 == (seed & 0x3ff))
 				log.info( String.format( "Seed %d", seed ) );
 
@@ -188,11 +195,13 @@ public class SeedSearch {
 		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
 
 		boolean ret = false;
+		int w = -1;
 		for (int b : beaconPath) {
 			GeneratedBeacon bec = beaconList.get(b);
 			FTLEvent event = bec.getEvent();
 			if (eventItem(event, "WEAPON_PREIGNITE")) {
 				ret = true;
+				w = b;
 				break;
 			}
 		}
@@ -202,9 +211,11 @@ public class SeedSearch {
 
 		ret = false;
 		for (int b : beaconPath) {
+			if (b == w)
+				continue;
 			GeneratedBeacon bec = beaconList.get(b);
 			FTLEvent event = bec.getEvent();
-			if (eventItem(event, "BEAM_HULL")) {
+			if (eventItem(event, "SHOTGUN_2")) {
 				ret = true;
 				break;
 			}
@@ -224,6 +235,9 @@ public class SeedSearch {
 	}
 
 	private boolean eventHostile(FTLEvent event, boolean hostile) {
+		if (event.getBoarders() != null)
+			return true;
+
 		ShipEvent se = event.getShip();
 		if (se != null)
 			hostile = se.getHostile();

@@ -133,6 +133,22 @@ public class FTLEvent implements Cloneable {
 		public String name = null;
 	}
 
+	@XmlElement
+	private Boarders boarders = null;
+
+	@XmlAccessorType( XmlAccessType.NONE )
+	public static class Boarders {
+		@XmlAttribute
+		public int min = 0;
+
+		@XmlAttribute
+		public int max = 0;
+
+		@XmlAttribute( name = "class" )
+		public String name = null;
+	}
+
+
 	public Object clone() {
 		FTLEvent o = null;
 		try {
@@ -219,6 +235,13 @@ public class FTLEvent implements Cloneable {
 		if (drone != null) {
 			o.drone = new Item();
 			o.drone.name = drone.name;
+		}
+
+		if (boarders != null) {
+			o.boarders = new Boarders();
+			o.boarders.min = boarders.min;
+			o.boarders.max = boarders.max;
+			o.boarders.name = boarders.name;
 		}
 
 		return o;
@@ -328,6 +351,14 @@ public class FTLEvent implements Cloneable {
 		this.drone = drone;
 	}
 
+	public Boarders getBoarders() {
+		return boarders;
+	}
+
+	public void setBoarders( Boarders boarders ) {
+		this.boarders = boarders;
+	}
+
 	@Override
 	public String toString() {
 		if (id != null)
@@ -382,6 +413,13 @@ public class FTLEvent implements Cloneable {
 
 		if (drone != null)
 			indent(sb, level).append("drone: ").append(drone.name).append("\n");
+
+		if (boarders != null) {
+			indent(sb, level).append("boarders: ").append("\n");
+			indent(sb, level+1).append("min: ").append(boarders.min).append("\n");
+			indent(sb, level+1).append("max: ").append(boarders.max).append("\n");
+			indent(sb, level+1).append("class: ").append(boarders.name).append("\n");
+		}
 
 		if (crewMember != null) {
 			indent(sb, level).append("crew: ").append("\n");
