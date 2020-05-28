@@ -73,6 +73,15 @@ public class DefaultDataManager extends DataManager {
 	private Map<String, Encounters> stdEventsFileMap;
 	private Map<String, Encounters> dlcEventsFileMap;
 
+	private Map<String, FTLEvent> stdEventIdMap;
+	private Map<String, FTLEvent> dlcEventIdMap;
+
+	private Map<String, FTLEventList> stdEventListIdMap;
+	private Map<String, FTLEventList> dlcEventListIdMap;
+
+	private Map<String, TextList> stdTextListIdMap;
+	private Map<String, TextList> dlcTextListIdMap;
+
 	private Map<String, AugBlueprint> stdAugmentIdMap;
 	private Map<String, AugBlueprint> dlcAugmentIdMap;
 
@@ -284,6 +293,76 @@ public class DefaultDataManager extends DataManager {
 				dlcEventsFileMap.put( eventsFileName, tmpEncounters );
 			}
 
+			Pattern overridePtn = Pattern.compile( "^OVERRIDE_(.*)" );
+
+			stdEventIdMap = new LinkedHashMap<String, FTLEvent>();
+			stdEventListIdMap = new LinkedHashMap<String, FTLEventList>();
+			stdTextListIdMap = new LinkedHashMap<String, TextList>();
+
+			for ( Map.Entry<String, Encounters> entry : stdEventsFileMap.entrySet() ) {
+				Encounters tmpEncounters = entry.getValue();
+				List<FTLEvent> eventList = tmpEncounters.getEvents();
+				for ( FTLEvent event : eventList ) {
+					if ( overridePtn.matcher( event.getId() ).matches() ) continue;
+					stdEventIdMap.put( event.getId(), event );
+				}
+
+				List<FTLEventList> eventListsList = tmpEncounters.getEventLists();
+				for ( FTLEventList eventLists : eventListsList ) {
+					if ( overridePtn.matcher( eventLists.getId() ).matches() ) continue;
+					stdEventListIdMap.put( eventLists.getId(), eventLists );
+				}
+
+				List<TextList> textListsList = tmpEncounters.getTextLists();
+				for ( TextList textLists : textListsList ) {
+					if ( overridePtn.matcher( textLists.getId() ).matches() ) continue;
+					stdTextListIdMap.put( textLists.getId(), textLists );
+				}
+			}
+
+			dlcEventIdMap = new LinkedHashMap<String, FTLEvent>( stdEventIdMap );
+			dlcEventListIdMap = new LinkedHashMap<String, FTLEventList>( stdEventListIdMap );
+			dlcTextListIdMap = new LinkedHashMap<String, TextList>( stdTextListIdMap );
+
+			for ( Map.Entry<String, Encounters> entry : dlcEventsFileMap.entrySet() ) {
+				Encounters tmpEncounters = entry.getValue();
+				List<FTLEvent> eventList = tmpEncounters.getEvents();
+				for ( FTLEvent event : eventList ) {
+					Matcher m = overridePtn.matcher( event.getId() );
+					if ( m.matches() ) {
+						String baseId = m.group( 1 );
+						dlcEventIdMap.put( baseId, event );
+					}
+					else {
+						dlcEventIdMap.put( event.getId(), event );
+					}
+				}
+
+				List<FTLEventList> eventListsList = tmpEncounters.getEventLists();
+				for ( FTLEventList eventLists : eventListsList ) {
+					Matcher m = overridePtn.matcher( eventLists.getId() );
+					if ( m.matches() ) {
+						String baseId = m.group( 1 );
+						dlcEventListIdMap.put( baseId, eventLists );
+					}
+					else {
+						dlcEventListIdMap.put( eventLists.getId(), eventLists );
+					}
+				}
+
+				List<TextList> textListsList = tmpEncounters.getTextLists();
+				for ( TextList textLists : textListsList ) {
+					Matcher m = overridePtn.matcher( textLists.getId() );
+					if ( m.matches() ) {
+						String baseId = m.group( 1 );
+						dlcTextListIdMap.put( baseId, textLists );
+					}
+					else {
+						dlcTextListIdMap.put( textLists.getId(), textLists );
+					}
+				}
+			}
+
 			log.info( "Reading Crew Names..." );
 
 			List<CrewNameList> crewNameLists;
@@ -305,7 +384,6 @@ public class DefaultDataManager extends DataManager {
 				sectorDescriptionIdMap.put( tmpDesc.getId(), tmpDesc );
 			}
 
-			Pattern overridePtn = Pattern.compile( "^OVERRIDE_(.*)" );
 			stdSectorTypeIdMap = new LinkedHashMap<String, SectorType>();
 			for ( SectorType tmpType : tmpSectorData.getSectorTypes() ) {
 				if ( overridePtn.matcher( tmpType.getId() ).matches() ) continue;
@@ -1100,22 +1178,18 @@ public class DefaultDataManager extends DataManager {
 	 */
 	@Override
 	public FTLEvent getEventById( String id, boolean dlcEnabled ) {
-		Map<String, Encounters> events = null;
+		Map<String, FTLEvent> events = null;
 		if ( dlcEnabled ) {
-			events = dlcEventsFileMap;
+			events = dlcEventIdMap;
 		} else {
-			events = stdEventsFileMap;
+			events = stdEventIdMap;
 		}
 
-		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
-			FTLEvent tmpEvent = entry.getValue().getEventById( "OVERRIDE_" + id );
-			if ( tmpEvent != null ) return tmpEvent;
+		FTLEvent result = events.get( id );
+		if ( result == null ) {
+			log.error( "No Event found for id: "+ id );
 		}
-		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
-			FTLEvent tmpEvent = entry.getValue().getEventById( id );
-			if ( tmpEvent != null ) return tmpEvent;
-		}
-		return null;
+		return result;
 	}
 
 	/**
@@ -1127,22 +1201,15 @@ public class DefaultDataManager extends DataManager {
 	 */
 	@Override
 	public FTLEventList getEventListById( String id, boolean dlcEnabled ) {
-		Map<String, Encounters> events = null;
+		Map<String, FTLEventList> eventLists = null;
 		if ( dlcEnabled ) {
-			events = dlcEventsFileMap;
+			eventLists = dlcEventListIdMap;
 		} else {
-			events = stdEventsFileMap;
+			eventLists = stdEventListIdMap;
 		}
 
-		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
-			FTLEventList tmpEventList = entry.getValue().getEventListById( "OVERRIDE_" + id );
-			if ( tmpEventList != null ) return tmpEventList;
-		}
-		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
-			FTLEventList tmpEventList = entry.getValue().getEventListById( id );
-			if ( tmpEventList != null ) return tmpEventList;
-		}
-		return null;
+		FTLEventList result = eventLists.get( id );
+		return result;
 	}
 
 	/**
@@ -1151,22 +1218,18 @@ public class DefaultDataManager extends DataManager {
 	 */
 	@Override
 	public TextList getTextListById( String id, boolean dlcEnabled ) {
-		Map<String, Encounters> events = null;
+		Map<String, TextList> textLists = null;
 		if ( dlcEnabled ) {
-			events = dlcEventsFileMap;
+			textLists = dlcTextListIdMap;
 		} else {
-			events = stdEventsFileMap;
+			textLists = stdTextListIdMap;
 		}
 
-		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
-			TextList tmpTextList = entry.getValue().getTextListById( "OVERRIDE_" + id );
-			if ( tmpTextList != null ) return tmpTextList;
+		TextList result = textLists.get( id );
+		if ( result == null ) {
+			log.error( "No TextList found for id: "+ id );
 		}
-		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
-			TextList tmpTextList = entry.getValue().getTextListById( id );
-			if ( tmpTextList != null ) return tmpTextList;
-		}
-		return null;
+		return result;
 	}
 
 	/**
