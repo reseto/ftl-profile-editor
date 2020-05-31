@@ -49,8 +49,8 @@ import net.blerf.ftl.parser.random.RandRNG;
  */
 public class RandomSectorMapGenerator {
 
-	// private static final Logger log = LoggerFactory.getLogger( RandomSectorMapGenerator.class );
-	private static final Logger log = NOPLogger.NOP_LOGGER;
+	private static final Logger log = LoggerFactory.getLogger( RandomSectorMapGenerator.class );
+	// private static final Logger log = NOPLogger.NOP_LOGGER;
 
 	/**
 	 * The threshold for re-rolling a map with disconnected beacons.
@@ -67,10 +67,10 @@ public class RandomSectorMapGenerator {
 	 */
 	public static final double ISOLATION_THRESHOLD = 165d;
 
-	public String sectorId = "STANDARD_SPACE";
-	public int sectorNumber = 0;
-	public Difficulty difficulty = Difficulty.NORMAL;
-	public boolean dlcEnabled = false;
+	public String sectorId = "PIRATE_SECTOR";
+	public int sectorNumber = 1;
+	public Difficulty difficulty = Difficulty.HARD;
+	public boolean dlcEnabled = true;
 
 	private static Set<Integer> uniqueCrewNames = null;
 
@@ -172,12 +172,12 @@ public class RandomSectorMapGenerator {
 			genMap.setPreferredSize( new Dimension( 640, 488 ) );  // TODO: Magic numbers.
 
 			int n;
-			// int generations = 0;
+			int generations = 0;
 
 			n = rng.rand();
 			genMap.setRebelFleetFudge( n % 250 + 50 );
 
-			// while ( generations < 50 ) {
+			while ( generations < 50 ) {
 				List<GeneratedBeacon> genBeaconList = new ArrayList<GeneratedBeacon>();
 				int skipInclusiveCount = 0;
 				int z = 0;
@@ -219,22 +219,23 @@ public class RandomSectorMapGenerator {
 				}
 
 				genMap.setGeneratedBeaconList( genBeaconList );
-				// generations++;
+				generations++;
 
-				// boolean isolation = calculateIsolation( genMap );
-				// if ( isolation  ) {
-				// 	if (log.isDebugEnabled())
-				// 		log.debug( String.format( "Re-rolling sector map because attempt #%d has isolated beacons (threshold dist %5.2f): %5.2f", generations, ISOLATION_THRESHOLD, isolation ) );
-				// 	genMap.setGeneratedBeaconList( null );
-				// }
-				// else {
-				// 	break;  // Success!
-				// }
-			// }
+				boolean isolation = calculateIsolation( genMap );
+				if ( isolation  ) {
+					if (log.isDebugEnabled())
+						log.debug( String.format( "Re-rolling sector map because attempt #%d has isolated beacons ", generations ) );
+					genMap.setGeneratedBeaconList( null );
+					return null;
+				}
+				else {
+					break;  // Success!
+				}
+			}
 
-			// if ( genMap.getGeneratedBeaconList() == null ) {
-			// 	throw new IllegalStateException( String.format( "No valid map was produced after %d attempts!?", generations ) );
-			// }
+			if ( genMap.getGeneratedBeaconList() == null ) {
+				throw new IllegalStateException( String.format( "No valid map was produced after %d attempts!?", generations ) );
+			}
 
 			RandomEvent.setSectorId(sectorId);
 			RandomEvent.setSectorNumber(sectorNumber);
@@ -260,6 +261,7 @@ public class RandomSectorMapGenerator {
 			}
 
 			genMap.startBeacon = startingBeacon;
+			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
 			genBeaconList.get(startingBeacon).event = RandomEvent.loadEventId(startEvent, rng);
 
 			/* Generate ending beacon position: two rands at 0x4e8032 and 0x4e804d */
@@ -290,8 +292,9 @@ public class RandomSectorMapGenerator {
 			} while (endingGb == null);
 
 			/* If no path of four jumps possible, return */
-			if (minDistanceMap(genMap, 4) == -1)
-				return null;
+			// if (minDistanceMap(genMap, 4) == -1)
+			// 	return null;
+			minDistanceMap(genMap, 10);
 
 			/* Generate ending beacon event ("FINISH_BEACON") */
 			endingGb.event = RandomEvent.loadEventId("FINISH_BEACON", rng);

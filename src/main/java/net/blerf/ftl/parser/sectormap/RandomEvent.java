@@ -34,8 +34,8 @@ import net.blerf.ftl.xml.DroneBlueprint;
  */
 public final class RandomEvent {
 
-	// private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
-	private static final Logger log = NOPLogger.NOP_LOGGER;
+	private static final Logger log = LoggerFactory.getLogger( RandomEvent.class );
+	// private static final Logger log = NOPLogger.NOP_LOGGER;
 
 	private static boolean fast = true;
 
@@ -52,7 +52,14 @@ public final class RandomEvent {
 		uniqueCrewNames = un;
 	}
 
-	public static void setSectorId( String si ) { sectorId = si; }
+	public static void setSectorId( String si ) {
+		sectorId = si;
+		crewRarities.clear();
+		weaponRarities.clear();
+		augRarities.clear();
+		droneRarities.clear();
+	}
+
 	public static void setSectorNumber( int sn ) { sectorNumber = sn; }
 	public static void setDifficulty( Difficulty d ) { difficulty = d; }
 	public static void setDlc( boolean d ) { dlcEnabled = d; }
@@ -202,13 +209,6 @@ public final class RandomEvent {
 			if (log.isDebugEnabled())
 				log.debug( String.format( "Generating crewMember" ) );
 
-			/* Alter sector number based on difficulty */
-			int newSectorNumber = sectorNumber;
-			if (difficulty == Difficulty.EASY)
-				newSectorNumber++;
-			if ((difficulty == Difficulty.HARD) && (newSectorNumber > 0))
-				newSectorNumber--;
-
 			if (crewMember.id == null)
 				crewMember.id = "random";
 
@@ -277,8 +277,8 @@ public final class RandomEvent {
 				int skillMins[] = {0, 0, 0, 0, 1, 1, 1, 2, 0};
 				int skillMaxs[] = {0, 0, 1, 2, 2, 2, 3, 3, 0};
 
-				int skillMin = skillMins[newSectorNumber];
-				int skillMax = skillMaxs[newSectorNumber];
+				int skillMin = skillMins[sectorNumber];
+				int skillMax = skillMaxs[sectorNumber];
 
 				if (log.isDebugEnabled())
 					log.debug( String.format( "Generating crewMember skill amount" ) );
