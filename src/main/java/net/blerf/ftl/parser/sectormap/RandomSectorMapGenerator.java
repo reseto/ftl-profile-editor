@@ -172,10 +172,16 @@ public class RandomSectorMapGenerator {
 			genMap.setPreferredSize( new Dimension( 640, 488 ) );  // TODO: Magic numbers.
 
 			int n;
-			int generations = 0;
 
 			n = rng.rand();
 			genMap.setRebelFleetFudge( n % 250 + 50 );
+
+			outer:
+			while(true) {
+
+			int generations = 0;
+
+			genMap.setGeneratedBeaconList(null);
 
 			while ( generations < 50 ) {
 				List<GeneratedBeacon> genBeaconList = new ArrayList<GeneratedBeacon>();
@@ -191,6 +197,7 @@ public class RandomSectorMapGenerator {
 
 							if ( skipInclusiveCount / z > 4 ) {  // Skip this cell.
 								skipInclusiveCount++;
+								log.debug( String.format( "Skip beacon (%d,%d)", c, r ) );
 								continue;
 							}
 						}
@@ -226,7 +233,7 @@ public class RandomSectorMapGenerator {
 					if (log.isDebugEnabled())
 						log.debug( String.format( "Re-rolling sector map because attempt #%d has isolated beacons ", generations ) );
 					genMap.setGeneratedBeaconList( null );
-					return null;
+					// return null;
 				}
 				else {
 					break;  // Success!
@@ -262,39 +269,75 @@ public class RandomSectorMapGenerator {
 
 			genMap.startBeacon = startingBeacon;
 			List<GeneratedBeacon> genBeaconList = genMap.getGeneratedBeaconList();
+			log.debug( String.format( "Start at beacon %d (%d,%d)", genMap.startBeacon, genBeaconList.get(startingBeacon).col, genBeaconList.get(startingBeacon).row ) );
 			genBeaconList.get(startingBeacon).event = RandomEvent.loadEventId(startEvent, rng);
 
 			/* Generate ending beacon position: two rands at 0x4e8032 and 0x4e804d */
 			int r, c;
 			GeneratedBeacon endingGb = null;
-			do {
-				r = rng.rand() & 3;
-				c = (rng.rand() & 1) + 4;
-				if ( false ) { // Some condition, probably last sector
-					if ( difficulty == Difficulty.HARD ) {
-						c = (rng.rand() & 1) + 3;
-					}
-					else {
-						c = (rng.rand() & 1) + 2;
-					}
-				}
 
-				/* Check that the position has a beacon in it, otherwise loop */
-				for (int g = genBeaconList.size() - 1; g >= 0; g--) {
-					GeneratedBeacon gb = genBeaconList.get(g);
-					Point gridLoc = gb.getGridPosition();
-					if ((gridLoc.x == c) && (gridLoc.y == r)) {
-						endingGb = gb;
-						genMap.endBeacon = g;
-						break;
-					}
+			/* We have some contraints on the distance between start and end
+			 * beacons. Effectively, it is only relevent for sector 8.
+			 */
+			int minD = 4;
+			int maxD = 100;
+
+			if ( sectorNumber == 7 ) {
+				if ( difficulty == Difficulty.HARD ) {
+					minD = 4;
+					maxD = 7;
 				}
-			} while (endingGb == null);
+				else {
+					minD = 3;
+					maxD = 5;
+				}
+			}
+
+			int tt = 0;
+			for (; tt<16; tt++) {
+
+				do {
+					r = rng.rand() & 3;
+					c = (rng.rand() & 1) + 4;
+					if ( sectorNumber == 7 ) {
+						if ( difficulty == Difficulty.HARD ) {
+							c = (rng.rand() & 1) + 3;
+						}
+						else {
+							c = (rng.rand() & 1) + 2;
+						}
+					}
+
+					/* Check that the position has a beacon in it, otherwise loop */
+					for (int g = genBeaconList.size() - 1; g >= 0; g--) {
+						GeneratedBeacon gb = genBeaconList.get(g);
+						Point gridLoc = gb.getGridPosition();
+						if ((gridLoc.x == c) && (gridLoc.y == r)) {
+							endingGb = gb;
+							genMap.endBeacon = g;
+
+							/* Compute distance table */
+							minDistanceMap(genMap, 20);
+							log.debug( String.format( "Beacon dist is %d", endingGb.distance ) );
+							break;
+						}
+					}
+				} while (endingGb == null);
+
+				if (((endingGb.distance+1) > minD) && ((endingGb.distance+1) < maxD)) {
+					break;
+				}
+			}
+
+			if ((endingGb == null) || (tt == 16))
+				break outer;
+
+			log.debug( String.format( "End at beacon %d (%d,%d)", genMap.endBeacon, endingGb.col, endingGb.row ) );
 
 			/* If no path of four jumps possible, return */
 			// if (minDistanceMap(genMap, 4) == -1)
 			// 	return null;
-			minDistanceMap(genMap, 10);
+			// minDistanceMap(genMap, 10);
 
 			/* Generate ending beacon event ("FINISH_BEACON") */
 			endingGb.event = RandomEvent.loadEventId("FINISH_BEACON", rng);
@@ -556,7 +599,59 @@ public class RandomSectorMapGenerator {
 				}
 			}
 
-			uniqueCrewNames.clear(); // TODO: should be kept between sectors?
+			/* Sector 8 */
+			if (sectorNumber == 7) {
+				/* Pick a random beacon */
+				int y = rng.rand() % genBeaconList.size();
+
+				/* Save starting position */
+				int sb = genMap.startBeacon;
+
+				genMap.flagshipBeacon = -1;
+
+				/* Choose flagship coords so that there are between 4 and 6 beacons to base */
+				while (tt < 15) { // Yes, the same tt used for finish beacon
+					/* Pick coordinates */
+					r = rng.rand() & 3;
+					c = (rng.rand() & 1) + 4;
+
+					log.debug( String.format( "Pick flasghip (%d, %d)", c, r ) );
+
+					genMap.startBeacon = -1;
+
+					int gi = 0;
+					for (; gi < genBeaconList.size(); gi++) {
+						GeneratedBeacon gb = genBeaconList.get(gi);
+						if ((gb.col == c) && (gb.row == r)) {
+							genMap.startBeacon = gi;
+							break;
+						}
+					}
+
+					if (genMap.startBeacon == -1)
+						continue;
+
+					/* Compute distance to base */
+					int d = minDistanceMap(genMap, 6);
+
+					log.debug( String.format( "Distance to base: %d", d ) );
+
+					if ((d >= 3) && (d <= 5)) {
+						genMap.startBeacon = sb;
+						genMap.flagshipBeacon = gi;
+						log.debug( String.format( "Flagship is: %d", gi ) );
+						return genMap;
+					}
+					tt++;
+				}
+			}
+			else {
+				return genMap;
+			}
+
+			}
+
+			// uniqueCrewNames.clear(); // TODO: should be kept between sectors?
 
 			return genMap;
 		}
@@ -576,6 +671,11 @@ public class RandomSectorMapGenerator {
 	 */
 	public boolean calculateIsolation( GeneratedSectorMap genMap ) {
 		List<GeneratedBeacon> beaconList = genMap.getGeneratedBeaconList();
+
+		/* Reset all distances */
+		for (GeneratedBeacon curBec : beaconList) {
+			curBec.distance = -1;
+		}
 
 		GeneratedBeacon startBeacon = beaconList.get(0);
 
@@ -620,17 +720,13 @@ public class RandomSectorMapGenerator {
 			}
 		}
 
-		/* Check if all distances are not -1, and reset all distances */
-		boolean isolated = false;
-		for (int bd = 0; bd < beaconList.size(); bd++) {
-			GeneratedBeacon curBec = beaconList.get(bd);
+		/* Check if all distances are not -1 */
+		for (GeneratedBeacon curBec : beaconList) {
 			if (curBec.distance == -1)
-				isolated = true;
-			else
-				curBec.distance = -1;
+				return true;
 		}
 
-		return isolated;
+		return false;
 	}
 
 	/**
@@ -638,8 +734,13 @@ public class RandomSectorMapGenerator {
 	 * of max upperBound jumps from start to finish.
 	 * If no path of upperBound jumps, the distance of the finish beacon will be -1
 	 */
-	private int minDistanceMap(GeneratedSectorMap map, int upperBound) {
+	public int minDistanceMap(GeneratedSectorMap map, int upperBound) {
 		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
+
+		/* Reset all distances */
+		for (GeneratedBeacon curBec : beaconList) {
+			curBec.distance = -1;
+		}
 
 		GeneratedBeacon startBeacon = beaconList.get(map.startBeacon);
 		GeneratedBeacon endBeacon = beaconList.get(map.endBeacon);

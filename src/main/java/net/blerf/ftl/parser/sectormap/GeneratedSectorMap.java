@@ -18,6 +18,7 @@ public class GeneratedSectorMap {
 
 	public int startBeacon = -1;
 	public int endBeacon = -1;
+	public int flagshipBeacon = -1;
 
 	public GeneratedSectorMap() {
 	}

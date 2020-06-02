@@ -36,7 +36,7 @@ public class SeedSearch {
 
 	protected RandRNG rng;
 	boolean dlcEnabled = true;
-	Difficulty difficulty = Difficulty.EASY;
+	Difficulty difficulty = Difficulty.HARD;
 
 	private static Set<Integer> uniqueCrewNames = new HashSet<Integer>();
 
@@ -85,7 +85,7 @@ public class SeedSearch {
 
 		seed = rng.rand();
 		rng.srand(seed);
-		// log.info( String.format( "Sector map generation, seed: %d", seed ) );
+		log.info( String.format( "Sector map generation, seed: %d", seed ) );
 
 		GeneratedSectorMap map = sectorMapGen.generateSectorMap(rng, 9);
 
@@ -107,11 +107,15 @@ public class SeedSearch {
 		 * 40823384
 
 		 *
-		 * 68861792
+		 * 250410660
+		 * 273050382
+		 * 340087472
+		 * 416218906
+		 * 492539968
 		 */
 
-		for (int seed = 186900480; seed < 500000000; seed++) {
-			if (0 == (seed & 0x3ff))
+		for (int seed = 250410660; seed < 250410661; seed++) {
+			if (0 == (seed & 0xfff))
 				log.info( String.format( "Seed %d", seed ) );
 
 			rng.srand( seed );
@@ -119,9 +123,195 @@ public class SeedSearch {
 			boolean res = generateAll( rng );
 			if (res) {
 				log.info( String.format( "Seed %d", seed ) );
-				break;
+				// break;
 			}
 		}
+
+
+
+		/* Sector map generation */
+		RandomSectorMapGenerator sectorMapGen = new RandomSectorMapGenerator();
+		// sectorMapGen.sectorId = "PIRATE_SECTOR";
+		sectorMapGen.sectorId = "MANTIS_SECTOR";
+		sectorMapGen.sectorNumber = 1;
+		sectorMapGen.difficulty = difficulty;
+		sectorMapGen.dlcEnabled = dlcEnabled;
+		sectorMapGen.setUniqueNames(uniqueCrewNames);
+
+		rng.srand( 1351785981 );
+
+		for (int k=0; k<694+24; k++) {
+			rng.rand();
+		}
+
+		int seed2 = rng.rand();
+		rng.srand( seed2 );
+		log.info( String.format( "Sector 2 map generation, seed: %d", seed2 ) );
+
+		sectorMapGen.sectorId = "MANTIS_SECTOR";
+		sectorMapGen.sectorNumber = 1;
+		sectorMapGen.generateSectorMap(rng, 9);
+
+		for (int k=0; k<1256-16; k++) {
+			rng.rand();
+		}
+
+		int seed3 = rng.rand();
+
+		rng.srand( seed3 );
+		log.info( String.format( "Sector 3 map generation, seed: %d", seed3 ) );
+
+		sectorMapGen.sectorId = "NEBULA_SECTOR";
+		sectorMapGen.sectorNumber = 2;
+		sectorMapGen.generateSectorMap(rng, 9);
+
+
+		rng.srand( 1798517121 );
+		log.info( String.format( "Sector 4 map generation, seed: 1798517121" ) );
+
+		sectorMapGen.sectorId = "ENGI_HOME";
+		sectorMapGen.sectorNumber = 3;
+		sectorMapGen.generateSectorMap(rng, 9);
+
+		rng.srand( 1090748583 );
+		log.info( String.format( "Sector 5 map generation, seed: 1090748583" ) );
+
+		sectorMapGen.sectorId = "ENGI_SECTOR";
+		sectorMapGen.sectorNumber = 4;
+		sectorMapGen.generateSectorMap(rng, 9);
+
+		rng.srand( 1472587140 );
+		log.info( String.format( "Sector 6 map generation, seed: 1472587140" ) );
+
+		sectorMapGen.sectorId = "MANTIS_SECTOR";
+		sectorMapGen.sectorNumber = 5;
+		sectorMapGen.generateSectorMap(rng, 9);
+
+		// rng.srand( 1866532180 );
+		// log.info( String.format( "Sector 7 map generation, seed: 1866532180" ) );
+		//
+		// sectorMapGen.sectorId = "REBEL_SECTOR";
+		// sectorMapGen.sectorNumber = 6;
+		// sectorMapGen.generateSectorMap(rng, 9);
+
+		Set<Integer> backCrewNames = new HashSet<Integer>();
+		backCrewNames.addAll(uniqueCrewNames);
+
+		for (int l = 200; l<600; l++) {
+
+			uniqueCrewNames.clear();
+			uniqueCrewNames.addAll(backCrewNames);
+
+			rng.srand( 1866532180 );
+			// log.info( String.format( "Sector 7 map generation, seed: 1866532180" ) );
+
+			sectorMapGen.sectorId = "REBEL_SECTOR";
+			sectorMapGen.sectorNumber = 6;
+			sectorMapGen.generateSectorMap(rng, 9);
+
+			for (int k=0; k<1000+l; k++) {
+				rng.rand();
+			}
+
+			int seed8 = rng.rand();
+
+			// if (seed8 != 579979646)
+			// 	continue;
+
+			rng.srand( seed8 );
+			log.info( String.format( "Sector 8 map generation for l %d, seed: %d", l, seed8 ) );
+
+			sectorMapGen.sectorId = "FINAL";
+			sectorMapGen.sectorNumber = 7;
+			GeneratedSectorMap map = sectorMapGen.generateSectorMap(rng, 9);
+
+			if (map.flagshipBeacon == -1)
+				continue;
+
+			List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
+			GeneratedBeacon endBeacon = beaconList.get(map.endBeacon);
+
+			int begB = map.startBeacon;
+			int endB = map.endBeacon;
+			int flagB = map.flagshipBeacon;
+
+			/* Only keep sectors when flagship is at distance 4 */
+			map.endBeacon = map.flagshipBeacon;
+			sectorMapGen.minDistanceMap(map, 4);
+
+			if (beaconList.get(flagB).distance != 4)
+				continue;
+
+			/* There should be one path without fights for the first two beacons */
+			if (!bfsStart(map))
+				continue;
+
+			/* We must check if there is a beacon:
+			 * - at distance 3 from start
+			 * - at distance 1 from flagship
+			 * - in a shortest path from flagship to base
+			 */
+
+			/* Find all beacons at distance 3 from start to flagship */
+			Set<Integer> d3s = new HashSet<Integer>();
+			for (int m = 0; m<beaconList.size(); m++) {
+				GeneratedBeacon gg = beaconList.get(m);
+				if (gg.distance == 3)
+					d3s.add(m);
+			}
+
+			/* Find all beacons at distance 1 from flagship to base */
+			map.startBeacon = flagB;
+			map.endBeacon = endB;
+			sectorMapGen.minDistanceMap(map, 20);
+			int ss = beaconList.get(endB).distance;
+
+			Set<Integer> d1f = new HashSet<Integer>();
+			for (int m = 0; m<beaconList.size(); m++) {
+				GeneratedBeacon gg = beaconList.get(m);
+				if (gg.distance == 1) {
+					d1f.add(m);
+					log.info( String.format( "Beacon at dist 1 from flagship: %d", m) );
+				}
+			}
+
+			/* Find all beacons at distance n-1 from base to flagship */
+			map.startBeacon = endB;
+			map.endBeacon = flagB;
+			sectorMapGen.minDistanceMap(map, 20);
+
+			Set<Integer> dnb = new HashSet<Integer>();
+			for (int m = 0; m<beaconList.size(); m++) {
+				GeneratedBeacon gg = beaconList.get(m);
+				if (gg.distance == (ss-1)) {
+					dnb.add(m);
+					log.info( String.format( "Beacon at dist %d from end: %d", ss-1, m) );
+				}
+			}
+
+			/* Intersect the two sets to find all 1+dist beacons */
+			d1f.retainAll(dnb);
+
+			/* Check that all beacons are at distance 3 from start */
+			if (!d3s.containsAll(d1f))
+				continue;
+
+			/* Check that there's a path without fights */
+			d3s.retainAll(d1f);
+			if (!d3s.isEmpty()) {
+				for (Integer ii : d3s) {
+					map.startBeacon = begB;
+					map.endBeacon = ii;
+					sectorMapGen.minDistanceMap(map, 20);
+					if (bfsStart(map))
+						log.info( String.format( "Found!" ) );
+
+				}
+			}
+
+			break;
+		}
+
 	}
 
 	public static final double ISOLATION_THRESHOLD = 165d;
@@ -149,6 +339,11 @@ public class SeedSearch {
 		GeneratedBeacon gb = beaconList.get(currentBeacon);
 		FTLEvent event = gb.getEvent();
 
+		/* Check if finish beacon */
+		if (currentBeacon == map.endBeacon) {
+			return validatePath(map, beaconPath);
+		}
+
 		/* Is ship hostile */
 		if (eventHostile(event, false))
 			return false;
@@ -159,12 +354,6 @@ public class SeedSearch {
 			beaconPath.add(currentBeacon);
 		else
 			beaconPath.set(currentDist, currentBeacon);
-
-
-		/* Check if finish beacon */
-		if (currentBeacon == map.endBeacon) {
-			return validatePath(map, beaconPath);
-		}
 
 		int curRow = gb.row;
 		int curCol = gb.col;
@@ -194,35 +383,35 @@ public class SeedSearch {
 	private boolean validatePath(GeneratedSectorMap map, List<Integer> beaconPath) {
 		List<GeneratedBeacon> beaconList = map.getGeneratedBeaconList();
 
-		boolean ret = false;
-		int w = -1;
-		for (int b : beaconPath) {
-			GeneratedBeacon bec = beaconList.get(b);
-			FTLEvent event = bec.getEvent();
-			if (eventItem(event, "WEAPON_PREIGNITE")) {
-				ret = true;
-				w = b;
-				break;
-			}
-		}
+		// boolean ret = false;
+		// int w = -1;
+		// for (int b : beaconPath) {
+		// 	GeneratedBeacon bec = beaconList.get(b);
+		// 	FTLEvent event = bec.getEvent();
+		// 	if (eventItem(event, "BEAM_HULL")) {
+		// 		ret = true;
+		// 		w = b;
+		// 		break;
+		// 	}
+		// }
+		//
+		// if (! ret)
+		// 	return false;
 
-		if (! ret)
-			return false;
-
-		ret = false;
-		for (int b : beaconPath) {
-			if (b == w)
-				continue;
-			GeneratedBeacon bec = beaconList.get(b);
-			FTLEvent event = bec.getEvent();
-			if (eventItem(event, "SHOTGUN_2")) {
-				ret = true;
-				break;
-			}
-		}
-
-		if (! ret)
-			return false;
+		// ret = false;
+		// for (int b : beaconPath) {
+		// 	if (b == w)
+		// 		continue;
+		// 	GeneratedBeacon bec = beaconList.get(b);
+		// 	FTLEvent event = bec.getEvent();
+		// 	if (eventItem(event, "SHOTGUN_2")) {
+		// 		ret = true;
+		// 		break;
+		// 	}
+		// }
+		//
+		// if (! ret)
+		// 	return false;
 
 		for (int b : beaconPath) {
 			GeneratedBeacon bec = beaconList.get(b);
@@ -248,7 +437,7 @@ public class SeedSearch {
 		if (choiceList == null)
 			return hostile;
 
-		boolean childHostile = hostile;
+		boolean childHostile = true;
 		for ( int i=0; i < choiceList.size(); i++ ) {
 			Choice choice = choiceList.get(i);
 			/* We skip if any requirement, we probably don't meet any */
