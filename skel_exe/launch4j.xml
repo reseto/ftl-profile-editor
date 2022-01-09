@@ -23,7 +23,5 @@
 		<maxVersion></maxVersion>
 		<jdkPreference>preferJre</jdkPreference>
 		<runtimeBits>64/32</runtimeBits>
-		<opt>-XX:+IgnoreUnrecognizedVMOptions</opt>
-		<opt>--add-modules=java.xml.bind</opt>
 	</jre>
 </launch4jConfig>

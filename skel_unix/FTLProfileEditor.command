@@ -61,15 +61,7 @@ fi
 
 if [ -n "${java_cmd}" ]; then
 
-  # This used to be sufficient.
-  #"${java_cmd}" -jar FTLProfileEditor.jar;
-
-  # Java 9 made JAXB opt-in, to deprecate it later.
-  # Earlier versions won't rcognize that arg.
-  # I don't feel like scraping java's version string to conditionally add args.
-  # Ignorable args NEED an equals for their value.
-
-  "${java_cmd}" -XX:+IgnoreUnrecognizedVMOptions --add-modules=java.xml.bind -jar FTLProfileEditor.jar;
+  "${java_cmd}" -jar FTLProfileEditor.jar;
 
 else
 
