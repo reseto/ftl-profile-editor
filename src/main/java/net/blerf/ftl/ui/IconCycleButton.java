@@ -15,10 +15,12 @@ public class IconCycleButton extends JButton implements ActionListener {
 
 	private Icon[] icons;
 	private int state = 0;
+	private boolean disabled;
 
 
 	public IconCycleButton( Icon[] icons ) {
 		this.icons = icons;
+		this.disabled = false;
 		this.setBorder( BorderFactory.createEmptyBorder( 2, 4, 2, 4 ) );
 		this.setFocusPainted( true );
 		this.setContentAreaFilled( false );
@@ -35,9 +37,15 @@ public class IconCycleButton extends JButton implements ActionListener {
 	public int getSelectedState() {
 		return state;
 	}
+	
+	public void setDisabled(boolean d) {
+		disabled = d;
+	}
 
 	@Override
 	public void actionPerformed( ActionEvent e ) {
-		setSelectedState( (state+1) % icons.length );
+		if(!disabled) {
+			setSelectedState( (state+1) % icons.length );
+		}
 	}
 }

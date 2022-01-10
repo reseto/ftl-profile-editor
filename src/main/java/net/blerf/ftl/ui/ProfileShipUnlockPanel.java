@@ -118,7 +118,8 @@ public class ProfileShipUnlockPanel extends JPanel implements ActionListener {
 		panel.add( shipABox );
 
 		if ( variantBShip != null ) {
-			IconCycleButton shipBBox = ImageUtilities.createDummyCycleButton();
+			IconCycleButton shipBBox = ImageUtilities.createCycleButton("img/ship/"+ variantBShip.getGraphicsBaseName() + "_base.png", false);
+			shipBBox.setDisabled(true);
 			shipBBox.addMouseListener( new StatusbarMouseListener( frame, "Type-B: "+ variantBShip.getName().getTextValue() +" (To unlock, choose two ship achievements below.)" ) );
 			panel.add( shipBBox );
 		}
