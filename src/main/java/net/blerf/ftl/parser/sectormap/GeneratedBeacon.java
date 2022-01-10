@@ -1,6 +1,7 @@
 package net.blerf.ftl.parser.sectormap;
 
 import java.awt.Point;
+import net.blerf.ftl.xml.FTLEvent;
 
 
 /**
@@ -16,8 +17,14 @@ import java.awt.Point;
 public class GeneratedBeacon {
 
 	protected int throbTicks = 0;
+	public int col = 0;
+	public int row = 0;
 	protected int x = 0;
 	protected int y = 0;
+	protected FTLEvent event = null;
+
+	/* Distance from begin to finish, or -1 if not part of an optimal path */
+	public int distance = -1;
 
 	/**
 	 * Sets time elapsed while this beacon's 'under attack' throbber
@@ -33,10 +40,24 @@ public class GeneratedBeacon {
 	public int getThrobTicks() { return throbTicks; }
 
 	/**
+	 * Sets the position in the grid
+	 */
+	public void setGridPosition( int newCol, int newRow ) { col = newCol; row = newRow; }
+	public Point getGridPosition() { return new Point( col, row ); }
+
+	/**
 	 * Sets the pixel location of this beacon.
 	 *
 	 * This offset is from a point within the sector map window.
 	 */
 	public void setLocation( int newX, int newY ) { x = newX; y = newY; }
 	public Point getLocation() { return new Point( x, y ); }
+
+	/**
+	 * Sets the event for this beacon
+	 */
+	public void setEvent( FTLEvent newEvent ) { event = newEvent; }
+	public FTLEvent getEvent() { return event; }
+
+
 }

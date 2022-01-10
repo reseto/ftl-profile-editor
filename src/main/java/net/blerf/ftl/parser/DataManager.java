@@ -24,6 +24,7 @@ import net.blerf.ftl.xml.ShipBlueprint;
 import net.blerf.ftl.xml.ShipEvent;
 import net.blerf.ftl.xml.ShipChassis;
 import net.blerf.ftl.xml.SystemBlueprint;
+import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.WeaponBlueprint;
 
 public abstract class DataManager implements Closeable {
@@ -283,6 +284,17 @@ public abstract class DataManager implements Closeable {
 	 */
 	public FTLEventList getEventListById( String id ) {
 		return getEventListById( id, dlcEnabledByDefault );
+	}
+
+	public TextList getTextListById( String id, boolean dlcEnabled ) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * A frontend using the global DLC default.
+	 */
+	public TextList getTextListById( String id ) {
+		return getTextListById( id, dlcEnabledByDefault );
 	}
 
 	public Map<String, Encounters> getEncounters( boolean dlcEnabled ) {

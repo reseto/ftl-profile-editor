@@ -93,8 +93,6 @@
 					<arg>-Xlint:unchecked</arg>
 					<arg>-Xlint:deprecation</arg>
 				</compilerArgs>
-<!--				<source>${jdk.version}</source>-->
-<!--				<target>${jdk.version}</target>-->
 			</configuration>
 		</plugin>
 		<plugin>

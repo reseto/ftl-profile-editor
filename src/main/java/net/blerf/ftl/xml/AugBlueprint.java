@@ -73,7 +73,7 @@ public class AugBlueprint {
 	}
 
 	public int getRarity() {
-		return cost;
+		return rarity;
 	}
 
 	public void setStackable( boolean b ) {

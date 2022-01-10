@@ -33,6 +33,7 @@ public class SectorMapLayout implements LayoutManager2 {
 	private static final int DEFAULT_BEACON_ZONE_H = 488;
 
 	protected List<Point> beaconLocationList = new ArrayList<Point>();
+	protected List<String> beaconDescriptionList = new ArrayList<String>();
 
 	protected List<Component> beaconList = new ArrayList<Component>();
 	protected List<Component> miscBoxList = new ArrayList<Component>();
@@ -92,6 +93,34 @@ public class SectorMapLayout implements LayoutManager2 {
 		if ( newLocations != null ) {
 			beaconLocationList.addAll( newLocations );
 		}
+	}
+
+	/**
+	 * Sets description of the beacon event, where index == beaconId.
+	 *
+	 * @ param newLocations a list of String, or null
+	 * @see net.blerf.ftl.parser.sectormap.GeneratedBeacon
+	 */
+	public void setBeaconDescriptions( List<String> newDescriptions ) {
+		beaconDescriptionList.clear();
+
+		if ( newDescriptions != null ) {
+			beaconDescriptionList.addAll( newDescriptions );
+		}
+	}
+
+	/**
+	 * Returns the description for the corresponding beacon id.
+	 */
+	public String getBeaconDescription( int id ) {
+		if ( id < 0 )
+			return "";
+		if ( beaconDescriptionList == null )
+			return "";
+		if ( id >= beaconDescriptionList.size() )
+			return "";
+
+		return beaconDescriptionList.get( id );
 	}
 
 	/**

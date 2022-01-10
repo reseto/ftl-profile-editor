@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -40,6 +41,7 @@ import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.Encounters;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
+import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.SectorData;
 import net.blerf.ftl.xml.SectorDescription;
@@ -68,6 +70,15 @@ public class DefaultDataManager extends DataManager {
 
 	private Map<String, Encounters> stdEventsFileMap;
 	private Map<String, Encounters> dlcEventsFileMap;
+
+	private Map<String, FTLEvent> stdEventIdMap;
+	private Map<String, FTLEvent> dlcEventIdMap;
+
+	private Map<String, FTLEventList> stdEventListIdMap;
+	private Map<String, FTLEventList> dlcEventListIdMap;
+
+	private Map<String, TextList> stdTextListIdMap;
+	private Map<String, TextList> dlcTextListIdMap;
 
 	private Map<String, AugBlueprint> stdAugmentIdMap;
 	private Map<String, AugBlueprint> dlcAugmentIdMap;
@@ -280,6 +291,76 @@ public class DefaultDataManager extends DataManager {
 				dlcEventsFileMap.put( eventsFileName, tmpEncounters );
 			}
 
+			Pattern overridePtn = Pattern.compile( "^OVERRIDE_(.*)" );
+
+			stdEventIdMap = new LinkedHashMap<String, FTLEvent>();
+			stdEventListIdMap = new LinkedHashMap<String, FTLEventList>();
+			stdTextListIdMap = new LinkedHashMap<String, TextList>();
+
+			for ( Map.Entry<String, Encounters> entry : stdEventsFileMap.entrySet() ) {
+				Encounters tmpEncounters = entry.getValue();
+				List<FTLEvent> eventList = tmpEncounters.getEvents();
+				for ( FTLEvent event : eventList ) {
+					if ( overridePtn.matcher( event.getId() ).matches() ) continue;
+					stdEventIdMap.put( event.getId(), event );
+				}
+
+				List<FTLEventList> eventListsList = tmpEncounters.getEventLists();
+				for ( FTLEventList eventLists : eventListsList ) {
+					if ( overridePtn.matcher( eventLists.getId() ).matches() ) continue;
+					stdEventListIdMap.put( eventLists.getId(), eventLists );
+				}
+
+				List<TextList> textListsList = tmpEncounters.getTextLists();
+				for ( TextList textLists : textListsList ) {
+					if ( overridePtn.matcher( textLists.getId() ).matches() ) continue;
+					stdTextListIdMap.put( textLists.getId(), textLists );
+				}
+			}
+
+			dlcEventIdMap = new LinkedHashMap<String, FTLEvent>( stdEventIdMap );
+			dlcEventListIdMap = new LinkedHashMap<String, FTLEventList>( stdEventListIdMap );
+			dlcTextListIdMap = new LinkedHashMap<String, TextList>( stdTextListIdMap );
+
+			for ( Map.Entry<String, Encounters> entry : dlcEventsFileMap.entrySet() ) {
+				Encounters tmpEncounters = entry.getValue();
+				List<FTLEvent> eventList = tmpEncounters.getEvents();
+				for ( FTLEvent event : eventList ) {
+					Matcher m = overridePtn.matcher( event.getId() );
+					if ( m.matches() ) {
+						String baseId = m.group( 1 );
+						dlcEventIdMap.put( baseId, event );
+					}
+					else {
+						dlcEventIdMap.put( event.getId(), event );
+					}
+				}
+
+				List<FTLEventList> eventListsList = tmpEncounters.getEventLists();
+				for ( FTLEventList eventLists : eventListsList ) {
+					Matcher m = overridePtn.matcher( eventLists.getId() );
+					if ( m.matches() ) {
+						String baseId = m.group( 1 );
+						dlcEventListIdMap.put( baseId, eventLists );
+					}
+					else {
+						dlcEventListIdMap.put( eventLists.getId(), eventLists );
+					}
+				}
+
+				List<TextList> textListsList = tmpEncounters.getTextLists();
+				for ( TextList textLists : textListsList ) {
+					Matcher m = overridePtn.matcher( textLists.getId() );
+					if ( m.matches() ) {
+						String baseId = m.group( 1 );
+						dlcTextListIdMap.put( baseId, textLists );
+					}
+					else {
+						dlcTextListIdMap.put( textLists.getId(), textLists );
+					}
+				}
+			}
+
 			log.info( "Reading Crew Names..." );
 
 			List<CrewNameList> crewNameLists;
@@ -301,17 +382,16 @@ public class DefaultDataManager extends DataManager {
 				sectorDescriptionIdMap.put( tmpDesc.getId(), tmpDesc );
 			}
 
-			Pattern sectorOverridePtn = Pattern.compile( "^OVERRIDE_(.*)" );
 			stdSectorTypeIdMap = new LinkedHashMap<String, SectorType>();
 			for ( SectorType tmpType : tmpSectorData.getSectorTypes() ) {
-				if ( sectorOverridePtn.matcher( tmpType.getId() ).matches() ) continue;
+				if ( overridePtn.matcher( tmpType.getId() ).matches() ) continue;
 
 				stdSectorTypeIdMap.put( tmpType.getId(), tmpType );
 			}
 
 			dlcSectorTypeIdMap = new LinkedHashMap<String, SectorType>( stdSectorTypeIdMap );
 			for ( SectorType tmpType : tmpSectorData.getSectorTypes() ) {
-				Matcher m = sectorOverridePtn.matcher( tmpType.getId() );
+				Matcher m = overridePtn.matcher( tmpType.getId() );
 				if ( m.matches() ) {
 					String baseId = m.group( 1 );
 					dlcSectorTypeIdMap.put( baseId, tmpType );
@@ -411,7 +491,7 @@ public class DefaultDataManager extends DataManager {
 				}
 			}
 
-			stdAugmentIdMap = new LinkedHashMap<String, AugBlueprint>();
+			stdAugmentIdMap = new TreeMap<String, AugBlueprint>();
 			for ( Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -419,7 +499,7 @@ public class DefaultDataManager extends DataManager {
 					stdAugmentIdMap.put( augment.getId(), augment );
 				}
 			}
-			dlcAugmentIdMap = new LinkedHashMap<String, AugBlueprint>( stdAugmentIdMap );
+			dlcAugmentIdMap = new TreeMap<String, AugBlueprint>( stdAugmentIdMap );
 			for ( Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -428,7 +508,7 @@ public class DefaultDataManager extends DataManager {
 				}
 			}
 
-			stdCrewIdMap = new LinkedHashMap<String, CrewBlueprint>();
+			stdCrewIdMap = new TreeMap<String, CrewBlueprint>();
 			for ( Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -436,7 +516,7 @@ public class DefaultDataManager extends DataManager {
 					stdCrewIdMap.put( crew.getId(), crew );
 				}
 			}
-			dlcCrewIdMap = new LinkedHashMap<String, CrewBlueprint>( stdCrewIdMap );
+			dlcCrewIdMap = new TreeMap<String, CrewBlueprint>( stdCrewIdMap );
 			for ( Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -445,7 +525,7 @@ public class DefaultDataManager extends DataManager {
 				}
 			}
 
-			stdDroneIdMap = new LinkedHashMap<String, DroneBlueprint>();
+			stdDroneIdMap = new TreeMap<String, DroneBlueprint>();
 			for ( Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -453,7 +533,7 @@ public class DefaultDataManager extends DataManager {
 					stdDroneIdMap.put( drone.getId(), drone );
 				}
 			}
-			dlcDroneIdMap = new LinkedHashMap<String, DroneBlueprint>( stdDroneIdMap );
+			dlcDroneIdMap = new TreeMap<String, DroneBlueprint>( stdDroneIdMap );
 			for ( Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -479,7 +559,7 @@ public class DefaultDataManager extends DataManager {
 				}
 			}
 
-			stdWeaponIdMap = new LinkedHashMap<String, WeaponBlueprint>();
+			stdWeaponIdMap = new TreeMap<String, WeaponBlueprint>();
 			for ( Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -487,7 +567,7 @@ public class DefaultDataManager extends DataManager {
 					stdWeaponIdMap.put( weapon.getId(), weapon );
 				}
 			}
-			dlcWeaponIdMap = new LinkedHashMap<String, WeaponBlueprint>( stdWeaponIdMap );
+			dlcWeaponIdMap = new TreeMap<String, WeaponBlueprint>( stdWeaponIdMap );
 			for ( Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet() ) {
 				Blueprints blueprints = entry.getValue();
 
@@ -646,7 +726,11 @@ public class DefaultDataManager extends DataManager {
 				Encounters tmpEncounters = entry.getValue();
 				List<ShipEvent> shipEventList = tmpEncounters.getShipEvents();
 				for ( ShipEvent shipEvent : shipEventList ) {
-					dlcShipEventIdMap.put( shipEvent.getId(), shipEvent );
+					Matcher m = overridePtn.matcher( shipEvent.getId() );
+					if ( m.matches() ) {
+						String baseId = m.group( 1 );
+						dlcShipEventIdMap.put( baseId, shipEvent );
+					}
 				}
 			}
 
@@ -1092,17 +1176,16 @@ public class DefaultDataManager extends DataManager {
 	 */
 	@Override
 	public FTLEvent getEventById( String id, boolean dlcEnabled ) {
-		Map<String, Encounters> events = null;
+		Map<String, FTLEvent> events = null;
 		if ( dlcEnabled ) {
-			events = dlcEventsFileMap;
+			events = dlcEventIdMap;
 		} else {
-			events = stdEventsFileMap;
+			events = stdEventIdMap;
 		}
 
-		FTLEvent result = null;
-		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
-			FTLEvent tmpEvent = entry.getValue().getEventById( id );
-			if ( tmpEvent != null ) result = tmpEvent;
+		FTLEvent result = events.get( id );
+		if ( result == null ) {
+			log.error( "No Event found for id: "+ id );
 		}
 		return result;
 	}
@@ -1116,17 +1199,33 @@ public class DefaultDataManager extends DataManager {
 	 */
 	@Override
 	public FTLEventList getEventListById( String id, boolean dlcEnabled ) {
-		Map<String, Encounters> events = null;
+		Map<String, FTLEventList> eventLists = null;
 		if ( dlcEnabled ) {
-			events = dlcEventsFileMap;
+			eventLists = dlcEventListIdMap;
 		} else {
-			events = stdEventsFileMap;
+			eventLists = stdEventListIdMap;
 		}
 
-		FTLEventList result = null;
-		for ( Map.Entry<String, Encounters> entry : events.entrySet() ) {
-			FTLEventList tmpEventList = entry.getValue().getEventListById( id );
-			if ( tmpEventList != null ) result = tmpEventList;
+		FTLEventList result = eventLists.get( id );
+		return result;
+	}
+
+	/**
+	 * Returns an TextList with a given id.
+	 * All event xml files are searched.
+	 */
+	@Override
+	public TextList getTextListById( String id, boolean dlcEnabled ) {
+		Map<String, TextList> textLists = null;
+		if ( dlcEnabled ) {
+			textLists = dlcTextListIdMap;
+		} else {
+			textLists = stdTextListIdMap;
+		}
+
+		TextList result = textLists.get( id );
+		if ( result == null ) {
+			log.error( "No TextList found for id: "+ id );
 		}
 		return result;
 	}

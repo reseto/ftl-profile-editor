@@ -15,6 +15,14 @@ public class ShipEvent {
 	@XmlAttribute( name = "name" )
 	private String id;
 
+	@XmlAttribute( name = "load", required = false )
+	private String load;
+
+	@XmlAttribute
+	private boolean hostile = false;
+
+	private int seed;
+
 	@XmlAttribute( name = "auto_blueprint" )
 	private String autoBlueprintId;
 
@@ -29,6 +37,30 @@ public class ShipEvent {
 		this.id = id;
 	}
 
+	public String getLoad() {
+		return load;
+	}
+
+	public void setLoad( String load ) {
+		this.load = load;
+	}
+
+	public boolean getHostile() {
+		return hostile;
+	}
+
+	public void setHostile( boolean hostile ) {
+		this.hostile = hostile;
+	}
+
+	public int getSeed() {
+		return seed;
+	}
+
+	public void setSeed( int seed ) {
+		this.seed = seed;
+	}
+
 	public String getAutoBlueprintId() {
 		return autoBlueprintId;
 	}
@@ -39,6 +71,10 @@ public class ShipEvent {
 
 	@Override
 	public String toString() {
-		return ""+id;
+		if (id != null)
+			return ""+id;
+		else if (load != null)
+			return ""+load;
+		return "<null>";
 	}
 }

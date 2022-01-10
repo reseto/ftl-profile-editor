@@ -14,13 +14,31 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @XmlRootElement( name = "text" )
 @XmlAccessorType( XmlAccessType.FIELD )
-public class NamedText {
+public class NamedText implements Cloneable {
 
 	@XmlAttribute( name = "name" )
 	private String id;
 
+	@XmlAttribute( name = "load" )
+	private String load;
+
 	@XmlValue
 	private String text;
+
+	public Object clone() {
+		NamedText o = null;
+		try {
+			o = (NamedText)super.clone();
+		} catch(CloneNotSupportedException cnse) {
+			cnse.printStackTrace(System.err);
+		}
+
+		o.setId(getId());
+		o.setLoad(getLoad());
+		o.setText(getText());
+
+		return o;
+	}
 
 
 	public void setId( String id ) {
@@ -29,6 +47,14 @@ public class NamedText {
 
 	public String getId() {
 		return id;
+	}
+
+	public void setLoad( String load ) {
+		this.load = load;
+	}
+
+	public String getLoad() {
+		return load;
 	}
 
 	public void setText( String s ) {

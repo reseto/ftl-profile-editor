@@ -16,6 +16,9 @@ public class GeneratedSectorMap {
 	protected Integer rebelFleetFudge = null;
 	protected List<GeneratedBeacon> genBeaconList = new ArrayList<GeneratedBeacon>();
 
+	public int startBeacon = -1;
+	public int endBeacon = -1;
+	public int flagshipBeacon = -1;
 
 	public GeneratedSectorMap() {
 	}

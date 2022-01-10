@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
+import net.blerf.ftl.xml.TextList;
 
 
 @XmlRootElement( name = "events" )
@@ -21,6 +22,9 @@ public class Encounters {
 
 	@XmlElement( name = "eventList", required = false )
 	private List<FTLEventList> eventLists = new ArrayList<FTLEventList>();
+
+	@XmlElement( name = "textList", required = false )
+	private List<TextList> textLists = new ArrayList<TextList>();
 
 	@XmlElement( name = "ship", required = false )
 	private List<ShipEvent> shipEvents = new ArrayList<ShipEvent>();
@@ -40,6 +44,14 @@ public class Encounters {
 
 	public List<FTLEventList> getEventLists() {
 		return eventLists;
+	}
+
+	public void setTextLists( List<TextList> textLists ) {
+		this.textLists = textLists;
+	}
+
+	public List<TextList> getTextLists() {
+		return textLists;
 	}
 
 	public void setShipEvents( List<ShipEvent> shipEvents ) {
@@ -79,6 +91,20 @@ public class Encounters {
 		FTLEventList result = null;
 		for ( FTLEventList tmpEventList : eventLists ) {
 			if ( id.equals( tmpEventList.getId() ) ) result = tmpEventList;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Returns an TextList with a given id.
+	 */
+	public TextList getTextListById( String id ) {
+		if ( id == null || textLists == null ) return null;
+
+		TextList result = null;
+		for ( TextList tmpTextList : textLists ) {
+			if ( id.equals( tmpTextList.getId() ) ) result = tmpTextList;
 		}
 
 		return result;
