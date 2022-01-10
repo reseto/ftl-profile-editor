@@ -675,7 +675,7 @@ public class PkgPack extends AbstractPack {
 			throw new FileNotFoundException( "InnerPath does not exist: "+ innerPath );
 		}
 
-		int entryIndex = pathToIndexMap.get( innerPath ).intValue();
+		int entryIndex = pathToIndexMap.get(innerPath);
 		pathToIndexMap.remove( innerPath );
 		PkgEntry removedEntry = entryList.set( entryIndex, null );
 
@@ -705,7 +705,7 @@ public class PkgPack extends AbstractPack {
 			throw new FileNotFoundException( "InnerPath does not exist: "+ innerPath );
 		}
 
-		int entryIndex = pathToIndexMap.get( innerPath ).intValue();
+		int entryIndex = pathToIndexMap.get(innerPath);
 		PkgEntry entry = entryList.get( entryIndex );
 
 		// Create a stream that can only see this region.

@@ -5,7 +5,6 @@
 package net.blerf.ftl.parser;
 
 import java.util.Arrays;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;

@@ -48,7 +48,7 @@ public class LinearSectorTreeGenerator {
 
 		for ( int r=0; r < route.size(); r++ ) {
 			SectorDot dot = new SectorDot( null, null, "Unknown" );
-			dot.setVisited( route.get(r).booleanValue() );
+			dot.setVisited(route.get(r));
 			columnDots.add( dot );
 
 			if ( ( r == 0 || dot.isVisited() || r > lastVisitedR ) && result.size() < columnCount ) {

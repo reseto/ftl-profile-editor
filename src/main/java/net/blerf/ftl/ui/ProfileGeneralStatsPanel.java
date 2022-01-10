@@ -1,9 +1,6 @@
 package net.blerf.ftl.ui;
 
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -12,9 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.slf4j.Logger;
@@ -28,9 +23,7 @@ import net.blerf.ftl.model.Score;
 import net.blerf.ftl.model.Stats;
 import net.blerf.ftl.model.Stats.StatType;
 import net.blerf.ftl.model.Profile;
-import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.ui.FTLFrame;
-import net.blerf.ftl.ui.StatusbarMouseListener;
 
 
 public class ProfileGeneralStatsPanel extends JPanel {
@@ -64,12 +57,12 @@ public class ProfileGeneralStatsPanel extends JPanel {
 		JPanel statsSubPanelsHolder = new JPanel();
 		statsSubPanelsHolder.setLayout( new BoxLayout( statsSubPanelsHolder, BoxLayout.Y_AXIS ) );
 		this.add( statsSubPanelsHolder );
-		
+
 		sessionRecordsPanel = new StatsSubPanel();
 		sessionRecordsPanel.addFillRow();
 		sessionRecordsPanel.setBorder( BorderFactory.createTitledBorder( "Session Records" ) );
 		statsSubPanelsHolder.add( sessionRecordsPanel );
-		
+
 		crewRecordsPanel = new StatsSubPanel();
 		crewRecordsPanel.addFillRow();
 		crewRecordsPanel.setBorder( BorderFactory.createTitledBorder( "Crew Records" ) );

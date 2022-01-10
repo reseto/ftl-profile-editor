@@ -797,7 +797,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		int actualDroneSlots;
 
 		if ( shipBlueprint.getDroneSlots() != null ) {
-			int minDroneSlots = shipBlueprint.getDroneSlots().intValue();
+			int minDroneSlots = shipBlueprint.getDroneSlots();
 			if ( droneList.size() > minDroneSlots ) {
 				log.warn( String.format( "Ship state has %d drones, exceeding %d droneSlots on its blueprint", droneList.size(), minDroneSlots ) );
 			}
@@ -936,7 +936,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 					break;
 				}
 			}
-			addBreachSprite( shipBundle, breachX, breachY, roomId, squareId, breachEntry.getValue().intValue() );
+			addBreachSprite( shipBundle, breachX, breachY, roomId, squareId, breachEntry.getValue());
 		}
 
 		// Add fires.
@@ -2925,7 +2925,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		int maxSystemCapacity = systemBlueprint.getMaxPower();
 		Integer maxPowerOverride = shipBundle.getShipBlueprint().getSystemList().getSystemRoom( systemRef.get().getSystemType() )[0].getMaxPower();
 		if ( maxPowerOverride != null ) {
-			maxSystemCapacity = maxPowerOverride.intValue();
+			maxSystemCapacity = maxPowerOverride;
 		}
 
 		final int batteryCapacity = shipBundle.getBatteryPoolCapacity();

@@ -20,3 +20,8 @@ Desktop.ini
 # IdeaJ
 *.idea
 *.iml
+
+# test files
+log4j2-test.xml
+ftl-editor.cfg
+ftl-editor-log.txt
