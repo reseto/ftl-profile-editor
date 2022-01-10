@@ -1192,7 +1192,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 		Pattern placeHolderPtn = Pattern.compile( "\\{([^}]+)\\}" );  // "{blah}"
 
 		for ( Map.Entry<Integer, List<String>> releaseEntry : historyMap.entrySet() ) {
-			if ( releaseEntry.getKey().intValue() <= sinceVersion ) break;
+			if (releaseEntry.getKey() <= sinceVersion ) break;
 
 			releaseBuf.setLength( 0 );
 

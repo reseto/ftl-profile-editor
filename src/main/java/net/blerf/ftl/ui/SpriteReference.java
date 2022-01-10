@@ -18,7 +18,7 @@ public class SpriteReference<T> {
 	/**
 	 * Constructor.
 	 *
-	 * @param a shared object, or null (where permitted)
+	 * @param referent a shared object, or null (where permitted)
 	 */
 	public SpriteReference( T referent ) {
 		this.referent = referent;

@@ -1,6 +1,5 @@
 package net.blerf.ftl.parser;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -47,7 +46,6 @@ import net.blerf.ftl.xml.SectorDescription;
 import net.blerf.ftl.xml.SectorType;
 import net.blerf.ftl.xml.ShipBlueprint;
 import net.blerf.ftl.xml.ShipEvent;
-import net.blerf.ftl.xml.ShipEvents;
 import net.blerf.ftl.xml.ShipChassis;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.WeaponAnim;
@@ -55,7 +53,7 @@ import net.blerf.ftl.xml.WeaponBlueprint;
 
 
 public class DefaultDataManager extends DataManager {
-	
+
 	private static final Logger log = LoggerFactory.getLogger( DefaultDataManager.class );
 
 	private List<String> stdPlayerShipBaseIds;
@@ -714,7 +712,7 @@ public class DefaultDataManager extends DataManager {
 		}
 	}
 
-	@Override	
+	@Override
 	public boolean hasResourceInputStream( String innerPath ) {
 		AbstractPack pack = packContainer.getPackFor( innerPath );
 		if ( pack != null && pack.contains( innerPath ) ) {
@@ -724,7 +722,7 @@ public class DefaultDataManager extends DataManager {
 		}
 	}
 
-	@Override	
+	@Override
 	public InputStream getResourceInputStream( String innerPath ) throws IOException {
 		AbstractPack pack = packContainer.getPackFor( innerPath );
 		if ( pack != null ) {
