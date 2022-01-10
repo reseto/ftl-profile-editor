@@ -1,11 +1,14 @@
 package net.blerf.ftl.parser.random;
 
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.NOPLogger;
 
 import net.blerf.ftl.parser.random.RandRNG;
-import net.blerf.ftl.parser.random.NativeRandomJNI;
 
 
 /**
@@ -17,37 +20,31 @@ import net.blerf.ftl.parser.random.NativeRandomJNI;
  */
 public class NativeRandom implements RandRNG {
 	// private static final Logger log = LoggerFactory.getLogger( NativeRandom.class );
-	// private static final Logger log = NOPLogger.NOP_LOGGER;
+	private static final Logger log = NOPLogger.NOP_LOGGER;
 
+	protected int seed = 1;
 	protected String name = null;
 
-	NativeRandomJNI nativeInterface;
 
 	public NativeRandom() {
 		this( null );
-		nativeInterface = new NativeRandomJNI();
 	}
 
 	public NativeRandom( String name ) {
 		this.name = name;
-		nativeInterface = new NativeRandomJNI();
 	}
 
 	@Override
 	public void srand( int newSeed ) {
-		nativeInterface.native_srand( newSeed );
+		CLibrary.INSTANCE.srand( newSeed );
+		seed = newSeed;
 	}
 
 	static int count = 0;
 
 	@Override
 	public int rand() {
-		int ret = nativeInterface.native_rand();
-		// if (log.isDebugEnabled()) {
-		// 	log.debug( String.format( "rng call %d: %d", count, ret ) );
-		// 	count++;
-		// }
-		return ret;
+		return CLibrary.INSTANCE.rand();
 	}
 
 	@Override
@@ -58,5 +55,37 @@ public class NativeRandom implements RandRNG {
 	@Override
 	public String toString() {
 		return (name != null ? name : super.toString());
+	}
+
+
+
+	public interface CLibrary extends Library {
+		/** A singleton to use for making native function calls. */
+		CLibrary INSTANCE = (CLibrary)Native.loadLibrary( (Platform.isWindows() ? "msvcrt" : "c"), CLibrary.class );
+
+		/**
+		 * Returns a random int from 0 to RAND_MAX.
+		 *
+		 * Afterward modulo (range limiting) and addition (shifting min) may be
+		 * performed on the result.
+		 *
+		 * C++ has some additional funcs to generate random numbers.
+		 *
+		 * This method is not thread-safe!
+		 *
+		 * If multiple classes/objects load the underlying native library to call
+		 * RNG funcs, they will interfere with each other.
+		 */
+		int rand();
+
+		/**
+		 * Sets the seed for subsequent rand() calls.
+		 *
+		 * This method is not thread-safe!
+		 *
+		 * If multiple classes/objects load the underlying native library to call
+		 * RNG funcs, they will interfere with each other.
+		 */
+		void srand( int seed );
 	}
 }
