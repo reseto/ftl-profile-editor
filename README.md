@@ -16,14 +16,14 @@ Status
 * FTL 1.5.4-1.6.3 saved games are partially editable.
 * FTL 1.01-1.03.3 saved games are fully editable.
 
-<a href="https://raw.github.com/Vhati/ftl-profile-editor/master/img/screenshot05.png"><img src="https://raw.github.com/Vhati/ftl-profile-editor/master/img/screenshot05_thumb.jpg" width="145px" height="auto" /></a> &nbsp; <a href="https://raw.github.com/Vhati/ftl-profile-editor/master/img/screenshot04.png"><img src="https://raw.github.com/Vhati/ftl-profile-editor/master/img/screenshot04_thumb.jpg" width="145px" height="auto" /></a> &nbsp; <a href="https://raw.github.com/Vhati/ftl-profile-editor/master/img/screenshot02.png"><img src="https://raw.github.com/Vhati/ftl-profile-editor/master/img/screenshot02_thumb.jpg" width="145px" height="auto" /></a> &nbsp; <a href="https://raw.github.com/Vhati/ftl-profile-editor/master/img/screenshot06.png"><img src="https://raw.github.com/Vhati/ftl-profile-editor/master/img/screenshot06_thumb.jpg" width="145px" height="auto" /></a>
+<a href="https://raw.github.com/reseto/ftl-profile-editor/master/img/ftl-edit-v29-ss1.png"><img src="https://raw.github.com/reseto/ftl-profile-editor/master/img/ftl-edit-v29-ss1.png" width="145px" height="auto" /></a> &nbsp; <a href="https://raw.github.com/reseto/ftl-profile-editor/master/img/ftl-edit-v29-ss2.png"><img src="https://raw.github.com/reseto/ftl-profile-editor/master/img/ftl-edit-v29-ss1.png" width="145px" height="auto" /></a> &nbsp; <a href="https://raw.github.com/reseto/ftl-profile-editor/master/img/ftl-edit-v29-ss3.png"><img src="https://raw.github.com/reseto/ftl-profile-editor/master/img/ftl-edit-v29-ss3.png" width="145px" height="auto" /></a> &nbsp; <a href="https://raw.github.com/reseto/ftl-profile-editor/master/img/ftl-edit-v29-ss4.png"><img src="https://raw.github.com/reseto/ftl-profile-editor/master/img/ftl-edit-v29-ss4.png" width="145px" height="auto" /></a>
 
 To download compiled binaries, [click here](https://sourceforge.net/projects/ftleditor/).
 
 Comments can be made in a forum thread [here](https://subsetgames.com/forum/viewtopic.php?f=7&t=10959).
 
-I do not have a PayPal, please give all credit to Vhati :)
-Vhati accepts PayPal donations [here](https://vhati.github.io/donate.html).
+I do not have a PayPal, please give all credit to Vhati :) <br />
+Vhati accepts PayPal donations [here](https://vhati.github.io/donate.html). <br />
 Thanks and enjoy!
 
 
