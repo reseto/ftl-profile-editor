@@ -1,5 +1,10 @@
 Changelog
 
+29
+- Added all changes done in all available forks of github.com/Vhati/ftl-profile-editor
+- Added support for Type-B ship icons thanks to gentsemaj github.com/gsemaj/ftl-profile-editor
+- Updated readme and bumped versions
+
 27:
 - Added support for FTL 1.6.1+ resources
 - Added partial editing for FTL 1.6.1+ saved games / full editing of profiles
