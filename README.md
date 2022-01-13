@@ -8,9 +8,11 @@ With this, you can unlock any or all ships and achievements in your profile, or 
 
 Status
 -----
+* FTL 1.6.4 profiles are fully editable, some Advanced Edition features are not supported.
 * FTL 1.5.4-1.6.3 profiles are fully editable. (ae_prof.sav)
 * FTL 1.01-1.03.3 profiles are fully editable. (prof.sav)
 <br /><br />
+* FTL 1.6.4 saved games are fully editable, some Advanced Edition features are not supported.
 * FTL 1.5.4-1.6.3 saved games are partially editable.
 * FTL 1.01-1.03.3 saved games are fully editable.
 
@@ -20,13 +22,14 @@ To download compiled binaries, [click here](https://sourceforge.net/projects/ftl
 
 Comments can be made in a forum thread [here](https://subsetgames.com/forum/viewtopic.php?f=7&t=10959).
 
-I can accept PayPal donations [here](https://vhati.github.io/donate.html).
-That would be fantastic.
+I do not have a PayPal, please give all credit to Vhati :)
+Vhati accepts PayPal donations [here](https://vhati.github.io/donate.html).
+Thanks and enjoy!
 
 
 Usage
 -----
-* Quit FTL to before editing profiles.
+* Quit FTL before editing profiles.
 <br /><br />
 * For saved games, you must NOT be actively playing a campaign.
     * FTL 1.5.4+: The main menu is safe.
@@ -42,10 +45,11 @@ Usage
 
 Requirements
 ------------
-* Java (1.6 or higher).
+* Java (1.7 or higher, tested on the latest Java 17.0.1).
     * http://www.java.com/en/download/
-* FTL (1.01-1.03.3 or 1.5.4-1.6.2, Windows/OSX/Linux, Steam/GOG/Standalone).
+* FTL (1.01-1.03.3 or 1.5.4-1.6.4, Windows/OSX/Linux, Steam/GOG/Standalone).
     * https://subsetgames.com/
+    * some Advanced Edition features are not supported by this editor
 * WinXP SP1 can't run Java 1.7.
     * (1.7 was built with VisualStudio 2010, causing a DecodePointer error.)
     * To get 1.6, you may have to google "jdk-6u45-windows-i586.exe".

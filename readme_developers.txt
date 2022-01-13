@@ -8,7 +8,7 @@ The build process for this project is automated by Maven.
 
 
 To build, run "mvn clean" and "mvn package" in this folder.
-
+(note from reseto: version 29 was built with IntelliJ Idea v2021.3.1 and built-in maven 3.8.1 and Amazon Corretto 17.0.1 JDK)
 
 "img/"
   Screenshots.

@@ -30,8 +30,8 @@ public class EditorInitThread extends Thread {
 
 	private static final Logger log = LoggerFactory.getLogger( EditorInitThread.class );
 
-	private final String latestVersionUrl = "https://raw.github.com/Vhati/ftl-profile-editor/master/latest-version.txt";
-	private final String versionHistoryUrl = "https://raw.github.com/Vhati/ftl-profile-editor/master/release-notes.txt";
+	private final String latestVersionUrl = "https://raw.github.com/reseto/ftl-profile-editor/master/latest-version.txt";
+	private final String versionHistoryUrl = "https://raw.github.com/reseto/ftl-profile-editor/master/release-notes.txt";
 
 	private final FTLFrame frame;
 	private final EditorConfig initConfig;

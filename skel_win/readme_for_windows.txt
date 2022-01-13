@@ -1,5 +1,5 @@
 FTL Profile/SavedGame Editor
-https://github.com/Vhati/ftl-profile-editor
+https://github.com/reseto/ftl-profile-editor
 
 
 About
@@ -14,24 +14,22 @@ About
 
 Status
 
+  FTL 1.6.4 profiles are fully editable, some Advanced Edition features are not supported.
   FTL 1.5.4-1.6.3 profiles are fully editable. (ae_prof.sav)
   FTL 1.01-1.03.3 profiles are fully editable. (prof.sav)
 
+  FTL 1.6.4 saved games are fully editable, some Advanced Edition features are not supported.
   FTL 1.5.4-1.6.3 saved games are partially editable.
   FTL 1.01-1.03.3 saved games are fully editable.
 
 
 Requirements
 
-  Java (1.6 or higher).
+  Java (1.7 or higher).
     http://www.java.com/en/download/
 
-  FTL (1.01-1.03.3 or 1.5.4-1.6.3, Windows/OSX/Linux, Steam/GOG/Standalone).
+  FTL (1.01-1.03.3 or 1.5.4-1.6.4, Windows/OSX/Linux, Steam/GOG/Standalone).
     https://subsetgames.com/
-
-  * WinXP SP1 can't run Java 1.7.
-    (1.7 was built with VisualStudio 2010, causing a DecodePointer error.)
-    To get 1.6, you may have to google "jdk-6u45-windows-i586.exe".
 
 
 Setup
