@@ -1341,10 +1341,10 @@ public class SavedGameFloorplanPanel extends JPanel {
 	}
 
 	private void selectSystem() {
-		if ( ftlConstants instanceof AdvancedFTLConstants ) {  // TODO: Remove this.
-			JOptionPane.showMessageDialog( frame, "System editing is not possible yet for Advanced Edition saved games.\n\nHowever, stores (Sector Map tab) can be edited.", "Work in Progress", JOptionPane.WARNING_MESSAGE );
-			return;
-		}
+//		if ( ftlConstants instanceof AdvancedFTLConstants ) {  // TODO: Remove this.
+//			JOptionPane.showMessageDialog( frame, "System editing is not possible yet for Advanced Edition saved games.\n\nHowever, stores (Sector Map tab) can be edited.", "Work in Progress", JOptionPane.WARNING_MESSAGE );
+//			return;
+//		}
 
 		miscSelector.reset();
 		miscSelector.clearSpriteLists();
