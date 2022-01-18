@@ -1,35 +1,32 @@
 package net.blerf.ftl;
 
-import javax.imageio.ImageIO;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.FileAppender;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Properties;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
-import ch.qos.logback.core.FileAppender;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
-
-import net.vhati.modmanager.core.FTLUtilities;
-
 import net.blerf.ftl.core.EditorConfig;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.DefaultDataManager;
-import net.blerf.ftl.ui.FTLFrame;
 import net.blerf.ftl.seedsearch.SeedSearch;
+import net.blerf.ftl.ui.FTLFrame;
+import net.vhati.modmanager.core.FTLUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 
 public class FTLProfileEditor {

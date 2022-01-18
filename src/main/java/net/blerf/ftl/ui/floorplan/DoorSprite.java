@@ -7,15 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import javax.swing.JComponent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.model.shiplayout.DoorCoordinate;
 import net.blerf.ftl.parser.SavedGameParser.DoorState;
-import net.blerf.ftl.ui.floorplan.DoorAtlas;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class DoorSprite extends JComponent implements ReferenceSprite<DoorState> {

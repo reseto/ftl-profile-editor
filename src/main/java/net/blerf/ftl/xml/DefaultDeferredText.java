@@ -6,8 +6,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlValue;
 
-import net.blerf.ftl.xml.DeferredText;
-
 
 @XmlAccessorType( XmlAccessType.FIELD )
 public class DefaultDeferredText implements DeferredText {

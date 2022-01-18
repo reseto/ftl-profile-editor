@@ -1,12 +1,10 @@
 package net.blerf.ftl.ui.floorplan;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
-
 import net.blerf.ftl.parser.SavedGameParser.SystemState;
 import net.blerf.ftl.ui.ImageUtilities;
 import net.blerf.ftl.ui.ImageUtilities.Tint;

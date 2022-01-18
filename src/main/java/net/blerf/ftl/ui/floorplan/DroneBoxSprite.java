@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.font.LineMetrics;
 import javax.swing.JComponent;
-
 import net.blerf.ftl.parser.SavedGameParser.DroneState;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;

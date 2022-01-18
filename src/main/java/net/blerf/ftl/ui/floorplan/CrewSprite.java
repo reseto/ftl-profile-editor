@@ -1,18 +1,11 @@
 package net.blerf.ftl.ui.floorplan;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.parser.SavedGameParser.CrewState;
-import net.blerf.ftl.ui.floorplan.SpriteImageProvider;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;
 

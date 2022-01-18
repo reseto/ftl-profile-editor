@@ -4,9 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.font.LineMetrics;
-import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
-
 import net.blerf.ftl.parser.SavedGameParser.WeaponState;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;

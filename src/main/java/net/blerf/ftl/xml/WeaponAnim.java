@@ -6,9 +6,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import net.blerf.ftl.xml.AnimSpec;
-import net.blerf.ftl.xml.Offset;
-
 
 @XmlRootElement(name = "weaponAnim")
 @XmlAccessorType(XmlAccessType.FIELD)

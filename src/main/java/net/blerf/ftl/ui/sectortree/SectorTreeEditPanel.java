@@ -31,12 +31,10 @@ import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicArrowButton;
-
 import net.blerf.ftl.model.sectortree.SectorDot;
 import net.blerf.ftl.model.sectortree.SectorTree;
 import net.blerf.ftl.model.sectortree.SectorTreeEvent;
 import net.blerf.ftl.model.sectortree.SectorTreeListener;
-import net.blerf.ftl.ui.sectortree.SectorTreePreviewPanel;
 
 
 public class SectorTreeEditPanel extends JLayeredPane implements SectorTreeListener {

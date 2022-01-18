@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.blerf.ftl.parser.sectormap.GeneratedBeacon;
-
 
 /**
  * An object to communicate values FTL would generate at runtime.

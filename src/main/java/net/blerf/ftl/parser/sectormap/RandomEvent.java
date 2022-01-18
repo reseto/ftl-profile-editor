@@ -1,31 +1,26 @@
 package net.blerf.ftl.parser.sectormap;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.NOPLogger;
-
-import net.blerf.ftl.parser.random.RandRNG;
-import net.blerf.ftl.parser.DataManager;
-
+import java.util.Set;
 import net.blerf.ftl.constants.Difficulty;
-
+import net.blerf.ftl.parser.DataManager;
+import net.blerf.ftl.parser.random.RandRNG;
+import net.blerf.ftl.xml.AugBlueprint;
+import net.blerf.ftl.xml.Choice;
+import net.blerf.ftl.xml.CrewBlueprint;
+import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
-import net.blerf.ftl.xml.SectorDescription;
-import net.blerf.ftl.xml.Choice;
 import net.blerf.ftl.xml.NamedText;
-import net.blerf.ftl.xml.TextList;
+import net.blerf.ftl.xml.SectorDescription;
 import net.blerf.ftl.xml.ShipEvent;
-import net.blerf.ftl.xml.AugBlueprint;
-import net.blerf.ftl.xml.CrewBlueprint;
+import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.WeaponBlueprint;
-import net.blerf.ftl.xml.DroneBlueprint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 

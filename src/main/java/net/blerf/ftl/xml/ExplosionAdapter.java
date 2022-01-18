@@ -14,8 +14,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import net.blerf.ftl.xml.ShipChassis;
-
 
 /**
  * An XmlAdapter for ShipChassis Explosions.

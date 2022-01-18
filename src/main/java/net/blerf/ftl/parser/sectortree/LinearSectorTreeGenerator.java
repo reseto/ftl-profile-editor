@@ -2,7 +2,6 @@ package net.blerf.ftl.parser.sectortree;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.blerf.ftl.model.sectortree.SectorDot;
 
 

@@ -1,7 +1,7 @@
 package net.blerf.ftl.ui;
 
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -17,16 +17,12 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.model.AchievementRecord;
+import net.blerf.ftl.model.Profile;
 import net.blerf.ftl.model.Score;
 import net.blerf.ftl.model.Stats;
-import net.blerf.ftl.model.Profile;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.ui.FTLFrame;
-import net.blerf.ftl.ui.ScorePanel;
-import net.blerf.ftl.ui.StatusbarMouseListener;
 import net.blerf.ftl.xml.Achievement;
 import net.blerf.ftl.xml.ShipBlueprint;
 

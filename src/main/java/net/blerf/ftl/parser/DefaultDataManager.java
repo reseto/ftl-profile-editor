@@ -2,35 +2,22 @@ package net.blerf.ftl.parser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.bind.JAXBException;
-
-import org.jdom2.JDOMException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.vhati.ftldat.AbstractPack;
-import net.vhati.ftldat.FolderPack;
-import net.vhati.ftldat.FTLPack;
-import net.vhati.ftldat.PackContainer;
-import net.vhati.ftldat.PkgPack;
-
 import net.blerf.ftl.model.shiplayout.ShipLayout;
-import net.blerf.ftl.parser.DatParser;
 import net.blerf.ftl.xml.Achievement;
 import net.blerf.ftl.xml.Anim;
-import net.blerf.ftl.xml.Animations;
 import net.blerf.ftl.xml.AnimSheet;
+import net.blerf.ftl.xml.Animations;
 import net.blerf.ftl.xml.AugBlueprint;
 import net.blerf.ftl.xml.BackgroundImageList;
 import net.blerf.ftl.xml.Blueprints;
@@ -41,17 +28,25 @@ import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.Encounters;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
-import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.SectorData;
 import net.blerf.ftl.xml.SectorDescription;
 import net.blerf.ftl.xml.SectorType;
 import net.blerf.ftl.xml.ShipBlueprint;
-import net.blerf.ftl.xml.ShipEvent;
 import net.blerf.ftl.xml.ShipChassis;
+import net.blerf.ftl.xml.ShipEvent;
 import net.blerf.ftl.xml.SystemBlueprint;
+import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.WeaponAnim;
 import net.blerf.ftl.xml.WeaponBlueprint;
+import net.vhati.ftldat.AbstractPack;
+import net.vhati.ftldat.FTLPack;
+import net.vhati.ftldat.FolderPack;
+import net.vhati.ftldat.PackContainer;
+import net.vhati.ftldat.PkgPack;
+import org.jdom2.JDOMException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class DefaultDataManager extends DataManager {

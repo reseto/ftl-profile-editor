@@ -1,7 +1,7 @@
 package net.blerf.ftl.ui;
 
-import javax.swing.filechooser.FileFilter;
 import java.io.File;
+import javax.swing.filechooser.FileFilter;
 
 
 /**

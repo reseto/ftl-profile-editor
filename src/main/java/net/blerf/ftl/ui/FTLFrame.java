@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -22,13 +21,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -53,46 +49,19 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-
-import net.vhati.ftldat.PackUtilities;
-import net.vhati.modmanager.core.FTLUtilities;
-
 import net.blerf.ftl.core.EditorConfig;
 import net.blerf.ftl.model.Profile;
-import net.blerf.ftl.net.TaggedString;
-import net.blerf.ftl.net.TaggedStringResponseHandler;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.MysteryBytes;
 import net.blerf.ftl.parser.ProfileParser;
 import net.blerf.ftl.parser.SavedGameParser;
-import net.blerf.ftl.ui.DumpPanel;
-import net.blerf.ftl.ui.ExtensionFileFilter;
-import net.blerf.ftl.ui.HTMLEditorTransferHandler;
-import net.blerf.ftl.ui.ProfileGeneralAchievementsPanel;
-import net.blerf.ftl.ui.ProfileGeneralStatsPanel;
-import net.blerf.ftl.ui.ProfileShipStatsPanel;
-import net.blerf.ftl.ui.ProfileShipUnlockPanel;
-import net.blerf.ftl.ui.SavedGameFloorplanPanel;
-import net.blerf.ftl.ui.SavedGameGeneralPanel;
-import net.blerf.ftl.ui.SavedGameHangarPanel;
-import net.blerf.ftl.ui.SavedGameSectorMapPanel;
-import net.blerf.ftl.ui.SavedGameSectorTreePanel;
-import net.blerf.ftl.ui.SavedGameStateVarsPanel;
-import net.blerf.ftl.ui.Statusbar;
-import net.blerf.ftl.ui.StatusbarMouseListener;
+import net.vhati.ftldat.PackUtilities;
+import net.vhati.modmanager.core.FTLUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class FTLFrame extends JFrame implements ActionListener, Statusbar, Thread.UncaughtExceptionHandler {

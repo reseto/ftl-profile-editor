@@ -1,7 +1,6 @@
 package net.blerf.ftl.constants;
 
 import java.util.List;
-
 import net.blerf.ftl.parser.SavedGameParser.CrewType;
 import net.blerf.ftl.parser.SavedGameParser.StationDirection;
 import net.blerf.ftl.parser.SavedGameParser.SystemType;

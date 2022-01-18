@@ -7,16 +7,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import net.vhati.ftldat.AbstractPack;
-import net.vhati.ftldat.AbstractPack.PathAndSize;
-import net.vhati.ftldat.PackUtilities;
 
 
 /**

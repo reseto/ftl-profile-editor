@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
 import net.blerf.ftl.model.sectortree.SectorDot;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.random.RandRNG;

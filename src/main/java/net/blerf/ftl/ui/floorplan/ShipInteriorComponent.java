@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.JComponent;
-
 import net.blerf.ftl.model.shiplayout.DoorCoordinate;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;

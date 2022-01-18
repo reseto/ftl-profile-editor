@@ -3,8 +3,6 @@ package net.blerf.ftl.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.blerf.ftl.ui.ReferenceSprite;
-
 
 /**
  * A reference to a shared object, to be represented by multiple sprites.

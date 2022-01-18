@@ -3,11 +3,11 @@ package net.blerf.ftl.ui;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.image.BufferedImage;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -17,15 +17,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.model.Score;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.ui.FieldEditorPanel;
 import net.blerf.ftl.xml.ShipBlueprint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ScorePanel extends JPanel {

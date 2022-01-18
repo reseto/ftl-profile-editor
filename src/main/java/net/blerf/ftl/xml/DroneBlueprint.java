@@ -6,8 +6,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import net.blerf.ftl.xml.DefaultDeferredText;
-
 
 @XmlRootElement( name = "droneBlueprint" )
 @XmlAccessorType( XmlAccessType.FIELD )

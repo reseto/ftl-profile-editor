@@ -2,16 +2,11 @@ package net.blerf.ftl.model.shiplayout;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
-
-import net.blerf.ftl.model.shiplayout.DoorCoordinate;
-import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;
-import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
 
 
 public class ShipLayout {

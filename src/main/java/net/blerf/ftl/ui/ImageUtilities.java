@@ -15,8 +15,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.awt.image.RescaleOp;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,13 +24,10 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.ui.IconCycleButton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ImageUtilities {

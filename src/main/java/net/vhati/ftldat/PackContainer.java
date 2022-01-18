@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.vhati.ftldat.AbstractPack;
-
 
 /**
  * A container coordinating access to one or more of FTL's dat files.

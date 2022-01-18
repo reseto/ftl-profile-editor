@@ -11,19 +11,16 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
 import net.blerf.ftl.model.CrewRecord;
+import net.blerf.ftl.model.Profile;
 import net.blerf.ftl.model.Score;
 import net.blerf.ftl.model.Stats;
 import net.blerf.ftl.model.Stats.StatType;
-import net.blerf.ftl.model.Profile;
-import net.blerf.ftl.ui.FTLFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ProfileGeneralStatsPanel extends JPanel {

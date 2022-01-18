@@ -4,27 +4,25 @@
 
 package net.blerf.ftl.parser;
 
-import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import net.vhati.modmanager.core.EmptyAwareSAXHandlerFactory;
+import net.vhati.modmanager.core.SloppyXMLParser;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.JDOMParseException;
 import org.jdom2.input.SAXBuilder;
-
-import net.vhati.modmanager.core.EmptyAwareSAXHandlerFactory;
-import net.vhati.modmanager.core.SloppyXMLParser;
 
 
 public class TextUtilities {

@@ -8,42 +8,32 @@
 
 package net.blerf.ftl.parser;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.TreeMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
+import net.blerf.ftl.model.XYPair;
 import net.blerf.ftl.model.shiplayout.DoorCoordinate;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
-import net.blerf.ftl.model.XYPair;
-import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.MysteryBytes;
 import net.blerf.ftl.xml.CrewBlueprint;
 import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.ShipBlueprint;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.WeaponBlueprint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class SavedGameParser extends Parser {

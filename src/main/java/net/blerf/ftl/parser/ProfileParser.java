@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.NewbieTipLevel;
 import net.blerf.ftl.model.AchievementRecord;
@@ -23,6 +19,8 @@ import net.blerf.ftl.model.ShipAvailability;
 import net.blerf.ftl.model.Stats;
 import net.blerf.ftl.model.Stats.StatType;
 import net.blerf.ftl.xml.Achievement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ProfileParser extends Parser {

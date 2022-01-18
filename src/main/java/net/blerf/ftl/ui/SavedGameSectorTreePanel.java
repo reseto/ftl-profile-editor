@@ -2,38 +2,21 @@ package net.blerf.ftl.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.model.sectortree.SectorDot;
 import net.blerf.ftl.model.sectortree.SectorTree;
 import net.blerf.ftl.model.sectortree.SectorTreeEvent;
@@ -47,11 +30,10 @@ import net.blerf.ftl.parser.random.NativeRandom;
 import net.blerf.ftl.parser.random.RandRNG;
 import net.blerf.ftl.parser.sectortree.LinearSectorTreeGenerator;
 import net.blerf.ftl.parser.sectortree.RandomSectorTreeGenerator;
-import net.blerf.ftl.ui.FieldEditorPanel;
-import net.blerf.ftl.ui.FTLFrame;
-import net.blerf.ftl.ui.StatusbarMouseListener;
-import net.blerf.ftl.ui.sectortree.SectorTreePreviewPanel;
 import net.blerf.ftl.ui.sectortree.SectorTreeEditPanel;
+import net.blerf.ftl.ui.sectortree.SectorTreePreviewPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class SavedGameSectorTreePanel extends JPanel implements ActionListener {

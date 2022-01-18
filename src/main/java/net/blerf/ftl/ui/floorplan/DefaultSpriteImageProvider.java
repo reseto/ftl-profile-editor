@@ -1,39 +1,33 @@
 package net.blerf.ftl.ui.floorplan;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.GraphicsDevice;
 import java.awt.GraphicsConfiguration;
-import java.awt.Rectangle;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser.CrewType;
 import net.blerf.ftl.parser.SavedGameParser.DroneType;
 import net.blerf.ftl.parser.SavedGameParser.SystemType;
 import net.blerf.ftl.ui.ImageUtilities;
 import net.blerf.ftl.ui.ImageUtilities.Tint;
-import net.blerf.ftl.ui.floorplan.AnimAtlas;
-import net.blerf.ftl.ui.floorplan.DoorAtlas;
 import net.blerf.ftl.xml.Anim;
 import net.blerf.ftl.xml.AnimSheet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class DefaultSpriteImageProvider implements SpriteImageProvider {

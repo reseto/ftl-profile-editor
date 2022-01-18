@@ -1,8 +1,8 @@
 package net.blerf.ftl.parser;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,15 +12,9 @@ import java.util.regex.Pattern;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.jdom2.output.DOMOutputter;
-
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
-import net.blerf.ftl.parser.TextUtilities;
 import net.blerf.ftl.xml.Achievement;
 import net.blerf.ftl.xml.Achievements;
 import net.blerf.ftl.xml.Animations;
@@ -33,11 +27,13 @@ import net.blerf.ftl.xml.Encounters;
 import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.NamedTexts;
 import net.blerf.ftl.xml.SectorData;
-import net.blerf.ftl.xml.ShipBlueprint;
 import net.blerf.ftl.xml.ShipChassis;
 import net.blerf.ftl.xml.ShipEvent;
 import net.blerf.ftl.xml.ShipEvents;
 import net.blerf.ftl.xml.TextLookupUnmarshalListener;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.output.DOMOutputter;
 
 
 public class DatParser {

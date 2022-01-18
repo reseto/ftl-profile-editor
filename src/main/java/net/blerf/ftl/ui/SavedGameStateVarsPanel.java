@@ -7,15 +7,10 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JPanel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.parser.SavedGameParser.StateVar;
-import net.blerf.ftl.ui.FieldEditorPanel;
-import net.blerf.ftl.ui.FTLFrame;
-import net.blerf.ftl.ui.StatusbarMouseListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class SavedGameStateVarsPanel extends JPanel {

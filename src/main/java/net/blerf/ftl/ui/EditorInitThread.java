@@ -1,7 +1,6 @@
 package net.blerf.ftl.ui;
 
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,20 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import net.blerf.ftl.core.EditorConfig;
+import net.blerf.ftl.net.TaggedString;
+import net.blerf.ftl.net.TaggedStringResponseHandler;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-
-import net.blerf.ftl.core.EditorConfig;
-import net.blerf.ftl.net.TaggedString;
-import net.blerf.ftl.net.TaggedStringResponseHandler;
-import net.blerf.ftl.ui.FTLFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class EditorInitThread extends Thread {

@@ -1,11 +1,9 @@
 package net.blerf.ftl.ui.floorplan;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JComponent;
-
 import net.blerf.ftl.parser.SavedGameParser.RoomState;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;

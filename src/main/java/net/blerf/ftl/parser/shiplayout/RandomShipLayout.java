@@ -1,19 +1,15 @@
 package net.blerf.ftl.parser.shiplayout;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.AbstractMap;
-import java.util.Set;
 import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.NOPLogger;
-
-import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.random.RandRNG;
+import java.util.List;
+import java.util.Set;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
+import net.blerf.ftl.parser.DataManager;
+import net.blerf.ftl.parser.random.RandRNG;
+import org.slf4j.Logger;
+import org.slf4j.helpers.NOPLogger;
 
 /**
  * A generator of ship layout.

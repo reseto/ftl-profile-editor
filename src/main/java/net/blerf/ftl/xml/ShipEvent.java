@@ -5,8 +5,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import net.blerf.ftl.xml.DefaultDeferredText;
-
 
 @XmlRootElement( name = "ship" )
 @XmlAccessorType( XmlAccessType.FIELD )

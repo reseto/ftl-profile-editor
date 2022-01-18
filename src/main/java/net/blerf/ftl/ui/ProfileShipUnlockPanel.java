@@ -11,27 +11,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.model.AchievementRecord;
-import net.blerf.ftl.model.ShipAvailability;
 import net.blerf.ftl.model.Profile;
+import net.blerf.ftl.model.ShipAvailability;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.ui.FTLFrame;
-import net.blerf.ftl.ui.IconCycleButton;
-import net.blerf.ftl.ui.ImageUtilities;
-import net.blerf.ftl.ui.StatusbarMouseListener;
 import net.blerf.ftl.xml.Achievement;
 import net.blerf.ftl.xml.ShipBlueprint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ProfileShipUnlockPanel extends JPanel implements ActionListener {

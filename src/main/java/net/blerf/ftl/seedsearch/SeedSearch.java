@@ -1,31 +1,23 @@
 package net.blerf.ftl.seedsearch;
 
 import java.awt.Point;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.AbstractMap;
-import java.util.Set;
 import java.util.HashSet;
-import java.util.Collections;
-
+import java.util.List;
+import java.util.Set;
+import net.blerf.ftl.constants.Difficulty;
+import net.blerf.ftl.parser.random.NativeRandom;
+import net.blerf.ftl.parser.random.RandRNG;
+import net.blerf.ftl.parser.sectormap.GeneratedBeacon;
+import net.blerf.ftl.parser.sectormap.GeneratedSectorMap;
+import net.blerf.ftl.parser.sectormap.RandomSectorMapGenerator;
+import net.blerf.ftl.parser.sectortree.RandomSectorTreeGenerator;
+import net.blerf.ftl.parser.shiplayout.RandomShipLayout;
+import net.blerf.ftl.xml.Choice;
+import net.blerf.ftl.xml.FTLEvent;
+import net.blerf.ftl.xml.ShipEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.blerf.ftl.constants.Difficulty;
-import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.random.RandRNG;
-import net.blerf.ftl.parser.random.NativeRandom;
-import net.blerf.ftl.parser.shiplayout.RandomShipLayout;
-import net.blerf.ftl.parser.sectormap.RandomSectorMapGenerator;
-import net.blerf.ftl.parser.sectormap.GeneratedSectorMap;
-import net.blerf.ftl.parser.sectormap.GeneratedBeacon;
-import net.blerf.ftl.parser.sectortree.RandomSectorTreeGenerator;
-import net.blerf.ftl.model.shiplayout.ShipLayout;
-import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
-import net.blerf.ftl.xml.FTLEvent;
-import net.blerf.ftl.xml.Choice;
-import net.blerf.ftl.xml.ShipEvent;
 
 /**
  * Finding good seeds

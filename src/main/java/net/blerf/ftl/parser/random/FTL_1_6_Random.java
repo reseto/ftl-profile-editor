@@ -2,8 +2,6 @@ package net.blerf.ftl.parser.random;
 
 import java.math.BigInteger;
 
-import net.blerf.ftl.parser.random.RandRNG;
-
 
 /**
  * An implementation of FTLGame.srandom32()/random32().

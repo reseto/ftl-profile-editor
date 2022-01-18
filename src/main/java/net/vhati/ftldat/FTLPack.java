@@ -5,14 +5,12 @@ package net.vhati.ftldat;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-//import java.nio.MappedByteBuffer;      // For Memory-mapped streams
-//import java.nio.channels.FileChannel;  // For Memory-mapped streams
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
@@ -21,11 +19,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.vhati.ftldat.AbstractPack;
-import net.vhati.ftldat.AbstractPack.PathAndSize;
-import net.vhati.ftldat.AbstractPack.RepackResult;
-import net.vhati.ftldat.FileChannelRegionInputStream;
 
 
 /**

@@ -3,8 +3,6 @@ package net.blerf.ftl.ui;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import net.blerf.ftl.ui.Statusbar;
-
 
 /**
  * A MouseListener to show rollover help text in a status bar.

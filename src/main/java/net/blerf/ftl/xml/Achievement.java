@@ -7,8 +7,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import net.blerf.ftl.xml.DefaultDeferredText;
-
 
 @XmlRootElement( name = "achievement" )
 @XmlAccessorType( XmlAccessType.FIELD )
