@@ -30,7 +30,7 @@ public class ShipEvent {
     @XmlAttribute(name = "name")
     private String id;
 
-    @XmlAttribute(name = "load", required = false)
+    @XmlAttribute(name = "load")
     private String load;
 
     @XmlAttribute

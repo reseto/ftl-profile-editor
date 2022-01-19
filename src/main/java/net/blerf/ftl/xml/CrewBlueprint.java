@@ -33,8 +33,8 @@ public class CrewBlueprint {
     @XmlElement(name = "power")
     private List<DefaultDeferredText> powerList;
 
-    @XmlElementWrapper(name = "colorList", required = false)
-    @XmlElement(name = "layer", required = false)
+    @XmlElementWrapper(name = "colorList")
+    @XmlElement(name = "layer")
     private List<SpriteTintLayer> spriteTintLayerList;  // FTL 1.5.4 introduced sprite tinting.
 
     @XmlAccessorType(XmlAccessType.FIELD)

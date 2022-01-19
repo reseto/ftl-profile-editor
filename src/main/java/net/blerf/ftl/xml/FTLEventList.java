@@ -14,7 +14,7 @@ public class FTLEventList {
     @XmlAttribute(name = "name")
     private String id;
 
-    @XmlElement(name = "event", required = false)
+    @XmlElement(name = "event")
     private List<FTLEvent> eventList;
 
     public String getId() {

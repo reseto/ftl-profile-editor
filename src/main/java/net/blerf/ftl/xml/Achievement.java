@@ -17,7 +17,7 @@ public class Achievement {
 
     private DefaultDeferredText name;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private DefaultDeferredText shortName;
 
     @XmlElement(name = "desc")
@@ -26,10 +26,10 @@ public class Achievement {
     @XmlElement(name = "img")
     private String imagePath;
 
-    @XmlElement(name = "ship", required = false)
+    @XmlElement(name = "ship")
     private String shipId;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private int multiDifficulty;
 
     // Ship Victory achievements track *all* the variants which earned them.

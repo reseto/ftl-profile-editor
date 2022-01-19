@@ -20,7 +20,7 @@ public class TextList {
     @XmlAttribute(name = "name")
     private String id;
 
-    @XmlElement(name = "text", required = false)
+    @XmlElement(name = "text")
     private List<NamedText> textList;
 
     @Override

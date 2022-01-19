@@ -26,34 +26,34 @@ public class ShipBlueprint {
     @XmlElement(name = "class")
     private DefaultDeferredText shipClass;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private DefaultDeferredText name;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private DefaultDeferredText unlockTip;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private DefaultDeferredText desc;
 
     private SystemList systemList;
 
-    @XmlElement(required = false)  // Not present in autoBlueprints.xml.
+    @XmlElement()  // Not present in autoBlueprints.xml.
     private Integer weaponSlots, droneSlots;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private WeaponList weaponList;
 
-    @XmlElement(name = "aug", required = false)
+    @XmlElement(name = "aug")
     private List<AugmentId> augmentIds;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private DroneList droneList;
 
     private Health health;
     private MaxPower maxPower;   // Initial reserve power capacity.
     private CrewCount crewCount;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private String boardingAI;  // Only present in autoBlueprints.xml.
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -65,7 +65,7 @@ public class ShipBlueprint {
             /**
              * The direction crew will face when standing at the terminal.
              */
-            @XmlElement(required = false)
+            @XmlElement()
             private String direction;
 
             private int number;  // The room square.
@@ -104,7 +104,7 @@ public class ShipBlueprint {
              * <p>
              * Not capped by SystemBlueprint's maxPower.
              */
-            @XmlAttribute(name = "max", required = false)
+            @XmlAttribute(name = "max")
             private Integer maxPower;
 
             @XmlAttribute(name = "room")
@@ -116,10 +116,10 @@ public class ShipBlueprint {
              * Treat null omissions as as true.
              * On randomly generated ships, false means it's sometimes present.
              */
-            @XmlAttribute(required = false)
+            @XmlAttribute()
             private Boolean start;
 
-            @XmlAttribute(required = false)
+            @XmlAttribute()
             private String img;
 
             /**
@@ -128,7 +128,7 @@ public class ShipBlueprint {
              * For the medbay and clonebay, this is the blocked square.
              * When omitted, each system has a different hard-coded default.
              */
-            @XmlElement(required = false)
+            @XmlElement()
             private RoomSlot slot;
 
             public void setPower(int power) {
@@ -202,7 +202,7 @@ public class ShipBlueprint {
         private SystemRoom teleporterRoom;
         @XmlElement(name = "cloaking")
         private SystemRoom cloakRoom;  // lol :)
-        @XmlElement(name = "artillery", required = false)
+        @XmlElement(name = "artillery")
         private List<SystemRoom> artilleryRooms;
         @XmlElement(name = "clonebay")
         private SystemRoom cloneRoom;
@@ -441,7 +441,7 @@ public class ShipBlueprint {
         @XmlAttribute
         public int missiles;
 
-        @XmlAttribute(name = "load", required = false)
+        @XmlAttribute(name = "load")
         public String blueprintListId;
 
         @XmlElement(name = "weapon")
@@ -484,7 +484,7 @@ public class ShipBlueprint {
         @XmlAttribute
         public int drones;
 
-        @XmlAttribute(name = "load", required = false)
+        @XmlAttribute(name = "load")
         public String blueprintListId;
 
         @XmlElement(name = "drone")
@@ -530,7 +530,7 @@ public class ShipBlueprint {
         @XmlAttribute
         public int amount;
 
-        @XmlAttribute(required = false)
+        @XmlAttribute()
         public Integer max;  // Only present in autoBlueprints.xml.
 
         @XmlAttribute(name = "class")

@@ -26,10 +26,10 @@ public class WeaponAnim {
     private Offset firePoint;
     private Offset mountPoint;
 
-    @XmlElement(name = "delayChargeAnim", required = false)
+    @XmlElement(name = "delayChargeAnim")
     private Float chargeDelay;
 
-    @XmlElement(name = "chargeImage", required = false)
+    @XmlElement(name = "chargeImage")
     private String chargeImagePath;
 
     public void setId(String id) {

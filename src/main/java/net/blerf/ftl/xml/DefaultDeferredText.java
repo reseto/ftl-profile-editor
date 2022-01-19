@@ -13,7 +13,7 @@ public class DefaultDeferredText implements DeferredText {
     @XmlValue
     private String ownText;
 
-    @XmlAttribute(name = "id", required = false)
+    @XmlAttribute(name = "id")
     private String textId = null;
 
     @XmlTransient

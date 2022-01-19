@@ -10,19 +10,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "choice")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Choice {
-    @XmlAttribute(name = "hidden", required = false)
+    @XmlAttribute(name = "hidden")
     private boolean hidden;
 
-    @XmlAttribute(name = "req", required = false)
+    @XmlAttribute(name = "req")
     private String req;
 
-    @XmlAttribute(name = "lvl", required = false)
+    @XmlAttribute(name = "lvl")
     private String level;
 
-    @XmlElement(name = "text", required = false)
+    @XmlElement(name = "text")
     private NamedText text;
 
-    @XmlElement(name = "event", required = false)
+    @XmlElement(name = "event")
     private FTLEvent event;
 
     public boolean getHidden() {

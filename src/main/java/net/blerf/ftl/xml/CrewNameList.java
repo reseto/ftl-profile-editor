@@ -25,7 +25,7 @@ public class CrewNameList {
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class CrewName {
 
-        @XmlAttribute(required = false)
+        @XmlAttribute()
         public String shortName;
 
         @XmlValue

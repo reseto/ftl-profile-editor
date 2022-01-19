@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BackgroundImageLists {
 
-    @XmlElement(name = "imageList", required = false)
+    @XmlElement(name = "imageList")
     private List<BackgroundImageList> imageLists = new ArrayList<BackgroundImageList>();
 
 

@@ -12,16 +12,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Encounters {
 
-    @XmlElement(name = "event", required = false)
+    @XmlElement(name = "event")
     private List<FTLEvent> events = new ArrayList<FTLEvent>();
 
-    @XmlElement(name = "eventList", required = false)
+    @XmlElement(name = "eventList")
     private List<FTLEventList> eventLists = new ArrayList<FTLEventList>();
 
-    @XmlElement(name = "textList", required = false)
+    @XmlElement(name = "textList")
     private List<TextList> textLists = new ArrayList<TextList>();
 
-    @XmlElement(name = "ship", required = false)
+    @XmlElement(name = "ship")
     private List<ShipEvent> shipEvents = new ArrayList<ShipEvent>();
 
 

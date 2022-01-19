@@ -12,25 +12,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Blueprints {
 
-    @XmlElement(name = "blueprintList", required = false)
+    @XmlElement(name = "blueprintList")
     private List<BlueprintList> blueprintLists = new ArrayList<BlueprintList>();
 
-    @XmlElement(name = "crewBlueprint", required = false)
+    @XmlElement(name = "crewBlueprint")
     private List<CrewBlueprint> crewBlueprints = new ArrayList<CrewBlueprint>();
 
-    @XmlElement(name = "systemBlueprint", required = false)
+    @XmlElement(name = "systemBlueprint")
     private List<SystemBlueprint> systemBlueprints = new ArrayList<SystemBlueprint>();
 
-    @XmlElement(name = "weaponBlueprint", required = false)
+    @XmlElement(name = "weaponBlueprint")
     private List<WeaponBlueprint> weaponBlueprints = new ArrayList<WeaponBlueprint>();
 
-    @XmlElement(name = "droneBlueprint", required = false)
+    @XmlElement(name = "droneBlueprint")
     private List<DroneBlueprint> droneBlueprints = new ArrayList<DroneBlueprint>();
 
-    @XmlElement(name = "augBlueprint", required = false)
+    @XmlElement(name = "augBlueprint")
     private List<AugBlueprint> augBlueprints = new ArrayList<AugBlueprint>();
 
-    @XmlElement(name = "shipBlueprint", required = false)
+    @XmlElement(name = "shipBlueprint")
     private List<ShipBlueprint> shipBlueprints = new ArrayList<ShipBlueprint>();
 
 

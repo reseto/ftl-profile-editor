@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @XmlRootElement(name = "event")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FTLEvent implements Cloneable {
-    @XmlAttribute(name = "name", required = false)
+    @XmlAttribute(name = "name")
     private String id;
 
     @XmlAttribute
@@ -26,16 +26,16 @@ public class FTLEvent implements Cloneable {
     @XmlElement
     private NamedText text;
 
-    @XmlElement(name = "img", required = false)
+    @XmlElement(name = "img")
     private BackgroundImage image;
 
-    @XmlElement(name = "choice", required = false)
+    @XmlElement(name = "choice")
     private List<Choice> choiceList;
 
     @XmlElement
     private ShipEvent ship;
 
-    @XmlElement(name = "item_modify", required = false)
+    @XmlElement(name = "item_modify")
     private ItemList itemList;
 
     public static class Reward {
@@ -62,7 +62,7 @@ public class FTLEvent implements Cloneable {
 
     @XmlAccessorType(XmlAccessType.NONE)
     public static class AutoReward {
-        @XmlAttribute(name = "level", required = false)
+        @XmlAttribute(name = "level")
         public String level;
 
         @XmlValue

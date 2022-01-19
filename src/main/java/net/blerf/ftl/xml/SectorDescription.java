@@ -27,7 +27,7 @@ public class SectorDescription {
 
     private RarityList rarityList;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private String startEvent;
 
     @XmlElement(name = "event")

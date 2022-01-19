@@ -12,13 +12,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Animations {
 
-    @XmlElement(name = "animSheet", required = false)
+    @XmlElement(name = "animSheet")
     private List<AnimSheet> sheets = new ArrayList<AnimSheet>();
 
-    @XmlElement(name = "anim", required = false)
+    @XmlElement(name = "anim")
     private List<Anim> anims = new ArrayList<Anim>();
 
-    @XmlElement(name = "weaponAnim", required = false)
+    @XmlElement(name = "weaponAnim")
     private List<WeaponAnim> weaponAnims = new ArrayList<WeaponAnim>();
 
 

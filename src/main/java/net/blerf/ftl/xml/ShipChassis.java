@@ -18,7 +18,7 @@ public class ShipChassis {
     @XmlElement(name = "img")
     private ChassisImageBounds imageBounds;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private Offsets offsets;  // FTL 1.5.4 introduced floor/cloak offsets.
 
     @XmlElementWrapper(name = "weaponMounts")

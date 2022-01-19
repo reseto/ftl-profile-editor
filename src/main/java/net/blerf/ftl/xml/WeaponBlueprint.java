@@ -22,7 +22,7 @@ public class WeaponBlueprint {
     @XmlElement(name = "short")
     private DefaultDeferredText shortTitle;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private Integer locked;
 
     private DefaultDeferredText desc;

@@ -16,7 +16,7 @@ public class DroneBlueprint {
 
     private String type;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private Integer locked;
 
     private DefaultDeferredText title;
@@ -29,22 +29,22 @@ public class DroneBlueprint {
     @XmlElement(name = "bp")
     private int bp;  // TODO: Rename this.
 
-    @XmlElement(required = false)
+    @XmlElement()
     private Integer cooldown, dodge, speed;
 
     private int power;
     private int cost;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private String droneImage;
 
-    @XmlElement(name = "image", required = false)
+    @XmlElement(name = "image")
     private String imagePath;  // InnerPath of a projectile anim sheet. Unused?
 
-    @XmlElement(required = false)
+    @XmlElement()
     private String iconImage;  // TODO: FTL 1.5.4 introduced this. For iPad?
 
-    @XmlElement(name = "weaponBlueprint", required = false)
+    @XmlElement(name = "weaponBlueprint")
     private String weaponId;
 
     private int rarity;

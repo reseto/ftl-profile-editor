@@ -35,7 +35,7 @@ public class SystemBlueprint {
 
     private int cost;
 
-    @XmlElement(required = false)
+    @XmlElement()
     private Integer locked;
 
 }
