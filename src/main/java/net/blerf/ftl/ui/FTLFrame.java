@@ -1329,6 +1329,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 
 		if ( gs == null ) {
 		}
+		// todo jesus, get rid of all these numbers everywhere, create an enum
 		else if ( Arrays.binarySearch( new int[] {2, 7, 8, 9, 11}, gs.getFileFormat() ) >= 0 ) {
 			// savedGameDumpPanel doesn't modify anything.
 			savedGameGeneralPanel.updateGameState( gs );

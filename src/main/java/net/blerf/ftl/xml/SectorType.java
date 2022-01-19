@@ -6,8 +6,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "sectorType")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SectorType {
@@ -18,19 +24,4 @@ public class SectorType {
 	@XmlElement(name = "sector")
 	public List<String> sectorIds;
 
-	public void setId( String id ) {
-		this.id = id;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setSectorIds( List<String> sectorIds ) {
-		this.sectorIds = sectorIds;
-	}
-
-	public List<String> getSectorIds() {
-		return sectorIds;
-	}
 }

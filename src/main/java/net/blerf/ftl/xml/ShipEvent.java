@@ -4,11 +4,28 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement( name = "ship" )
 @XmlAccessorType( XmlAccessType.FIELD )
 public class ShipEvent {
+
+	// copy constructor instead of cloning the object later
+//	public ShipEvent(ShipEvent o) {
+//		this.id = o.getId();
+//		this.load = o.getLoad();
+//		this.hostile = o.isHostile();
+//		this.seed = o.getSeed();
+//		this.autoBlueprintId = o.getAutoBlueprintId();
+//	}
 
 	@XmlAttribute( name = "name" )
 	private String id;
@@ -23,49 +40,6 @@ public class ShipEvent {
 
 	@XmlAttribute( name = "auto_blueprint" )
 	private String autoBlueprintId;
-
-	// The rest is uninteresting. ;)
-
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId( String id ) {
-		this.id = id;
-	}
-
-	public String getLoad() {
-		return load;
-	}
-
-	public void setLoad( String load ) {
-		this.load = load;
-	}
-
-	public boolean getHostile() {
-		return hostile;
-	}
-
-	public void setHostile( boolean hostile ) {
-		this.hostile = hostile;
-	}
-
-	public int getSeed() {
-		return seed;
-	}
-
-	public void setSeed( int seed ) {
-		this.seed = seed;
-	}
-
-	public String getAutoBlueprintId() {
-		return autoBlueprintId;
-	}
-
-	public void setAutoBlueprintId( String autoBlueprintId ) {
-		this.autoBlueprintId = autoBlueprintId;
-	}
 
 	@Override
 	public String toString() {

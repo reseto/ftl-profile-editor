@@ -6,8 +6,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "textList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TextList {
@@ -16,22 +22,6 @@ public class TextList {
 
 	@XmlElement(name = "text", required = false)
 	private List<NamedText> textList;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId( String id ) {
-		this.id = id;
-	}
-
-	public List<NamedText> getTextList() {
-		return textList;
-	}
-
-	public void setTextList( List<NamedText> textList ) {
-		this.textList = textList;
-	}
 
 	@Override
 	public String toString() {
