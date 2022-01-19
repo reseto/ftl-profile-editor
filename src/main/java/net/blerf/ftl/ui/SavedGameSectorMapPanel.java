@@ -51,6 +51,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.FTLConstants;
@@ -82,13 +83,9 @@ import net.blerf.ftl.xml.Encounters;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
 import net.blerf.ftl.xml.ShipEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class SavedGameSectorMapPanel extends JPanel {
-
-	private static final Logger log = LoggerFactory.getLogger( SavedGameSectorMapPanel.class );
 
 	// Dimensions for placing beacons' background sprite images.
 	private static final int SCREEN_WIDTH = 1280;
@@ -1061,7 +1058,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 		final String LAYOUT_GRID = "Grid";
 		final String LAYOUT_SEEDED = "Seeded";
 
-		String title = String.format( "Sector Layout" );
+		String title = "Sector Layout";
 
 		final FieldEditorPanel editorPanel = new FieldEditorPanel( true );
 		editorPanel.addRow( ALGORITHM, FieldEditorPanel.ContentType.COMBO );
@@ -1257,7 +1254,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 		final String HIDDEN_SECTOR = "In Hidden Sector";
 		final String HAZARDS_VISIBLE = "Hazards Visible";
 
-		String title = String.format( "General" );
+		String title = "General";
 
 		final FieldEditorPanel editorPanel = new FieldEditorPanel( true );
 		editorPanel.addRow( REBEL_FLEET_OFFSET, FieldEditorPanel.ContentType.INTEGER );
@@ -1317,7 +1314,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 		final String FLAGSHIP_GAMMA = "Gamma?";
 		final String FLAGSHIP_DELTA = "Delta?";
 
-		String title = String.format( "Flagship" );
+		String title = "Flagship";
 
 		final FieldEditorPanel editorPanel = new FieldEditorPanel( true );
 		editorPanel.addRow( FLAGSHIP_VISIBLE, FieldEditorPanel.ContentType.BOOLEAN );

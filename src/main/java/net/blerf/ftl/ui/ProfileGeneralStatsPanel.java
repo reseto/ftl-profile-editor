@@ -19,13 +19,9 @@ import net.blerf.ftl.model.Profile;
 import net.blerf.ftl.model.Score;
 import net.blerf.ftl.model.Stats;
 import net.blerf.ftl.model.Stats.StatType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class ProfileGeneralStatsPanel extends JPanel {
-
-	private static final Logger log = LoggerFactory.getLogger( ProfileGeneralStatsPanel.class );
 
 	private static final int MAX_SCORE_PANELS = 5;
 

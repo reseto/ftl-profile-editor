@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.model.sectortree.SectorDot;
 import net.blerf.ftl.model.sectortree.SectorTree;
 import net.blerf.ftl.model.sectortree.SectorTreeEvent;
@@ -32,13 +33,9 @@ import net.blerf.ftl.parser.sectortree.LinearSectorTreeGenerator;
 import net.blerf.ftl.parser.sectortree.RandomSectorTreeGenerator;
 import net.blerf.ftl.ui.sectortree.SectorTreeEditPanel;
 import net.blerf.ftl.ui.sectortree.SectorTreePreviewPanel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class SavedGameSectorTreePanel extends JPanel implements ActionListener {
-
-	private static final Logger log = LoggerFactory.getLogger( SavedGameSectorTreePanel.class );
 
 	private static final String ALGORITHM = "RNG Algorithm";
 	private static final String TREE_TYPE = "Preview";

@@ -8,8 +8,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @XmlRootElement( name = "event" )
 @XmlAccessorType( XmlAccessType.FIELD )
 public class FTLEvent implements Cloneable {
@@ -146,7 +147,7 @@ public class FTLEvent implements Cloneable {
 		try {
 			o = (FTLEvent)super.clone();
 		} catch(CloneNotSupportedException cnse) {
-			cnse.printStackTrace(System.err);
+			log.error("Failed to clone. ", cnse);
 		}
 
 		o.id = id;
@@ -174,7 +175,7 @@ public class FTLEvent implements Cloneable {
 		if (ship != null) {
 			o.ship = new ShipEvent();
 			o.ship.setId(ship.getId());
-			o.ship.setHostile(ship.getHostile());
+			o.ship.setHostile(ship.isHostile());
 			o.ship.setLoad(ship.getLoad());
 			o.ship.setAutoBlueprintId(ship.getAutoBlueprintId());
 		}

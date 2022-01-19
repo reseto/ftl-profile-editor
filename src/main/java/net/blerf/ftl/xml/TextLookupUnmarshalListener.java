@@ -3,8 +3,7 @@ package net.blerf.ftl.xml;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.Unmarshaller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -15,9 +14,8 @@ import org.slf4j.LoggerFactory;
  *
  * @see net.blerf.ftl.xml.DeferredText
  */
+@Slf4j
 public class TextLookupUnmarshalListener extends Unmarshaller.Listener {
-
-	private static final Logger log = LoggerFactory.getLogger( TextLookupUnmarshalListener.class );
 
 	private Map<String, String> lookupMap = new HashMap<String, String>();
 
@@ -46,7 +44,7 @@ public class TextLookupUnmarshalListener extends Unmarshaller.Listener {
 					deferredText.setResolvedText( resolvedText );
 				}
 				else {
-					log.warn( "Text lookup failed for id: "+ textId );
+					log.warn( "Text lookup failed for id: {}", textId );
 				}
 			}
 		}

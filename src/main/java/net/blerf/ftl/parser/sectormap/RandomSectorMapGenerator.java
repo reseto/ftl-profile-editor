@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.random.RandRNG;
@@ -35,10 +36,8 @@ import org.slf4j.LoggerFactory;
  *
  * @see net.blerf.ftl.parser.SavedGameParser.SavedGameState#getFileFormat()
  */
+@Slf4j
 public class RandomSectorMapGenerator {
-
-	private static final Logger log = LoggerFactory.getLogger( RandomSectorMapGenerator.class );
-	// private static final Logger log = NOPLogger.NOP_LOGGER;
 
 	/**
 	 * The threshold for re-rolling a map with disconnected beacons.
@@ -218,8 +217,7 @@ public class RandomSectorMapGenerator {
 
 				boolean isolation = calculateIsolation( genMap );
 				if ( isolation  ) {
-					if (log.isDebugEnabled())
-						log.debug( String.format( "Re-rolling sector map because attempt #%d has isolated beacons ", generations ) );
+						log.debug( "Re-rolling sector map because attempt #{} has isolated beacons ", generations );
 					genMap.setGeneratedBeaconList( null );
 					// return null;
 				}
@@ -339,7 +337,6 @@ public class RandomSectorMapGenerator {
 			for (SectorDescription.EventDistribution ed : eventDistribution) {
 				if (ed.name.startsWith("NEBULA")) {
 					int m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
-					if (log.isDebugEnabled())
 						log.debug( String.format( "min %d max %d value %d", ed.min, ed.max, m ) );
 
 					for (int i=0; i<m; i++)
@@ -347,8 +344,7 @@ public class RandomSectorMapGenerator {
 				}
 			}
 
-			if (log.isDebugEnabled())
-				log.debug( String.format( "Generate %d nebula events", nebulaEvents.size() ) );
+				log.debug( "Generate {} nebula events", nebulaEvents.size() );
 
 			if (!nebulaEvents.isEmpty()) {
 
@@ -405,8 +401,7 @@ public class RandomSectorMapGenerator {
 				int bId = rng.rand() % emptyBeacons.size();
 				EmptyBeacon beacon = emptyBeacons.get(bId);
 
-				if (log.isDebugEnabled())
-					log.debug( String.format( "Starting nebula beacon: %d ", bId ) );
+					log.debug( "Starting nebula beacon: {} ", bId ) ;
 
 				/* The nebula model is centered on the chosen beacon */
 				int modelW = nebulaModelListW.get(n);
@@ -423,7 +418,6 @@ public class RandomSectorMapGenerator {
 
 				do {
 					boolean oneNewBeacon = false;
-					if (log.isDebugEnabled())
 						log.debug( String.format( "Nebula rect is: (%d, %d, %d, %d) ", modelX, modelY, modelW, modelH ) );
 
 					/* Iterate over all empty beacons */
@@ -457,14 +451,12 @@ public class RandomSectorMapGenerator {
 								/* Load the nebula event */
 								genBeaconList.get(curBeacon.id).event = RandomEvent.loadEventId(nebulaEvent, rng);
 
-								if (log.isDebugEnabled())
 									log.debug( String.format( "Nebula event at beacon %d (%d,%d)", curBeacon.id, curBeacon.x, curBeacon.y ) );
 							}
 
 							/* If finish beacon, load the FINISH_BEACON_NEBULA event instead */
 							else if (curBeacon.event.getId().equals("FINISH_BEACON")) {
 								genBeaconList.get(curBeacon.id).event = RandomEvent.loadEventId("FINISH_BEACON_NEBULA", rng);
-								if (log.isDebugEnabled())
 									log.debug( String.format( "Nebula finish event at beacon %d (%d,%d)", curBeacon.id, curBeacon.x, curBeacon.y ) );
 							}
 
@@ -542,25 +534,21 @@ public class RandomSectorMapGenerator {
 				/* Pick a random number of events from the distribution */
 				int m = 0;
 				if (ed.max != 0) {
-					if (log.isDebugEnabled())
-						log.debug( String.format( "Generate the number of events of distribution %s", ed.name ) );
+						log.debug( "Generate the number of events of distribution {}", ed.name );
 					m = (rng.rand() % (ed.max + 1 - ed.min)) + ed.min;
 				}
 
 				int i = 0;
 				while ((i<m) && (!beaconIds.isEmpty())) {
 					/* Choose a random empty beacon */
-					if (log.isDebugEnabled())
-						log.debug( String.format( "Choose the beacon to apply event" ) );
+						log.debug( "Choose the beacon to apply event" );
 					int b = rng.rand() % beaconIds.size();
 					GeneratedBeacon gb = genBeaconList.get(beaconIds.get(b));
 
 					/* Check if the beacon is empty */
 					if (gb.event == null) {
-						if (log.isDebugEnabled())
 							log.debug( String.format( "Generate event %s for beacon %d", ed.name, beaconIds.get(b) ) );
 						Point p = gb.getLocation();
-						if (log.isDebugEnabled())
 							log.debug( String.format( "Coords %d - %d", p.x, p.y ) );
 						gb.event = RandomEvent.loadEventId(ed.name, rng);
 						i++;
@@ -581,7 +569,6 @@ public class RandomSectorMapGenerator {
 
 				/* Check if the beacon is empty */
 				if (gb.event == null) {
-					if (log.isDebugEnabled())
 						log.debug( String.format( "Generate event NEUTRAL for beacon %d", beaconIds.get(b) ) );
 					gb.event = RandomEvent.loadEventId("NEUTRAL", rng);
 				}

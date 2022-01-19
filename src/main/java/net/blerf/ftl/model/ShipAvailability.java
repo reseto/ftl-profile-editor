@@ -44,6 +44,6 @@ public class ShipAvailability {
 	@Override
 	public String toString() {
 
-        return String.format("ShipId: %-25s  Type-A: %-5b  Type-C: %-5b\n", shipId, unlockedA, unlockedC);
+        return String.format("ShipId: %-25s  Type-A: %-5b  Type-C: %-5b%n", shipId, unlockedA, unlockedC);
 	}
 }

@@ -10,18 +10,15 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.WeaponBlueprint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class SavedGameGeneralPanel extends JPanel {
-
-	private static final Logger log = LoggerFactory.getLogger( SavedGameGeneralPanel.class );
 
 	private static final String TOTAL_SHIPS_DEFEATED = "Total Ships Defeated";
 	private static final String TOTAL_BEACONS = "Total Beacons";

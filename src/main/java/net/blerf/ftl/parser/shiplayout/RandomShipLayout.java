@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.random.RandRNG;
-import org.slf4j.Logger;
-import org.slf4j.helpers.NOPLogger;
+import net.blerf.ftl.parser.shiplayout.RandomShipLayout.RoomSquare;
 
 /**
  * A generator of ship layout.
@@ -17,10 +17,8 @@ import org.slf4j.helpers.NOPLogger;
  * @see net.blerf.ftl.model.shiplayout.ShipLayout
  * @see net.blerf.ftl.parser.random.NativeRandom
  */
+@Slf4j
 public class RandomShipLayout {
-
-	// private static final Logger log = LoggerFactory.getLogger( RandomShipLayout.class );
-	private static final Logger log = NOPLogger.NOP_LOGGER;
 
 	protected RandRNG rng;
 
@@ -84,8 +82,7 @@ public class RandomShipLayout {
 			square.x = square.x * 35 + 17;
 			square.y = square.y * 35 + 87;
 
-			if (log.isDebugEnabled())
-				log.debug( String.format( "Room %d has coords %d - %d", square.roomId, square.x, square.y ) );
+			log.debug("Room {} has coords {} - {}", square.roomId, square.x, square.y);
 		}
 
 		Arrays.fill(squarePairs, false);
@@ -121,8 +118,7 @@ public class RandomShipLayout {
 					if ((square1.x != square2.x) && (square1.y != square2.y)) {
 						RoomSquare extraSquare = new RoomSquare();
 						int rr = rng.rand();
-						if (log.isDebugEnabled())
-							log.debug( String.format( "Rooms %d - %d value is %d", square1.roomId, square2.roomId, rr ) );
+							log.debug( "Rooms {} - {} value is {}", square1.roomId, square2.roomId, rr );
 
 						if ((rr & 0x1) == 0) {
 							extraSquare.x = square1.x;
@@ -149,8 +145,7 @@ public class RandomShipLayout {
 						}
 
 						if (isPair) {
-							if (log.isDebugEnabled())
-								log.debug( String.format( "Found middle room" ) );
+								log.debug( "Found middle room" );
 							continue;
 						}
 

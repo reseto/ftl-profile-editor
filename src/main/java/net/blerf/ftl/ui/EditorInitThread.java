@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import javax.swing.SwingUtilities;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.core.EditorConfig;
 import net.blerf.ftl.net.TaggedString;
 import net.blerf.ftl.net.TaggedStringResponseHandler;
@@ -17,13 +18,9 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class EditorInitThread extends Thread {
-
-	private static final Logger log = LoggerFactory.getLogger( EditorInitThread.class );
 
 	private final String latestVersionUrl = "https://raw.github.com/reseto/ftl-profile-editor/master/latest-version.txt";
 	private final String versionHistoryUrl = "https://raw.github.com/reseto/ftl-profile-editor/master/release-notes.txt";

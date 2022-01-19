@@ -5,11 +5,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
  * One of the "text" tags in lookup files.
  */
+@Slf4j
 @XmlRootElement( name = "text" )
 @XmlAccessorType( XmlAccessType.FIELD )
 public class NamedText implements Cloneable {
@@ -27,8 +29,8 @@ public class NamedText implements Cloneable {
 		NamedText o = null;
 		try {
 			o = (NamedText)super.clone();
-		} catch(CloneNotSupportedException cnse) {
-			cnse.printStackTrace(System.err);
+		} catch(CloneNotSupportedException e) {
+			log.error("Failed to clone.", e);
 		}
 
 		o.setId(getId());

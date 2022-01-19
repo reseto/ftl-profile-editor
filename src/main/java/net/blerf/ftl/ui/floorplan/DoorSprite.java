@@ -7,20 +7,17 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import javax.swing.JComponent;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.model.shiplayout.DoorCoordinate;
 import net.blerf.ftl.parser.SavedGameParser.DoorState;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class DoorSprite extends JComponent implements ReferenceSprite<DoorState> {
 
 	private static final int CLOSED_CELL = 0;
 	private static final int OPEN_CELL = 4;
-
-	private static final Logger log = LoggerFactory.getLogger( FireSprite.class );
 
 	private final Color dummyColor = new Color( 150, 150, 200 );
 	int chop = 10;  // Chop 10 pixels off the sides for skinny doors.
@@ -80,7 +77,7 @@ public class DoorSprite extends JComponent implements ReferenceSprite<DoorState>
 		else {
 			currentFrame = null;  // Atlas didn't have that level.
 
-			log.error( "Expected level not present in DoorAtlas: "+ level );
+			log.error( "Expected level not present in DoorAtlas: {}", level );
 		}
 
 		this.repaint();

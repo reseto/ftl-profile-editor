@@ -91,11 +91,12 @@ public class TextUtilities {
 			}
 			if ( encoding == null ) {
 				// All guesses failed!?
-				String msg = String.format( "Could not guess encoding for %s.", (description!=null ? "\""+description+"\"" : "a file") );
+				StringBuilder sb = new StringBuilder("Could not guess encoding for the input.");
+				sb.append("Description is: ").append(description).append(System.lineSeparator());
 				for ( Map.Entry<String,Exception> entry : errorMap.entrySet() ) {
-					msg += String.format( "\nFailed to decode as %s: %s", entry.getKey(), entry.getValue() );
+					sb.append(String.format( "Failed to decode as %s: %s%n", entry.getKey(), entry.getValue() ));
 				}
-				throw new IOException( msg );
+				throw new IOException( sb.toString() );
 			}
 			allBytes = null;    // GC hint.
 		}

@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,8 +22,6 @@ import org.slf4j.LoggerFactory;
  * @see net.blerf.ftl.parser.sectormap.GeneratedSectorMap
  */
 public class SectorMapLayout implements LayoutManager2 {
-
-	private static final Logger log = LoggerFactory.getLogger( SectorMapLayout.class );
 
 	// These numbers were copied from RandomSectorMapGenerator's size for FTL 1.5.4.
 	private static final int DEFAULT_BEACON_ZONE_W = 700;

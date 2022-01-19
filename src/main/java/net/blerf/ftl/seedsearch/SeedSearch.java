@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.random.NativeRandom;
 import net.blerf.ftl.parser.random.RandRNG;
@@ -16,15 +17,12 @@ import net.blerf.ftl.parser.shiplayout.RandomShipLayout;
 import net.blerf.ftl.xml.Choice;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.ShipEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Finding good seeds
  */
+@Slf4j
 public class SeedSearch {
-
-	private static final Logger log = LoggerFactory.getLogger( SeedSearch.class );
 
 	protected RandRNG rng;
 	boolean dlcEnabled = true;
@@ -53,7 +51,7 @@ public class SeedSearch {
 
 		/* Random ship generation */
 		int seed = rng.rand();
-		// log.info( String.format( "Ship generation, seed: %d", seed ) );
+		 log.debug( "Ship generation, seed: {}", seed );
 
 		ship.generateShipLayout(rng, seed);
 
@@ -64,7 +62,7 @@ public class SeedSearch {
 
 		RandomSectorTreeGenerator expandedTreeGen = new RandomSectorTreeGenerator( rng );
 		seed = rng.rand();
-		// log.info( String.format( "Sector tree generation, seed: %d", seed ) );
+		 log.info( "Sector tree generation, seed: {}", seed );
 		expandedTreeGen.generateSectorTree(seed, dlcEnabled);
 
 		/* Sector map generation */
@@ -77,7 +75,7 @@ public class SeedSearch {
 
 		seed = rng.rand();
 		rng.srand(seed);
-		log.info( String.format( "Sector map generation, seed: %d", seed ) );
+		log.debug( "Sector map generation, seed: {}", seed );
 
 		GeneratedSectorMap map = sectorMapGen.generateSectorMap(rng, 9);
 
@@ -107,14 +105,14 @@ public class SeedSearch {
 		 */
 
 		for (int seed = 250410660; seed < 250410661; seed++) {
-			if (0 == (seed & 0xfff))
-				log.info( String.format( "Seed %d", seed ) );
+//			if (0 == (seed & 0xfff))
+//				log.info( String.format( "Seed %d", seed ) );
 
 			rng.srand( seed );
 
 			boolean res = generateAll( rng );
 			if (res) {
-				log.info( String.format( "Seed %d", seed ) );
+				log.info( "Seed {}", seed ) ;
 				// break;
 			}
 		}
@@ -151,7 +149,7 @@ public class SeedSearch {
 		int seed3 = rng.rand();
 
 		rng.srand( seed3 );
-		log.info( String.format( "Sector 3 map generation, seed: %d", seed3 ) );
+		log.info( "Sector 3 map generation, seed: {}", seed3 );
 
 		sectorMapGen.sectorId = "NEBULA_SECTOR";
 		sectorMapGen.sectorNumber = 2;
@@ -159,21 +157,21 @@ public class SeedSearch {
 
 
 		rng.srand( 1798517121 );
-		log.info( String.format( "Sector 4 map generation, seed: 1798517121" ) );
+		log.info( "Sector 4 map generation, seed: 1798517121" );
 
 		sectorMapGen.sectorId = "ENGI_HOME";
 		sectorMapGen.sectorNumber = 3;
 		sectorMapGen.generateSectorMap(rng, 9);
 
 		rng.srand( 1090748583 );
-		log.info( String.format( "Sector 5 map generation, seed: 1090748583" ) );
+		log.info( "Sector 5 map generation, seed: 1090748583" );
 
 		sectorMapGen.sectorId = "ENGI_SECTOR";
 		sectorMapGen.sectorNumber = 4;
 		sectorMapGen.generateSectorMap(rng, 9);
 
 		rng.srand( 1472587140 );
-		log.info( String.format( "Sector 6 map generation, seed: 1472587140" ) );
+		log.info( "Sector 6 map generation, seed: 1472587140" );
 
 		sectorMapGen.sectorId = "MANTIS_SECTOR";
 		sectorMapGen.sectorNumber = 5;
@@ -296,7 +294,7 @@ public class SeedSearch {
 					map.endBeacon = ii;
 					sectorMapGen.minDistanceMap(map, 20);
 					if (bfsStart(map))
-						log.info( String.format( "Found!" ) );
+						log.info( "Found!" );
 
 				}
 			}
@@ -408,8 +406,8 @@ public class SeedSearch {
 		for (int b : beaconPath) {
 			GeneratedBeacon bec = beaconList.get(b);
 			FTLEvent event = bec.getEvent();
-			log.info( String.format( "Got beacon %d", b ) );
-			log.info( event.toDescription(0) );
+			log.debug( "Got beacon {}", b );
+			log.debug( event.toDescription(0) );
 		}
 
 		return true;
@@ -421,7 +419,7 @@ public class SeedSearch {
 
 		ShipEvent se = event.getShip();
 		if (se != null)
-			hostile = se.getHostile();
+			hostile = se.isHostile();
 
 		/* Browse each choice, and load the corresponding event */
 		List<Choice> choiceList = event.getChoiceList();

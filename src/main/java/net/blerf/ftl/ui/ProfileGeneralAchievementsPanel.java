@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.NewbieTipLevel;
 import net.blerf.ftl.model.AchievementRecord;
@@ -17,10 +18,8 @@ import net.blerf.ftl.xml.Achievement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class ProfileGeneralAchievementsPanel extends JPanel {
-
-	private static final Logger log = LoggerFactory.getLogger( ProfileGeneralAchievementsPanel.class );
 
 	private static final int ICON_LOCKED = 0;
 	private static final int ICON_EASY = 1;
@@ -73,7 +72,7 @@ public class ProfileGeneralAchievementsPanel extends JPanel {
 		// TODO: Magic number 7.
 		for ( int i=0; i < 7; i++ ) {
 			Achievement ach = achievements.get( i+offset );
-			log.trace( "Setting icons for cycle button. Base image: " + "img/" + ach.getImagePath() );
+			log.trace( "Setting icons for cycle button. Base image: img/{}", ach.getImagePath() );
 
 			IconCycleButton box = ImageUtilities.createCycleButton( "img/" + ach.getImagePath(), true );
 			box.setToolTipText( ach.getName().getTextValue() );
@@ -107,7 +106,7 @@ public class ProfileGeneralAchievementsPanel extends JPanel {
 						box.setSelectedState( ICON_HARD );
 					}
 					else {
-						log.warn( String.format( "Unexpected difficulty for achievement (\"%s\"): %s. Changed to EASY.", achId, rec.getDifficulty().toString() ) );
+						log.warn( "Unexpected difficulty {} for achievement id {} Changed to EASY.", rec.getDifficulty(), achId  );
 						box.setSelectedState( ICON_EASY );
 					}
 				}
@@ -142,7 +141,7 @@ public class ProfileGeneralAchievementsPanel extends JPanel {
 					difficulty = Difficulty.HARD;
 				}
 				else {
-					log.warn( String.format( "Unexpected difficulty for achievement (\"%s\"): %d. Changed to EASY.", achId, box.getSelectedState() ) );
+					log.warn( "Unexpected difficulty {} for achievement id {} Changed to EASY.", box.getSelectedState(), achId );
 					difficulty = Difficulty.EASY;
 				}
 

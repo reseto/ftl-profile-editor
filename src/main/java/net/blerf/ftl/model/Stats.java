@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 public class Stats {
-
-	private static final Logger log = LoggerFactory.getLogger( Stats.class );
 
 	public static enum StatType {
 		// IntRecords
@@ -90,7 +87,7 @@ public class Stats {
 	}
 	public CrewRecord getCrewRecord( StatType  type ) {
 		if ( !crewMap.containsKey( type ) )
-			log.error( "No crew record found for type: "+ type );
+			log.error( "No crew record found for type: {}", type );
 		return crewMap.get( type );
 	}
 
@@ -99,7 +96,7 @@ public class Stats {
 	}
 	public int getIntRecord( StatType type ) {
 		if ( !intMap.containsKey( type ) )
-			log.error( "No int record found for type: "+ type );
+			log.error( "No int record found for type: {}", type );
 		return intMap.get(type);
 	}
 

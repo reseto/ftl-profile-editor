@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Properties;
 import javax.imageio.ImageIO;
@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.core.EditorConfig;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.DefaultDataManager;
@@ -28,10 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-
+@Slf4j
 public class FTLProfileEditor {
-
-	private static final Logger log = LoggerFactory.getLogger( FTLProfileEditor.class );
 
 	public static final String APP_NAME = "FTL Profile Editor";
 	public static final int APP_VERSION = 29;
@@ -50,7 +49,7 @@ public class FTLProfileEditor {
 
 		PatternLayoutEncoder encoder = new PatternLayoutEncoder();
 		encoder.setContext( lc );
-		encoder.setCharset( Charset.forName( "UTF-8" ) );
+		encoder.setCharset( StandardCharsets.UTF_8 );
 		encoder.setPattern( "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" );
 		encoder.start();
 
@@ -73,7 +72,7 @@ public class FTLProfileEditor {
 		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 			@Override
 			public void uncaughtException( Thread t, Throwable e ) {
-				log.error( "Uncaught exception in thread: "+ t.toString(), e );
+				log.error( "Uncaught exception in thread: {}", t, e );
 			}
 		});
 
@@ -130,10 +129,10 @@ public class FTLProfileEditor {
 
 			if ( !useDefaultUI ) {
 				LookAndFeel defaultLaf = UIManager.getLookAndFeel();
-				log.debug( "Default look and feel is: "+ defaultLaf.getName() );
+				log.debug( "Default look and feel is: {}", defaultLaf.getName() );
 
 				try {
-					log.debug( "Setting system look and feel: "+ UIManager.getSystemLookAndFeelClassName() );
+					log.debug( "Setting system look and feel: {}", UIManager.getSystemLookAndFeelClassName() );
 
 					// SystemLaf is risky. It may throw an exception, or lead to graphical bugs.
 					// Problems are geneally caused by custom Windows themes.
@@ -157,7 +156,7 @@ public class FTLProfileEditor {
 							appConfig.writeConfig();
 						}
 						catch ( IOException g ) {
-							log.error( String.format( "Error writing config to \"%s\"", configFile.getPath(), g ) );
+							log.error( "Error writing config to {}", configFile.getPath(), g );
 						}
 
 						throw new ExitException();
@@ -173,7 +172,7 @@ public class FTLProfileEditor {
 			String datsPath = appConfig.getProperty( EditorConfig.FTL_DATS_PATH, "" );
 
 			if ( datsPath.length() > 0 ) {
-				log.info( "Using FTL dats path from config: "+ datsPath );
+				log.info( "Using FTL dats path from config: {}", datsPath );
 				datsDir = new File( datsPath );
 				if ( FTLUtilities.isDatsDirValid( datsDir ) == false ) {
 					log.error( "The config's "+ EditorConfig.FTL_DATS_PATH +" does not exist, or it is invalid" );
@@ -200,7 +199,7 @@ public class FTLProfileEditor {
 				if ( datsDir != null ) {
 					appConfig.setProperty( EditorConfig.FTL_DATS_PATH, datsDir.getAbsolutePath() );
 					writeConfig = true;
-					log.info( "FTL dats located at: "+ datsDir.getAbsolutePath() );
+					log.info( "FTL dats located at: {}", datsDir.getAbsolutePath() );
 				}
 			}
 

@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser.CrewType;
 import net.blerf.ftl.parser.SavedGameParser.DroneType;
@@ -26,18 +27,14 @@ import net.blerf.ftl.ui.ImageUtilities;
 import net.blerf.ftl.ui.ImageUtilities.Tint;
 import net.blerf.ftl.xml.Anim;
 import net.blerf.ftl.xml.AnimSheet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class DefaultSpriteImageProvider implements SpriteImageProvider {
 
 	private static final String BREACH_ANIM = "breach";
 	private static final String FIRE_ANIM = "fire_large";
 
 	private static final int squareSize = 35;
-
-	private static final Logger log = LoggerFactory.getLogger( DefaultSpriteImageProvider.class );
 
 	private final Color dummyColor = new Color( 150, 150, 200 );
 
@@ -80,7 +77,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
 			basePath = glowPath;
 		}
 		else {
-			log.error( "Could not find base image for ship: "+ shipGfxBaseName );
+			log.error( "Could not find base image for ship: {}", shipGfxBaseName );
 		}
 
 		if ( basePath != null ) {
@@ -162,7 +159,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
 			decorImage = readResourceImage( decorPath );
 		}
 		catch ( FileNotFoundException e ) {
-			log.error( "Could not find decor image innerPath: "+ decorPath );
+			log.error( "Could not find decor image innerPath: {}", decorPath );
 		}
 		catch ( IOException e ) {
 			log.error( "Failed to read decor image: "+ decorPath, e );
@@ -241,7 +238,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
 			result = ImageUtilities.getCroppedImage( originalPath, offsetX, offsetY, w, h, cachedImagesMap );
 		}
 		else {
-			log.error( String.format( "No body image found for drone: %s, %s", droneType.getId(), (playerControlled ? "playerControlled" : "NPC") ) );
+			log.error( "No body image found for drone: {}, {}", droneType.getId(), (playerControlled ? "playerControlled" : "NPC") );
 
 			result = gc.createCompatibleImage( w, h, Transparency.OPAQUE );
 			Graphics2D g2d = result.createGraphics();
@@ -385,7 +382,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
 			}
 		}
 		catch ( FileNotFoundException e ) {
-			log.error( "Could not find door sheet innerPath: "+ sheetPath );
+			log.error( "Could not find door sheet innerPath: {}", sheetPath );
 		}
 		catch ( IOException e ) {
 			log.error( "Failed to read door sheet image: "+ sheetPath, e );
@@ -432,7 +429,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
 			overlayImage = readResourceImage( overlayPath );
 		}
 		catch ( FileNotFoundException e ) {
-			log.error( "Could not find system room innerPath: "+ overlayPath );
+			log.error( "Could not find system room innerPath: {}", overlayPath );
 		}
 		catch ( IOException e ) {
 			log.error( "Failed to read system room image: "+ overlayPath, e );
@@ -565,7 +562,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
 					sheetImage = readResourceImage( sheetPath );
 				}
 				catch ( FileNotFoundException e ) {
-					log.error( "Could not find AnimSheet innerPath: "+ sheetPath );
+					log.error( "Could not find AnimSheet innerPath: {}", sheetPath );
 				}
 				catch ( IOException e ) {
 					log.error( "Failed to read AnimSheet image: "+ sheetPath, e );

@@ -15,8 +15,6 @@ import org.slf4j.helpers.NOPLogger;
  * random results for a given seed.
  */
 public class NativeRandom implements RandRNG {
-	// private static final Logger log = LoggerFactory.getLogger( NativeRandom.class );
-	private static final Logger log = NOPLogger.NOP_LOGGER;
 
 	protected int seed = 1;
 	protected String name = null;

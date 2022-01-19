@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.NewbieTipLevel;
 import net.blerf.ftl.model.AchievementRecord;
@@ -19,14 +20,9 @@ import net.blerf.ftl.model.ShipAvailability;
 import net.blerf.ftl.model.Stats;
 import net.blerf.ftl.model.Stats.StatType;
 import net.blerf.ftl.xml.Achievement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class ProfileParser extends Parser {
-
-	private static final Logger log = LoggerFactory.getLogger( ProfileParser.class );
-
 
 	public ProfileParser() {
 	}
@@ -159,7 +155,7 @@ public class ProfileParser extends Parser {
 
 			Achievement ach = DataManager.get().getAchievement( achId );
 			if ( ach == null ) {
-				log.warn( "Skipping unsupported achievement id: "+ achId );
+				log.warn( "Skipping unsupported achievement id: {}", achId );
 				continue;
 			}
 
@@ -228,7 +224,7 @@ public class ProfileParser extends Parser {
 
 			Achievement ach = DataManager.get().getAchievement( rec.getAchievementId() );
 			if ( ach == null ) {
-				log.warn( "Omitting unsupported achievement id: "+ rec.getAchievementId() );
+				log.warn( "Omitting unsupported achievement id: {}", rec.getAchievementId() );
 				continue;
 			}
 
@@ -262,7 +258,7 @@ public class ProfileParser extends Parser {
 				diffFlag = 2;
 			}
 			else {
-				log.warn( String.format( "Substituting EASY for unsupported difficulty for achievement (\"%s\"): %s", rec.getAchievementId(), rec.getDifficulty().toString() ) );
+				log.warn( "Unexpected difficulty {} for achievement id {} Changed to EASY.", rec.getDifficulty(), rec.getAchievementId() );
 				diffFlag = 0;
 			}
 			writeInt( out, diffFlag );
@@ -291,7 +287,7 @@ public class ProfileParser extends Parser {
 							variantDiffFlag = 2;
 						}
 						else {
-							log.warn( String.format( "Substituting EASY for unsupported per-layout difficulty for achievement (\"%s\"): %s", rec.getAchievementId(), variantDiff.toString() ) );
+							log.warn( "Unexpected difficulty {} for achievement id {} Changed to EASY.", variantDiff, rec.getAchievementId() );
 							variantDiffFlag = 0;
 						}
 						writeInt( out, variantDiffFlag );
@@ -522,7 +518,7 @@ public class ProfileParser extends Parser {
 				diffFlag = 2;
 			}
 			else {
-				log.warn( String.format( "Substituting EASY for unsupported difficulty for score (\"%s\"): %s", score.getShipName(), score.getDifficulty().toString() ) );
+				log.warn( "Unexpected difficulty {} for score {} Changed to EASY.", score.getDifficulty(), score.getShipName() );
 				diffFlag = 0;
 			}
 			writeInt( out, diffFlag );

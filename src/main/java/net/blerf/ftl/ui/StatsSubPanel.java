@@ -21,17 +21,14 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser.CrewType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class StatsSubPanel extends JPanel implements ActionListener {
-
-	private static final Logger log = LoggerFactory.getLogger( StatsSubPanel.class );
 
 	private int COLUMN_COUNT = 0;
 	private final int DESC_COL = COLUMN_COUNT++;

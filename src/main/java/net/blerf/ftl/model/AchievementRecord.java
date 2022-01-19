@@ -66,9 +66,9 @@ public class AchievementRecord {
 		String typeBDiffString = (typeBDiff != null ? typeBDiff.toString() : "N/A");
 		String typeCDiffString = (typeCDiff != null ? typeCDiff.toString() : "N/A");
 
-		result.append( String.format( "AchId: %-30s  Difficulty: %-6s\n", achievementId, difficulty.toString() ) );
+		result.append( String.format( "AchId: %-30s  Difficulty: %-6s%n", achievementId, difficulty.toString() ) );
 
-		result.append( String.format( "With Type-A: %-6s  With Type-B: %-6s  With Type-C: %-6s\n", typeADiffString, typeBDiffString, typeCDiffString ) );
+		result.append( String.format( "With Type-A: %-6s  With Type-B: %-6s  With Type-C: %-6s%n", typeADiffString, typeBDiffString, typeCDiffString ) );
 
 		return result.toString();
 	}

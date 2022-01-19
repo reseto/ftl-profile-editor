@@ -21,13 +21,9 @@ import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.model.Score;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.xml.ShipBlueprint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class ScorePanel extends JPanel {
-
-	private static final Logger log = LoggerFactory.getLogger( ScorePanel.class );
 
 	private static final String SHIP_NAME = "Ship Name";
 	private static final String SHIP_ID = "Ship Id";

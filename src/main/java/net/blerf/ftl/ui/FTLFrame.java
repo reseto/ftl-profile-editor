@@ -52,6 +52,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.core.EditorConfig;
 import net.blerf.ftl.model.Profile;
 import net.blerf.ftl.parser.DataManager;
@@ -60,13 +61,9 @@ import net.blerf.ftl.parser.ProfileParser;
 import net.blerf.ftl.parser.SavedGameParser;
 import net.vhati.ftldat.PackUtilities;
 import net.vhati.modmanager.core.FTLUtilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class FTLFrame extends JFrame implements ActionListener, Statusbar, Thread.UncaughtExceptionHandler {
-
-	private static final Logger log = LoggerFactory.getLogger( FTLFrame.class );
 
 	private static final String PROFILE_SHIP_UNLOCK = "Ship Unlocks & Achievements";
 	private static final String PROFILE_GENERAL_ACH = "General Achievements";
@@ -535,7 +532,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 				Exception exception = null;
 
 				try {
-					log.info( "Opening profile: "+ chosenFile.getAbsolutePath() );
+					log.info( "Opening profile: {}", chosenFile.getAbsolutePath() );
 
 					in = new FileInputStream( chosenFile );
 
@@ -680,19 +677,19 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 
 				FileOutputStream out = null;
 				try {
-					log.info( "Writing profile: "+ chosenFile.getAbsolutePath() );
+					log.info( "Writing profile: {}", chosenFile.getAbsolutePath() );
 
 					if ( chosenFile.exists() ) {
 
 						if ( bakFile.exists() && !bakFile.delete() ) {
-							log.warn( "Could not delete the previous backup: "+ bakName );
+							log.warn( "Could not delete the previous backup: {}", bakName );
 						}
 
 						backupCreated = chosenFile.renameTo( bakFile );
 						if ( backupCreated ) {
-							log.info( "Existing file was backed up: "+ bakName );
+							log.info( "Existing file was backed up: {}", bakName );
 						} else {
-							log.warn( "Could not rename the existing file: "+ chosenFile.getName() );
+							log.warn( "Could not rename the existing file: {}", chosenFile.getName() );
 						}
 					}
 
@@ -705,8 +702,8 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 					saveSucceeded = true;
 				}
 				catch ( IOException f ) {
-					log.error( String.format( "Error writing profile (\"%s\")", chosenFile.getName() ), f );
-					showErrorDialog( String.format( "Error writing profile (\"%s\"):\n%s: %s", chosenFile.getName(), f.getClass().getSimpleName(), f.getMessage() ) );
+					log.error("Error writing profile to file {}", chosenFile.getName() , f );
+					showErrorDialog( String.format( "Error writing profile (\"%s\"):%n%s: %s", chosenFile.getName(), f.getClass().getSimpleName(), f.getMessage() ) );
 					exception = f;
 				}
 				finally {
@@ -717,16 +714,16 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 				if ( !saveSucceeded ) {
 					if ( backupCreated ) {
 						if ( chosenFile.exists() && !chosenFile.delete() ) {
-							log.warn( "Could not delete the corrupt file: "+ chosenFile.getName() );
+							log.warn( "Could not delete the corrupt file: {}", chosenFile.getAbsolutePath() );
 						}
 
 						boolean backupRestored = bakFile.renameTo( chosenFile );
 						if ( backupRestored ) {
-							log.info( "The backup was restored" );
+							log.info( "The backup was restored from {}", chosenFile.getAbsolutePath() );
 							JOptionPane.showMessageDialog( FTLFrame.this, "A backup, created beforehand, was restored.", "Disaster Averted", JOptionPane.INFORMATION_MESSAGE );
 						}
 						else {
-							log.warn( "A backup was created, but it could not be renamed: "+ bakName );
+							log.warn( "A backup was created, but it could not be renamed: {}", bakName );
 							JOptionPane.showMessageDialog( FTLFrame.this, "A backup was created, but it could not be renamed.", "Error", JOptionPane.ERROR_MESSAGE );
 						}
 					}
@@ -795,7 +792,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 			if ( chooserResponse == JFileChooser.APPROVE_OPTION && !sillyMistake ) {
 				BufferedWriter out = null;
 				try {
-					log.info( "Dumping profile: "+ chosenFile.getAbsolutePath() );
+					log.info( "Dumping profile: {}", chosenFile.getAbsolutePath() );
 
 					out = new BufferedWriter( new OutputStreamWriter( new FileOutputStream( chosenFile ) ) );
 					out.write( profile.toString() );
@@ -803,7 +800,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 				}
 				catch ( IOException f ) {
 					log.error( String.format( "Error dumping profile (\"%s\")", chosenFile.getName() ), f );
-					showErrorDialog( String.format( "Error dumping profile (\"%s\"):\n%s: %s", chosenFile.getName(), f.getClass().getSimpleName(), f.getMessage() ) );
+					showErrorDialog( String.format( "Error dumping profile (\"%s\"):%n%s: %s", chosenFile.getName(), f.getClass().getSimpleName(), f.getMessage() ) );
 				}
 				finally {
 					try {if ( out != null ) out.close();}
@@ -837,7 +834,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 				Exception exception = null;
 
 				try {
-					log.info( "Reading game state: "+ chosenFile.getAbsolutePath() );
+					log.info( "Reading game state: {}", chosenFile.getAbsolutePath() );
 
 					in = new FileInputStream( chosenFile );
 
@@ -875,13 +872,13 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 				}
 				catch ( FileNotFoundException f ) {
 					// Don't log a whole stack trace.
-					log.error( String.format( "Reading game state (\"%s\") failed: %s", chosenFile.getName(), f.getMessage() ) );
-					showErrorDialog( String.format( "Reading game state (\"%s\") failed:\n%s", chosenFile.getName(), f.getMessage() ) );
+					log.error( "Reading game state from file {} failed: {}", chosenFile.getName(), f.getMessage()  );
+					showErrorDialog( String.format( "Reading game state (\"%s\") failed:%n%s", chosenFile.getName(), f.getMessage() ) );
 					// Nothing more to do.
 				}
 				catch ( Exception f ) {
-					log.error( String.format( "Reading game state (\"%s\") failed", chosenFile.getName() ), f );
-					showErrorDialog( String.format( "Error reading game state (\"%s\"):\n%s: %s", chosenFile.getName(), f.getClass().getSimpleName(), f.getMessage() ) );
+					log.error( "Reading game state from file {} failed.", chosenFile.getAbsolutePath() , f );
+					showErrorDialog( String.format( "Error reading game state (\"%s\"):%n%s: %s", chosenFile.getName(), f.getClass().getSimpleName(), f.getMessage() ) );
 					exception = f;
 				}
 				finally {
@@ -943,19 +940,19 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 
 				FileOutputStream out = null;
 				try {
-					log.info( "Writing game state: "+ chosenFile.getAbsolutePath() );
+					log.info( "Writing game state: {}", chosenFile.getAbsolutePath() );
 
 					if ( chosenFile.exists() ) {
 
 						if ( bakFile.exists() && !bakFile.delete() ) {
-							log.warn( "Could not delete the previous backup: "+ bakName );
+							log.warn( "Could not delete the previous backup: {}", bakName );
 						}
 
 						backupCreated = chosenFile.renameTo( bakFile );
 						if ( backupCreated ) {
-							log.info( "Existing file was backed up: "+ bakName );
+							log.info( "Existing file was backed up: {}", bakName );
 						} else {
-							log.warn( "Could not rename the existing file: "+ chosenFile.getName() );
+							log.warn( "Could not rename the existing file: {}", chosenFile.getName() );
 						}
 					}
 
@@ -968,8 +965,8 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 					saveSucceeded = true;
 				}
 				catch ( IOException f ) {
-					log.error( String.format( "Error writing game state (\"%s\").", chosenFile.getName() ), f );
-					showErrorDialog( String.format( "Error writing game state (\"%s\"):\n%s: %s", chosenFile.getName(), f.getClass().getSimpleName(), f.getMessage() ) );
+					log.error( "Error writing game state to file {}", chosenFile.getName() , f );
+					showErrorDialog( String.format( "Error writing game state (\"%s\"):%n%s: %s", chosenFile.getName(), f.getClass().getSimpleName(), f.getMessage() ) );
 					exception = f;
 				}
 				finally {
@@ -980,7 +977,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 				if ( !saveSucceeded ) {
 					if ( backupCreated ) {
 						if ( chosenFile.exists() && !chosenFile.delete() ) {
-							log.warn( "Could not delete the corrupt file: "+ chosenFile.getName() );
+							log.warn( "Could not delete the corrupt file: {}", chosenFile.getName() );
 						}
 
 						boolean backupRestored = bakFile.renameTo( chosenFile );
@@ -989,7 +986,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 							JOptionPane.showMessageDialog( FTLFrame.this, "A backup, created beforehand, was restored.", "Disaster Averted", JOptionPane.INFORMATION_MESSAGE );
 						}
 						else {
-							log.warn( "A backup was created, but it could not be renamed: "+ bakName );
+							log.warn( "A backup was created, but it could not be renamed: {}", bakName );
 							JOptionPane.showMessageDialog( FTLFrame.this, "A backup was created, but it could not be renamed.", "Error", JOptionPane.ERROR_MESSAGE );
 						}
 					}
@@ -1102,7 +1099,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 			int latestVersion = Collections.max( historyMap.keySet() );
 
 			if ( latestVersion <= appVersion ) {
-				log.debug( String.format( "Latest version (%d) <= App version (%d)", latestVersion, appVersion ) );
+				log.warn( "Latest version {} <= App version {}", latestVersion, appVersion );
 				return;
 			}
 
@@ -1321,7 +1318,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 			SwingUtilities.invokeLater( scrollAll );
 		}
 		else {
-			log.error( "Unsupported game state fileFormat: "+ gs.getFileFormat() );
+			log.error( "Unsupported game state fileFormat: {} ", gs.getFileFormat() );
 			showErrorDialog( "Unsupported game state fileFormat: "+ gs.getFileFormat() );
 
 			loadGameState( null );
@@ -1369,9 +1366,8 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 
 	@Override
 	public void uncaughtException( Thread t, Throwable e ) {
-		log.error( "Uncaught exception in thread: "+ t.toString(), e );
+		log.error( "Uncaught exception in thread: {} ", t, e );
 
-		final String threadString = t.toString();
 		final String errString = e.toString();
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

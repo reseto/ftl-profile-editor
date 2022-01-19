@@ -15,6 +15,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.model.AchievementRecord;
 import net.blerf.ftl.model.Profile;
@@ -22,13 +23,9 @@ import net.blerf.ftl.model.ShipAvailability;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.xml.Achievement;
 import net.blerf.ftl.xml.ShipBlueprint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class ProfileShipUnlockPanel extends JPanel implements ActionListener {
-
-	private static final Logger log = LoggerFactory.getLogger( ProfileShipUnlockPanel.class );
 
 	private static final int ACH_LOCKED = 0;
 	private static final int SHIP_LOCKED = 0;
@@ -91,7 +88,7 @@ public class ProfileShipUnlockPanel extends JPanel implements ActionListener {
 
 	private JPanel createShipUnlockPanel( String baseId ) {
 
-		log.trace( "Creating ship unlock panel for: "+ baseId );
+		log.trace( "Creating ship unlock panel for: {}", baseId );
 
 		ShipBlueprint variantAShip = DataManager.get().getPlayerShipVariant( baseId, 0 );
 		ShipBlueprint variantBShip = DataManager.get().getPlayerShipVariant( baseId, 1 );
@@ -139,7 +136,7 @@ public class ProfileShipUnlockPanel extends JPanel implements ActionListener {
 
 	private JPanel createShipAchPanel( String baseId ) {
 
-		log.trace( "Creating ship achievements panel for: "+ baseId );
+		log.trace( "Creating ship achievements panel for: {}", baseId );
 
 		ShipBlueprint variantAShip = DataManager.get().getPlayerShipVariant( baseId, 0 );
 		if ( variantAShip == null ) return null;

@@ -9,13 +9,9 @@ import javax.swing.Box;
 import javax.swing.JPanel;
 import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.parser.SavedGameParser.StateVar;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class SavedGameStateVarsPanel extends JPanel {
-
-	private static final Logger log = LoggerFactory.getLogger( SavedGameStateVarsPanel.class );
 
 	private FTLFrame frame;
 	private ArrayList<String> allVars = new ArrayList<String>();

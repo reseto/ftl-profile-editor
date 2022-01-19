@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.bind.JAXBException;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.xml.Achievement;
 import net.blerf.ftl.xml.Anim;
@@ -48,10 +49,8 @@ import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class DefaultDataManager extends DataManager {
-
-	private static final Logger log = LoggerFactory.getLogger( DefaultDataManager.class );
 
 	private List<String> stdPlayerShipBaseIds;
 	private List<String> dlcPlayerShipBaseIds;
@@ -872,7 +871,7 @@ public class DefaultDataManager extends DataManager {
 
 		AugBlueprint result = augments.get( id );
 		if ( result == null ) {
-			log.error( "No AugBlueprint found for id: "+ id );
+			log.error( "No AugBlueprint found for id: {}", id );
 		}
 		return result;
 	}
@@ -900,7 +899,7 @@ public class DefaultDataManager extends DataManager {
 
 		CrewBlueprint result = crews.get( id );
 		if ( result == null ) {
-			log.error( "No CrewBlueprint found for id: "+ id );
+			log.error( "No CrewBlueprint found for id: {}", id );
 		}
 		return result;
 	}
@@ -928,7 +927,7 @@ public class DefaultDataManager extends DataManager {
 
 		DroneBlueprint result = drones.get( id );
 		if ( result == null ) {
-			log.error( "No DroneBlueprint found for id: "+ id );
+			log.error( "No DroneBlueprint found for id: {}", id );
 		}
 		return result;
 	}
@@ -956,7 +955,7 @@ public class DefaultDataManager extends DataManager {
 
 		SystemBlueprint result = systems.get( id );
 		if ( result == null ) {
-			log.error( "No SystemBlueprint found for id: "+ id );
+			log.error( "No SystemBlueprint found for id: {}", id );
 		}
 		return result;
 	}
@@ -972,7 +971,7 @@ public class DefaultDataManager extends DataManager {
 
 		WeaponBlueprint result = weapons.get( id );
 		if ( result == null ) {
-			log.error( "No WeaponBlueprint found for id: "+ id );
+			log.error( "No WeaponBlueprint found for id: {}", id );
 		}
 		return result;
 	}
@@ -1000,7 +999,7 @@ public class DefaultDataManager extends DataManager {
 
 		ShipBlueprint result = ships.get( id );
 		if ( result == null ) {
-			log.error( "No ShipBlueprint found for id: "+ id );
+			log.error( "No ShipBlueprint found for id: {}", id );
 		}
 		return result;
 	}
@@ -1107,10 +1106,10 @@ public class DefaultDataManager extends DataManager {
 				shipLayoutIdMap.put( id, result );
 			}
 			catch ( FileNotFoundException e ) {
-				log.error( "No ShipLayout found for id: "+ id );
+				log.error( "No ShipLayout found for id: {}", id );
 			}
 			catch ( IOException e ) {
-				log.error( "An error occurred while parsing ShipLayout: "+ id, e );
+				log.error( "An error occurred while parsing ShipLayout: {}", id, e );
 			}
 			finally {
 				try {if ( in != null ) in.close();}
@@ -1141,16 +1140,16 @@ public class DefaultDataManager extends DataManager {
 				shipChassisIdMap.put( id, result );
 			}
 			catch ( JDOMException e ) {
-				log.error( "Parsing XML failed for ShipChassis id: "+ id, e );
+				log.error( "Parsing XML failed for ShipChassis id: {}", id, e );
 			}
 			catch ( JAXBException e ) {
-				log.error( "Parsing XML failed for ShipChassis id: "+ id, e );
+				log.error( "Parsing XML failed for ShipChassis id: {}", id, e );
 			}
 			catch ( FileNotFoundException e ) {
-				log.error( "No ShipChassis found for id: "+ id );
+				log.error( "No ShipChassis found for id: {}", id );
 			}
 			catch ( IOException e ) {
-				log.error( "An error occurred while parsing ShipChassis: "+ id, e );
+				log.error( "An error occurred while parsing ShipChassis: {}", id, e );
 			}
 			finally {
 				try {if ( in != null ) in.close();}
@@ -1180,7 +1179,7 @@ public class DefaultDataManager extends DataManager {
 
 		FTLEvent result = events.get( id );
 		if ( result == null ) {
-			log.error( "No Event found for id: "+ id );
+			log.error( "No Event found for id: {}", id );
 		}
 		return result;
 	}
@@ -1220,7 +1219,7 @@ public class DefaultDataManager extends DataManager {
 
 		TextList result = textLists.get( id );
 		if ( result == null ) {
-			log.error( "No TextList found for id: "+ id );
+			log.error( "No TextList found for id: {}", id );
 		}
 		return result;
 	}
@@ -1253,7 +1252,7 @@ public class DefaultDataManager extends DataManager {
 
 		ShipEvent result = shipEvents.get( id );
 		if ( result == null ) {
-			log.error( "No ShipEvent found for id: "+ id );
+			log.error( "No ShipEvent found for id: {}", id );
 		}
 		return result;
 	}
@@ -1307,7 +1306,7 @@ public class DefaultDataManager extends DataManager {
 
 		SectorType result = sectorTypes.get( id );
 		if ( result == null ) {
-			log.error( "No SectorType found for id: "+ id );
+			log.error( "No SectorType found for id: {}", id );
 		}
 		return result;
 	}
@@ -1319,7 +1318,7 @@ public class DefaultDataManager extends DataManager {
 	public SectorDescription getSectorDescriptionById( String id ) {
 		SectorDescription result = sectorDescriptionIdMap.get( id );
 		if ( result == null ) {
-			log.error( "No SectorDescription found for id: "+ id );
+			log.error( "No SectorDescription found for id: {}", id );
 		}
 		return result;
 	}
@@ -1353,7 +1352,7 @@ public class DefaultDataManager extends DataManager {
 		}
 
 		if ( results.isEmpty() ) {
-			log.error( "No Anims found for sheetId: "+ id );
+			log.error( "No Anims found for sheetId: {}", id );
 		}
 		return results;
 	}
@@ -1372,7 +1371,7 @@ public class DefaultDataManager extends DataManager {
 
 		Anim result = anims.get( id );
 		if ( result == null ) {
-			log.error( "No Anim found for id: "+ id );
+			log.error( "No Anim found for id: {}", id );
 		}
 		return result;
 	}
@@ -1391,7 +1390,7 @@ public class DefaultDataManager extends DataManager {
 
 		AnimSheet result = sheets.get( id );
 		if ( result == null ) {
-			log.error( "No AnimSheet found for id: "+ id );
+			log.error( "No AnimSheet found for id: {}", id );
 		}
 		return result;
 	}

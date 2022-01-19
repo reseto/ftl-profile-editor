@@ -167,8 +167,8 @@ public class Profile {
 			default: formatDesc = "???"; break;
 		}
 
-		result.append( String.format( "File Format:            %4d (%s)\n", fileFormat, formatDesc ) );
-		result.append( String.format( "Newbie Tip Level:       %4s\n", newbieTipLevel.toString() ) );
+		result.append( String.format( "File Format:            %4d (%s)%n", fileFormat, formatDesc ) );
+		result.append( String.format( "Newbie Tip Level:       %4s%n", newbieTipLevel.toString() ) );
 
 		result.append( "\nShip Unlocks...\n" );
 		first = true;
@@ -180,7 +180,7 @@ public class Profile {
 
 		result.append("\nStats...\n");
 		for ( StatType type : intStatTypes ) {
-			result.append(String.format("%-25s %5d\n", type.toString(), stats.getIntRecord( type )));
+			result.append(String.format("%-25s %5d%n", type, stats.getIntRecord( type )));
 		}
 
 		result.append( "\nCrew Records...\n" );
@@ -190,7 +190,7 @@ public class Profile {
 			else { result.append( ",\n" ); }
 
 			CrewRecord rec = stats.getCrewRecord( type );
-			result.append( String.format( "%s\n", type.toString() ) );
+			result.append( String.format( "%s%n", type ) );
 			if ( rec != null ) {
 				result.append( rec.toString().replaceAll( "(^|\n)(.+)", "$1  $2" ) );
 			} else {

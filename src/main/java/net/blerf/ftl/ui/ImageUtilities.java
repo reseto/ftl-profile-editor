@@ -24,15 +24,14 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.DataManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class ImageUtilities {
-
-	private static final Logger log = LoggerFactory.getLogger( ImageUtilities.class );
 
 	private static final int maxIconWidth = 64;
 	private static final int maxIconHeight = 64;
@@ -214,7 +213,7 @@ public class ImageUtilities {
 			cacheMap = cachedImages.get( innerPath );
 			if ( cacheMap != null ) result = cacheMap.get( keyRect );
 			if ( result != null ) return result;
-			log.trace( "Image not in cache, loading and scaling...: "+ innerPath );
+			log.trace( "Image not in cache, loading and scaling: {}", innerPath );
 		}
 
 		InputStream in = null;
@@ -299,7 +298,7 @@ public class ImageUtilities {
 					if ( result != null ) return result;
 				}
 			}
-			log.trace( "Image not in cache, loading and proportionally scaling...: "+ innerPath );
+			log.trace( "Image not in cache, loading and proportionally scaling {} ", innerPath );
 		}
 
 		InputStream in = null;
@@ -330,13 +329,13 @@ public class ImageUtilities {
 			}
 		}
 		catch ( RasterFormatException e ) {
-			log.error( "Failed to load and proportionally scale image: "+ innerPath, e );
+			log.error( "Failed to load and proportionally scale image: {}", innerPath, e );
 		}
 		catch ( FileNotFoundException e ) {
-			log.error( String.format( "Failed to load and proportionally scale image (\"%s\"): innerPath was not found", innerPath ) );
+			log.error( "Failed to load and proportionally scale image, innerPath was not found: {}", innerPath  );
 		}
 		catch ( IOException e ) {
-			log.error( "Failed to load and proportionally scale image: "+ innerPath, e );
+			log.error( "Failed to load and proportionally scale image: {}", innerPath, e );
 		}
 		finally {
 			try {if ( in != null ) in.close();}
@@ -389,7 +388,7 @@ public class ImageUtilities {
 			cacheMap = cachedImages.get( innerPath );
 			if ( cacheMap != null ) result = cacheMap.get( keyRect );
 			if ( result != null ) return result;
-			log.trace( "Image not in cache, loading and cropping...: "+ innerPath );
+			log.trace( "Image not in cache, loading and cropping: {}", innerPath );
 		}
 
 		InputStream in = null;
@@ -399,13 +398,13 @@ public class ImageUtilities {
 			result = bigImage.getSubimage( x, y, w, h );
 		}
 		catch ( RasterFormatException e ) {
-			log.error( "Failed to load and crop image: "+ innerPath, e );
+			log.error( "Failed to load and crop image: {}", innerPath, e );
 		}
 		catch ( FileNotFoundException e ) {
-			log.error( String.format( "Failed to load and crop image (\"%s\"): innerPath was not found", innerPath ) );
+			log.error(  "Failed to load and crop image , innerPath was not found: {}", innerPath  );
 		}
 		catch ( IOException e ) {
-			log.error( "Failed to load and crop image: "+ innerPath, e );
+			log.error( "Failed to load and crop image: {}", innerPath, e );
 		}
 		finally {
 			try {if ( in != null ) in.close();}
@@ -500,7 +499,7 @@ public class ImageUtilities {
 				}
 			}
 		}
-		log.trace( String.format( "Image Trimmed to Bounds: %d,%d %dx%d", lowX, lowY, highX, highY ) );
+		log.trace( "Image Trimmed to Bounds: {},{} {}x{}", lowX, lowY, highX, highY );
 		if ( lowX >= 0 && lowY >= 0 && highX < origW && highY < origH && lowX < highX && lowY < highY ) {
 			result = result.getSubimage( lowX, lowY, highX-lowX+1, highY-lowY+1 );
 		}

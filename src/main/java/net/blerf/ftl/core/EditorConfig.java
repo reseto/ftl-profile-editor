@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -93,14 +94,14 @@ public class EditorConfig {
 
 			StringBuilder commentsBuf = new StringBuilder( "\n" );
 			for ( Map.Entry<String, String> entry : userFieldsMap.entrySet() ) {
-				commentsBuf.append( String.format( " %-"+ fieldWidth +"s - %s\n", entry.getKey(), entry.getValue() ) );
+				commentsBuf.append( String.format( " %-"+ fieldWidth +"s - %s%n", entry.getKey(), entry.getValue() ) );
 			}
 			commentsBuf.append( "\n" );
 			for ( Map.Entry<String, String> entry : appFieldsMap.entrySet() ) {
-				commentsBuf.append( String.format( " %-"+ fieldWidth +"s - %s\n", entry.getKey(), entry.getValue() ) );
+				commentsBuf.append( String.format( " %-"+ fieldWidth +"s - %s%n", entry.getKey(), entry.getValue() ) );
 			}
 
-			OutputStreamWriter writer = new OutputStreamWriter( out, "UTF-8" );
+			OutputStreamWriter writer = new OutputStreamWriter( out, StandardCharsets.UTF_8);
 			config.store( writer, commentsBuf.toString() );
 			writer.flush();
 		}

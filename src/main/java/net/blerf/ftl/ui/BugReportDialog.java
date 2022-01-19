@@ -21,6 +21,7 @@ import javax.swing.JTextArea;
  */
 public class BugReportDialog extends JDialog {
 
+	public static final String BR = "<br/>";
 	protected Font reportFont = new Font( Font.MONOSPACED, Font.PLAIN, 13 );
 
 	protected String htmlMessage = null;
@@ -63,15 +64,16 @@ public class BugReportDialog extends JDialog {
 		StringBuilder htmlBuf = new StringBuilder();
 
 		htmlBuf.append( htmlMessage );
-		htmlBuf.append( "<br/>" );
+		htmlBuf.append(BR);
 
 		if ( htmlInstructions != null ) {
 			htmlBuf.append( htmlInstructions );
-			htmlBuf.append( "<br/>" );
+			htmlBuf.append( BR );
 		}
 
-		htmlBuf.append( "Copy (Ctrl-A, Ctrl-C) the following text, including \"[ code ] tags\".<br/>" );
-		htmlBuf.append( "<br/>" );
+		htmlBuf.append( "Copy (Ctrl-A, Ctrl-C) the following text, including \"[ code ] tags\"." );
+		htmlBuf.append( BR );
+		htmlBuf.append( BR );
 
 		StringBuilder reportBuf = new StringBuilder();
 
@@ -89,14 +91,14 @@ public class BugReportDialog extends JDialog {
 		if ( appDescription != null ) {
 			reportBuf.append( appDescription );
 		}
-		reportBuf.append( String.format( "OS: %s %s\n", System.getProperty( "os.name" ), System.getProperty( "os.version" ) ) );
-		reportBuf.append( String.format( "VM: %s, %s, %s\n", System.getProperty( "java.vm.name" ), System.getProperty( "java.version" ), System.getProperty( "os.arch" ) ) );
+		reportBuf.append( String.format( "OS: %s %s%n", System.getProperty( "os.name" ), System.getProperty( "os.version" ) ) );
+		reportBuf.append( String.format( "VM: %s, %s, %s%n", System.getProperty( "java.vm.name" ), System.getProperty( "java.version" ), System.getProperty( "os.arch" ) ) );
 
 		reportBuf.append( "[/code]\n" );
 		reportBuf.append( "\n" );
 
 		if ( attachmentName != null && attachmentContent != null ) {
-			reportBuf.append( String.format( "File (\"%s\")...\n", attachmentName ) );
+			reportBuf.append( String.format( "File (\"%s\")...%n", attachmentName ) );
 			reportBuf.append( "[code]\n" );
 			reportBuf.append( attachmentContent );
 			reportBuf.append( "\n[/code]\n" );
@@ -143,7 +145,7 @@ public class BugReportDialog extends JDialog {
 	 * Sets an (app name: version) line for the runtime environment.
 	 */
 	public void setAppDescription( String appName, String appVersion ) {
-		this.appDescription = String.format( "%s Version: %s\n", appName, appVersion );
+		this.appDescription = String.format( "%s Version: %s%n", appName, appVersion );
 	}
 
 	/**
@@ -187,14 +189,14 @@ public class BugReportDialog extends JDialog {
 	 * Formats an exception, appending lines to a bug report buffer.
 	 */
 	protected void appendStackTrace( StringBuilder reportBuf, Throwable exception ) {
-		reportBuf.append( String.format( "Exception: %s\n", exception.toString() ) );
+		reportBuf.append( String.format( "Exception: %s%n", exception.toString() ) );
 		reportBuf.append( "\n" );
 
 		reportBuf.append( "Stack Trace...\n" );
 		StackTraceElement[] traceElements = exception.getStackTrace();
 		int traceDepth = 5;
 		for ( int i=0; i < traceDepth && i < traceElements.length; i++ ) {
-			reportBuf.append( String.format( "  %s\n", traceElements[i].toString() ) );
+			reportBuf.append( String.format( "  %s%n", traceElements[i].toString() ) );
 		}
 /*
 		Throwable currentCause = exception;
@@ -204,11 +206,11 @@ public class BugReportDialog extends JDialog {
 		// remaining lines are redundant.
 
 		while ( currentCause.getCause() != currentCause && null != (currentCause=currentCause.getCause()) ) {
-			reportBuf.append( String.format( "Caused by: %s\n", currentCause.toString() ) );
+			reportBuf.append( String.format( "Caused by: %s%n", currentCause.toString() ) );
 			StackTraceElement[] causeElements = currentCause.getStackTrace();
 			int causeDepth = 3;
 			for ( int i=0; i < causeDepth && i < causeElements.length; i++ ) {
-				reportBuf.append( String.format( "  %s\n", causeElements[i].toString() ) );
+				reportBuf.append( String.format( "  %s%n", causeElements[i].toString() ) );
 			}
 		}
 */

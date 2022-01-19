@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser.CrewType;
@@ -18,13 +19,9 @@ import net.blerf.ftl.parser.SavedGameParser.StoreItem;
 import net.blerf.ftl.parser.SavedGameParser.StoreItemType;
 import net.blerf.ftl.parser.SavedGameParser.StoreShelf;
 import net.blerf.ftl.parser.SavedGameParser.SystemType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class StoreShelfPanel extends JPanel implements ActionListener {
-
-	private static final Logger log = LoggerFactory.getLogger( StoreShelfPanel.class );
 
 	private static final String SHELF_TYPE = "Type";
 	private static final String ITEM_ZERO = "#0 Item";

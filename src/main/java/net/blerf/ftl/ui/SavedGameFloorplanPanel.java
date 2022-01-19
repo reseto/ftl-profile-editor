@@ -46,6 +46,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
@@ -101,13 +102,9 @@ import net.blerf.ftl.xml.ShipBlueprint;
 import net.blerf.ftl.xml.ShipChassis;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.WeaponBlueprint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+@Slf4j
 public class SavedGameFloorplanPanel extends JPanel {
-
-	private static final Logger log = LoggerFactory.getLogger( SavedGameFloorplanPanel.class );
 
 	private static final Integer WEAPON_LAYER = 5;
 	private static final Integer BASE_LAYER = 10;
@@ -774,7 +771,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		if ( shipBlueprint.getDroneSlots() != null ) {
 			int minDroneSlots = shipBlueprint.getDroneSlots();
 			if ( droneList.size() > minDroneSlots ) {
-				log.warn( String.format( "Ship state has %d drones, exceeding %d droneSlots on its blueprint", droneList.size(), minDroneSlots ) );
+				log.warn( "Ship state has {} drones, exceeding {} droneSlots on its blueprint", droneList.size(), minDroneSlots );
 			}
 			actualDroneSlots = Math.max( minDroneSlots, droneList.size() );
 		}
@@ -783,7 +780,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 			// In-game GUI shows 2 or 3.
 			int minDroneSlots = 3;
 			if ( droneList.size() > minDroneSlots && shipBundle.isPlayerControlled() ) {
-				log.warn( String.format( "Ship state has %d drones, exceeding the default %d droneSlots when not set by its blueprint", droneList.size(), minDroneSlots ) );
+				log.warn( "Ship state has {} drones, exceeding the default {} droneSlots when not set by its blueprint", droneList.size(), minDroneSlots ) ;
 			}
 			actualDroneSlots = Math.max( minDroneSlots, droneList.size() );
 		}
@@ -814,7 +811,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 		int actualWeaponSlots = Math.min( weaponMounts.size(), blueprintWeaponSlots );
 
 		if ( weaponList.size() > weaponMounts.size() || blueprintWeaponSlots > weaponMounts.size() ) {
-			log.warn( String.format( "Ship state has %d weapons, the ship blueprint expects %d mounts, the chassis only has %d mounts", weaponList.size(), blueprintWeaponSlots, weaponMounts.size() ) );
+			log.warn( "Ship state has {} weapons, the ship blueprint expects {} mounts, the chassis only has {} mounts", weaponList.size(), blueprintWeaponSlots, weaponMounts.size() );
 		}
 
 		for ( int i=0; i < actualWeaponSlots; i++ ) {
