@@ -8,35 +8,35 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement( name = "imageList" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "imageList")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BackgroundImageList {
 
-	@XmlAttribute( name = "name" )
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	@XmlElement( name = "img" )
-	private List<BackgroundImage> images;
+    @XmlElement(name = "img")
+    private List<BackgroundImage> images;
 
 
-	public void setImages( List<BackgroundImage> images ) {
-		this.images = images;
-	}
+    public void setImages(List<BackgroundImage> images) {
+        this.images = images;
+    }
 
-	public List<BackgroundImage> getImages() {
-		return images;
-	}
+    public List<BackgroundImage> getImages() {
+        return images;
+    }
 
-	public void setId( String id ) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	@Override
-	public String toString() {
-		return ""+id;
-	}
+    @Override
+    public String toString() {
+        return "" + id;
+    }
 }

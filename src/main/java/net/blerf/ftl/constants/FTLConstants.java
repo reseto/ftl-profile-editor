@@ -8,40 +8,45 @@ import net.blerf.ftl.parser.SavedGameParser.SystemType;
 
 public interface FTLConstants {
 
-	// ShipState constants.
+    // ShipState constants.
 
-	int getMaxReservePoolCapacity();
-
-
-	// SystemState constants.
-
-	/**
-	 * Returns the bonus system bars produced by a Battery system.
-	 *
-	 * @param batterySystemCapacity the capacity of the system itself (its level)
-	 */
-	int getBatteryPoolCapacity( int batterySystemCapacity );
-
-	int getMaxIonizedBars();
+    int getMaxReservePoolCapacity();
 
 
-	// CrewState constants.
+    // SystemState constants.
 
-	List<CrewType> getCrewTypes();
+    /**
+     * Returns the bonus system bars produced by a Battery system.
+     *
+     * @param batterySystemCapacity the capacity of the system itself (its level)
+     */
+    int getBatteryPoolCapacity(int batterySystemCapacity);
 
-	int getMasteryIntervalPilot( CrewType race );
-	int getMasteryIntervalEngine( CrewType race );
-	int getMasteryIntervalShield( CrewType race );
-	int getMasteryIntervalWeapon( CrewType race );
-	int getMasteryIntervalRepair( CrewType race );
-	int getMasteryIntervalCombat( CrewType race );
+    int getMaxIonizedBars();
 
 
-	// System-related constants.
+    // CrewState constants.
 
-	List<SystemType> getSystemTypes();
+    List<CrewType> getCrewTypes();
 
-	int getDefaultSystemRoomSlotSquare( SystemType systemType );
+    int getMasteryIntervalPilot(CrewType race);
 
-	StationDirection getDefaultSystemRoomSlotDirection( SystemType systemType );
+    int getMasteryIntervalEngine(CrewType race);
+
+    int getMasteryIntervalShield(CrewType race);
+
+    int getMasteryIntervalWeapon(CrewType race);
+
+    int getMasteryIntervalRepair(CrewType race);
+
+    int getMasteryIntervalCombat(CrewType race);
+
+
+    // System-related constants.
+
+    List<SystemType> getSystemTypes();
+
+    int getDefaultSystemRoomSlotSquare(SystemType systemType);
+
+    StationDirection getDefaultSystemRoomSlotDirection(SystemType systemType);
 }

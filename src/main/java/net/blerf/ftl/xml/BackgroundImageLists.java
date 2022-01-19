@@ -8,19 +8,19 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement( name = "imageLists" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "imageLists")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BackgroundImageLists {
 
-	@XmlElement( name = "imageList", required = false )
-	private List<BackgroundImageList> imageLists = new ArrayList<BackgroundImageList>();
+    @XmlElement(name = "imageList", required = false)
+    private List<BackgroundImageList> imageLists = new ArrayList<BackgroundImageList>();
 
 
-	public void setImageLists( List<BackgroundImageList> imageLists ) {
-		this.imageLists = imageLists;
-	}
+    public void setImageLists(List<BackgroundImageList> imageLists) {
+        this.imageLists = imageLists;
+    }
 
-	public List<BackgroundImageList> getImageLists() {
-		return imageLists;
-	}
+    public List<BackgroundImageList> getImageLists() {
+        return imageLists;
+    }
 }

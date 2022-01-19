@@ -11,68 +11,82 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FireSprite extends JComponent {
 
-	private static final String FIRE_ANIM = "fire_large";
+    private static final String FIRE_ANIM = "fire_large";
 
-	private final Color dummyColor = new Color( 150, 150, 200 );
+    private final Color dummyColor = new Color(150, 150, 200);
 
-	private Point currentFrame = null;
+    private Point currentFrame = null;
 
-	private AnimAtlas fireAtlas;
-	private int roomId;
-	private int squareId;
-	private int health;
+    private AnimAtlas fireAtlas;
+    private int roomId;
+    private int squareId;
+    private int health;
 
 
-	public FireSprite( AnimAtlas fireAtlas, int roomId, int squareId, int health ) {
-		this.fireAtlas = fireAtlas;
-		this.roomId = roomId;
-		this.squareId = squareId;
-		this.health = health;
+    public FireSprite(AnimAtlas fireAtlas, int roomId, int squareId, int health) {
+        this.fireAtlas = fireAtlas;
+        this.roomId = roomId;
+        this.squareId = squareId;
+        this.health = health;
 
-		int prefWidth = Math.max( fireAtlas.getFrameWidth(), 10 );
-		int prefHeight = Math.max( fireAtlas.getFrameHeight(), 10 );
-		this.setPreferredSize( new Dimension( prefWidth, prefHeight ) );
+        int prefWidth = Math.max(fireAtlas.getFrameWidth(), 10);
+        int prefHeight = Math.max(fireAtlas.getFrameHeight(), 10);
+        this.setPreferredSize(new Dimension(prefWidth, prefHeight));
 
-		// Get the first frame of the "fire_large" Anim.
-		Point[] frameset = fireAtlas.getFrameset( FIRE_ANIM );
-		if ( frameset != null && frameset.length > 0 ) {
-			currentFrame = frameset[0];
-		}
-		else {
-			log.error( "Expected Anim not present in Atlas: "+ FIRE_ANIM );
-		}
+        // Get the first frame of the "fire_large" Anim.
+        Point[] frameset = fireAtlas.getFrameset(FIRE_ANIM);
+        if (frameset != null && frameset.length > 0) {
+            currentFrame = frameset[0];
+        } else {
+            log.error("Expected Anim not present in Atlas: " + FIRE_ANIM);
+        }
 
-		this.setOpaque( false );
-	}
+        this.setOpaque(false);
+    }
 
-	public void setRoomId( int n ) { roomId = n; }
-	public void setSquareId( int n ) { squareId = n; }
-	public void setHealth( int n ) { health = n; }
+    public void setRoomId(int n) {
+        roomId = n;
+    }
 
-	public int getRoomId() { return roomId; }
-	public int getSquareId() { return squareId; }
-	public int getHealth() { return health; }
+    public void setSquareId(int n) {
+        squareId = n;
+    }
 
-	@Override
-	public void paintComponent( Graphics g ) {
-		super.paintComponent( g );
+    public void setHealth(int n) {
+        health = n;
+    }
 
-		Graphics2D g2d = (Graphics2D)g;
+    public int getRoomId() {
+        return roomId;
+    }
 
-		if ( currentFrame != null ) {
-			int rX = currentFrame.x;
-			int rY = currentFrame.y;
-			int rW = fireAtlas.getFrameWidth();
-			int rH = fireAtlas.getFrameHeight();
-			g2d.drawImage( fireAtlas.getSheetImage(), 0, 0, this.getWidth(), this.getHeight(), rX, rY, rX+rW-1, rY+rH-1, this );
-		}
-		else {
-			Color prevColor = g2d.getColor();
+    public int getSquareId() {
+        return squareId;
+    }
 
-			g2d.setColor( dummyColor );
-			g2d.fillRect( 0, 0, this.getWidth()-1, this.getHeight()-1 );
+    public int getHealth() {
+        return health;
+    }
 
-			g2d.setColor( prevColor );
-		}
-	}
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        if (currentFrame != null) {
+            int rX = currentFrame.x;
+            int rY = currentFrame.y;
+            int rW = fireAtlas.getFrameWidth();
+            int rH = fireAtlas.getFrameHeight();
+            g2d.drawImage(fireAtlas.getSheetImage(), 0, 0, this.getWidth(), this.getHeight(), rX, rY, rX + rW - 1, rY + rH - 1, this);
+        } else {
+            Color prevColor = g2d.getColor();
+
+            g2d.setColor(dummyColor);
+            g2d.fillRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
+
+            g2d.setColor(prevColor);
+        }
+    }
 }

@@ -11,41 +11,41 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BackgroundImage {
 
-	@XmlAttribute(name = "w")
-	private int width;
+    @XmlAttribute(name = "w")
+    private int width;
 
-	@XmlAttribute(name = "h")
-	private int height;
+    @XmlAttribute(name = "h")
+    private int height;
 
-	@XmlValue
-	private String innerPath;
+    @XmlValue
+    private String innerPath;
 
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public void setWidth( int width ) {
-		this.width = width;
-	}
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public void setHeight( int height ) {
-		this.height = height;
-	}
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
-	public String getInnerPath() {
-		return innerPath;
-	}
+    public String getInnerPath() {
+        return innerPath;
+    }
 
-	public void setInnerPath( String innerPath ) {
-		this.innerPath = innerPath;
-	}
+    public void setInnerPath(String innerPath) {
+        this.innerPath = innerPath;
+    }
 
-	@Override
-	public String toString() {
-		return String.format( "%s (%dx%d)", innerPath, width, height );
-	}
+    @Override
+    public String toString() {
+        return String.format("%s (%dx%d)", innerPath, width, height);
+    }
 }

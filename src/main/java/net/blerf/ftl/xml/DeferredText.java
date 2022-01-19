@@ -8,20 +8,20 @@ package net.blerf.ftl.xml;
  */
 public interface DeferredText {
 
-	/**
-	 * Returns the "id" attribute value, or null.
-	 */
-	String getTextId();
+    /**
+     * Returns the "id" attribute value, or null.
+     */
+    String getTextId();
 
-	/**
-	 * Sets the looked-up text.
-	 */
-	void setResolvedText( String s );
+    /**
+     * Sets the looked-up text.
+     */
+    void setResolvedText(String s);
 
-	/**
-	 * Returns either the looked-up text or the element's own value.
-	 *
-	 * TODO: Test to find out which one FTL prioritizes.
-	 */
-	String getTextValue();
+    /**
+     * Returns either the looked-up text or the element's own value.
+     * <p>
+     * TODO: Test to find out which one FTL prioritizes.
+     */
+    String getTextValue();
 }

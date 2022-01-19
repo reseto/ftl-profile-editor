@@ -11,11 +11,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "blueprintList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BlueprintList {
-	
-	@XmlAttribute
-	private String name;
-	
-	@XmlElement(name = "name")
-	private List<String> items;
+
+    @XmlAttribute
+    private String name;
+
+    @XmlElement(name = "name")
+    private List<String> items;
 
 }

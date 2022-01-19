@@ -12,56 +12,56 @@ import lombok.extern.slf4j.Slf4j;
  * One of the "text" tags in lookup files.
  */
 @Slf4j
-@XmlRootElement( name = "text" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "text")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class NamedText implements Cloneable {
 
-	@XmlAttribute( name = "name" )
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	@XmlAttribute( name = "load" )
-	private String load;
+    @XmlAttribute(name = "load")
+    private String load;
 
-	@XmlValue
-	private String text;
+    @XmlValue
+    private String text;
 
-	public Object clone() {
-		NamedText o = null;
-		try {
-			o = (NamedText)super.clone();
-		} catch(CloneNotSupportedException e) {
-			log.error("Failed to clone.", e);
-		}
+    public Object clone() {
+        NamedText o = null;
+        try {
+            o = (NamedText) super.clone();
+        } catch (CloneNotSupportedException e) {
+            log.error("Failed to clone.", e);
+        }
 
-		o.setId(getId());
-		o.setLoad(getLoad());
-		o.setText(getText());
+        o.setId(getId());
+        o.setLoad(getLoad());
+        o.setText(getText());
 
-		return o;
-	}
+        return o;
+    }
 
 
-	public void setId( String id ) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setLoad( String load ) {
-		this.load = load;
-	}
+    public void setLoad(String load) {
+        this.load = load;
+    }
 
-	public String getLoad() {
-		return load;
-	}
+    public String getLoad() {
+        return load;
+    }
 
-	public void setText( String s ) {
-		text = s;
-	}
+    public void setText(String s) {
+        text = s;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public String getText() {
+        return text;
+    }
 }

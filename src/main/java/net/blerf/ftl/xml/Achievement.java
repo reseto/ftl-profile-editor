@@ -8,109 +8,109 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
-@XmlRootElement( name = "achievement" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "achievement")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Achievement {
 
-	@XmlAttribute
-	private String id;
+    @XmlAttribute
+    private String id;
 
-	private DefaultDeferredText name;
+    private DefaultDeferredText name;
 
-	@XmlElement( required = false )
-	private DefaultDeferredText shortName;
+    @XmlElement(required = false)
+    private DefaultDeferredText shortName;
 
-	@XmlElement( name = "desc" )
-	private DefaultDeferredText description;
+    @XmlElement(name = "desc")
+    private DefaultDeferredText description;
 
-	@XmlElement( name = "img" )
-	private String imagePath;
+    @XmlElement(name = "img")
+    private String imagePath;
 
-	@XmlElement( name = "ship", required = false )
-	private String shipId;
+    @XmlElement(name = "ship", required = false)
+    private String shipId;
 
-	@XmlElement( required = false )
-	private int multiDifficulty;
+    @XmlElement(required = false)
+    private int multiDifficulty;
 
-	// Ship Victory achievements track *all* the variants which earned them.
-	// Ship Victory achievements don't unlock ship variants.
-	@XmlTransient
-	private boolean victory = false;
+    // Ship Victory achievements track *all* the variants which earned them.
+    // Ship Victory achievements don't unlock ship variants.
+    @XmlTransient
+    private boolean victory = false;
 
-	// Ship Quest achievements don't unlock ship variants.
-	@XmlTransient
-	private boolean quest = false;
+    // Ship Quest achievements don't unlock ship variants.
+    @XmlTransient
+    private boolean quest = false;
 
 
-	public void setId( String id ) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setName( DefaultDeferredText name ) {
-		this.name = name;
-	}
+    public void setName(DefaultDeferredText name) {
+        this.name = name;
+    }
 
-	public DefaultDeferredText getName() {
-		return name;
-	}
+    public DefaultDeferredText getName() {
+        return name;
+    }
 
-	public void setShortName( DefaultDeferredText shortName ) {
-		this.shortName = shortName;
-	}
+    public void setShortName(DefaultDeferredText shortName) {
+        this.shortName = shortName;
+    }
 
-	public DefaultDeferredText getShortName() {
-		return shortName;
-	}
+    public DefaultDeferredText getShortName() {
+        return shortName;
+    }
 
-	public void setDescription( DefaultDeferredText description ) {
-		this.description = description;
-	}
+    public void setDescription(DefaultDeferredText description) {
+        this.description = description;
+    }
 
-	public DefaultDeferredText getDescription() {
-		return description;
-	}
+    public DefaultDeferredText getDescription() {
+        return description;
+    }
 
-	public void setImagePath( String imagePath ) {
-		this.imagePath = imagePath;
-	}
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
-	public String getImagePath() {
-		return imagePath;
-	}
+    public String getImagePath() {
+        return imagePath;
+    }
 
-	public void setShipId( String shipId ) {
-		this.shipId = shipId;
-	}
+    public void setShipId(String shipId) {
+        this.shipId = shipId;
+    }
 
-	public String getShipId() {
-		return shipId;
-	}
+    public String getShipId() {
+        return shipId;
+    }
 
-	public void setMultiDifficulty( int multiDifficulty ) {
-		this.multiDifficulty = multiDifficulty;
-	}
+    public void setMultiDifficulty(int multiDifficulty) {
+        this.multiDifficulty = multiDifficulty;
+    }
 
-	public int getMultiDifficulty() {
-		return multiDifficulty;
-	}
+    public int getMultiDifficulty() {
+        return multiDifficulty;
+    }
 
-	public void setVictory( boolean b ) {
-		victory = b;
-	}
+    public void setVictory(boolean b) {
+        victory = b;
+    }
 
-	public boolean isVictory() {
-		return victory;
-	}
+    public boolean isVictory() {
+        return victory;
+    }
 
-	public void setQuest( boolean b ) {
-		quest = b;
-	}
+    public void setQuest(boolean b) {
+        quest = b;
+    }
 
-	public boolean isQuest() {
-		return quest;
-	}
+    public boolean isQuest() {
+        return quest;
+    }
 }

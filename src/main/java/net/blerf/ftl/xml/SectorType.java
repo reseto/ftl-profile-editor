@@ -18,10 +18,10 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SectorType {
 
-	@XmlAttribute(name = "name")
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	@XmlElement(name = "sector")
-	public List<String> sectorIds;
+    @XmlElement(name = "sector")
+    public List<String> sectorIds;
 
 }

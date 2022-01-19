@@ -19,460 +19,460 @@ import javax.swing.filechooser.FileFilter;
 
 public class FTLUtilities {
 
-	/** Steam's application ID for FTL. */
-	public static final String STEAM_APPID_FTL = "212680";
+    /**
+     * Steam's application ID for FTL.
+     */
+    public static final String STEAM_APPID_FTL = "212680";
 
 
-	/**
-	 * Confirms the FTL resources dir exists and contains the dat files.
-	 *
-	 * This checks for either "ftl.dat" or both "data.dat" and "resource.dat".
-	 *
-	 * Note: Do d.getCanonicalFile() to resolve any symlinks first!
-	 */
-	public static boolean isDatsDirValid( File d ) {
-		if ( !d.exists() || !d.isDirectory() ) return false;
+    /**
+     * Confirms the FTL resources dir exists and contains the dat files.
+     * <p>
+     * This checks for either "ftl.dat" or both "data.dat" and "resource.dat".
+     * <p>
+     * Note: Do d.getCanonicalFile() to resolve any symlinks first!
+     */
+    public static boolean isDatsDirValid(File d) {
+        if (!d.exists() || !d.isDirectory()) return false;
 
-		if ( new File( d, "ftl.dat" ).exists() ) return true;
+        if (new File(d, "ftl.dat").exists()) return true;
 
-		if ( new File( d, "data.dat" ).exists() && new File( d, "resource.dat" ).exists() ) {
-			return true;
-		}
+        if (new File(d, "data.dat").exists() && new File(d, "resource.dat").exists()) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Returns the FTL resources dir, or null.
-	 *
-	 * Windows: Steam, GOG, HumbleBundle
-	 * Linux (Wine): GOG, HumbleBundle
-	 * Linux: Steam, HumbleBundle
-	 * OSX: Steam, HumbleBundle
-	 */
-	public static File findDatsDir() {
-		String steamPath = "Steam/steamapps/common/FTL Faster Than Light";
-		String gogPath = "GOG.com/Faster Than Light";
-		String humblePath = "FTL";
+    /**
+     * Returns the FTL resources dir, or null.
+     * <p>
+     * Windows: Steam, GOG, HumbleBundle
+     * Linux (Wine): GOG, HumbleBundle
+     * Linux: Steam, HumbleBundle
+     * OSX: Steam, HumbleBundle
+     */
+    public static File findDatsDir() {
+        String steamPath = "Steam/steamapps/common/FTL Faster Than Light";
+        String gogPath = "GOG.com/Faster Than Light";
+        String humblePath = "FTL";
 
-		String programFiles86 = System.getenv( "ProgramFiles(x86)" );
-		String programFiles = System.getenv( "ProgramFiles" );
+        String programFiles86 = System.getenv("ProgramFiles(x86)");
+        String programFiles = System.getenv("ProgramFiles");
 
-		String home = System.getProperty( "user.home" );
+        String home = System.getProperty("user.home");
 
-		String xdgDataHome = System.getenv( "XDG_DATA_HOME" );
-		if ( xdgDataHome == null && home != null )
-			xdgDataHome = home +"/.local/share";
+        String xdgDataHome = System.getenv("XDG_DATA_HOME");
+        if (xdgDataHome == null && home != null)
+            xdgDataHome = home + "/.local/share";
 
-		String winePrefix = System.getProperty( "WINEPREFIX" );
-		if ( winePrefix == null && home != null )
-			winePrefix = home +"/.wine";
+        String winePrefix = System.getProperty("WINEPREFIX");
+        if (winePrefix == null && home != null)
+            winePrefix = home + "/.wine";
 
-		List<File> candidates = new ArrayList<File>();
-		// Windows - Steam, GOG, Humble Bundle.
-		if ( programFiles86 != null ) {
-			candidates.add( new File( new File( programFiles86 ), steamPath ) );
-			candidates.add( new File( new File( programFiles86 ), gogPath ) );
-			candidates.add( new File( new File( programFiles86 ), humblePath ) );
+        List<File> candidates = new ArrayList<File>();
+        // Windows - Steam, GOG, Humble Bundle.
+        if (programFiles86 != null) {
+            candidates.add(new File(new File(programFiles86), steamPath));
+            candidates.add(new File(new File(programFiles86), gogPath));
+            candidates.add(new File(new File(programFiles86), humblePath));
 
-			candidates.add( new File( new File( programFiles86 ), steamPath +"/resources" ) );
-			candidates.add( new File( new File( programFiles86 ), gogPath +"/resources" ) );
-			candidates.add( new File( new File( programFiles86 ), humblePath +"/resources" ) );
-		}
-		if ( programFiles != null ) {
-			candidates.add( new File( new File( programFiles ), steamPath ) );
-			candidates.add( new File( new File( programFiles ), gogPath ) );
-			candidates.add( new File( new File( programFiles ), humblePath ) );
+            candidates.add(new File(new File(programFiles86), steamPath + "/resources"));
+            candidates.add(new File(new File(programFiles86), gogPath + "/resources"));
+            candidates.add(new File(new File(programFiles86), humblePath + "/resources"));
+        }
+        if (programFiles != null) {
+            candidates.add(new File(new File(programFiles), steamPath));
+            candidates.add(new File(new File(programFiles), gogPath));
+            candidates.add(new File(new File(programFiles), humblePath));
 
-			candidates.add( new File( new File( programFiles ), steamPath +"/resources" ) );
-			candidates.add( new File( new File( programFiles ), gogPath +"/resources" ) );
-			candidates.add( new File( new File( programFiles ), humblePath +"/resources" ) );
-		}
-		// Linux - Steam.
-		if ( xdgDataHome != null ) {
-			candidates.add( new File( xdgDataHome +"/Steam/steamapps/common/FTL Faster Than Light/data" ) );
-			candidates.add( new File( xdgDataHome +"/Steam/SteamApps/common/FTL Faster Than Light/data" ) );
+            candidates.add(new File(new File(programFiles), steamPath + "/resources"));
+            candidates.add(new File(new File(programFiles), gogPath + "/resources"));
+            candidates.add(new File(new File(programFiles), humblePath + "/resources"));
+        }
+        // Linux - Steam.
+        if (xdgDataHome != null) {
+            candidates.add(new File(xdgDataHome + "/Steam/steamapps/common/FTL Faster Than Light/data"));
+            candidates.add(new File(xdgDataHome + "/Steam/SteamApps/common/FTL Faster Than Light/data"));
 
-			candidates.add( new File( xdgDataHome +"/Steam/steamapps/common/FTL Faster Than Light/data/resources" ) );
-			candidates.add( new File( xdgDataHome +"/Steam/SteamApps/common/FTL Faster Than Light/data/resources" ) );
-		}
-		if ( home != null ) {  // I think .steam/ contains symlinks to the paths above.
-			candidates.add( new File( home +"/.steam/steam/steamapps/common/FTL Faster Than Light/data" ) );
-			candidates.add( new File( home +"/.steam/steam/SteamApps/common/FTL Faster Than Light/data" ) );
+            candidates.add(new File(xdgDataHome + "/Steam/steamapps/common/FTL Faster Than Light/data/resources"));
+            candidates.add(new File(xdgDataHome + "/Steam/SteamApps/common/FTL Faster Than Light/data/resources"));
+        }
+        if (home != null) {  // I think .steam/ contains symlinks to the paths above.
+            candidates.add(new File(home + "/.steam/steam/steamapps/common/FTL Faster Than Light/data"));
+            candidates.add(new File(home + "/.steam/steam/SteamApps/common/FTL Faster Than Light/data"));
 
-			candidates.add( new File( home +"/.steam/steam/steamapps/common/FTL Faster Than Light/data/resources" ) );
-			candidates.add( new File( home +"/.steam/steam/SteamApps/common/FTL Faster Than Light/data/resources" ) );
-		}
-		// Linux - Wine.
-		if ( winePrefix != null ) {
-			candidates.add( new File( winePrefix +"/drive_c/Program Files (x86)/"+ gogPath ) );
-			candidates.add( new File( winePrefix +"/drive_c/Program Files (x86)/"+ humblePath ) );
-			candidates.add( new File( winePrefix +"/drive_c/Program Files/"+ gogPath ) );
-			candidates.add( new File( winePrefix +"/drive_c/Program Files/"+ humblePath ) );
+            candidates.add(new File(home + "/.steam/steam/steamapps/common/FTL Faster Than Light/data/resources"));
+            candidates.add(new File(home + "/.steam/steam/SteamApps/common/FTL Faster Than Light/data/resources"));
+        }
+        // Linux - Wine.
+        if (winePrefix != null) {
+            candidates.add(new File(winePrefix + "/drive_c/Program Files (x86)/" + gogPath));
+            candidates.add(new File(winePrefix + "/drive_c/Program Files (x86)/" + humblePath));
+            candidates.add(new File(winePrefix + "/drive_c/Program Files/" + gogPath));
+            candidates.add(new File(winePrefix + "/drive_c/Program Files/" + humblePath));
 
-			candidates.add( new File( winePrefix +"/drive_c/Program Files (x86)/"+ gogPath +"/resources" ) );
-			candidates.add( new File( winePrefix +"/drive_c/Program Files (x86)/"+ humblePath +"/resources" ) );
-			candidates.add( new File( winePrefix +"/drive_c/Program Files/"+ gogPath +"/resources" ) );
-			candidates.add( new File( winePrefix +"/drive_c/Program Files/"+ humblePath +"/resources" ) );
-		}
-		// OSX - Steam.
-		if ( home != null ) {
-			candidates.add( new File( home +"/Library/Application Support/Steam/steamapps/common/FTL Faster Than Light/FTL.app/Contents/Resources" ) );
-			candidates.add( new File( home +"/Library/Application Support/Steam/SteamApps/common/FTL Faster Than Light/FTL.app/Contents/Resources" ) );
-		}
-		// OSX - Standalone.
-		candidates.add( new File( "/Applications/FTL.app/Contents/Resources" ) );
+            candidates.add(new File(winePrefix + "/drive_c/Program Files (x86)/" + gogPath + "/resources"));
+            candidates.add(new File(winePrefix + "/drive_c/Program Files (x86)/" + humblePath + "/resources"));
+            candidates.add(new File(winePrefix + "/drive_c/Program Files/" + gogPath + "/resources"));
+            candidates.add(new File(winePrefix + "/drive_c/Program Files/" + humblePath + "/resources"));
+        }
+        // OSX - Steam.
+        if (home != null) {
+            candidates.add(new File(home + "/Library/Application Support/Steam/steamapps/common/FTL Faster Than Light/FTL.app/Contents/Resources"));
+            candidates.add(new File(home + "/Library/Application Support/Steam/SteamApps/common/FTL Faster Than Light/FTL.app/Contents/Resources"));
+        }
+        // OSX - Standalone.
+        candidates.add(new File("/Applications/FTL.app/Contents/Resources"));
 
-		File result = null;
+        File result = null;
 
-		for ( File candidate : candidates ) {
-			// Resolve symlinks.
-			try {candidate = candidate.getCanonicalFile();}
-			catch ( IOException e ) {continue;}
+        for (File candidate : candidates) {
+            // Resolve symlinks.
+            try {
+                candidate = candidate.getCanonicalFile();
+            } catch (IOException e) {
+                continue;
+            }
 
-			if ( isDatsDirValid( candidate ) ) {
-				result = candidate;
-				break;
-			}
-		}
+            if (isDatsDirValid(candidate)) {
+                result = candidate;
+                break;
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Modally prompts the user for the FTL resources dir.
-	 *
-	 * Reminder: GUI dialogs need to be in the event dispatch thread.
-	 *
-	 * @param parentComponent a parent for Swing dialogs, or null
-	 */
-	public static File promptForDatsDir( Component parentComponent ) {
-		File result = null;
+    /**
+     * Modally prompts the user for the FTL resources dir.
+     * <p>
+     * Reminder: GUI dialogs need to be in the event dispatch thread.
+     *
+     * @param parentComponent a parent for Swing dialogs, or null
+     */
+    public static File promptForDatsDir(Component parentComponent) {
+        File result = null;
 
-		String message = ""
-			+ "You will now be prompted to locate FTL manually.\n"
-			+ "Look in {FTL dir} to select 'ftl.dat' or 'data.dat'.\n"
-			+ "\n"
-			+ "It may be buried under a subdirectory called 'resources/'.\n"
-			+ "Or select 'FTL.app', if you're on OSX.";
+        String message = ""
+                + "You will now be prompted to locate FTL manually.\n"
+                + "Look in {FTL dir} to select 'ftl.dat' or 'data.dat'.\n"
+                + "\n"
+                + "It may be buried under a subdirectory called 'resources/'.\n"
+                + "Or select 'FTL.app', if you're on OSX.";
 
-		JOptionPane.showMessageDialog( parentComponent, message, "Find FTL", JOptionPane.INFORMATION_MESSAGE );
+        JOptionPane.showMessageDialog(parentComponent, message, "Find FTL", JOptionPane.INFORMATION_MESSAGE);
 
-		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle( "Find ftl.dat or data.dat or FTL.app" );
-		fc.setFileHidingEnabled( false );
-		fc.addChoosableFileFilter(new FileFilter() {
-			@Override
-			public String getDescription() {
-				return "FTL Resources (ftl.dat; data.dat; FTL.app)";
-			}
-			@Override
-			public boolean accept( File f ) {
-				return f.isDirectory() || f.getName().equals( "ftl.dat" ) || f.getName().equals( "data.dat" ) || f.getName().equals( "FTL.app" );
-			}
-		});
-		fc.setMultiSelectionEnabled( false );
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Find ftl.dat or data.dat or FTL.app");
+        fc.setFileHidingEnabled(false);
+        fc.addChoosableFileFilter(new FileFilter() {
+            @Override
+            public String getDescription() {
+                return "FTL Resources (ftl.dat; data.dat; FTL.app)";
+            }
 
-		if ( fc.showOpenDialog( parentComponent ) == JFileChooser.APPROVE_OPTION ) {
-			File f = fc.getSelectedFile();
-			if ( f.getName().equals( "ftl.dat" ) || f.getName().equals( "data.dat" ) ) {
-				result = f.getParentFile();
-			}
-			else if ( f.getName().endsWith( ".app" ) && f.isDirectory() ) {
-				File contentsPath = new File( f, "Contents" );
-				if ( contentsPath.exists() && contentsPath.isDirectory() && new File( contentsPath, "Resources" ).exists() ) {
-					result = new File( contentsPath, "Resources" );
-				}
-			}
-		}
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().equals("ftl.dat") || f.getName().equals("data.dat") || f.getName().equals("FTL.app");
+            }
+        });
+        fc.setMultiSelectionEnabled(false);
 
-		if ( result != null && isDatsDirValid( result ) ) {
-			return result;
-		}
+        if (fc.showOpenDialog(parentComponent) == JFileChooser.APPROVE_OPTION) {
+            File f = fc.getSelectedFile();
+            if (f.getName().equals("ftl.dat") || f.getName().equals("data.dat")) {
+                result = f.getParentFile();
+            } else if (f.getName().endsWith(".app") && f.isDirectory()) {
+                File contentsPath = new File(f, "Contents");
+                if (contentsPath.exists() && contentsPath.isDirectory() && new File(contentsPath, "Resources").exists()) {
+                    result = new File(contentsPath, "Resources");
+                }
+            }
+        }
 
-		return null;
-	}
+        if (result != null && isDatsDirValid(result)) {
+            return result;
+        }
 
-	/**
-	 * Returns the executable that will launch FTL, or null.
-	 *
-	 * FTL 1.01-1.5.13:
-	 *   Windows
-	 *     {FTL dir}/resources/*.dat
-	 *     {FTL dir}/FTLGame.exe
-	 *   Linux
-	 *     {FTL dir}/data/resources/*.dat
-	 *     {FTL dir}/data/FTL
-	 *   OSX
-	 *     {FTL dir}/Contents/Resources/*.dat
-	 *     {FTL dir}
-	 *
-	 * FTL 1.6.1:
-	 *   Windows
-	 *     {FTL dir}/*.dat
-	 *     {FTL dir}/FTLGame.exe
-	 *   Linux
-	 *     {FTL dir}/data/*.dat
-	 *     {FTL dir}/data/FTL
-	 *   OSX
-	 *     {FTL dir}/Contents/Resources/*.dat
-	 *     {FTL dir}
-	 *
-	 * On Windows, FTLGame.exe is a binary.
-	 * On Linux, FTL is a script.
-	 * On OSX, FTL.app is the grandparent dir itself (a bundle).
-	 */
-	public static File findGameExe( File datsDir ) {
-		File result = null;
+        return null;
+    }
 
-		if ( System.getProperty( "os.name" ).startsWith( "Windows" ) ) {
+    /**
+     * Returns the executable that will launch FTL, or null.
+     * <p>
+     * FTL 1.01-1.5.13:
+     * Windows
+     * {FTL dir}/resources/*.dat
+     * {FTL dir}/FTLGame.exe
+     * Linux
+     * {FTL dir}/data/resources/*.dat
+     * {FTL dir}/data/FTL
+     * OSX
+     * {FTL dir}/Contents/Resources/*.dat
+     * {FTL dir}
+     * <p>
+     * FTL 1.6.1:
+     * Windows
+     * {FTL dir}/*.dat
+     * {FTL dir}/FTLGame.exe
+     * Linux
+     * {FTL dir}/data/*.dat
+     * {FTL dir}/data/FTL
+     * OSX
+     * {FTL dir}/Contents/Resources/*.dat
+     * {FTL dir}
+     * <p>
+     * On Windows, FTLGame.exe is a binary.
+     * On Linux, FTL is a script.
+     * On OSX, FTL.app is the grandparent dir itself (a bundle).
+     */
+    public static File findGameExe(File datsDir) {
+        File result = null;
 
-			for ( File candidateDir : new File[] { datsDir, datsDir.getParentFile() } ) {
-				if ( candidateDir == null ) continue;
+        if (System.getProperty("os.name").startsWith("Windows")) {
 
-				File exeFile = new File( candidateDir, "FTLGame.exe" );
-				if ( exeFile.exists() ) {
-					result = exeFile;
-					break;
-				}
-			}
-		}
-		else if ( System.getProperty( "os.name" ).equals( "Linux" ) ) {
+            for (File candidateDir : new File[]{datsDir, datsDir.getParentFile()}) {
+                if (candidateDir == null) continue;
 
-			for ( File candidateDir : new File[] { datsDir, datsDir.getParentFile() } ) {
-				if ( candidateDir == null ) continue;
+                File exeFile = new File(candidateDir, "FTLGame.exe");
+                if (exeFile.exists()) {
+                    result = exeFile;
+                    break;
+                }
+            }
+        } else if (System.getProperty("os.name").equals("Linux")) {
 
-				File exeFile = new File( candidateDir, "FTL" );
-				if ( exeFile.exists() ) {
-					result = exeFile;
-					break;
-				}
-			}
-		}
-		else if ( System.getProperty( "os.name" ).contains( "OS X" ) ) {
-			// FTL.app/Contents/Resources/
-			File contentsDir = datsDir.getParentFile();
-			if ( contentsDir != null ) {
-				File bundleDir = contentsDir.getParentFile();
-				if ( bundleDir != null ) {
-					if ( new File( bundleDir, "Contents/Info.plist" ).exists() ) {
-						result = bundleDir;
-					}
-				}
-			}
-		}
+            for (File candidateDir : new File[]{datsDir, datsDir.getParentFile()}) {
+                if (candidateDir == null) continue;
 
-		return result;
-	}
+                File exeFile = new File(candidateDir, "FTL");
+                if (exeFile.exists()) {
+                    result = exeFile;
+                    break;
+                }
+            }
+        } else if (System.getProperty("os.name").contains("OS X")) {
+            // FTL.app/Contents/Resources/
+            File contentsDir = datsDir.getParentFile();
+            if (contentsDir != null) {
+                File bundleDir = contentsDir.getParentFile();
+                if (bundleDir != null) {
+                    if (new File(bundleDir, "Contents/Info.plist").exists()) {
+                        result = bundleDir;
+                    }
+                }
+            }
+        }
 
-	/**
-	 * Returns the executable that will launch Steam, or null.
-	 *
-	 * On Windows, "Steam.exe".
-	 * On Linux, "steam" is a script. ( http://moritzmolch.com/815 )
-	 * On OSX, "Steam.app" is a bundle.
-	 *
-	 * The definitive Windows registry will not be checked.
-	 *   Key,Name,Type: "HKCU\\Software\\Valve\\Steam", "SteamExe", "REG_SZ".
-	 *
-	 * The args to launch FTL are: ["-applaunch", STEAM_APPID_FTL]
-	 *
-	 * @see #queryRegistryKey(String, String, String)
-	 */
-	public static File findSteamExe() {
-		String programFiles86 = System.getenv( "ProgramFiles(x86)" );
-		String programFiles = System.getenv( "ProgramFiles" );
+        return result;
+    }
 
-		String osName = System.getProperty( "os.name" );
+    /**
+     * Returns the executable that will launch Steam, or null.
+     * <p>
+     * On Windows, "Steam.exe".
+     * On Linux, "steam" is a script. ( http://moritzmolch.com/815 )
+     * On OSX, "Steam.app" is a bundle.
+     * <p>
+     * The definitive Windows registry will not be checked.
+     * Key,Name,Type: "HKCU\\Software\\Valve\\Steam", "SteamExe", "REG_SZ".
+     * <p>
+     * The args to launch FTL are: ["-applaunch", STEAM_APPID_FTL]
+     *
+     * @see #queryRegistryKey(String, String, String)
+     */
+    public static File findSteamExe() {
+        String programFiles86 = System.getenv("ProgramFiles(x86)");
+        String programFiles = System.getenv("ProgramFiles");
 
-		List<File> candidates = new ArrayList<File>();
+        String osName = System.getProperty("os.name");
 
-		if ( osName.startsWith( "Windows" ) ) {
-			if ( programFiles86 != null ) {
-				candidates.add( new File( new File( programFiles86 ), "Steam/Steam.exe" ) );
-			}
-			if ( programFiles != null ) {
-				candidates.add( new File( new File( programFiles ), "Steam/Steam.exe" ) );
-			}
-		}
-		else if ( osName.equals( "Linux" ) ) {
-			candidates.add( new File( "/usr/bin/steam" ) );
-		}
-		else if ( osName.contains( "OS X" ) ) {
-			candidates.add( new File( "/Applications/Steam.app" ) );
-		}
+        List<File> candidates = new ArrayList<File>();
 
-		File result = null;
+        if (osName.startsWith("Windows")) {
+            if (programFiles86 != null) {
+                candidates.add(new File(new File(programFiles86), "Steam/Steam.exe"));
+            }
+            if (programFiles != null) {
+                candidates.add(new File(new File(programFiles), "Steam/Steam.exe"));
+            }
+        } else if (osName.equals("Linux")) {
+            candidates.add(new File("/usr/bin/steam"));
+        } else if (osName.contains("OS X")) {
+            candidates.add(new File("/Applications/Steam.app"));
+        }
 
-		for ( File candidate : candidates ) {
-			if ( candidate.exists() ) {
-				result = candidate;
-				break;
-			}
-		}
+        File result = null;
 
-		return result;
-	}
+        for (File candidate : candidates) {
+            if (candidate.exists()) {
+                result = candidate;
+                break;
+            }
+        }
 
-	/**
-	 * Tells Steam to "verify game cache".
-	 *
-	 * This will spawn a process to notify Steam and exit immediately.
-	 *
-	 * Steam will start, if not already running, and a popup with progress bar
-	 * will appear.
-	 *
-	 * For FTL, this method amounts to running:
-	 *   Steam.exe "steam://validate/212680"
-	 *
-	 * Steam registers itself with the OS as a custom URI handler. The URI gets
-	 * passed as an argument when a "steam://" address is visited.
-	 */
-	public static Process verifySteamGameCache( File exeFile, String appId ) throws IOException {
-		if ( appId == null || appId.length() == 0 ) throw new IllegalArgumentException( "No Steam APP_ID was provided" );
+        return result;
+    }
 
-		String[] exeArgs = new String[] {"steam://validate/"+ appId};
-		return launchExe( exeFile, exeArgs );
-	}
+    /**
+     * Tells Steam to "verify game cache".
+     * <p>
+     * This will spawn a process to notify Steam and exit immediately.
+     * <p>
+     * Steam will start, if not already running, and a popup with progress bar
+     * will appear.
+     * <p>
+     * For FTL, this method amounts to running:
+     * Steam.exe "steam://validate/212680"
+     * <p>
+     * Steam registers itself with the OS as a custom URI handler. The URI gets
+     * passed as an argument when a "steam://" address is visited.
+     */
+    public static Process verifySteamGameCache(File exeFile, String appId) throws IOException {
+        if (appId == null || appId.length() == 0) throw new IllegalArgumentException("No Steam APP_ID was provided");
 
-	/**
-	 * Launches an executable.
-	 *
-	 * On Windows, *.exe.
-	 * On Linux, a binary or script.
-	 * On OSX, an *.app bundle dir.
-	 *
-	 * OSX bundles are executed with: "open -a bundle.app".
-	 *
-	 * @param exeFile see findGameExe() or findSteamExe()
-	 * @param exeArgs arguments for the executable
-	 * @return a Process object, or null
-	 */
-	public static Process launchExe( File exeFile, String... exeArgs ) throws IOException {
-		if ( exeFile == null ) return null;
-		if ( exeArgs == null ) exeArgs = new String[0];
+        String[] exeArgs = new String[]{"steam://validate/" + appId};
+        return launchExe(exeFile, exeArgs);
+    }
 
-		Process result = null;
-		ProcessBuilder pb = null;
-		if ( System.getProperty( "os.name" ).contains( "OS X" ) ) {
-			String[] args = new String[3 + exeArgs.length];
-			args[0] = "open";
-			args[1] = "-a";
-			args[2] = exeFile.getAbsolutePath();
-			System.arraycopy( exeArgs, 0, args, 3, exeArgs.length );
+    /**
+     * Launches an executable.
+     * <p>
+     * On Windows, *.exe.
+     * On Linux, a binary or script.
+     * On OSX, an *.app bundle dir.
+     * <p>
+     * OSX bundles are executed with: "open -a bundle.app".
+     *
+     * @param exeFile see findGameExe() or findSteamExe()
+     * @param exeArgs arguments for the executable
+     * @return a Process object, or null
+     */
+    public static Process launchExe(File exeFile, String... exeArgs) throws IOException {
+        if (exeFile == null) return null;
+        if (exeArgs == null) exeArgs = new String[0];
 
-			pb = new ProcessBuilder( args );
-		}
-		else {
-			String[] args = new String[1 + exeArgs.length];
-			args[0] = exeFile.getAbsolutePath();
-			System.arraycopy( exeArgs, 0, args, 1, exeArgs.length );
+        Process result = null;
+        ProcessBuilder pb = null;
+        if (System.getProperty("os.name").contains("OS X")) {
+            String[] args = new String[3 + exeArgs.length];
+            args[0] = "open";
+            args[1] = "-a";
+            args[2] = exeFile.getAbsolutePath();
+            System.arraycopy(exeArgs, 0, args, 3, exeArgs.length);
 
-			pb = new ProcessBuilder( args );
-		}
-		if ( pb != null ) {
-			pb.directory( exeFile.getParentFile() );
-			result = pb.start();
-		}
-		return result;
-	}
+            pb = new ProcessBuilder(args);
+        } else {
+            String[] args = new String[1 + exeArgs.length];
+            args[0] = exeFile.getAbsolutePath();
+            System.arraycopy(exeArgs, 0, args, 1, exeArgs.length);
 
-	/**
-	 * Returns the directory for user profiles and saved games, or null.
-	 */
-	public static File findUserDataDir() {
-		String home = System.getProperty( "user.home" );
+            pb = new ProcessBuilder(args);
+        }
+        if (pb != null) {
+            pb.directory(exeFile.getParentFile());
+            result = pb.start();
+        }
+        return result;
+    }
 
-		String xdgDataHome = System.getenv( "XDG_DATA_HOME" );
-		if ( xdgDataHome == null && home != null )
-			xdgDataHome = home +"/.local/share";
+    /**
+     * Returns the directory for user profiles and saved games, or null.
+     */
+    public static File findUserDataDir() {
+        String home = System.getProperty("user.home");
 
-		List<File> candidates = new ArrayList<File>();
+        String xdgDataHome = System.getenv("XDG_DATA_HOME");
+        if (xdgDataHome == null && home != null)
+            xdgDataHome = home + "/.local/share";
 
-		// Windows.
-		if ( home != null ) {
-			// Windows XP.
-			candidates.add( new File( home +"/My Documents/My Games/FasterThanLight" ) );
-			// Windows Vista/7/etc.
-			candidates.add( new File( home +"/Documents/My Games/FasterThanLight" ) );
-		}
-		// Linux.
-		if ( xdgDataHome != null ) {
-			candidates.add( new File( xdgDataHome +"/FasterThanLight" ) );
-		}
-		// OSX.
-		if ( home != null ) {
-			candidates.add( new File( home +"/Library/Application Support/FasterThanLight" ) );
-		}
+        List<File> candidates = new ArrayList<File>();
 
-		File result = null;
+        // Windows.
+        if (home != null) {
+            // Windows XP.
+            candidates.add(new File(home + "/My Documents/My Games/FasterThanLight"));
+            // Windows Vista/7/etc.
+            candidates.add(new File(home + "/Documents/My Games/FasterThanLight"));
+        }
+        // Linux.
+        if (xdgDataHome != null) {
+            candidates.add(new File(xdgDataHome + "/FasterThanLight"));
+        }
+        // OSX.
+        if (home != null) {
+            candidates.add(new File(home + "/Library/Application Support/FasterThanLight"));
+        }
 
-		for ( File candidate : candidates ) {
-			if ( candidate.isDirectory() && candidate.exists() ) {
-				result = candidate;
-				break;
-			}
-		}
+        File result = null;
 
-		return result;
-	}
+        for (File candidate : candidates) {
+            if (candidate.isDirectory() && candidate.exists()) {
+                result = candidate;
+                break;
+            }
+        }
 
-	/**
-	 * Returns a value from the Windows registry, by scraping reg.exe, or null.
-	 *
-	 * This is equivalent to: reg.exe query {key} /v {valueName} /t {valueType}
-	 *
-	 * This view will not be jailed in Wow6432Node, even if Java is?
-	 * Characters outside windows-1252 are unsupported (results will be mangled).
-	 *
-	 * Bad unicode example: "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Console\\TrueTypeFont", "932", "REG_SZ".
-	 *
-	 * @param key a backslash path starting with HKLM, HKCU, HKCR, HKU, HKCC
-	 * @param valueName a value name, or "" for the "(Default)" value
-	 * @param valueType REG_SZ ("Abc"), REG_DWORD ("0x1"), REG_BINARY ("44E09C"), etc
-	 */
-	public static String queryRegistryKey( String key, String valueName, String valueType ) throws IOException {
-		if ( !System.getProperty( "os.name" ).startsWith( "Windows" ) ) return null;
-		if ( key == null || valueType == null || key.length() * valueType.length() == 0  ) {
-			throw new IllegalArgumentException( "key and valueType cannot be null or empty" );
-		}
+        return result;
+    }
 
-		BufferedReader r = null;
-		try {
-			String regExePath = "reg.exe";
-			String winDir = System.getenv( "windir" );
+    /**
+     * Returns a value from the Windows registry, by scraping reg.exe, or null.
+     * <p>
+     * This is equivalent to: reg.exe query {key} /v {valueName} /t {valueType}
+     * <p>
+     * This view will not be jailed in Wow6432Node, even if Java is?
+     * Characters outside windows-1252 are unsupported (results will be mangled).
+     * <p>
+     * Bad unicode example: "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Console\\TrueTypeFont", "932", "REG_SZ".
+     *
+     * @param key       a backslash path starting with HKLM, HKCU, HKCR, HKU, HKCC
+     * @param valueName a value name, or "" for the "(Default)" value
+     * @param valueType REG_SZ ("Abc"), REG_DWORD ("0x1"), REG_BINARY ("44E09C"), etc
+     */
+    public static String queryRegistryKey(String key, String valueName, String valueType) throws IOException {
+        if (!System.getProperty("os.name").startsWith("Windows")) return null;
+        if (key == null || valueType == null || key.length() * valueType.length() == 0) {
+            throw new IllegalArgumentException("key and valueType cannot be null or empty");
+        }
 
-			if ( winDir != null && winDir.length() > 0 ) {
-				// When Java's in Wow64 redirection jail, sysnative is a virtual dir with the 64bit commands.
-				// I don't know if this will ever happen to Java.
-				File unWowRegExeFile = new File( winDir, "sysnative\\reg.exe" );
-				if ( unWowRegExeFile.exists() ) regExePath = unWowRegExeFile.getAbsolutePath();
-			}
+        BufferedReader r = null;
+        try {
+            String regExePath = "reg.exe";
+            String winDir = System.getenv("windir");
 
-			String[] steamRegArgs = new String[] {regExePath, "query", key, "/v", valueName, "/t", valueType};
-			Pattern regPtn = Pattern.compile( Pattern.quote( (( valueName != null ) ? valueName : "(Default)") ) +"\\s+"+ Pattern.quote( valueType ) +"\\s+(.*)" );
+            if (winDir != null && winDir.length() > 0) {
+                // When Java's in Wow64 redirection jail, sysnative is a virtual dir with the 64bit commands.
+                // I don't know if this will ever happen to Java.
+                File unWowRegExeFile = new File(winDir, "sysnative\\reg.exe");
+                if (unWowRegExeFile.exists()) regExePath = unWowRegExeFile.getAbsolutePath();
+            }
 
-			Process p = new ProcessBuilder( steamRegArgs ).start();
-			p.waitFor();
-			if ( p.exitValue() == 0 ) {
-				r = new BufferedReader( new InputStreamReader( p.getInputStream(), "windows-1252" ) );
-				Matcher m;
-				String line;
-				while ( (line=r.readLine()) != null ) {
-					if ( (m=regPtn.matcher( line )).find() ) {
-						return m.group( 1 );
-					}
-				}
-			}
-		}
-		catch ( InterruptedException e ) {  // *shrug*
-			Thread.currentThread().interrupt();  // Set interrupt flag.
-		}
-		finally {
-			try {if ( r != null ) r.close();}
-			catch ( IOException e ) {}
-		}
+            String[] steamRegArgs = new String[]{regExePath, "query", key, "/v", valueName, "/t", valueType};
+            Pattern regPtn = Pattern.compile(Pattern.quote(((valueName != null) ? valueName : "(Default)")) + "\\s+" + Pattern.quote(valueType) + "\\s+(.*)");
 
-		return null;
-	}
+            Process p = new ProcessBuilder(steamRegArgs).start();
+            p.waitFor();
+            if (p.exitValue() == 0) {
+                r = new BufferedReader(new InputStreamReader(p.getInputStream(), "windows-1252"));
+                Matcher m;
+                String line;
+                while ((line = r.readLine()) != null) {
+                    if ((m = regPtn.matcher(line)).find()) {
+                        return m.group(1);
+                    }
+                }
+            }
+        } catch (InterruptedException e) {  // *shrug*
+            Thread.currentThread().interrupt();  // Set interrupt flag.
+        } finally {
+            try {
+                if (r != null) r.close();
+            } catch (IOException e) {
+            }
+        }
+
+        return null;
+    }
 }

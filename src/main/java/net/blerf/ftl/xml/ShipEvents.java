@@ -7,19 +7,19 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement( name = "shipEvents" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "shipEvents")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ShipEvents {
 
-	@XmlElement( name = "ship" )
-	private List<ShipEvent> shipEvents;
+    @XmlElement(name = "ship")
+    private List<ShipEvent> shipEvents;
 
 
-	public void setShipEvents( List<ShipEvent> shipEvents ) {
-		this.shipEvents = shipEvents;
-	}
+    public void setShipEvents(List<ShipEvent> shipEvents) {
+        this.shipEvents = shipEvents;
+    }
 
-	public List<ShipEvent> getShipEvents() {
-		return shipEvents;
-	}
+    public List<ShipEvent> getShipEvents() {
+        return shipEvents;
+    }
 }

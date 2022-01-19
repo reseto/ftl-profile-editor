@@ -10,52 +10,52 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "sectorData")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SectorData {
-	@XmlElement(name = "sectorType")
-	private List<SectorType> sectorTypes;
+    @XmlElement(name = "sectorType")
+    private List<SectorType> sectorTypes;
 
-	@XmlElement(name="sectorDescription")
-	private List<SectorDescription> sectorDescriptions;
+    @XmlElement(name = "sectorDescription")
+    private List<SectorDescription> sectorDescriptions;
 
-	public void setSectorTypes( List<SectorType> sectorTypes ) {
-		this.sectorTypes = sectorTypes;
-	}
+    public void setSectorTypes(List<SectorType> sectorTypes) {
+        this.sectorTypes = sectorTypes;
+    }
 
-	public List<SectorType> getSectorTypes() {
-		return sectorTypes;
-	}
+    public List<SectorType> getSectorTypes() {
+        return sectorTypes;
+    }
 
-	public void setSectorDescriptions( List<SectorDescription> sectorDescriptions ) {
-		this.sectorDescriptions = sectorDescriptions;
-	}
+    public void setSectorDescriptions(List<SectorDescription> sectorDescriptions) {
+        this.sectorDescriptions = sectorDescriptions;
+    }
 
-	public List<SectorDescription> getSectorDescriptions() {
-		return sectorDescriptions;
-	}
+    public List<SectorDescription> getSectorDescriptions() {
+        return sectorDescriptions;
+    }
 
-	/**
-	 * Returns a SectorType with a given id.
-	 */
-	public SectorType getSectorTypeById( String id ) {
-		if ( id == null || sectorTypes == null ) return null;
+    /**
+     * Returns a SectorType with a given id.
+     */
+    public SectorType getSectorTypeById(String id) {
+        if (id == null || sectorTypes == null) return null;
 
-		for ( SectorType tmpType : sectorTypes ) {
-			if ( id.equals(tmpType.getId()) ) return tmpType;
-		}
+        for (SectorType tmpType : sectorTypes) {
+            if (id.equals(tmpType.getId())) return tmpType;
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Returns a SectorDescription with a given id.
-	 */
-	public SectorDescription getSectorDescriptionById( String id ) {
-		if ( id == null || sectorDescriptions == null ) return null;
+    /**
+     * Returns a SectorDescription with a given id.
+     */
+    public SectorDescription getSectorDescriptionById(String id) {
+        if (id == null || sectorDescriptions == null) return null;
 
-		SectorDescription result = null;
-		for ( SectorDescription tmpDesc : sectorDescriptions ) {
-			if ( id.equals(tmpDesc.getId()) ) result = tmpDesc;
-		}
+        SectorDescription result = null;
+        for (SectorDescription tmpDesc : sectorDescriptions) {
+            if (id.equals(tmpDesc.getId())) result = tmpDesc;
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

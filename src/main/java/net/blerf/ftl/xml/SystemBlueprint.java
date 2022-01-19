@@ -15,27 +15,27 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@XmlRootElement( name = "systemBlueprint" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "systemBlueprint")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SystemBlueprint {
 
-	@XmlAttribute(name = "name")
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	private String type;
-	private DefaultDeferredText title;
-	private DefaultDeferredText desc;
-	private int startPower;  // Initial system capacity.
-	private int maxPower;    // Highest possible capacity attainable by upgrading.
-	private int rarity;
+    private String type;
+    private DefaultDeferredText title;
+    private DefaultDeferredText desc;
+    private int startPower;  // Initial system capacity.
+    private int maxPower;    // Highest possible capacity attainable by upgrading.
+    private int rarity;
 
-	@XmlElementWrapper(name = "upgradeCost")
-	@XmlElement(name = "level")
-	private List<Integer> upgradeCosts;
+    @XmlElementWrapper(name = "upgradeCost")
+    @XmlElement(name = "level")
+    private List<Integer> upgradeCosts;
 
-	private int cost;
+    private int cost;
 
-	@XmlElement(required = false)
-	private Integer locked;
+    @XmlElement(required = false)
+    private Integer locked;
 
 }

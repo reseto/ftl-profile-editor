@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Substitutes string values using an existing lookup Map.
- *
+ * <p>
  * After each DeferredText field is unmarshalled, this will call
  * setResolvedText() on it, unescaping newlines in the process.
  *
@@ -17,36 +17,35 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TextLookupUnmarshalListener extends Unmarshaller.Listener {
 
-	private Map<String, String> lookupMap = new HashMap<String, String>();
+    private Map<String, String> lookupMap = new HashMap<String, String>();
 
 
-	public TextLookupUnmarshalListener() {
-	}
+    public TextLookupUnmarshalListener() {
+    }
 
-	/**
-	 * After construction, get this Map and put entries into it.
-	 */
-	public Map<String, String> getLookupMap() {
-		return lookupMap;
-	}
+    /**
+     * After construction, get this Map and put entries into it.
+     */
+    public Map<String, String> getLookupMap() {
+        return lookupMap;
+    }
 
-	@Override
-	public void afterUnmarshal( Object target, Object parent ) {
+    @Override
+    public void afterUnmarshal(Object target, Object parent) {
 
-		if ( target instanceof DeferredText ) {
-			DeferredText deferredText = (DeferredText)target;
+        if (target instanceof DeferredText) {
+            DeferredText deferredText = (DeferredText) target;
 
-			if ( deferredText.getTextId() != null ) {
-				String textId = deferredText.getTextId();
+            if (deferredText.getTextId() != null) {
+                String textId = deferredText.getTextId();
 
-				if ( lookupMap.containsKey( textId ) ) {
-					String resolvedText = lookupMap.get( textId ).replaceAll( "\\n", "\n" );
-					deferredText.setResolvedText( resolvedText );
-				}
-				else {
-					log.warn( "Text lookup failed for id: {}", textId );
-				}
-			}
-		}
-	}
+                if (lookupMap.containsKey(textId)) {
+                    String resolvedText = lookupMap.get(textId).replaceAll("\\n", "\n");
+                    deferredText.setResolvedText(resolvedText);
+                } else {
+                    log.warn("Text lookup failed for id: {}", textId);
+                }
+            }
+        }
+    }
 }

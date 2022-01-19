@@ -24,292 +24,283 @@ import net.blerf.ftl.model.sectortree.SectorTreeListener;
 
 public class SectorTreePreviewPanel extends JPanel implements SectorTreeListener {
 
-	protected SectorTree tree = new SectorTree();
-	protected boolean treeExpanded = true;
-	protected int dotRegionW = 494, dotRegionH = 162;
-	protected int dotRadius = 7;
+    protected SectorTree tree = new SectorTree();
+    protected boolean treeExpanded = true;
+    protected int dotRegionW = 494, dotRegionH = 162;
+    protected int dotRadius = 7;
 
-	protected Map<String,Color> dotColorMap = new HashMap<String,Color>();
-	protected Color possibleRouteColor = new Color( 255, 255, 255 );
-	protected Color traveledRouteColor = new Color( 255, 255, 50 );
-	protected Color inaccessibleRouteColor = new Color( 125, 125, 125 );
+    protected Map<String, Color> dotColorMap = new HashMap<String, Color>();
+    protected Color possibleRouteColor = new Color(255, 255, 255);
+    protected Color traveledRouteColor = new Color(255, 255, 50);
+    protected Color inaccessibleRouteColor = new Color(125, 125, 125);
 
-	private Point aXY = new Point();
-	private Point bXY = new Point();
-	private List<SectorDot> tmpList = new ArrayList<SectorDot>( 4 );
-
-
-	public SectorTreePreviewPanel() {
-		super();
-		this.setLayout( null );
-
-		dotColorMap.put( "CIVILIAN", new Color( 135, 199, 74 ) );
-		dotColorMap.put( "HOSTILE", new Color( 214, 50, 50 ) );
-		dotColorMap.put( "NEBULA", new Color( 128, 51, 210 ) );
-		dotColorMap.put( null, new Color( 50, 50, 50 ) );
-
-		this.setPreferredSize( new Dimension( dotRegionW, dotRegionH ) );
-		this.setOpaque( false );
-	}
+    private Point aXY = new Point();
+    private Point bXY = new Point();
+    private List<SectorDot> tmpList = new ArrayList<SectorDot>(4);
 
 
-	public void setSectorTree( SectorTree newTree ) {
-		tree = newTree;
-		this.repaint();
-	}
+    public SectorTreePreviewPanel() {
+        super();
+        this.setLayout(null);
 
-	public SectorTree getSectorTree() {
-		return tree;
-	}
+        dotColorMap.put("CIVILIAN", new Color(135, 199, 74));
+        dotColorMap.put("HOSTILE", new Color(214, 50, 50));
+        dotColorMap.put("NEBULA", new Color(128, 51, 210));
+        dotColorMap.put(null, new Color(50, 50, 50));
 
-	/**
-	 * Toggles whether the tree will be flattened.
-	 *
-	 * One dot per column will be drawn, a visited one, if present.
-	 * Forward travel will not be possible.
-	 */
-	public void setTreeExpanded( boolean b ) {
-		treeExpanded = b;
-	}
-
-	public boolean isTreeExpanded() {
-		return treeExpanded;
-	}
+        this.setPreferredSize(new Dimension(dotRegionW, dotRegionH));
+        this.setOpaque(false);
+    }
 
 
-	@Override
-	public void sectorTreeChanged( SectorTreeEvent e ) {
-		this.repaint();
-	}
+    public void setSectorTree(SectorTree newTree) {
+        tree = newTree;
+        this.repaint();
+    }
+
+    public SectorTree getSectorTree() {
+        return tree;
+    }
+
+    /**
+     * Toggles whether the tree will be flattened.
+     * <p>
+     * One dot per column will be drawn, a visited one, if present.
+     * Forward travel will not be possible.
+     */
+    public void setTreeExpanded(boolean b) {
+        treeExpanded = b;
+    }
+
+    public boolean isTreeExpanded() {
+        return treeExpanded;
+    }
 
 
-	/**
-	 * Returns the radius of circles used to represent SectorDots.
-	 */
-	public int getDotRadius() {
-		return dotRadius;
-	}
+    @Override
+    public void sectorTreeChanged(SectorTreeEvent e) {
+        this.repaint();
+    }
 
 
-	/**
-	 * Returns the center of a dot's visual bounds.
-	 */
-	public int getDotX( int column, int row ) {
-		int colHGap = dotRegionW / tree.getColumnsCount();
-
-		return colHGap/2 + column * colHGap;
-	}
-
-	/**
-	 * Returns the center of a dot's visual bounds.
-	 */
-	public int getDotY( int column, int row ) {
-		if ( !treeExpanded ) {
-			return dotRegionH / 2;
-		}
-		else {
-			int colSize = tree.getColumn( column ).size();
-
-			int colVGap = dotRegionH / (colSize-1 + 2);
-			// Two extra gaps (before and after the dots) to vertically center.
-
-			return colVGap + row * colVGap;
-		}
-	}
-
-	/**
-	 * Stores the center of a dot's visual bounds in a Point.
-	 */
-	public void getDotXY( int column, int row, Point resultPoint ) {
-		resultPoint.setLocation( getDotX( column, row ), getDotY( column, row ) );
-	}
-
-	/**
-	 * Returns the center of a dot's visual bounds in a Point.
-	 */
-	public boolean getDotXY( SectorDot dot, Point resultPoint ) {
-		int column = -1;
-		int row = -1;
-		for ( int c=tree.getColumnsCount()-1; c >= 0; c-- ) {
-			if ( tree.getColumn( c ).contains( dot ) ) {
-				column = c;
-				row = tree.getColumn( c ).indexOf( dot );
-				resultPoint.setLocation( getDotX( column, row ), getDotY( column, row ) );
-				return true;
-			}
-		}
-		resultPoint.setLocation( 0, 0 );
-		return false;
-	}
-
-	/**
-	 * Returns the visual bounds of all dots, plus col/row info as Points.
-	 *
-	 * Each call creates new Rectangles and Points.
-	 */
-	public Map<Rectangle,Point> getDotsBounds() {
-		int dotCount = 0;
-
-		for ( int c=0; c < tree.getColumnsCount(); c++ ) {
-			List<SectorDot> columnDots = tree.getColumn( c );
-			dotCount += columnDots.size();
-		}
-
-		Map<Rectangle,Point> resultMap = new HashMap<Rectangle,Point>( dotCount );
-
-		for ( int c=0; c < tree.getColumnsCount(); c++ ) {
-			List<SectorDot> columnDots = tree.getColumn( c );
-
-			for ( int r=0; r < columnDots.size(); r++ ) {
-				int boundsX = getDotX( c, r ) - dotRadius;
-				int boundsY = getDotY( c, r ) - dotRadius;
-				int boundsW = dotRadius * 2;
-				int boundsH = dotRadius * 2;
-				resultMap.put( new Rectangle( boundsX, boundsY, boundsW, boundsH ), new Point( c, r ) );
-			}
-		}
-
-		return resultMap;
-	}
+    /**
+     * Returns the radius of circles used to represent SectorDots.
+     */
+    public int getDotRadius() {
+        return dotRadius;
+    }
 
 
-	@Override
-	public void paintComponent( Graphics g ) {
-		super.paintComponent( g );
+    /**
+     * Returns the center of a dot's visual bounds.
+     */
+    public int getDotX(int column, int row) {
+        int colHGap = dotRegionW / tree.getColumnsCount();
 
-		Graphics2D g2d = (Graphics2D)g;
-		Object prevHintAlias = g2d.getRenderingHint( RenderingHints.KEY_ANTIALIASING );
-		Stroke prevStroke = g2d.getStroke();
-		Color prevColor = g2d.getColor();
+        return colHGap / 2 + column * colHGap;
+    }
 
-		g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-		g2d.setStroke( new BasicStroke( 1.6f ) );
+    /**
+     * Returns the center of a dot's visual bounds.
+     */
+    public int getDotY(int column, int row) {
+        if (!treeExpanded) {
+            return dotRegionH / 2;
+        } else {
+            int colSize = tree.getColumn(column).size();
 
-		// Draw routes.
-		if ( !treeExpanded ) {
-			for ( int aCol=0; aCol < tree.getColumnsCount(); aCol++ ) {
-				SectorDot aDot = tree.getVisitedDot( aCol );
-				if ( aDot == null ) {
-					aDot = tree.getDot( aCol, 0 );  // Get an unvisited dot instead.
-				}
-				getDotXY( aDot, aXY );
+            int colVGap = dotRegionH / (colSize - 1 + 2);
+            // Two extra gaps (before and after the dots) to vertically center.
 
-				int bCol = aCol+1;
-				if ( bCol < tree.getColumnsCount() ) {
-					SectorDot bDot = tree.getVisitedDot( bCol );
-					if ( bDot == null ) {
-						bDot = tree.getDot( bCol, 0 );  // Get an unvisited dot instead.
-					}
-					getDotXY( bDot, bXY );
+            return colVGap + row * colVGap;
+        }
+    }
 
-					if ( bDot.isVisited() && aDot.isVisited() ) {
-						g2d.setColor( traveledRouteColor );
-					}
-					else {
-						g2d.setColor( inaccessibleRouteColor );
-					}
+    /**
+     * Stores the center of a dot's visual bounds in a Point.
+     */
+    public void getDotXY(int column, int row, Point resultPoint) {
+        resultPoint.setLocation(getDotX(column, row), getDotY(column, row));
+    }
 
-					g2d.drawLine( aXY.x, aXY.y, bXY.x, bXY.y );
-				}
-			}
-		}
-		else {
-			for ( int aCol=0; aCol < tree.getColumnsCount(); aCol++ ) {
-				List<SectorDot> aDots = tree.getColumn( aCol );
+    /**
+     * Returns the center of a dot's visual bounds in a Point.
+     */
+    public boolean getDotXY(SectorDot dot, Point resultPoint) {
+        int column = -1;
+        int row = -1;
+        for (int c = tree.getColumnsCount() - 1; c >= 0; c--) {
+            if (tree.getColumn(c).contains(dot)) {
+                column = c;
+                row = tree.getColumn(c).indexOf(dot);
+                resultPoint.setLocation(getDotX(column, row), getDotY(column, row));
+                return true;
+            }
+        }
+        resultPoint.setLocation(0, 0);
+        return false;
+    }
 
-				for ( int aRow=0; aRow < aDots.size(); aRow++ ) {
-					SectorDot aDot = aDots.get( aRow );
-					int aX = getDotX( aCol, aRow );
-					int aY = getDotY( aCol, aRow );
+    /**
+     * Returns the visual bounds of all dots, plus col/row info as Points.
+     * <p>
+     * Each call creates new Rectangles and Points.
+     */
+    public Map<Rectangle, Point> getDotsBounds() {
+        int dotCount = 0;
 
-					tree.getConnectedDots( aCol, aRow, true, tmpList );
-					int bCol = aCol+1;
+        for (int c = 0; c < tree.getColumnsCount(); c++) {
+            List<SectorDot> columnDots = tree.getColumn(c);
+            dotCount += columnDots.size();
+        }
 
-					for ( SectorDot bDot : tmpList ) {
-						int bRow = tree.getColumn( bCol ).indexOf( bDot );
-						int bX = getDotX( bCol, bRow );
-						int bY = getDotY( bCol, bRow );
+        Map<Rectangle, Point> resultMap = new HashMap<Rectangle, Point>(dotCount);
 
-						if ( bDot.isVisited() && aDot.isVisited() ) {
-							g2d.setColor( traveledRouteColor );
-						}
-						else if ( tree.isDotAccessible( bCol, bRow ) && tree.isDotAccessible( aCol, aRow ) ) {
-							g2d.setColor( possibleRouteColor );
-						}
-						else {
-							g2d.setColor( inaccessibleRouteColor );
-						}
+        for (int c = 0; c < tree.getColumnsCount(); c++) {
+            List<SectorDot> columnDots = tree.getColumn(c);
 
-						g2d.drawLine( aX, aY, bX, bY );
-					}
-				}
-			}
-		}
+            for (int r = 0; r < columnDots.size(); r++) {
+                int boundsX = getDotX(c, r) - dotRadius;
+                int boundsY = getDotY(c, r) - dotRadius;
+                int boundsW = dotRadius * 2;
+                int boundsH = dotRadius * 2;
+                resultMap.put(new Rectangle(boundsX, boundsY, boundsW, boundsH), new Point(c, r));
+            }
+        }
 
-		// Draw dots.
-		if ( !treeExpanded ) {
-			for ( int c=0; c < tree.getColumnsCount(); c++ ) {
-				SectorDot currentDot = tree.getVisitedDot( c );
-				if ( currentDot == null ) {
-					currentDot = tree.getDot( c, 0 );  // Get an unvisited dot instead.
-				}
-				getDotXY( currentDot, aXY );
-				Shape dotCircle = new Ellipse2D.Double( aXY.x - dotRadius, aXY.y - dotRadius, 2.0 * dotRadius, 2.0 * dotRadius );
-
-				Color dotColor = dotColorMap.get( currentDot.getType() );
-				if ( dotColor == null ) dotColorMap.get( null );
-				g2d.setColor( dotColor );
-
-				g2d.fill( dotCircle );
+        return resultMap;
+    }
 
 
-				if ( currentDot.isVisited() ) {
-					g2d.setColor( traveledRouteColor );
-				}
-				else {
-					g2d.setColor( inaccessibleRouteColor );
-				}
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-				g2d.draw( dotCircle );
-			}
-		}
-		else {
-			for ( int c=0; c < tree.getColumnsCount(); c++ ) {
-				List<SectorDot> columnDots = tree.getColumn( c );
+        Graphics2D g2d = (Graphics2D) g;
+        Object prevHintAlias = g2d.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+        Stroke prevStroke = g2d.getStroke();
+        Color prevColor = g2d.getColor();
 
-				for ( int r=0; r < columnDots.size(); r++ ) {
-					SectorDot currentDot = columnDots.get( r );
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setStroke(new BasicStroke(1.6f));
 
-					int dotX = getDotX( c, r );
-					int dotY = getDotY( c, r );
-					Shape dotCircle = new Ellipse2D.Double( dotX - dotRadius, dotY - dotRadius, 2.0 * dotRadius, 2.0 * dotRadius );
+        // Draw routes.
+        if (!treeExpanded) {
+            for (int aCol = 0; aCol < tree.getColumnsCount(); aCol++) {
+                SectorDot aDot = tree.getVisitedDot(aCol);
+                if (aDot == null) {
+                    aDot = tree.getDot(aCol, 0);  // Get an unvisited dot instead.
+                }
+                getDotXY(aDot, aXY);
 
-					Color dotColor = dotColorMap.get( currentDot.getType() );
-					if ( dotColor == null ) dotColorMap.get( null );
-					g2d.setColor( dotColor );
+                int bCol = aCol + 1;
+                if (bCol < tree.getColumnsCount()) {
+                    SectorDot bDot = tree.getVisitedDot(bCol);
+                    if (bDot == null) {
+                        bDot = tree.getDot(bCol, 0);  // Get an unvisited dot instead.
+                    }
+                    getDotXY(bDot, bXY);
 
-					g2d.fill( dotCircle );
+                    if (bDot.isVisited() && aDot.isVisited()) {
+                        g2d.setColor(traveledRouteColor);
+                    } else {
+                        g2d.setColor(inaccessibleRouteColor);
+                    }
+
+                    g2d.drawLine(aXY.x, aXY.y, bXY.x, bXY.y);
+                }
+            }
+        } else {
+            for (int aCol = 0; aCol < tree.getColumnsCount(); aCol++) {
+                List<SectorDot> aDots = tree.getColumn(aCol);
+
+                for (int aRow = 0; aRow < aDots.size(); aRow++) {
+                    SectorDot aDot = aDots.get(aRow);
+                    int aX = getDotX(aCol, aRow);
+                    int aY = getDotY(aCol, aRow);
+
+                    tree.getConnectedDots(aCol, aRow, true, tmpList);
+                    int bCol = aCol + 1;
+
+                    for (SectorDot bDot : tmpList) {
+                        int bRow = tree.getColumn(bCol).indexOf(bDot);
+                        int bX = getDotX(bCol, bRow);
+                        int bY = getDotY(bCol, bRow);
+
+                        if (bDot.isVisited() && aDot.isVisited()) {
+                            g2d.setColor(traveledRouteColor);
+                        } else if (tree.isDotAccessible(bCol, bRow) && tree.isDotAccessible(aCol, aRow)) {
+                            g2d.setColor(possibleRouteColor);
+                        } else {
+                            g2d.setColor(inaccessibleRouteColor);
+                        }
+
+                        g2d.drawLine(aX, aY, bX, bY);
+                    }
+                }
+            }
+        }
+
+        // Draw dots.
+        if (!treeExpanded) {
+            for (int c = 0; c < tree.getColumnsCount(); c++) {
+                SectorDot currentDot = tree.getVisitedDot(c);
+                if (currentDot == null) {
+                    currentDot = tree.getDot(c, 0);  // Get an unvisited dot instead.
+                }
+                getDotXY(currentDot, aXY);
+                Shape dotCircle = new Ellipse2D.Double(aXY.x - dotRadius, aXY.y - dotRadius, 2.0 * dotRadius, 2.0 * dotRadius);
+
+                Color dotColor = dotColorMap.get(currentDot.getType());
+                if (dotColor == null) dotColorMap.get(null);
+                g2d.setColor(dotColor);
+
+                g2d.fill(dotCircle);
 
 
-					if ( currentDot.isVisited() ) {
-						g2d.setColor( traveledRouteColor );
-					}
-					else if ( tree.isDotAccessible( c, r ) ) {
-						g2d.setColor( possibleRouteColor );
-					}
-					else {
-						g2d.setColor( inaccessibleRouteColor );
-					}
+                if (currentDot.isVisited()) {
+                    g2d.setColor(traveledRouteColor);
+                } else {
+                    g2d.setColor(inaccessibleRouteColor);
+                }
 
-					g2d.draw( dotCircle );
-				}
-			}
-		}
+                g2d.draw(dotCircle);
+            }
+        } else {
+            for (int c = 0; c < tree.getColumnsCount(); c++) {
+                List<SectorDot> columnDots = tree.getColumn(c);
 
-		g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING, prevHintAlias );
-		g2d.setStroke( prevStroke );
-		g2d.setColor( prevColor );
-	}
+                for (int r = 0; r < columnDots.size(); r++) {
+                    SectorDot currentDot = columnDots.get(r);
+
+                    int dotX = getDotX(c, r);
+                    int dotY = getDotY(c, r);
+                    Shape dotCircle = new Ellipse2D.Double(dotX - dotRadius, dotY - dotRadius, 2.0 * dotRadius, 2.0 * dotRadius);
+
+                    Color dotColor = dotColorMap.get(currentDot.getType());
+                    if (dotColor == null) dotColorMap.get(null);
+                    g2d.setColor(dotColor);
+
+                    g2d.fill(dotCircle);
+
+
+                    if (currentDot.isVisited()) {
+                        g2d.setColor(traveledRouteColor);
+                    } else if (tree.isDotAccessible(c, r)) {
+                        g2d.setColor(possibleRouteColor);
+                    } else {
+                        g2d.setColor(inaccessibleRouteColor);
+                    }
+
+                    g2d.draw(dotCircle);
+                }
+            }
+        }
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, prevHintAlias);
+        g2d.setStroke(prevStroke);
+        g2d.setColor(prevColor);
+    }
 
 
 /*

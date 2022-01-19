@@ -8,117 +8,117 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement( name = "events" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "events")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Encounters {
 
-	@XmlElement( name = "event", required = false )
-	private List<FTLEvent> events = new ArrayList<FTLEvent>();
+    @XmlElement(name = "event", required = false)
+    private List<FTLEvent> events = new ArrayList<FTLEvent>();
 
-	@XmlElement( name = "eventList", required = false )
-	private List<FTLEventList> eventLists = new ArrayList<FTLEventList>();
+    @XmlElement(name = "eventList", required = false)
+    private List<FTLEventList> eventLists = new ArrayList<FTLEventList>();
 
-	@XmlElement( name = "textList", required = false )
-	private List<TextList> textLists = new ArrayList<TextList>();
+    @XmlElement(name = "textList", required = false)
+    private List<TextList> textLists = new ArrayList<TextList>();
 
-	@XmlElement( name = "ship", required = false )
-	private List<ShipEvent> shipEvents = new ArrayList<ShipEvent>();
+    @XmlElement(name = "ship", required = false)
+    private List<ShipEvent> shipEvents = new ArrayList<ShipEvent>();
 
 
-	public void setEvents( List<FTLEvent> events ) {
-		this.events = events;
-	}
+    public void setEvents(List<FTLEvent> events) {
+        this.events = events;
+    }
 
-	public List<FTLEvent> getEvents() {
-		return events;
-	}
+    public List<FTLEvent> getEvents() {
+        return events;
+    }
 
-	public void setEventLists( List<FTLEventList> eventLists ) {
-		this.eventLists = eventLists;
-	}
+    public void setEventLists(List<FTLEventList> eventLists) {
+        this.eventLists = eventLists;
+    }
 
-	public List<FTLEventList> getEventLists() {
-		return eventLists;
-	}
+    public List<FTLEventList> getEventLists() {
+        return eventLists;
+    }
 
-	public void setTextLists( List<TextList> textLists ) {
-		this.textLists = textLists;
-	}
+    public void setTextLists(List<TextList> textLists) {
+        this.textLists = textLists;
+    }
 
-	public List<TextList> getTextLists() {
-		return textLists;
-	}
+    public List<TextList> getTextLists() {
+        return textLists;
+    }
 
-	public void setShipEvents( List<ShipEvent> shipEvents ) {
-		this.shipEvents = shipEvents;
-	}
+    public void setShipEvents(List<ShipEvent> shipEvents) {
+        this.shipEvents = shipEvents;
+    }
 
-	public List<ShipEvent> getShipEvents() {
-		return shipEvents;
-	}
+    public List<ShipEvent> getShipEvents() {
+        return shipEvents;
+    }
 
-	/**
-	 * Returns an Event with a given id.
-	 *
-	 * Events and EventLists share a namespace,
-	 * so an id could belong to either.
-	 */
-	public FTLEvent getEventById( String id ) {
-		if ( id == null || events == null ) return null;
+    /**
+     * Returns an Event with a given id.
+     * <p>
+     * Events and EventLists share a namespace,
+     * so an id could belong to either.
+     */
+    public FTLEvent getEventById(String id) {
+        if (id == null || events == null) return null;
 
-		FTLEvent result = null;
-		for ( FTLEvent tmpEvent : events ) {
-			if ( id.equals(tmpEvent.getId()) ) result = tmpEvent;
-		}
+        FTLEvent result = null;
+        for (FTLEvent tmpEvent : events) {
+            if (id.equals(tmpEvent.getId())) result = tmpEvent;
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Returns an EventList with a given id.
-	 *
-	 * Events and EventLists share a namespace,
-	 * so an id could belong to either.
-	 */
-	public FTLEventList getEventListById( String id ) {
-		if ( id == null || eventLists == null ) return null;
+    /**
+     * Returns an EventList with a given id.
+     * <p>
+     * Events and EventLists share a namespace,
+     * so an id could belong to either.
+     */
+    public FTLEventList getEventListById(String id) {
+        if (id == null || eventLists == null) return null;
 
-		FTLEventList result = null;
-		for ( FTLEventList tmpEventList : eventLists ) {
-			if ( id.equals( tmpEventList.getId() ) ) result = tmpEventList;
-		}
+        FTLEventList result = null;
+        for (FTLEventList tmpEventList : eventLists) {
+            if (id.equals(tmpEventList.getId())) result = tmpEventList;
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Returns an TextList with a given id.
-	 */
-	public TextList getTextListById( String id ) {
-		if ( id == null || textLists == null ) return null;
+    /**
+     * Returns an TextList with a given id.
+     */
+    public TextList getTextListById(String id) {
+        if (id == null || textLists == null) return null;
 
-		TextList result = null;
-		for ( TextList tmpTextList : textLists ) {
-			if ( id.equals( tmpTextList.getId() ) ) result = tmpTextList;
-		}
+        TextList result = null;
+        for (TextList tmpTextList : textLists) {
+            if (id.equals(tmpTextList.getId())) result = tmpTextList;
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Returns a ShipEvent with a given id.
-	 *
-	 * Events and EventLists share a namespace,
-	 * so an id could belong to either.
-	 */
-	public ShipEvent getShipEventById( String id ) {
-		if ( id == null || shipEvents == null ) return null;
+    /**
+     * Returns a ShipEvent with a given id.
+     * <p>
+     * Events and EventLists share a namespace,
+     * so an id could belong to either.
+     */
+    public ShipEvent getShipEventById(String id) {
+        if (id == null || shipEvents == null) return null;
 
-		ShipEvent result = null;
-		for ( ShipEvent tmpEvent : shipEvents ) {
-			if ( id.equals( tmpEvent.getId() ) ) result = tmpEvent;
-		}
+        ShipEvent result = null;
+        for (ShipEvent tmpEvent : shipEvents) {
+            if (id.equals(tmpEvent.getId())) result = tmpEvent;
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

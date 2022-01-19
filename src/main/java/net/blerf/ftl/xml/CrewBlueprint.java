@@ -9,119 +9,119 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement( name = "crewBlueprint" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "crewBlueprint")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CrewBlueprint {
 
-	@XmlAttribute( name = "name" )
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	private DefaultDeferredText desc;
-	private int cost;
+    private DefaultDeferredText desc;
+    private int cost;
 
-	@XmlElement( name = "bp" )
-	private int bp;  // TODO: Rename this.
+    @XmlElement(name = "bp")
+    private int bp;  // TODO: Rename this.
 
-	private DefaultDeferredText title;
+    private DefaultDeferredText title;
 
-	@XmlElement( name = "short" )
-	private DefaultDeferredText shortTitle;
+    @XmlElement(name = "short")
+    private DefaultDeferredText shortTitle;
 
-	private int rarity;
+    private int rarity;
 
-	@XmlElementWrapper( name = "powerList" )
-	@XmlElement( name = "power" )
-	private List<DefaultDeferredText> powerList;
+    @XmlElementWrapper(name = "powerList")
+    @XmlElement(name = "power")
+    private List<DefaultDeferredText> powerList;
 
-	@XmlElementWrapper( name = "colorList", required = false )
-	@XmlElement( name = "layer", required = false )
-	private List<SpriteTintLayer> spriteTintLayerList;  // FTL 1.5.4 introduced sprite tinting.
+    @XmlElementWrapper(name = "colorList", required = false)
+    @XmlElement(name = "layer", required = false)
+    private List<SpriteTintLayer> spriteTintLayerList;  // FTL 1.5.4 introduced sprite tinting.
 
-	@XmlAccessorType( XmlAccessType.FIELD )
-	public static class SpriteTintLayer {
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class SpriteTintLayer {
 
-		@XmlElement( name="color" )
-		public List<SpriteTintColor> tintList;
+        @XmlElement(name = "color")
+        public List<SpriteTintColor> tintList;
 
-		@XmlAccessorType( XmlAccessType.FIELD )
-		public static class SpriteTintColor {
-			@XmlAttribute
-			public int r, g, b;
-			@XmlAttribute
-			public float a;
-		}
-	}
+        @XmlAccessorType(XmlAccessType.FIELD)
+        public static class SpriteTintColor {
+            @XmlAttribute
+            public int r, g, b;
+            @XmlAttribute
+            public float a;
+        }
+    }
 
 
-	public void setId( String id ) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setDescription( DefaultDeferredText desc ) {
-		this.desc = desc;
-	}
+    public void setDescription(DefaultDeferredText desc) {
+        this.desc = desc;
+    }
 
-	public DefaultDeferredText getDescription() {
-		return desc;
-	}
+    public DefaultDeferredText getDescription() {
+        return desc;
+    }
 
-	public void setCost( int cost ) {
-		this.cost = cost;
-	}
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
 
-	public int getCost() {
-		return cost;
-	}
+    public int getCost() {
+        return cost;
+    }
 
-	public void setBP( int bp ) {
-		this.bp = bp;
-	}
+    public void setBP(int bp) {
+        this.bp = bp;
+    }
 
-	public int getBP() {
-		return bp;
-	}
+    public int getBP() {
+        return bp;
+    }
 
-	public void setTitle( DefaultDeferredText title ) {
-		this.title = title;
-	}
+    public void setTitle(DefaultDeferredText title) {
+        this.title = title;
+    }
 
-	public DefaultDeferredText getTitle() {
-		return title;
-	}
+    public DefaultDeferredText getTitle() {
+        return title;
+    }
 
-	public void setShortTitle( DefaultDeferredText shortTitle ) {
-		this.shortTitle = shortTitle;
-	}
+    public void setShortTitle(DefaultDeferredText shortTitle) {
+        this.shortTitle = shortTitle;
+    }
 
-	public DefaultDeferredText getShortTitle() {
-		return shortTitle;
-	}
+    public DefaultDeferredText getShortTitle() {
+        return shortTitle;
+    }
 
-	public void setRarity( int rarity ) {
-		this.rarity = rarity;
-	}
+    public void setRarity(int rarity) {
+        this.rarity = rarity;
+    }
 
-	public int getRarity() {
-		return rarity;
-	}
+    public int getRarity() {
+        return rarity;
+    }
 
-	public void setPowerList( List<DefaultDeferredText> powerList ) {
-		this.powerList = powerList;
-	}
+    public void setPowerList(List<DefaultDeferredText> powerList) {
+        this.powerList = powerList;
+    }
 
-	public List<DefaultDeferredText> getPowerList() {
-		return powerList;
-	}
+    public List<DefaultDeferredText> getPowerList() {
+        return powerList;
+    }
 
-	public void setSpriteTintLayerList( List<SpriteTintLayer> layerList ) {
-		spriteTintLayerList = layerList;
-	}
+    public void setSpriteTintLayerList(List<SpriteTintLayer> layerList) {
+        spriteTintLayerList = layerList;
+    }
 
-	public List<SpriteTintLayer> getSpriteTintLayerList() {
-		return spriteTintLayerList;
-	}
+    public List<SpriteTintLayer> getSpriteTintLayerList() {
+        return spriteTintLayerList;
+    }
 }

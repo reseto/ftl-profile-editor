@@ -12,46 +12,46 @@ import net.blerf.ftl.ui.SpriteReference;
 
 public class CrewSprite extends JComponent implements ReferenceSprite<CrewState> {
 
-	private int w=35, h=35;
-	private BufferedImage crewImage = null;
+    private int w = 35, h = 35;
+    private BufferedImage crewImage = null;
 
-	private SpriteReference<CrewState> crewRef;
-	private SpriteImageProvider spriteImageProvider;
+    private SpriteReference<CrewState> crewRef;
+    private SpriteImageProvider spriteImageProvider;
 
 
-	public CrewSprite( SpriteReference<CrewState> crewRef, SpriteImageProvider spriteImageProvider ) {
-		this.crewRef = crewRef;
-		this.spriteImageProvider = spriteImageProvider;
+    public CrewSprite(SpriteReference<CrewState> crewRef, SpriteImageProvider spriteImageProvider) {
+        this.crewRef = crewRef;
+        this.spriteImageProvider = spriteImageProvider;
 
-		this.setPreferredSize( new Dimension( w, h ) );
-		this.setOpaque( false );
+        this.setPreferredSize(new Dimension(w, h));
+        this.setOpaque(false);
 
-		crewRef.addSprite( this );
-		referenceChanged();
-	}
+        crewRef.addSprite(this);
+        referenceChanged();
+    }
 
-	@Override
-	public SpriteReference<CrewState> getReference() {
-		return crewRef;
-	}
+    @Override
+    public SpriteReference<CrewState> getReference() {
+        return crewRef;
+    }
 
-	@Override
-	public void referenceChanged() {
-		crewImage = spriteImageProvider.getCrewBodyImage( crewRef.get().getRace(), crewRef.get().isMale(), crewRef.get().isPlayerControlled() );
+    @Override
+    public void referenceChanged() {
+        crewImage = spriteImageProvider.getCrewBodyImage(crewRef.get().getRace(), crewRef.get().isMale(), crewRef.get().isPlayerControlled());
 
-		this.repaint();
-	}
+        this.repaint();
+    }
 
-	@Override
-	public void paintComponent( Graphics g ) {
-		super.paintComponent( g );
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.drawImage( crewImage, 0, 0, this.getWidth(), this.getHeight(), this );
-	}
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(crewImage, 0, 0, this.getWidth(), this.getHeight(), this);
+    }
 
-	@Override
-	public String toString() {
-		return String.format( "%s (%s, %d HP)", crewRef.get().getName(), crewRef.get().getRace().getId(), crewRef.get().getHealth() );
-	}
+    @Override
+    public String toString() {
+        return String.format("%s (%s, %d HP)", crewRef.get().getName(), crewRef.get().getRace().getId(), crewRef.get().getHealth());
+    }
 }

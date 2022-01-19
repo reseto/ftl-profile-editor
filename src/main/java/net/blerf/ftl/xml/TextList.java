@@ -17,14 +17,14 @@ import lombok.Setter;
 @XmlRootElement(name = "textList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TextList {
-	@XmlAttribute(name = "name")
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	@XmlElement(name = "text", required = false)
-	private List<NamedText> textList;
+    @XmlElement(name = "text", required = false)
+    private List<NamedText> textList;
 
-	@Override
-	public String toString() {
-		return ""+id;
-	}
+    @Override
+    public String toString() {
+        return "" + id;
+    }
 }

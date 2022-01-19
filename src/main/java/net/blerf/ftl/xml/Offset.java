@@ -14,6 +14,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Offset {
 
-	@XmlAttribute
-	public int x, y;
+    @XmlAttribute
+    public int x, y;
 }

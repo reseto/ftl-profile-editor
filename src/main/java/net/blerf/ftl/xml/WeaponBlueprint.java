@@ -9,249 +9,249 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement( name = "weaponBlueprint" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "weaponBlueprint")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class WeaponBlueprint {
-	
-	@XmlAttribute( name = "name" )
-	private String id;
 
-	private String type;
-	private DefaultDeferredText title;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	@XmlElement( name = "short" )
-	private DefaultDeferredText shortTitle;
+    private String type;
+    private DefaultDeferredText title;
 
-	@XmlElement( required = false )
-	private Integer locked;
+    @XmlElement(name = "short")
+    private DefaultDeferredText shortTitle;
 
-	private DefaultDeferredText desc;
-	private DefaultDeferredText tooltip;
+    @XmlElement(required = false)
+    private Integer locked;
 
-	@XmlElement( name = "sp" )
-	private int shieldPiercing;
+    private DefaultDeferredText desc;
+    private DefaultDeferredText tooltip;
 
-	@XmlElement( name = "bp" )
-	private int bp;  // TODO: Rename this.
+    @XmlElement(name = "sp")
+    private int shieldPiercing;
 
-	private int damage;
-	private int shots;
-	private int fireChance;
-	private int breachChance;
-	private int cooldown;
-	private int power;
-	private int cost;
-	private int rarity;
+    @XmlElement(name = "bp")
+    private int bp;  // TODO: Rename this.
 
-	@XmlElement( name = "image" )
-	private String projectileAnimId;  // Projectile / Beam-spot anim.
+    private int damage;
+    private int shots;
+    private int fireChance;
+    private int breachChance;
+    private int cooldown;
+    private int power;
+    private int cost;
+    private int rarity;
 
-	@XmlElementWrapper(name = "launchSounds")
-	@XmlElement( name = "sound" )
-	private List<String> launchSounds;
+    @XmlElement(name = "image")
+    private String projectileAnimId;  // Projectile / Beam-spot anim.
 
-	@XmlElementWrapper( name = "hitShipSounds" )
-	@XmlElement( name = "sound" )
-	private List<String> hitShipSounds;
+    @XmlElementWrapper(name = "launchSounds")
+    @XmlElement(name = "sound")
+    private List<String> launchSounds;
 
-	@XmlElementWrapper( name = "hitShieldSounds" )
-	@XmlElement( name = "sound" )
-	private List<String> hitShieldSounds;
+    @XmlElementWrapper(name = "hitShipSounds")
+    @XmlElement(name = "sound")
+    private List<String> hitShipSounds;
 
-	@XmlElementWrapper( name = "missSounds" )
-	@XmlElement( name = "sound" )
-	private List<String> missSounds;
+    @XmlElementWrapper(name = "hitShieldSounds")
+    @XmlElement(name = "sound")
+    private List<String> hitShieldSounds;
 
-	@XmlElement( name = "weaponArt" )
-	private String weaponAnimId;
-	
+    @XmlElementWrapper(name = "missSounds")
+    @XmlElement(name = "sound")
+    private List<String> missSounds;
 
-	public void setId( String id ) {
-		this.id = id;
-	}
+    @XmlElement(name = "weaponArt")
+    private String weaponAnimId;
 
-	public String getId() {
-		return id;
-	}
 
-	public void setType( String type ) {
-		this.type = type;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setTitle( DefaultDeferredText title ) {
-		this.title = title;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public DefaultDeferredText getTitle() {
-		return title;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setShortTitle( DefaultDeferredText shortTitle ) {
-		this.shortTitle = shortTitle;
-	}
+    public void setTitle(DefaultDeferredText title) {
+        this.title = title;
+    }
 
-	public DefaultDeferredText getShortTitle() {
-		return shortTitle;
-	}
+    public DefaultDeferredText getTitle() {
+        return title;
+    }
 
-	public void setLocked( Integer locked ) {
-		this.locked = locked;
-	}
+    public void setShortTitle(DefaultDeferredText shortTitle) {
+        this.shortTitle = shortTitle;
+    }
 
-	public Integer getLocked() {
-		return locked;
-	}
+    public DefaultDeferredText getShortTitle() {
+        return shortTitle;
+    }
 
-	public void setDescription( DefaultDeferredText desc ) {
-		this.desc = desc;
-	}
+    public void setLocked(Integer locked) {
+        this.locked = locked;
+    }
 
-	public DefaultDeferredText getDescription() {
-		return desc;
-	}
+    public Integer getLocked() {
+        return locked;
+    }
 
-	public void setTooltip( DefaultDeferredText tooltip ) {
-		this.tooltip = tooltip;
-	}
+    public void setDescription(DefaultDeferredText desc) {
+        this.desc = desc;
+    }
 
-	public DefaultDeferredText getTooltip() {
-		return tooltip;
-	}
+    public DefaultDeferredText getDescription() {
+        return desc;
+    }
 
-	public void setShieldPiercing( int shieldPiercing ) {
-		this.shieldPiercing = shieldPiercing;
-	}
+    public void setTooltip(DefaultDeferredText tooltip) {
+        this.tooltip = tooltip;
+    }
 
-	public int getShieldPiercing() {
-		return shieldPiercing;
-	}
+    public DefaultDeferredText getTooltip() {
+        return tooltip;
+    }
 
-	public void setBP( int bp ) {
-		this.bp = bp;
-	}
+    public void setShieldPiercing(int shieldPiercing) {
+        this.shieldPiercing = shieldPiercing;
+    }
 
-	public int getBP() {
-		return bp;
-	}
+    public int getShieldPiercing() {
+        return shieldPiercing;
+    }
 
-	public void setDamage( int damage ) {
-		this.damage = damage;
-	}
+    public void setBP(int bp) {
+        this.bp = bp;
+    }
 
-	public int getDamage() {
-		return damage;
-	}
+    public int getBP() {
+        return bp;
+    }
 
-	public void setShots( int shots ) {
-		this.shots = shots;
-	}
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
 
-	public int getShots() {
-		return shots;
-	}
+    public int getDamage() {
+        return damage;
+    }
 
-	public void setFireChance( int fireChance ) {
-		this.fireChance = fireChance;
-	}
+    public void setShots(int shots) {
+        this.shots = shots;
+    }
 
-	public int getFireChance() {
-		return fireChance;
-	}
+    public int getShots() {
+        return shots;
+    }
 
-	public void setBreachChance( int breachChance ) {
-		this.breachChance = breachChance;
-	}
+    public void setFireChance(int fireChance) {
+        this.fireChance = fireChance;
+    }
 
-	public int getBreachChance() {
-		return breachChance;
-	}
+    public int getFireChance() {
+        return fireChance;
+    }
 
-	public void setCooldown( int cooldown ) {
-		this.cooldown = cooldown;
-	}
+    public void setBreachChance(int breachChance) {
+        this.breachChance = breachChance;
+    }
 
-	public int getCooldown() {
-		return cooldown;
-	}
+    public int getBreachChance() {
+        return breachChance;
+    }
 
-	public void setPower( int power ) {
-		this.power = power;
-	}
+    public void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
+    }
 
-	public int getPower() {
-		return power;
-	}
+    public int getCooldown() {
+        return cooldown;
+    }
 
-	public void setCost( int cost ) {
-		this.cost = cost;
-	}
+    public void setPower(int power) {
+        this.power = power;
+    }
 
-	public int getCost() {
-		return cost;
-	}
+    public int getPower() {
+        return power;
+    }
 
-	public void setRarity( int rarity ) {
-		this.rarity = rarity;
-	}
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
 
-	public int getRarity() {
-		return rarity;
-	}
+    public int getCost() {
+        return cost;
+    }
 
-	public void setProjectileAnimId( String projectileAnimId ) {
-		this.projectileAnimId = projectileAnimId;
-	}
+    public void setRarity(int rarity) {
+        this.rarity = rarity;
+    }
 
-	public String getProjectileAnimId() {
-		return projectileAnimId;
-	}
+    public int getRarity() {
+        return rarity;
+    }
 
-	public void setLaunchSounds( List<String> launchSounds ) {
-		this.launchSounds = launchSounds;
-	}
+    public void setProjectileAnimId(String projectileAnimId) {
+        this.projectileAnimId = projectileAnimId;
+    }
 
-	public List<String> getLaunchSounds() {
-		return launchSounds;
-	}
+    public String getProjectileAnimId() {
+        return projectileAnimId;
+    }
 
-	public void setHitShipSounds( List<String> hitShipSounds ) {
-		this.hitShipSounds = hitShipSounds;
-	}
+    public void setLaunchSounds(List<String> launchSounds) {
+        this.launchSounds = launchSounds;
+    }
 
-	public List<String> getHitShipSounds() {
-		return hitShipSounds;
-	}
+    public List<String> getLaunchSounds() {
+        return launchSounds;
+    }
 
-	public void setHitShieldSounds( List<String> hitShieldSounds ) {
-		this.hitShieldSounds = hitShieldSounds;
-	}
+    public void setHitShipSounds(List<String> hitShipSounds) {
+        this.hitShipSounds = hitShipSounds;
+    }
 
-	public List<String> getHitShieldSounds() {
-		return hitShieldSounds;
-	}
+    public List<String> getHitShipSounds() {
+        return hitShipSounds;
+    }
 
-	public void setMissSounds( List<String> missSounds ) {
-		this.missSounds = missSounds;
-	}
+    public void setHitShieldSounds(List<String> hitShieldSounds) {
+        this.hitShieldSounds = hitShieldSounds;
+    }
 
-	public List<String> getMissSounds() {
-		return missSounds;
-	}
+    public List<String> getHitShieldSounds() {
+        return hitShieldSounds;
+    }
 
-	public void setWeaponAnimId( String weaponAnimId ) {
-		this.weaponAnimId = weaponAnimId;
-	}
+    public void setMissSounds(List<String> missSounds) {
+        this.missSounds = missSounds;
+    }
 
-	public String getWeaponAnimId() {
-		return weaponAnimId;
-	}
+    public List<String> getMissSounds() {
+        return missSounds;
+    }
 
-	@Override
-	public String toString() {
-		return ""+title;
-	}
+    public void setWeaponAnimId(String weaponAnimId) {
+        this.weaponAnimId = weaponAnimId;
+    }
+
+    public String getWeaponAnimId() {
+        return weaponAnimId;
+    }
+
+    @Override
+    public String toString() {
+        return "" + title;
+    }
 }

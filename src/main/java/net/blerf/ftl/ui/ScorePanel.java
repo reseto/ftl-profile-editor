@@ -25,438 +25,467 @@ import net.blerf.ftl.xml.ShipBlueprint;
 
 public class ScorePanel extends JPanel {
 
-	private static final String SHIP_NAME = "Ship Name";
-	private static final String SHIP_ID = "Ship Id";
-	private static final String VALUE = "Value";
-	private static final String SECTOR = "Sector";
-	private static final String DIFFICULTY = "Difficulty";
-	private static final String VICTORY = "Victory";
-	private static final String DLC_ENABLED = "DLC Enabled";
-	private static final String REMOVE = "Remove";
+    private static final String SHIP_NAME = "Ship Name";
+    private static final String SHIP_ID = "Ship Id";
+    private static final String VALUE = "Value";
+    private static final String SECTOR = "Sector";
+    private static final String DIFFICULTY = "Difficulty";
+    private static final String VICTORY = "Victory";
+    private static final String DLC_ENABLED = "DLC Enabled";
+    private static final String REMOVE = "Remove";
 
-	private Map<String, Map<Rectangle, BufferedImage>> cachedImages = null;
-	private boolean blank = true;
-	private boolean shipIdEditingEnabled = true;
-	private boolean blankable = false;
-	private BufferedImage shipImage;
+    private Map<String, Map<Rectangle, BufferedImage>> cachedImages = null;
+    private boolean blank = true;
+    private boolean shipIdEditingEnabled = true;
+    private boolean blankable = false;
+    private BufferedImage shipImage;
 
-	private String shipName = "";
-	private String shipId = "";
-	private int value = 0;
-	private int sector = 1;
-	private Difficulty difficulty = Difficulty.EASY;
-	private boolean victory = false;
-	private boolean dlcEnabled = false;
+    private String shipName = "";
+    private String shipId = "";
+    private int value = 0;
+    private int sector = 1;
+    private Difficulty difficulty = Difficulty.EASY;
+    private boolean victory = false;
+    private boolean dlcEnabled = false;
 
-	private JLabel valueDescLbl = new JLabel( "Score: ", JLabel.RIGHT );
-	private JLabel sectorDescLbl = new JLabel( "Sector: ", JLabel.RIGHT );
+    private JLabel valueDescLbl = new JLabel("Score: ", JLabel.RIGHT);
+    private JLabel sectorDescLbl = new JLabel("Sector: ", JLabel.RIGHT);
 
-	private JLabel shipImageLbl = new JLabel( "", JLabel.LEFT );
-	private JLabel shipNameLbl = new JLabel( "", JLabel.CENTER );
-	private JLabel valueLbl = new JLabel( "", JLabel.LEFT );
-	private JLabel sectorLbl = new JLabel( "", JLabel.LEFT );
-	private JLabel difficultyLbl = new JLabel( "", JLabel.CENTER );
-	private JLabel victoryLbl = new JLabel( "", JLabel.RIGHT );
-	private JLabel dlcLbl = new JLabel( "", JLabel.RIGHT );
-	private JButton editBtn = null;
-
-
-	/**
-	 * Constructs a ScorePanel.
-	 *
-	 * @param rank a number to use as a #X label on the border.
-	 * @param s a score to represent, or null for a blank panel.
-	 */
-	public ScorePanel( int rank, Score s ) {
-		super();
-		this.setBorder( BorderFactory.createTitledBorder( "" ) );
-		this.setLayout( new GridBagLayout() );
-
-		GridBagConstraints c = new GridBagConstraints();
-
-		c.anchor = GridBagConstraints.WEST;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.0;
-		c.gridwidth = 1;
-		c.gridheight = 4;
-		c.gridx = 0;
-		c.gridy = 0;
-		this.add( shipImageLbl, c );
-
-		// Wrap Victory label in a panel with 0 preferred width.
-		// By itself, the label's preferred width would've imbalanced weightx.
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.gridx = 1;
-		c.gridy = 3;
-		JPanel victoryPanel = new JPanel( new BorderLayout() );
-		victoryLbl.setBorder( BorderFactory.createEmptyBorder( 0, 0, 0, 5 ) );
-		victoryPanel.add( victoryLbl, BorderLayout.EAST );
-		victoryPanel.setPreferredSize( new java.awt.Dimension( 0, 0 ) );
-		this.add( victoryPanel, c );
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.0;
-		c.gridwidth = 4;
-		c.gridheight = 1;
-		c.gridx = 1;
-		c.gridy = 0;
-		this.add( shipNameLbl, c );
-
-		c.gridwidth = 1;
-		c.gridx = 2;
-		c.gridy++;
-		this.add( valueDescLbl, c );
-		c.gridx++;
-		this.add( valueLbl, c );
-
-		c.gridwidth = 1;
-		c.gridx = 2;
-		c.gridy++;
-		this.add( sectorDescLbl, c );
-		c.gridx++;
-		this.add( sectorLbl, c );
-
-		c.gridwidth = 2;
-		c.gridx = 2;
-		c.gridy = 3;
-		this.add( difficultyLbl, c );
-
-		// Wrap DLC label in a panel with 0 preferred width.
-		// By itself, the label's preferred width would've imbalanced weightx.
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.gridx = 4;
-		c.gridy = 3;
-		JPanel dlcPanel = new JPanel( new BorderLayout() );
-		dlcLbl.setBorder( BorderFactory.createEmptyBorder( 0, 5, 0, 0 ) );
-		dlcPanel.add( dlcLbl, BorderLayout.EAST );
-		dlcPanel.setPreferredSize( new java.awt.Dimension( 0, 0 ) );
-		this.add( dlcPanel, c );
-
-		c.weightx = 1.0;
-		c.gridwidth = 1;
-		c.gridx = 5;
-		c.gridy = 3;
-		this.add( Box.createHorizontalGlue(), c );
-
-		c.anchor = GridBagConstraints.CENTER;
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.0;
-		c.gridwidth = 1;
-		c.gridheight = 4;
-		c.gridx = 6;
-		c.gridy = 0;
-		editBtn = new JButton( "Edit" );
-		editBtn.setMargin( new Insets( 0,0,0,0 ) );
-		this.add( editBtn, c );
-
-		// Force a minimum height with an invisible component.
-		c.anchor = GridBagConstraints.CENTER;
-		c.fill = GridBagConstraints.NONE;
-		c.weightx = 0.0;
-		c.gridwidth = 1;
-		c.gridheight = 4;
-		c.gridx = 7;
-		c.gridy = 0;
-		this.add( Box.createVerticalStrut( 80 ), c );
-
-		editBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				showEditPopup();
-			}
-		});
-
-		setRank( rank );
-		if ( s != null ) {
-			setShipName( s.getShipName() );
-			setShipId( s.getShipId() );
-			setValue( s.getValue() );
-			setSector( s.getSector() );
-			setDifficulty( s.getDifficulty() );
-			setVictory( s.isVictory() );
-			setDLCEnabled( s.isDLCEnabled() );
-			setBlank( false );
-		}
-		else {
-			setBlank( true );
-		}
-	}
-
-	/**
-	 * Toggles visibility of everything ecept the edit button.
-	 */
-	public void setBlank( boolean b ) {
-		blank = b;
-		shipImageLbl.setVisible( !blank );
-		victoryLbl.setVisible( !blank );
-		shipNameLbl.setVisible( !blank );
-		valueDescLbl.setVisible( !blank );
-		valueLbl.setVisible( !blank );
-		sectorDescLbl.setVisible( !blank );
-		sectorLbl.setVisible( !blank );
-		difficultyLbl.setVisible( !blank );
-	}
-	public boolean isBlank() { return blank; }
-
-	public void setEditable( boolean b ) {
-		editBtn.setEnabled( b );
-	}
-	public boolean isEditable() { return editBtn.isEnabled(); }
-
-	public void setBlankable( boolean b ) {
-		blankable = b;
-	}
-	public boolean isBlankable() { return blankable; }
-
-	public void setShipIdEditingEnabled( boolean b ) {
-		shipIdEditingEnabled = b;
-	}
-
-	public void setRank( int n ) {
-		this.setBorder( BorderFactory.createTitledBorder( "#"+ n ) );
-	}
-
-	public void setShipName( String s ) {
-		shipName = s;
-		shipNameLbl.setText( shipName );
-	}
-	public String getShipName() { return shipName; }
-
-	public void setShipId( String s ) {
-		if ( s == null ) s = "";
-		if ( s.equals( shipId ) ) return;
-		shipId = s;
-
-		shipImage = null;
-		shipImageLbl.setIcon( null );
-
-		if ( shipId.length() > 0 ) {
-
-			ShipBlueprint ship = DataManager.get().getShip( shipId );
-			if ( ship != null ) {
-				String shipGfxBaseName = ship.getGraphicsBaseName();
-
-				String innerPath = null;
-				String[] candidatePaths = new String[2];
-				candidatePaths[0] = "img/ship/"+ shipGfxBaseName +"_base.png";  // FTL 1.01-1.03.3 (All ships), 1.5.4 (Player ships)
-				candidatePaths[1] = "img/ships_glow/"+ shipGfxBaseName +"_base.png";  // FTL 1.5.4 (Enemy ships)
-				for ( String candidatePath : candidatePaths ) {
-					if ( DataManager.get().hasResourceInputStream( candidatePath ) ) {
-						innerPath = candidatePath;
-					}
-				}
-				if ( innerPath != null ) {
-					int maxW = ImageUtilities.getMaxIconWidth();
-					int maxH = ImageUtilities.getMaxIconHeight();
-					shipImage = ImageUtilities.getProportionallyScaledImage( innerPath, maxW, maxH, cachedImages );
-					shipImageLbl.setIcon( new ImageIcon( shipImage ) );
-				}
-			}
-		}
-	}
-	public String getShipId() { return shipId; }
-
-	public void setValue( int n ) {
-		value = n;
-		valueLbl.setText( ""+value );
-	}
-	public int getValue() { return value; }
-
-	public void setSector( int n ) {
-		sector = n;
-		sectorLbl.setText( ""+sector );
-	}
-	public int getSector() { return sector; }
-
-	public void setDifficulty( Difficulty d ) {
-		difficulty = d;
-		difficultyLbl.setText( d.toString() );
-	}
-	public Difficulty getDifficulty() { return difficulty; }
-
-	public void setVictory( boolean b ) {
-		victory = b;
-		victoryLbl.setText( victory ? "Victory" : "" );
-	}
-	public boolean isVictory() { return victory; }
-
-	public void setDLCEnabled( boolean b ) {
-		dlcEnabled = b;
-		dlcLbl.setText( dlcEnabled ? "Advanced" : "" );
-	}
-	public boolean isDLCEnabled() { return dlcEnabled; }
+    private JLabel shipImageLbl = new JLabel("", JLabel.LEFT);
+    private JLabel shipNameLbl = new JLabel("", JLabel.CENTER);
+    private JLabel valueLbl = new JLabel("", JLabel.LEFT);
+    private JLabel sectorLbl = new JLabel("", JLabel.LEFT);
+    private JLabel difficultyLbl = new JLabel("", JLabel.CENTER);
+    private JLabel victoryLbl = new JLabel("", JLabel.RIGHT);
+    private JLabel dlcLbl = new JLabel("", JLabel.RIGHT);
+    private JButton editBtn = null;
 
 
-	private void showEditPopup() {
-		Map<String, ShipBlueprint> playerShipMap = DataManager.get().getPlayerShips();
-		Map<String, ShipBlueprint> autoShipMap = DataManager.get().getAutoShips();
+    /**
+     * Constructs a ScorePanel.
+     *
+     * @param rank a number to use as a #X label on the border.
+     * @param s    a score to represent, or null for a blank panel.
+     */
+    public ScorePanel(int rank, Score s) {
+        super();
+        this.setBorder(BorderFactory.createTitledBorder(""));
+        this.setLayout(new GridBagLayout());
 
-		JPanel popupPanel = new JPanel( new BorderLayout() );
+        GridBagConstraints c = new GridBagConstraints();
 
-		final FieldEditorPanel editorPanel = new FieldEditorPanel( true );
-		editorPanel.addRow( SHIP_NAME, FieldEditorPanel.ContentType.STRING );
-		editorPanel.addRow( SHIP_ID, FieldEditorPanel.ContentType.COMBO );
-		editorPanel.addRow( VALUE, FieldEditorPanel.ContentType.INTEGER );
-		editorPanel.addRow( SECTOR, FieldEditorPanel.ContentType.INTEGER );
-		editorPanel.addRow( DIFFICULTY, FieldEditorPanel.ContentType.COMBO );
-		editorPanel.addRow( VICTORY, FieldEditorPanel.ContentType.BOOLEAN );
-		editorPanel.addRow( DLC_ENABLED, FieldEditorPanel.ContentType.BOOLEAN );
-		if ( blankable ) {
-			editorPanel.addRow( REMOVE, FieldEditorPanel.ContentType.BOOLEAN );
-			editorPanel.getBoolean(REMOVE).setSelected( blank );
-		}
+        c.anchor = GridBagConstraints.WEST;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.0;
+        c.gridwidth = 1;
+        c.gridheight = 4;
+        c.gridx = 0;
+        c.gridy = 0;
+        this.add(shipImageLbl, c);
 
-		editorPanel.getCombo( SHIP_ID ).addItem( "" );
-		for ( ShipBlueprint blueprint : playerShipMap.values() ) {
-			editorPanel.getCombo( SHIP_ID ).addItem( blueprint );
-		}
-		editorPanel.getCombo( SHIP_ID ).addItem( "" );
-		for ( ShipBlueprint blueprint : autoShipMap.values() ) {
-			editorPanel.getCombo( SHIP_ID ).addItem( blueprint );
-		}
+        // Wrap Victory label in a panel with 0 preferred width.
+        // By itself, the label's preferred width would've imbalanced weightx.
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.gridx = 1;
+        c.gridy = 3;
+        JPanel victoryPanel = new JPanel(new BorderLayout());
+        victoryLbl.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+        victoryPanel.add(victoryLbl, BorderLayout.EAST);
+        victoryPanel.setPreferredSize(new java.awt.Dimension(0, 0));
+        this.add(victoryPanel, c);
 
-		if ( playerShipMap.containsKey( shipId ) ) {
-			editorPanel.setComboAndReminder( SHIP_ID, playerShipMap.get( shipId ) );
-		}
-		else if ( autoShipMap.containsKey( shipId ) ) {
-			editorPanel.setComboAndReminder( SHIP_ID, autoShipMap.get( shipId ) );
-		}
-		else if ( "".equals( shipId ) == false ) {
-			// Some unrecognized id. Add it as a string.
-			editorPanel.getCombo( SHIP_ID ).addItem( shipId );
-			editorPanel.setComboAndReminder( SHIP_ID, shipId );
-		}
-		else {
-			// It's blank.
-			editorPanel.setComboAndReminder( SHIP_ID, "" );
-		}
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.0;
+        c.gridwidth = 4;
+        c.gridheight = 1;
+        c.gridx = 1;
+        c.gridy = 0;
+        this.add(shipNameLbl, c);
 
-		editorPanel.getCombo( SHIP_ID ).setEnabled( shipIdEditingEnabled );
+        c.gridwidth = 1;
+        c.gridx = 2;
+        c.gridy++;
+        this.add(valueDescLbl, c);
+        c.gridx++;
+        this.add(valueLbl, c);
 
-		for ( Difficulty d : Difficulty.values() )
-			editorPanel.getCombo( DIFFICULTY ).addItem( d );
+        c.gridwidth = 1;
+        c.gridx = 2;
+        c.gridy++;
+        this.add(sectorDescLbl, c);
+        c.gridx++;
+        this.add(sectorLbl, c);
 
-		editorPanel.setStringAndReminder( SHIP_NAME, getShipName() );
-		editorPanel.setIntAndReminder( VALUE, getValue() );
-		editorPanel.setIntAndReminder( SECTOR, getSector() );
-		editorPanel.setComboAndReminder( DIFFICULTY, getDifficulty() );
-		editorPanel.setBoolAndReminder( VICTORY, isVictory() );
-		editorPanel.setBoolAndReminder( DLC_ENABLED, isDLCEnabled() );
-		popupPanel.add(editorPanel, BorderLayout.CENTER);
+        c.gridwidth = 2;
+        c.gridx = 2;
+        c.gridy = 3;
+        this.add(difficultyLbl, c);
 
-		JPanel ctrlPanel = new JPanel();
-		ctrlPanel.setLayout( new BoxLayout( ctrlPanel, BoxLayout.X_AXIS ) );
-		ctrlPanel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ) );
-		ctrlPanel.add( Box.createHorizontalGlue() );
-		JButton popupOkBtn = new JButton( "OK" );
-		ctrlPanel.add( popupOkBtn );
-		ctrlPanel.add( Box.createHorizontalGlue() );
-		JButton popupCancelBtn = new JButton( "Cancel" );
-		ctrlPanel.add( popupCancelBtn );
-		ctrlPanel.add( Box.createHorizontalGlue() );
-		popupPanel.add( ctrlPanel, BorderLayout.SOUTH );
-		popupOkBtn.setPreferredSize( popupCancelBtn.getPreferredSize() );
+        // Wrap DLC label in a panel with 0 preferred width.
+        // By itself, the label's preferred width would've imbalanced weightx.
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        c.gridx = 4;
+        c.gridy = 3;
+        JPanel dlcPanel = new JPanel(new BorderLayout());
+        dlcLbl.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        dlcPanel.add(dlcLbl, BorderLayout.EAST);
+        dlcPanel.setPreferredSize(new java.awt.Dimension(0, 0));
+        this.add(dlcPanel, c);
 
-		final JDialog popup = new JDialog( (java.awt.Frame)this.getTopLevelAncestor(), "Edit Score", true );
-		popup.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
-		popup.getContentPane().add( popupPanel );
-		popup.pack();
-		popup.setLocationRelativeTo( null );
+        c.weightx = 1.0;
+        c.gridwidth = 1;
+        c.gridx = 5;
+        c.gridy = 3;
+        this.add(Box.createHorizontalGlue(), c);
 
-		popupCancelBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				popup.setVisible( false );
-				popup.dispose();
-			}
-		});
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.NONE;
+        c.weightx = 0.0;
+        c.gridwidth = 1;
+        c.gridheight = 4;
+        c.gridx = 6;
+        c.gridy = 0;
+        editBtn = new JButton("Edit");
+        editBtn.setMargin(new Insets(0, 0, 0, 0));
+        this.add(editBtn, c);
 
-		popupOkBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed( ActionEvent e ) {
-				String newString = null;
+        // Force a minimum height with an invisible component.
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.NONE;
+        c.weightx = 0.0;
+        c.gridwidth = 1;
+        c.gridheight = 4;
+        c.gridx = 7;
+        c.gridy = 0;
+        this.add(Box.createVerticalStrut(80), c);
 
-				setShipName( editorPanel.getString( SHIP_NAME ).getText() );
+        editBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showEditPopup();
+            }
+        });
 
-				Object shipObj = editorPanel.getCombo( SHIP_ID ).getSelectedItem();
-				if ( shipObj instanceof ShipBlueprint ) {
-					setShipId( ((ShipBlueprint)shipObj).getId() );
-				}
+        setRank(rank);
+        if (s != null) {
+            setShipName(s.getShipName());
+            setShipId(s.getShipId());
+            setValue(s.getValue());
+            setSector(s.getSector());
+            setDifficulty(s.getDifficulty());
+            setVictory(s.isVictory());
+            setDLCEnabled(s.isDLCEnabled());
+            setBlank(false);
+        } else {
+            setBlank(true);
+        }
+    }
 
-				newString = editorPanel.getInt( VALUE ).getText();
-				try { setValue( Integer.parseInt( newString ) ); }
-				catch ( NumberFormatException f ) {}
+    /**
+     * Toggles visibility of everything ecept the edit button.
+     */
+    public void setBlank(boolean b) {
+        blank = b;
+        shipImageLbl.setVisible(!blank);
+        victoryLbl.setVisible(!blank);
+        shipNameLbl.setVisible(!blank);
+        valueDescLbl.setVisible(!blank);
+        valueLbl.setVisible(!blank);
+        sectorDescLbl.setVisible(!blank);
+        sectorLbl.setVisible(!blank);
+        difficultyLbl.setVisible(!blank);
+    }
 
-				newString = editorPanel.getInt( SECTOR ).getText();
-				try { setSector( Integer.parseInt( newString ) ); }
-				catch ( NumberFormatException f ) {}
+    public boolean isBlank() {
+        return blank;
+    }
 
-				setDifficulty( (Difficulty)editorPanel.getCombo( DIFFICULTY ).getSelectedItem() );
-				setVictory( editorPanel.getBoolean( VICTORY ).isSelected() );
-				setDLCEnabled( editorPanel.getBoolean( DLC_ENABLED ).isSelected() );
+    public void setEditable(boolean b) {
+        editBtn.setEnabled(b);
+    }
 
-				if ( blankable ) {
-					setBlank( editorPanel.getBoolean( REMOVE ).isSelected() );
-				} else {
-					setBlank( false );
-				}
+    public boolean isEditable() {
+        return editBtn.isEnabled();
+    }
 
-				popup.setVisible( false );
-				popup.dispose();
-			}
-		});
+    public void setBlankable(boolean b) {
+        blankable = b;
+    }
 
-		popup.setVisible( true );
-	}
+    public boolean isBlankable() {
+        return blankable;
+    }
 
-	public void setScore( Score s ) {
-		if ( s != null ) {
-			setShipName( s.getShipName() );
-			setShipId( s.getShipId() );
-			setValue( s.getValue() );
-			setSector( s.getSector() );
-			setDifficulty( s.getDifficulty() );
-			setVictory( s.isVictory() );
-			setDLCEnabled( s.isDLCEnabled() );
-			setBlank( false );
-		}
-		else {
-			setBlank( true );
-		}
-	}
+    public void setShipIdEditingEnabled(boolean b) {
+        shipIdEditingEnabled = b;
+    }
 
-	public void updateScore( Score s ) {
-		if ( isBlank() ) return;
+    public void setRank(int n) {
+        this.setBorder(BorderFactory.createTitledBorder("#" + n));
+    }
 
-		s.setShipName( getShipName() );
-		s.setShipId( getShipId() );
-		s.setValue( getValue() );
-		s.setSector( getSector() );
-		s.setDifficulty( getDifficulty() );
-		s.setVictory( isVictory() );
-		s.setDLCEnabled( isDLCEnabled() );
-	}
+    public void setShipName(String s) {
+        shipName = s;
+        shipNameLbl.setText(shipName);
+    }
 
-	public Score createScore() {
-		if ( isBlank() ) return null;
+    public String getShipName() {
+        return shipName;
+    }
 
-		Score s = new Score();
-		updateScore( s );
-		return s;
-	}
+    public void setShipId(String s) {
+        if (s == null) s = "";
+        if (s.equals(shipId)) return;
+        shipId = s;
 
-	/**
-	 * Sets a shared cache to use.
-	 *
-	 * The cache maps innerPath to (0,0,maxW,0)/(0,0,0,maxH) rects to images.
-	 */
-	public void setCacheMap( Map<String, Map<Rectangle, BufferedImage>> cachedImages ) {
-		this.cachedImages = cachedImages;
-	}
+        shipImage = null;
+        shipImageLbl.setIcon(null);
+
+        if (shipId.length() > 0) {
+
+            ShipBlueprint ship = DataManager.get().getShip(shipId);
+            if (ship != null) {
+                String shipGfxBaseName = ship.getGraphicsBaseName();
+
+                String innerPath = null;
+                String[] candidatePaths = new String[2];
+                candidatePaths[0] = "img/ship/" + shipGfxBaseName + "_base.png";  // FTL 1.01-1.03.3 (All ships), 1.5.4 (Player ships)
+                candidatePaths[1] = "img/ships_glow/" + shipGfxBaseName + "_base.png";  // FTL 1.5.4 (Enemy ships)
+                for (String candidatePath : candidatePaths) {
+                    if (DataManager.get().hasResourceInputStream(candidatePath)) {
+                        innerPath = candidatePath;
+                    }
+                }
+                if (innerPath != null) {
+                    int maxW = ImageUtilities.getMaxIconWidth();
+                    int maxH = ImageUtilities.getMaxIconHeight();
+                    shipImage = ImageUtilities.getProportionallyScaledImage(innerPath, maxW, maxH, cachedImages);
+                    shipImageLbl.setIcon(new ImageIcon(shipImage));
+                }
+            }
+        }
+    }
+
+    public String getShipId() {
+        return shipId;
+    }
+
+    public void setValue(int n) {
+        value = n;
+        valueLbl.setText("" + value);
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setSector(int n) {
+        sector = n;
+        sectorLbl.setText("" + sector);
+    }
+
+    public int getSector() {
+        return sector;
+    }
+
+    public void setDifficulty(Difficulty d) {
+        difficulty = d;
+        difficultyLbl.setText(d.toString());
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setVictory(boolean b) {
+        victory = b;
+        victoryLbl.setText(victory ? "Victory" : "");
+    }
+
+    public boolean isVictory() {
+        return victory;
+    }
+
+    public void setDLCEnabled(boolean b) {
+        dlcEnabled = b;
+        dlcLbl.setText(dlcEnabled ? "Advanced" : "");
+    }
+
+    public boolean isDLCEnabled() {
+        return dlcEnabled;
+    }
+
+
+    private void showEditPopup() {
+        Map<String, ShipBlueprint> playerShipMap = DataManager.get().getPlayerShips();
+        Map<String, ShipBlueprint> autoShipMap = DataManager.get().getAutoShips();
+
+        JPanel popupPanel = new JPanel(new BorderLayout());
+
+        final FieldEditorPanel editorPanel = new FieldEditorPanel(true);
+        editorPanel.addRow(SHIP_NAME, FieldEditorPanel.ContentType.STRING);
+        editorPanel.addRow(SHIP_ID, FieldEditorPanel.ContentType.COMBO);
+        editorPanel.addRow(VALUE, FieldEditorPanel.ContentType.INTEGER);
+        editorPanel.addRow(SECTOR, FieldEditorPanel.ContentType.INTEGER);
+        editorPanel.addRow(DIFFICULTY, FieldEditorPanel.ContentType.COMBO);
+        editorPanel.addRow(VICTORY, FieldEditorPanel.ContentType.BOOLEAN);
+        editorPanel.addRow(DLC_ENABLED, FieldEditorPanel.ContentType.BOOLEAN);
+        if (blankable) {
+            editorPanel.addRow(REMOVE, FieldEditorPanel.ContentType.BOOLEAN);
+            editorPanel.getBoolean(REMOVE).setSelected(blank);
+        }
+
+        editorPanel.getCombo(SHIP_ID).addItem("");
+        for (ShipBlueprint blueprint : playerShipMap.values()) {
+            editorPanel.getCombo(SHIP_ID).addItem(blueprint);
+        }
+        editorPanel.getCombo(SHIP_ID).addItem("");
+        for (ShipBlueprint blueprint : autoShipMap.values()) {
+            editorPanel.getCombo(SHIP_ID).addItem(blueprint);
+        }
+
+        if (playerShipMap.containsKey(shipId)) {
+            editorPanel.setComboAndReminder(SHIP_ID, playerShipMap.get(shipId));
+        } else if (autoShipMap.containsKey(shipId)) {
+            editorPanel.setComboAndReminder(SHIP_ID, autoShipMap.get(shipId));
+        } else if ("".equals(shipId) == false) {
+            // Some unrecognized id. Add it as a string.
+            editorPanel.getCombo(SHIP_ID).addItem(shipId);
+            editorPanel.setComboAndReminder(SHIP_ID, shipId);
+        } else {
+            // It's blank.
+            editorPanel.setComboAndReminder(SHIP_ID, "");
+        }
+
+        editorPanel.getCombo(SHIP_ID).setEnabled(shipIdEditingEnabled);
+
+        for (Difficulty d : Difficulty.values())
+            editorPanel.getCombo(DIFFICULTY).addItem(d);
+
+        editorPanel.setStringAndReminder(SHIP_NAME, getShipName());
+        editorPanel.setIntAndReminder(VALUE, getValue());
+        editorPanel.setIntAndReminder(SECTOR, getSector());
+        editorPanel.setComboAndReminder(DIFFICULTY, getDifficulty());
+        editorPanel.setBoolAndReminder(VICTORY, isVictory());
+        editorPanel.setBoolAndReminder(DLC_ENABLED, isDLCEnabled());
+        popupPanel.add(editorPanel, BorderLayout.CENTER);
+
+        JPanel ctrlPanel = new JPanel();
+        ctrlPanel.setLayout(new BoxLayout(ctrlPanel, BoxLayout.X_AXIS));
+        ctrlPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        ctrlPanel.add(Box.createHorizontalGlue());
+        JButton popupOkBtn = new JButton("OK");
+        ctrlPanel.add(popupOkBtn);
+        ctrlPanel.add(Box.createHorizontalGlue());
+        JButton popupCancelBtn = new JButton("Cancel");
+        ctrlPanel.add(popupCancelBtn);
+        ctrlPanel.add(Box.createHorizontalGlue());
+        popupPanel.add(ctrlPanel, BorderLayout.SOUTH);
+        popupOkBtn.setPreferredSize(popupCancelBtn.getPreferredSize());
+
+        final JDialog popup = new JDialog((java.awt.Frame) this.getTopLevelAncestor(), "Edit Score", true);
+        popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        popup.getContentPane().add(popupPanel);
+        popup.pack();
+        popup.setLocationRelativeTo(null);
+
+        popupCancelBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popup.setVisible(false);
+                popup.dispose();
+            }
+        });
+
+        popupOkBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String newString = null;
+
+                setShipName(editorPanel.getString(SHIP_NAME).getText());
+
+                Object shipObj = editorPanel.getCombo(SHIP_ID).getSelectedItem();
+                if (shipObj instanceof ShipBlueprint) {
+                    setShipId(((ShipBlueprint) shipObj).getId());
+                }
+
+                newString = editorPanel.getInt(VALUE).getText();
+                try {
+                    setValue(Integer.parseInt(newString));
+                } catch (NumberFormatException f) {
+                }
+
+                newString = editorPanel.getInt(SECTOR).getText();
+                try {
+                    setSector(Integer.parseInt(newString));
+                } catch (NumberFormatException f) {
+                }
+
+                setDifficulty((Difficulty) editorPanel.getCombo(DIFFICULTY).getSelectedItem());
+                setVictory(editorPanel.getBoolean(VICTORY).isSelected());
+                setDLCEnabled(editorPanel.getBoolean(DLC_ENABLED).isSelected());
+
+                if (blankable) {
+                    setBlank(editorPanel.getBoolean(REMOVE).isSelected());
+                } else {
+                    setBlank(false);
+                }
+
+                popup.setVisible(false);
+                popup.dispose();
+            }
+        });
+
+        popup.setVisible(true);
+    }
+
+    public void setScore(Score s) {
+        if (s != null) {
+            setShipName(s.getShipName());
+            setShipId(s.getShipId());
+            setValue(s.getValue());
+            setSector(s.getSector());
+            setDifficulty(s.getDifficulty());
+            setVictory(s.isVictory());
+            setDLCEnabled(s.isDLCEnabled());
+            setBlank(false);
+        } else {
+            setBlank(true);
+        }
+    }
+
+    public void updateScore(Score s) {
+        if (isBlank()) return;
+
+        s.setShipName(getShipName());
+        s.setShipId(getShipId());
+        s.setValue(getValue());
+        s.setSector(getSector());
+        s.setDifficulty(getDifficulty());
+        s.setVictory(isVictory());
+        s.setDLCEnabled(isDLCEnabled());
+    }
+
+    public Score createScore() {
+        if (isBlank()) return null;
+
+        Score s = new Score();
+        updateScore(s);
+        return s;
+    }
+
+    /**
+     * Sets a shared cache to use.
+     * <p>
+     * The cache maps innerPath to (0,0,maxW,0)/(0,0,0,maxH) rects to images.
+     */
+    public void setCacheMap(Map<String, Map<Rectangle, BufferedImage>> cachedImages) {
+        this.cachedImages = cachedImages;
+    }
 }

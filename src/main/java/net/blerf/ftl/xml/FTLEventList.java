@@ -11,30 +11,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "eventList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FTLEventList {
-	@XmlAttribute(name = "name")
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	@XmlElement(name = "event", required = false)
-	private List<FTLEvent> eventList;
+    @XmlElement(name = "event", required = false)
+    private List<FTLEvent> eventList;
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId( String id ) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public List<FTLEvent> getEventList() {
-		return eventList;
-	}
+    public List<FTLEvent> getEventList() {
+        return eventList;
+    }
 
-	public void setEventList( List<FTLEvent> eventList ) {
-		this.eventList = eventList;
-	}
+    public void setEventList(List<FTLEvent> eventList) {
+        this.eventList = eventList;
+    }
 
-	@Override
-	public String toString() {
-		return ""+id;
-	}
+    @Override
+    public String toString() {
+        return "" + id;
+    }
 }

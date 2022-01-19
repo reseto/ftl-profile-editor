@@ -7,7 +7,7 @@ import net.blerf.ftl.model.sectortree.SectorDot;
 
 /**
  * A generator of SectorDots to populate a SectorTree object.
- *
+ * <p>
  * This class simply creates a list of one-dot columns.
  * Each dot has null type, null id, and "Unknown" title.
  *
@@ -15,47 +15,47 @@ import net.blerf.ftl.model.sectortree.SectorDot;
  */
 public class LinearSectorTreeGenerator {
 
-	public List<List<SectorDot>> generateSectorTree( int columnCount ) {
-		List<List<SectorDot>> result = new ArrayList<List<SectorDot>>( columnCount );
+    public List<List<SectorDot>> generateSectorTree(int columnCount) {
+        List<List<SectorDot>> result = new ArrayList<List<SectorDot>>(columnCount);
 
-		for ( int c=0; c < columnCount; c++ ) {
-			List<SectorDot> columnDots = new ArrayList<SectorDot>( 1 );
+        for (int c = 0; c < columnCount; c++) {
+            List<SectorDot> columnDots = new ArrayList<SectorDot>(1);
 
-			SectorDot dot = new SectorDot( null, null, "Unknown" );
-			columnDots.add( dot );
+            SectorDot dot = new SectorDot(null, null, "Unknown");
+            columnDots.add(dot);
 
-			result.add( columnDots );
-		}
+            result.add(columnDots);
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Generates an invalid tree approximating a blind visitation route.
-	 *
-	 * The first column will have 1 dot.
-	 * Subsequent columns will have 0-or-more unvisited dots, then 1 visited.
-	 * When no further visited dots remain, columns will have 1 unvisited dot.
-	 * The final column will hold any excess dots.
-	 */
-	public List<List<SectorDot>> generateSectorTree( List<Boolean> route, int columnCount ) {
-		List<List<SectorDot>> result = new ArrayList<List<SectorDot>>( columnCount );
+    /**
+     * Generates an invalid tree approximating a blind visitation route.
+     * <p>
+     * The first column will have 1 dot.
+     * Subsequent columns will have 0-or-more unvisited dots, then 1 visited.
+     * When no further visited dots remain, columns will have 1 unvisited dot.
+     * The final column will hold any excess dots.
+     */
+    public List<List<SectorDot>> generateSectorTree(List<Boolean> route, int columnCount) {
+        List<List<SectorDot>> result = new ArrayList<List<SectorDot>>(columnCount);
 
-		int lastVisitedR = route.lastIndexOf( Boolean.TRUE );
-		List<SectorDot> columnDots = new ArrayList<SectorDot>( 1 );
-		result.add( columnDots );
+        int lastVisitedR = route.lastIndexOf(Boolean.TRUE);
+        List<SectorDot> columnDots = new ArrayList<SectorDot>(1);
+        result.add(columnDots);
 
-		for ( int r=0; r < route.size(); r++ ) {
-			SectorDot dot = new SectorDot( null, null, "Unknown" );
-			dot.setVisited(route.get(r));
-			columnDots.add( dot );
+        for (int r = 0; r < route.size(); r++) {
+            SectorDot dot = new SectorDot(null, null, "Unknown");
+            dot.setVisited(route.get(r));
+            columnDots.add(dot);
 
-			if ( ( r == 0 || dot.isVisited() || r > lastVisitedR ) && result.size() < columnCount ) {
-				columnDots = new ArrayList<SectorDot>();
-				result.add( columnDots );
-			}
-		}
+            if ((r == 0 || dot.isVisited() || r > lastVisitedR) && result.size() < columnCount) {
+                columnDots = new ArrayList<SectorDot>();
+                result.add(columnDots);
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

@@ -8,21 +8,21 @@ import net.blerf.ftl.parser.SavedGameParser.SystemType;
 
 public interface SpriteImageProvider {
 
-	BufferedImage getShipBaseImage( String shipGfxBaseName, int w, int h );
+    BufferedImage getShipBaseImage(String shipGfxBaseName, int w, int h);
 
-	BufferedImage getShipFloorImage( String shipGfxBaseName );
+    BufferedImage getShipFloorImage(String shipGfxBaseName);
 
-	BufferedImage getRoomDecorImage( String decorName, int squaresH, int squaresV );
+    BufferedImage getRoomDecorImage(String decorName, int squaresH, int squaresV);
 
-	BufferedImage getDroneBodyImage( DroneType droneType, boolean playerControlled );
+    BufferedImage getDroneBodyImage(DroneType droneType, boolean playerControlled);
 
-	BufferedImage getCrewBodyImage( CrewType crewType, boolean male, boolean playerControlled );
+    BufferedImage getCrewBodyImage(CrewType crewType, boolean male, boolean playerControlled);
 
-	DoorAtlas getDoorAtlas();
+    DoorAtlas getDoorAtlas();
 
-	BufferedImage getSystemRoomImage( SystemType systemType );
+    BufferedImage getSystemRoomImage(SystemType systemType);
 
-	AnimAtlas getBreachAtlas();
+    AnimAtlas getBreachAtlas();
 
-	AnimAtlas getFireAtlas();
+    AnimAtlas getFireAtlas();
 }

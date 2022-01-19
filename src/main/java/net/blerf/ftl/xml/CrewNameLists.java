@@ -11,14 +11,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CrewNameLists {
 
-	@XmlElement(name = "nameList")
-	private List<CrewNameList> crewNameLists;
+    @XmlElement(name = "nameList")
+    private List<CrewNameList> crewNameLists;
 
-	public void setCrewNameLists( List<CrewNameList> crewNameLists ) {
-		this.crewNameLists = crewNameLists;
-	}
+    public void setCrewNameLists(List<CrewNameList> crewNameLists) {
+        this.crewNameLists = crewNameLists;
+    }
 
-	public List<CrewNameList> getCrewNameLists() {
-		return crewNameLists;
-	}
+    public List<CrewNameList> getCrewNameLists() {
+        return crewNameLists;
+    }
 }

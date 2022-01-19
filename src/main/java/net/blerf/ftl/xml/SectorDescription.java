@@ -8,132 +8,132 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement( name = "sectorDescription" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "sectorDescription")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SectorDescription {
 
-	@XmlAttribute( name = "name" )
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	@XmlAttribute
-	private int minSector;
+    @XmlAttribute
+    private int minSector;
 
-	@XmlAttribute
-	private boolean unique;
+    @XmlAttribute
+    private boolean unique;
 
-	private NameList nameList;
+    private NameList nameList;
 
-	private TrackList trackList;
+    private TrackList trackList;
 
-	private RarityList rarityList;
+    private RarityList rarityList;
 
-	@XmlElement( required = false )
-	private String startEvent;
+    @XmlElement(required = false)
+    private String startEvent;
 
-	@XmlElement( name="event" )
-	private List<EventDistribution> eventDistributions;
+    @XmlElement(name = "event")
+    private List<EventDistribution> eventDistributions;
 
-	@XmlAccessorType( XmlAccessType.FIELD )
-	public static class NameList {
-		@XmlElement(name = "name")
-		public List<DefaultDeferredText> names;
-	}
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class NameList {
+        @XmlElement(name = "name")
+        public List<DefaultDeferredText> names;
+    }
 
-	@XmlAccessorType( XmlAccessType.FIELD )
-	public static class TrackList {
-		@XmlElement( name = "track" )
-		public List<String> tracks;
-	}
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class TrackList {
+        @XmlElement(name = "track")
+        public List<String> tracks;
+    }
 
-	@XmlAccessorType( XmlAccessType.FIELD )
-	public static class RarityList {
-		@XmlElement( name = "blueprint" )
-		public List<BlueprintRarity> blueprints;
-	}
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class RarityList {
+        @XmlElement(name = "blueprint")
+        public List<BlueprintRarity> blueprints;
+    }
 
-	@XmlAccessorType( XmlAccessType.FIELD )
-	public static class BlueprintRarity {
-		@XmlAttribute( name = "name" )
-		public String id;
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class BlueprintRarity {
+        @XmlAttribute(name = "name")
+        public String id;
 
-		@XmlAttribute
-		public int rarity;
-	}
+        @XmlAttribute
+        public int rarity;
+    }
 
-	@XmlAccessorType( XmlAccessType.FIELD )
-	public static class EventDistribution {
-		@XmlAttribute
-		public String name;
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class EventDistribution {
+        @XmlAttribute
+        public String name;
 
-		@XmlAttribute
-		public int min;
+        @XmlAttribute
+        public int min;
 
-		@XmlAttribute
-		public int max;
-	}
+        @XmlAttribute
+        public int max;
+    }
 
 
-	public void setId( String id ) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setMinSector( int minSector ) {
-		this.minSector = minSector;
-	}
+    public void setMinSector(int minSector) {
+        this.minSector = minSector;
+    }
 
-	public int getMinSector() {
-		return minSector;
-	}
+    public int getMinSector() {
+        return minSector;
+    }
 
-	public void setUnique( boolean unique ) {
-		this.unique = unique;
-	}
+    public void setUnique(boolean unique) {
+        this.unique = unique;
+    }
 
-	public boolean isUnique() {
-		return unique;
-	}
+    public boolean isUnique() {
+        return unique;
+    }
 
-	public void setNameList( NameList nameList ) {
-		this.nameList = nameList;
-	}
+    public void setNameList(NameList nameList) {
+        this.nameList = nameList;
+    }
 
-	public NameList getNameList() {
-		return nameList;
-	}
+    public NameList getNameList() {
+        return nameList;
+    }
 
-	public void setTrackList( TrackList trackList ) {
-		this.trackList = trackList;
-	}
+    public void setTrackList(TrackList trackList) {
+        this.trackList = trackList;
+    }
 
-	public TrackList getTrackList() {
-		return trackList;
-	}
+    public TrackList getTrackList() {
+        return trackList;
+    }
 
-	public void setRarityList( RarityList rarityList ) {
-		this.rarityList = rarityList;
-	}
+    public void setRarityList(RarityList rarityList) {
+        this.rarityList = rarityList;
+    }
 
-	public RarityList getRarityList() {
-		return rarityList;
-	}
+    public RarityList getRarityList() {
+        return rarityList;
+    }
 
-	public void setStartEvent( String startEvent ) {
-		this.startEvent = startEvent;
-	}
+    public void setStartEvent(String startEvent) {
+        this.startEvent = startEvent;
+    }
 
-	public String getStartEvent() {
-		return startEvent;
-	}
+    public String getStartEvent() {
+        return startEvent;
+    }
 
-	public void setEventDistributions( List<EventDistribution> eventDistributions ) {
-		this.eventDistributions = eventDistributions;
-	}
+    public void setEventDistributions(List<EventDistribution> eventDistributions) {
+        this.eventDistributions = eventDistributions;
+    }
 
-	public List<EventDistribution> getEventDistributions() {
-		return eventDistributions;
-	}
+    public List<EventDistribution> getEventDistributions() {
+        return eventDistributions;
+    }
 }

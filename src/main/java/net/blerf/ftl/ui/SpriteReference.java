@@ -9,62 +9,62 @@ import java.util.List;
  */
 public class SpriteReference<T> {
 
-	private List<ReferenceSprite<T>> spriteList = new ArrayList<ReferenceSprite<T>>(1);
-	private T referent;
+    private List<ReferenceSprite<T>> spriteList = new ArrayList<ReferenceSprite<T>>(1);
+    private T referent;
 
 
-	/**
-	 * Constructor.
-	 *
-	 * @param referent a shared object, or null (where permitted)
-	 */
-	public SpriteReference( T referent ) {
-		this.referent = referent;
-	}
+    /**
+     * Constructor.
+     *
+     * @param referent a shared object, or null (where permitted)
+     */
+    public SpriteReference(T referent) {
+        this.referent = referent;
+    }
 
-	/**
-	 * Sets a new referent.
-	 */
-	public void set( T newReferent ) {
-		referent = newReferent;
-	}
+    /**
+     * Sets a new referent.
+     */
+    public void set(T newReferent) {
+        referent = newReferent;
+    }
 
-	/**
-	 * Returns the referent.
-	 */
-	public T get() {
-		return referent;
-	}
+    /**
+     * Returns the referent.
+     */
+    public T get() {
+        return referent;
+    }
 
-	/**
-	 * Registers a sprite to notify of changes.
-	 */
-	public void addSprite( ReferenceSprite<T> sprite ) {
-		spriteList.add( sprite );
-	}
+    /**
+     * Registers a sprite to notify of changes.
+     */
+    public void addSprite(ReferenceSprite<T> sprite) {
+        spriteList.add(sprite);
+    }
 
-	public void removeSprite( ReferenceSprite<T> sprite ) {
-		spriteList.remove( sprite );
-	}
+    public void removeSprite(ReferenceSprite<T> sprite) {
+        spriteList.remove(sprite);
+    }
 
-	/**
-	 * Returns the first sprite of a given class, or null.
-	 */
-	public <U> U getSprite( Class<U> spriteClass ) {
-		for ( ReferenceSprite<T> sprite : spriteList ) {
-			if ( spriteClass.isInstance( sprite ) ) {
-				return spriteClass.cast( sprite );
-			}
-		}
-		return null;
-	}
+    /**
+     * Returns the first sprite of a given class, or null.
+     */
+    public <U> U getSprite(Class<U> spriteClass) {
+        for (ReferenceSprite<T> sprite : spriteList) {
+            if (spriteClass.isInstance(sprite)) {
+                return spriteClass.cast(sprite);
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * Notifies all sprites that changes have been made to the referent.
-	 */
-	public void fireReferenceChange() {
-		for ( ReferenceSprite<T> sprite : spriteList ) {
-			sprite.referenceChanged();
-		}
-	}
+    /**
+     * Notifies all sprites that changes have been made to the referent.
+     */
+    public void fireReferenceChange() {
+        for (ReferenceSprite<T> sprite : spriteList) {
+            sprite.referenceChanged();
+        }
+    }
 }

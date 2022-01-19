@@ -6,15 +6,19 @@ package net.blerf.ftl.model.shiplayout;
  */
 public class ShipLayoutDoor {
 
-	/** An adjacent roomId, or -1 for vacuum. */
-	public final int roomIdA;
+    /**
+     * An adjacent roomId, or -1 for vacuum.
+     */
+    public final int roomIdA;
 
-	/** An adjacent roomId, or -1 for vacuum. */
-	public final int roomIdB;
+    /**
+     * An adjacent roomId, or -1 for vacuum.
+     */
+    public final int roomIdB;
 
 
-	public ShipLayoutDoor( int roomIdA, int roomIdB ) {
-		this.roomIdA = roomIdA;
-		this.roomIdB = roomIdB;
-	}
+    public ShipLayoutDoor(int roomIdA, int roomIdB) {
+        this.roomIdA = roomIdA;
+        this.roomIdB = roomIdB;
+    }
 }

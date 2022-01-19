@@ -5,7 +5,7 @@ package net.blerf.ftl.ui;
  */
 public interface ReferenceSprite<T> {
 
-	SpriteReference<T> getReference();
+    SpriteReference<T> getReference();
 
-	void referenceChanged();
+    void referenceChanged();
 }

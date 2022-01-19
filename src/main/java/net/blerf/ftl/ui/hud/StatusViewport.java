@@ -8,35 +8,38 @@ import javax.swing.JViewport;
 
 
 public class StatusViewport extends JViewport {
-	private Color statusBgColor = new Color( 212, 208, 200 );
-	private String statusString = null;
+    private Color statusBgColor = new Color(212, 208, 200);
+    private String statusString = null;
 
-	public void setStatusString( String s ) {
-		if ( statusString != s ) {
-			statusString = s;
-			this.repaint();
-		}
-	}
-	public String getStatusString() { return statusString; }
+    public void setStatusString(String s) {
+        if (statusString != s) {
+            statusString = s;
+            this.repaint();
+        }
+    }
 
-	@Override
-	public void paintChildren( Graphics g ) {
-		super.paintChildren( g );
-		Graphics2D g2d = (Graphics2D)g;
-		Color prevColor = g2d.getColor();
+    public String getStatusString() {
+        return statusString;
+    }
 
-		if ( statusString != null ) {
-			LineMetrics lineMetrics = g2d.getFontMetrics().getLineMetrics( statusString, g2d );
-			int statusWidth = g2d.getFontMetrics().stringWidth( statusString );
-			int statusHeight = (int)lineMetrics.getAscent() + (int)lineMetrics.getDescent();
-			int statusX = 8;
-			int statusY = statusHeight + 6;
-			g2d.setColor( statusBgColor );
-			g2d.fillRect( statusX-3, statusY-((int)lineMetrics.getAscent())-3, statusWidth+6, statusHeight+6 );
-			g2d.setColor( Color.BLACK );
-			g2d.drawString( statusString, statusX, statusY );
-		}
+    @Override
+    public void paintChildren(Graphics g) {
+        super.paintChildren(g);
+        Graphics2D g2d = (Graphics2D) g;
+        Color prevColor = g2d.getColor();
 
-		g2d.setColor( prevColor );
-	}
+        if (statusString != null) {
+            LineMetrics lineMetrics = g2d.getFontMetrics().getLineMetrics(statusString, g2d);
+            int statusWidth = g2d.getFontMetrics().stringWidth(statusString);
+            int statusHeight = (int) lineMetrics.getAscent() + (int) lineMetrics.getDescent();
+            int statusX = 8;
+            int statusY = statusHeight + 6;
+            g2d.setColor(statusBgColor);
+            g2d.fillRect(statusX - 3, statusY - ((int) lineMetrics.getAscent()) - 3, statusWidth + 6, statusHeight + 6);
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(statusString, statusX, statusY);
+        }
+
+        g2d.setColor(prevColor);
+    }
 }

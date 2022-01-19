@@ -7,56 +7,56 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement( name = "anim" )
-@XmlAccessorType( XmlAccessType.FIELD )
+@XmlRootElement(name = "anim")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Anim {
 
-	@XmlAttribute( name = "name" )
-	private String id;
+    @XmlAttribute(name = "name")
+    private String id;
 
-	@XmlElement( name = "sheet" )
-	private String sheetId;
+    @XmlElement(name = "sheet")
+    private String sheetId;
 
-	@XmlElement( name = "desc" )
-	private AnimSpec spec;
+    @XmlElement(name = "desc")
+    private AnimSpec spec;
 
-	private float time;
+    private float time;
 
 
-	public void setId( String id ) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setSheetId( String sheetId ) {
-		this.sheetId = sheetId;
-	}
+    public void setSheetId(String sheetId) {
+        this.sheetId = sheetId;
+    }
 
-	public String getSheetId() {
-		return sheetId;
-	}
+    public String getSheetId() {
+        return sheetId;
+    }
 
-	public void setAnimSpec( AnimSpec spec ) {
-		this.spec = spec;
-	}
+    public void setAnimSpec(AnimSpec spec) {
+        this.spec = spec;
+    }
 
-	public AnimSpec getAnimSpec() {
-		return spec;
-	}
+    public AnimSpec getAnimSpec() {
+        return spec;
+    }
 
-	public void setTime( float time ) {
-		this.time = time;
-	}
+    public void setTime(float time) {
+        this.time = time;
+    }
 
-	public float getTime() {
-		return time;
-	}
+    public float getTime() {
+        return time;
+    }
 
-	@Override
-	public String toString() {
-		return ""+id;
-	}
+    @Override
+    public String toString() {
+        return "" + id;
+    }
 }
