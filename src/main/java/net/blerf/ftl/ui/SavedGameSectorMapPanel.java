@@ -83,7 +83,7 @@ import net.blerf.ftl.xml.BackgroundImageList;
 import net.blerf.ftl.xml.Encounters;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
-import net.blerf.ftl.xml.ShipEvent;
+import net.blerf.ftl.xml.ship.ShipEvent;
 
 @Slf4j
 public class SavedGameSectorMapPanel extends JPanel {

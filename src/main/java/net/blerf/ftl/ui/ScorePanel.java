@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.model.Score;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.xml.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
 
 
 public class ScorePanel extends JPanel {

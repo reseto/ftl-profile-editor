@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.model.state.ShipState;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.xml.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
 
 
 public class SavedGameHangarPanel extends JPanel {

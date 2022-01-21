@@ -7,22 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import net.blerf.ftl.xml.ship.ShipChassis;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class ShipLayout {
-
-    private int offsetX = 0, offsetY = 0;
-    private int horizontal = 0, vertical = 0;
-    private Rectangle shieldEllipse = new Rectangle();
-    private TreeMap<Integer, ShipLayoutRoom> roomMap = new TreeMap<Integer, ShipLayoutRoom>();
-    private Map<DoorCoordinate, ShipLayoutDoor> doorMap = new LinkedHashMap<DoorCoordinate, ShipLayoutDoor>();
-
-
-    /**
-     * Constructs a layout with uninteresting defaults.
-     */
-    public ShipLayout() {
-    }
 
     /**
      * Sets a positive offset to the entire ship in square-sized (35x35) units.
@@ -33,44 +26,20 @@ public class ShipLayout {
      * <p>
      * ShipChassis will further offset the ship images specifically.
      *
-     * @see net.blerf.ftl.xml.ShipChassis
+     * @see ShipChassis
      */
-    public void setOffsetX(int n) {
-        offsetX = n;
-    }
-
-    public void setOffsetY(int n) {
-        offsetY = n;
-    }
-
-    public int getOffsetX() {
-        return offsetX;
-    }
-
-    public int getOffsetY() {
-        return offsetY;
-    }
-
+    private int offsetX = 0;
+    private int offsetY = 0;
     /**
-     * Sets an additional whole-ship offest in pixel units.
+     * Sets an additional whole-ship offset in pixel units.
      * <p>
      * TODO: Reportedly horizontal doesn't apply for nearby ships!?
      */
-    public void setHorizontal(int n) {
-        horizontal = n;
-    }
-
-    public void setVertical(int n) {
-        vertical = n;
-    }
-
-    public int getHorizontal() {
-        return horizontal;
-    }
-
-    public int getVertical() {
-        return vertical;
-    }
+    private int horizontal = 0;
+    private int vertical = 0;
+    private Rectangle shieldEllipse = new Rectangle();
+    private final TreeMap<Integer, ShipLayoutRoom> roomMap = new TreeMap<>();
+    private final Map<DoorCoordinate, ShipLayoutDoor> doorMap = new LinkedHashMap<>();
 
     /**
      * Sets the collision/orbit ellipse.
@@ -79,10 +48,6 @@ public class ShipLayout {
      */
     public void setShieldEllipse(int w, int h, int x, int y) {
         shieldEllipse = new Rectangle(x, y, w, h);
-    }
-
-    public Rectangle getShieldEllipse() {
-        return shieldEllipse;
     }
 
     /**
@@ -109,13 +74,6 @@ public class ShipLayout {
         } catch (NoSuchElementException e) {
             return 0;
         }
-    }
-
-    /**
-     * Returns the map containing this layout's room info.
-     */
-    public Map<Integer, ShipLayoutRoom> getRoomMap() {
-        return roomMap;
     }
 
     /**

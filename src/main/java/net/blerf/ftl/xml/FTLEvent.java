@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 import lombok.extern.slf4j.Slf4j;
+import net.blerf.ftl.xml.ship.ShipEvent;
 
 @Slf4j
 @XmlRootElement(name = "event")

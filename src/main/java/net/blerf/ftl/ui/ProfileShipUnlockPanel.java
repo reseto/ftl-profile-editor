@@ -22,7 +22,7 @@ import net.blerf.ftl.model.Profile;
 import net.blerf.ftl.model.ShipAvailability;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.xml.Achievement;
-import net.blerf.ftl.xml.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
 
 @Slf4j
 public class ProfileShipUnlockPanel extends JPanel implements ActionListener {

@@ -12,8 +12,11 @@ import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
-import net.blerf.ftl.xml.ShipBlueprint;
+import net.blerf.ftl.xml.ship.AugmentId;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
 import net.blerf.ftl.xml.SystemBlueprint;
+import net.blerf.ftl.xml.ship.SystemList;
+import net.blerf.ftl.xml.ship.SystemRoom;
 
 public class ShipState {
     private String shipName;
@@ -86,7 +89,7 @@ public class ShipState {
             SavedGameParser.SystemState systemState = new SavedGameParser.SystemState(systemType);
 
             // Set capacity for systems that're initially present.
-            ShipBlueprint.SystemList.SystemRoom[] systemRoom = shipBlueprint.getSystemList().getSystemRoom(systemType);
+            SystemRoom[] systemRoom = shipBlueprint.getSystemList().getSystemRoom(systemType);
             if (systemRoom != null) {
                 Boolean start = systemRoom[0].getStart();
                 if (start == null || start) {
@@ -140,8 +143,8 @@ public class ShipState {
         // Augments.
         getAugmentIdList().clear();
         if (shipBlueprint.getAugmentIds() != null) {
-            for (ShipBlueprint.AugmentId augId : shipBlueprint.getAugmentIds()) {
-                addAugmentId(augId.name);
+            for (AugmentId augId : shipBlueprint.getAugmentIds()) {
+                addAugmentId(augId.getName());
             }
         }
 
@@ -154,7 +157,7 @@ public class ShipState {
             setDronePartsAmt(shipBlueprint.getDroneList().drones);
         }
         if (shipBlueprint.getWeaponList() != null) {
-            setMissilesAmt(shipBlueprint.getWeaponList().missiles);
+            setMissilesAmt(shipBlueprint.getWeaponList().getMissiles());
         }
     }
 
@@ -656,7 +659,7 @@ public class ShipState {
         // The blueprint fetching might vary if auto == true.
         // See "autoBlueprints.xml" vs "blueprints.xml".
         ShipBlueprint shipBlueprint = DataManager.get().getShip(shipBlueprintId);
-        ShipBlueprint.SystemList blueprintSystems = shipBlueprint.getSystemList();
+        SystemList blueprintSystems = shipBlueprint.getSystemList();
 
         ShipLayout shipLayout = DataManager.get().getShipLayout(shipLayoutId);
         if (shipLayout == null)

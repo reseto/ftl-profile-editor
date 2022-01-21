@@ -98,10 +98,13 @@ import net.blerf.ftl.ui.hud.StatusViewport;
 import net.blerf.ftl.xml.AugBlueprint;
 import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.Offset;
-import net.blerf.ftl.xml.ShipBlueprint;
-import net.blerf.ftl.xml.ShipChassis;
+import net.blerf.ftl.xml.ship.RoomSlot;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipChassis;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.WeaponBlueprint;
+import net.blerf.ftl.xml.ship.SystemRoom;
+import net.blerf.ftl.xml.ship.WeaponMount;
 
 @Slf4j
 public class SavedGameFloorplanPanel extends JPanel {
@@ -679,9 +682,9 @@ public class SavedGameFloorplanPanel extends JPanel {
         // TODO: Enemy ships don't have a blocked slot.
         //   Dunno if that's from being in "autoBlueprints.xml" or non-player controlled.
         //   Commandeer one and find out.
-        ShipBlueprint.SystemList.SystemRoom medicalSystem = shipBlueprint.getSystemList().getMedicalRoom();
+        SystemRoom medicalSystem = shipBlueprint.getSystemList().getMedicalRoom();
         if (medicalSystem != null) {
-            ShipBlueprint.SystemList.RoomSlot medicalSlot = medicalSystem.getSlot();
+            RoomSlot medicalSlot = medicalSystem.getSlot();
             int badRoomId = medicalSystem.getRoomId();
 
             int badSquareId;
@@ -733,7 +736,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         interiorComp.setLocation(shipBundle.getLayoutX() - interiorComp.getLocationFudge(), shipBundle.getLayoutY() - interiorComp.getLocationFudge());
         shipPanel.add(interiorComp, INTERIOR_LAYER);
 
-        for (ShipBlueprint.SystemList.SystemRoom systemRoom : shipBlueprint.getSystemList().getSystemRooms()) {
+        for (SystemRoom systemRoom : shipBlueprint.getSystemList().getSystemRooms()) {
             int roomId = systemRoom.getRoomId();
 
             ShipLayoutRoom layoutRoom = shipLayout.getRoom(roomId);
@@ -794,7 +797,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         }
 
         // Add Weapons.
-        List<ShipChassis.WeaponMount> weaponMounts = shipChassis.getWeaponMountList();
+        List<WeaponMount> weaponMounts = shipChassis.getWeaponMountList();
         List<WeaponState> weaponList = shipState.getWeaponList();
 
         // TODO: Magic number (when null: it's omitted in "autoBlueprints.xml").
@@ -810,7 +813,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         }
 
         for (int i = 0; i < actualWeaponSlots; i++) {
-            ShipChassis.WeaponMount weaponMount = null;
+            WeaponMount weaponMount = null;
 
             if (weaponMounts.size() > i) weaponMount = weaponMounts.get(i);
             if (weaponMount == null) continue;  // *shrug* Truncate extra weapons.
@@ -1817,7 +1820,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         }
     }
 
-    private void addWeaponSprite(ShipBundle shipBundle, SpriteReference<WeaponState> weaponRef, ShipChassis.WeaponMount weaponMount, int slot) {
+    private void addWeaponSprite(ShipBundle shipBundle, SpriteReference<WeaponState> weaponRef, WeaponMount weaponMount, int slot) {
         ShipChassis shipChassis = shipBundle.getShipChassis();
 
         WeaponSprite weaponSprite = new WeaponSprite(weaponRef, slot, weaponMount.rotate);

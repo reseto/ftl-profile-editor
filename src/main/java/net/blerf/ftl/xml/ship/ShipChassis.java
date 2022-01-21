@@ -1,4 +1,4 @@
-package net.blerf.ftl.xml;
+package net.blerf.ftl.xml.ship;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import net.blerf.ftl.xml.Offset;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "shipChassis")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ShipChassis {
@@ -44,19 +50,6 @@ public class ShipChassis {
         public Offset cloakOffset;
     }
 
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public static class WeaponMount {
-
-        @XmlAttribute
-        public int x, y, gib;
-
-        @XmlAttribute
-        public boolean rotate, mirror;
-
-        @XmlAttribute
-        public String slide;
-    }
-
     @XmlJavaTypeAdapter(ExplosionAdapter.class)
     public static class Explosion {
         public List<Gib> gibs = new ArrayList<Gib>();
@@ -76,36 +69,4 @@ public class ShipChassis {
         public float min, max;
     }
 
-
-    public void setImageBounds(ChassisImageBounds imageBounds) {
-        this.imageBounds = imageBounds;
-    }
-
-    public ChassisImageBounds getImageBounds() {
-        return imageBounds;
-    }
-
-    public void setOffsets(Offsets offsets) {
-        this.offsets = offsets;
-    }
-
-    public Offsets getOffsets() {
-        return offsets;
-    }
-
-    public void setWeaponMountList(List<WeaponMount> weaponMountList) {
-        this.weaponMountList = weaponMountList;
-    }
-
-    public List<WeaponMount> getWeaponMountList() {
-        return weaponMountList;
-    }
-
-    public void setExplosion(Explosion explosion) {
-        this.explosion = explosion;
-    }
-
-    public Explosion getExplosion() {
-        return explosion;
-    }
 }

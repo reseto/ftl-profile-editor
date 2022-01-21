@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
 
 @Getter
 @Setter

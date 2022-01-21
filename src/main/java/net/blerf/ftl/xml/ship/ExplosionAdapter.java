@@ -1,4 +1,4 @@
-package net.blerf.ftl.xml;
+package net.blerf.ftl.xml.ship;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -9,6 +9,7 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.dom.DOMSource;
+import net.blerf.ftl.xml.ship.ShipChassis;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,7 +22,7 @@ import org.w3c.dom.NodeList;
  * Explosion tags wrap a sequence of gibs. Gib tags have an irksome suffix tacked on
  * (gib1, gib2, gib3, ...).
  *
- * @see net.blerf.ftl.xml.ShipChassis
+ * @see ShipChassis
  */
 public class ExplosionAdapter extends XmlAdapter<Object, ShipChassis.Explosion> {
 

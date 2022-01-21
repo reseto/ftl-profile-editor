@@ -32,7 +32,7 @@ public class DroneBlueprint {
     private DefaultDeferredText description;
 
     @XmlElement(name = "bp")
-    private int bp;  // TODO: Rename this.
+    private int blueprint;
 
     @XmlElement()
     private Integer cooldown;

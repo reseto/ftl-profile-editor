@@ -16,7 +16,7 @@ import net.blerf.ftl.parser.sectortree.RandomSectorTreeGenerator;
 import net.blerf.ftl.parser.shiplayout.RandomShipLayout;
 import net.blerf.ftl.xml.Choice;
 import net.blerf.ftl.xml.FTLEvent;
-import net.blerf.ftl.xml.ShipEvent;
+import net.blerf.ftl.xml.ship.ShipEvent;
 
 /**
  * Finding good seeds

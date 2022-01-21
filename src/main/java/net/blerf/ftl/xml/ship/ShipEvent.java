@@ -1,4 +1,4 @@
-package net.blerf.ftl.xml;
+package net.blerf.ftl.xml.ship;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

@@ -17,7 +17,7 @@ import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
 import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.SectorDescription;
-import net.blerf.ftl.xml.ShipEvent;
+import net.blerf.ftl.xml.ship.ShipEvent;
 import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.WeaponBlueprint;
 

@@ -38,8 +38,9 @@ import net.blerf.ftl.model.state.ShipState;
 import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.model.state.WeaponModuleState;
 import net.blerf.ftl.xml.DroneBlueprint;
-import net.blerf.ftl.xml.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
 import net.blerf.ftl.xml.WeaponBlueprint;
+import net.blerf.ftl.xml.ship.SystemRoom;
 
 @Slf4j
 public class SavedGameParser extends Parser {
@@ -533,7 +534,7 @@ public class SavedGameParser extends Parser {
             // multi-room systems on regular ships and check the editor's
             // compatibility.
 
-            ShipBlueprint.SystemList.SystemRoom[] rooms = shipBlueprint.getSystemList().getSystemRoom(systemType);
+            SystemRoom[] rooms = shipBlueprint.getSystemList().getSystemRoom(systemType);
             if (rooms != null && rooms.length > 1) {
                 for (int q = 1; q < rooms.length; q++) {
                     shipState.addSystem(readSystem(in, systemType, fileFormat));

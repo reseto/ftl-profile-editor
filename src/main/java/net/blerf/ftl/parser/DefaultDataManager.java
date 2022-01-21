@@ -33,9 +33,9 @@ import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.SectorData;
 import net.blerf.ftl.xml.SectorDescription;
 import net.blerf.ftl.xml.SectorType;
-import net.blerf.ftl.xml.ShipBlueprint;
-import net.blerf.ftl.xml.ShipChassis;
-import net.blerf.ftl.xml.ShipEvent;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipChassis;
+import net.blerf.ftl.xml.ship.ShipEvent;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.WeaponAnim;
@@ -46,8 +46,6 @@ import net.vhati.ftldat.FolderPack;
 import net.vhati.ftldat.PackContainer;
 import net.vhati.ftldat.PkgPack;
 import org.jdom2.JDOMException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class DefaultDataManager extends DataManager {
@@ -283,7 +281,7 @@ public class DefaultDataManager extends DataManager {
                 dlcEventsFileMap.put(eventsFileName, tmpEncounters);
             }
 
-            Pattern overridePtn = Pattern.compile("^OVERRIDE_(.*)");
+            final Pattern overridePtn = Pattern.compile("^OVERRIDE_(.*)");
 
             stdEventIdMap = new LinkedHashMap<String, FTLEvent>();
             stdEventListIdMap = new LinkedHashMap<String, FTLEventList>();
@@ -1120,7 +1118,7 @@ public class DefaultDataManager extends DataManager {
      * <p>
      * Should be the same as layoutId.
      *
-     * @see net.blerf.ftl.xml.ShipBlueprint.getLayoutId()
+     * @see ShipBlueprint.getLayoutId()
      */
     @Override
     public ShipChassis getShipChassis(String id) {

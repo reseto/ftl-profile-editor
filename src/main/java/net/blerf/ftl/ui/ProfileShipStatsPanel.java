@@ -24,7 +24,7 @@ import net.blerf.ftl.model.Score;
 import net.blerf.ftl.model.Stats;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.xml.Achievement;
-import net.blerf.ftl.xml.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
 
 
 public class ProfileShipStatsPanel extends JPanel implements ActionListener {

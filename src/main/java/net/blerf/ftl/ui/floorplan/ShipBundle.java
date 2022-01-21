@@ -25,8 +25,8 @@ import net.blerf.ftl.parser.SavedGameParser.SystemState;
 import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.parser.SavedGameParser.WeaponState;
 import net.blerf.ftl.ui.SpriteReference;
-import net.blerf.ftl.xml.ShipBlueprint;
-import net.blerf.ftl.xml.ShipChassis;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipChassis;
 
 
 /**
