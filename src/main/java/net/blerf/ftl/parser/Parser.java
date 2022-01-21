@@ -5,11 +5,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 
 public class Parser {
 
-    private byte[] intbuf = new byte[4];
+    private static final byte[] intbuf = new byte[4];
+    /**
+     * Toggles string encoding between windows-1252 (default) and UTF-8.
+     * <p>
+     * Set this before reading/writing any strings.
+     * <p>
+     * Unicode strings were introduced in FTL 1.6.1.
+     */
     protected boolean unicodeStrings = false;
 
 
@@ -107,7 +115,7 @@ public class Parser {
         }
 
         if (unicodeStrings) {
-            return new String(strBytes, "UTF-8");
+            return new String(strBytes, StandardCharsets.UTF_8);
         } else {
             return new String(strBytes, "windows-1252");
         }
@@ -116,7 +124,7 @@ public class Parser {
     protected void writeString(OutputStream out, String str) throws IOException {
         byte[] strBytes;
         if (unicodeStrings) {
-            strBytes = str.getBytes("UTF-8");
+            strBytes = str.getBytes(StandardCharsets.UTF_8);
         } else {
             strBytes = str.getBytes("windows-1252");
         }
@@ -125,13 +133,7 @@ public class Parser {
         out.write(strBytes);
     }
 
-    /**
-     * Toggles string encoding between windows-1252 (default) and UTF-8.
-     * <p>
-     * Set this before reading/writing any strings.
-     * <p>
-     * Unicode strings were introduced in FTL 1.6.1.
-     */
+
     public void setUnicode(boolean b) {
         unicodeStrings = b;
     }

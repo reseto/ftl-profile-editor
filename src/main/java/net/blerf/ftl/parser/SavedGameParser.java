@@ -13,12 +13,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
+import net.blerf.ftl.constants.HazardVulnerability;
 import net.blerf.ftl.model.XYPair;
 import net.blerf.ftl.model.pod.BoarderDronePodInfo;
 import net.blerf.ftl.model.pod.EmptyDronePodInfo;
@@ -38,8 +40,8 @@ import net.blerf.ftl.model.state.ShipState;
 import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.model.state.WeaponModuleState;
 import net.blerf.ftl.xml.DroneBlueprint;
-import net.blerf.ftl.xml.ship.ShipBlueprint;
 import net.blerf.ftl.xml.WeaponBlueprint;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
 import net.blerf.ftl.xml.ship.SystemRoom;
 
 @Slf4j
@@ -49,24 +51,12 @@ public class SavedGameParser extends Parser {
     }
 
     public SavedGameState readSavedGame(File savFile) throws IOException {
-        SavedGameState gameState = null;
-
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(savFile);
-            gameState = readSavedGame(in);
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException e) {
-            }
+        try (FileInputStream in = new FileInputStream(savFile)) {
+            return readSavedGame(in);
         }
-
-        return gameState;
     }
 
     public SavedGameState readSavedGame(FileInputStream in) throws IOException {
-        InputStream layoutStream = null;
         try {
             SavedGameState gameState = new SavedGameState();
 
@@ -170,7 +160,7 @@ public class SavedGameParser extends Parser {
             }
 
             int sectorVisitationCount = readInt(in);
-            List<Boolean> route = new ArrayList<Boolean>();
+            List<Boolean> route = new ArrayList<>();
             for (int i = 0; i < sectorVisitationCount; i++) {
                 route.add(readBool(in));
             }
@@ -275,10 +265,7 @@ public class SavedGameParser extends Parser {
 
             return gameState;  // The finally block will still be executed.
         } finally {
-            try {
-                if (layoutStream != null) layoutStream.close();
-            } catch (IOException e) {
-            }
+            // TODO remove finally block - does nothing
         }
     }
 
@@ -299,6 +286,7 @@ public class SavedGameParser extends Parser {
             writeBool(out, gameState.isRandomNative());
         }
 
+        // TODO fix for ff==2
         if (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11) {
             writeBool(out, gameState.isDLCEnabled());
         } else {
@@ -4422,10 +4410,6 @@ public class SavedGameParser extends Parser {
         }
     }
 
-
-    public static enum HazardVulnerability {
-        PLAYER_SHIP, NEARBY_SHIP, BOTH_SHIPS
-    }
 
     public static class EnvironmentState {
         private boolean redGiantPresent = false;

@@ -12,6 +12,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
+import net.blerf.ftl.constants.HazardVulnerability;
 import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
@@ -80,6 +81,7 @@ public class SavedGameGeneralPanel extends JPanel {
     private static final String ENC_TEXT = "Text";
     private static final String ENC_CREW_SEED = "Affected Crew Seed";
     private static final String ENC_CHOICES = "Last Event Choices";
+    private static final String WARN_INVALID_INPUTS = "please provide valid number inputs";
 
     private FTLFrame frame;
 
@@ -357,7 +359,7 @@ public class SavedGameGeneralPanel extends JPanel {
                 }
             }
 
-            for (SavedGameParser.HazardVulnerability h : SavedGameParser.HazardVulnerability.values()) {
+            for (HazardVulnerability h : HazardVulnerability.values()) {
                 envPanel.getCombo(ENV_VULN).addItem(h);
             }
 
@@ -479,22 +481,12 @@ public class SavedGameGeneralPanel extends JPanel {
 
         try {
             gameState.setTotalShipsDefeated(sessionPanel.parseInt(TOTAL_SHIPS_DEFEATED));
-        } catch (NumberFormatException e) {
-        }
-
-        try {
             gameState.setTotalBeaconsExplored(sessionPanel.parseInt(TOTAL_BEACONS));
-        } catch (NumberFormatException e) {
-        }
-
-        try {
             gameState.setTotalScrapCollected(sessionPanel.parseInt(TOTAL_SCRAP));
-        } catch (NumberFormatException e) {
-        }
-
-        try {
             gameState.setTotalCrewHired(sessionPanel.parseInt(TOTAL_CREW_HIRED));
+            gameState.setUnknownBeta(sessionPanel.parseInt(TOP_BETA));
         } catch (NumberFormatException e) {
+            frame.setStatusText(WARN_INVALID_INPUTS);
         }
 
         gameState.setRandomNative(sessionPanel.getBoolean(RANDOM_NATIVE).isSelected());
@@ -502,11 +494,6 @@ public class SavedGameGeneralPanel extends JPanel {
 
         Object diffObj = sessionPanel.getCombo(DIFFICULTY).getSelectedItem();
         gameState.setDifficulty((Difficulty) diffObj);
-
-        try {
-            gameState.setUnknownBeta(sessionPanel.parseInt(TOP_BETA));
-        } catch (NumberFormatException e) {
-        }
 
         gameState.getCargoIdList().clear();
         for (String cargoSlot : cargoSlots) {
@@ -525,52 +512,29 @@ public class SavedGameGeneralPanel extends JPanel {
             env.setPDSPresent(envPanel.getBoolean(ENV_PDS_PRESENT).isSelected());
 
             Object vulnObj = envPanel.getCombo(ENV_VULN).getSelectedItem();
-            env.setVulnerableShips((SavedGameParser.HazardVulnerability) vulnObj);
+            env.setVulnerableShips((HazardVulnerability) vulnObj);
 
             SavedGameParser.AsteroidFieldState asteroidField = null;
             if (envPanel.getBoolean(ENV_ASTEROID_FIELD).isSelected()) {
                 asteroidField = new SavedGameParser.AsteroidFieldState();
-
                 try {
                     asteroidField.setUnknownAlpha(envPanel.parseInt(ENV_ASTEROID_ALPHA));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     asteroidField.setStrayRockTicks(envPanel.parseInt(ENV_ASTEROID_STRAY_TICKS));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     asteroidField.setUnknownGamma(envPanel.parseInt(ENV_ASTEROID_GAMMA));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     asteroidField.setBgDriftTicks(envPanel.parseInt(ENV_ASTEROID_BKG_TICKS));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     asteroidField.setCurrentTarget(envPanel.parseInt(ENV_ASTEROID_TARGET));
                 } catch (NumberFormatException e) {
+                    frame.setStatusText(WARN_INVALID_INPUTS);
                 }
             }
             env.setAsteroidField(asteroidField);
 
             try {
                 env.setSolarFlareFadeTicks(envPanel.parseInt(ENV_FLARE_FADE_TICKS));
-            } catch (NumberFormatException e) {
-            }
-
-            try {
                 env.setHavocTicks(envPanel.parseInt(ENV_HAVOC_TICKS));
-            } catch (NumberFormatException e) {
-            }
-
-            try {
                 env.setPDSTicks(envPanel.parseInt(ENV_PDS_TICKS));
             } catch (NumberFormatException e) {
+                frame.setStatusText(WARN_INVALID_INPUTS);
             }
         }
 
@@ -579,92 +543,46 @@ public class SavedGameGeneralPanel extends JPanel {
             ai.setSurrendered(aiPanel.getBoolean(AI_SURRENDERED).isSelected());
             ai.setEscaping(aiPanel.getBoolean(AI_ESCAPING).isSelected());
             ai.setDestroyed(aiPanel.getBoolean(AI_DESTROYED).isSelected());
-
-            try {
-                ai.setSurrenderThreshold(aiPanel.parseInt(AI_SURRENDER_THRESHOLD));
-            } catch (NumberFormatException e) {
-            }
-
-            try {
-                ai.setEscapeThreshold(aiPanel.parseInt(AI_ESCAPE_THRESHOLD));
-            } catch (NumberFormatException e) {
-            }
-
-            try {
-                ai.setEscapeTicks(aiPanel.parseInt(AI_ESCAPE_TICKS));
-            } catch (NumberFormatException e) {
-            }
-
             ai.setStalemateTriggered(aiPanel.getBoolean(AI_STALEMATE).isSelected());
 
             try {
+                ai.setSurrenderThreshold(aiPanel.parseInt(AI_SURRENDER_THRESHOLD));
+                ai.setEscapeThreshold(aiPanel.parseInt(AI_ESCAPE_THRESHOLD));
+                ai.setEscapeTicks(aiPanel.parseInt(AI_ESCAPE_TICKS));
                 ai.setStalemateTicks(aiPanel.parseInt(AI_STALEMATE_TICKS));
-            } catch (NumberFormatException e) {
-            }
-
-            try {
                 ai.setBoardingAttempts(aiPanel.parseInt(AI_BOARDING_ATTEMPTS));
-            } catch (NumberFormatException e) {
-            }
-
-            try {
                 ai.setBoardersNeeded(aiPanel.parseInt(AI_BOARDERS_NEEDED));
             } catch (NumberFormatException e) {
+                frame.setStatusText(WARN_INVALID_INPUTS);
             }
         }
 
         gameState.setWaiting(unknownsPanel.getBoolean(TOP_WAITING).isSelected());
+        gameState.setUnknownEpsilon(unknownsPanel.getString(TOP_EPSILON).getText());
+        gameState.setAutofire(unknownsPanel.getBoolean(TOP_AUTOFIRE).isSelected());
 
         try {
             gameState.setWaitEventSeed(unknownsPanel.parseInt(TOP_WAIT_EVENT_SEED));
-        } catch (NumberFormatException e) {
-        }
-
-        gameState.setUnknownEpsilon(unknownsPanel.getString(TOP_EPSILON).getText());
-
-        try {
             gameState.setUnknownMu(unknownsPanel.parseInt(TOP_MU));
-        } catch (NumberFormatException e) {
-        }
-
-        try {
             gameState.setUnknownNu(unknownsPanel.parseInt(TOP_NU));
-        } catch (NumberFormatException e) {
-        }
-
-        try {
             gameState.setUnknownXi(unknownsPanel.parseInt(TOP_XI));
         } catch (NumberFormatException e) {
+            frame.setStatusText(WARN_INVALID_INPUTS);
         }
-
-        gameState.setAutofire(unknownsPanel.getBoolean(TOP_AUTOFIRE).isSelected());
 
         SavedGameParser.EncounterState enc = gameState.getEncounter();
         if (enc != null && encEnabled) {
-            try {
-                enc.setShipEventSeed(encPanel.parseInt(ENC_SHIP_EVENT_SEED));
-            } catch (NumberFormatException e) {
-            }
-
             enc.setEscapeEventId(encPanel.getString(ENC_ESCAPE_EVENT).getText());
             enc.setDestroyedEventId(encPanel.getString(ENC_DESTROYED_EVENT).getText());
             enc.setDeadCrewEventId(encPanel.getString(ENC_DEAD_CREW_EVENT).getText());
             enc.setGotAwayEventId(encPanel.getString(ENC_GOT_AWAY_EVENT).getText());
             enc.setLastEventId(encPanel.getString(ENC_LAST_EVENT).getText());
-
-            try {
-                enc.setUnknownAlpha(encPanel.parseInt(ENC_ALPHA));
-            } catch (NumberFormatException e) {
-            }
-
             enc.setText(encPanel.getTextArea(ENC_TEXT).getText());
 
             try {
+                enc.setShipEventSeed(encPanel.parseInt(ENC_SHIP_EVENT_SEED));
+                enc.setUnknownAlpha(encPanel.parseInt(ENC_ALPHA));
                 enc.setAffectedCrewSeed(encPanel.parseInt(ENC_CREW_SEED));
-            } catch (NumberFormatException e) {
-            }
-
-            try {
                 List<Integer> newChoices = new ArrayList<Integer>();
                 String choicesString = encPanel.getString(ENC_CHOICES).getText();
                 choicesString = choicesString.replaceAll(",,+", ",");
@@ -674,6 +592,7 @@ public class SavedGameGeneralPanel extends JPanel {
                 }
                 enc.setChoiceList(newChoices);
             } catch (NumberFormatException e) {
+                frame.setStatusText(WARN_INVALID_INPUTS);
             }
         }
     }

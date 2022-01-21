@@ -10,6 +10,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
 
 
 /**
@@ -38,7 +39,7 @@ public class BugReportDialog extends JDialog {
 
     public BugReportDialog(Frame owner) {
         super(owner, "Bug Report", true);
-        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel(new BorderLayout());
 

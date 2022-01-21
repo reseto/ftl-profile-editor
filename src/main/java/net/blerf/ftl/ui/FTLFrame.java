@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -851,19 +852,19 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
 
                     log.debug("Game state read successfully");
 
-                    if (gameState.getMysteryList().size() > 0) {
-                        StringBuilder musteryBuf = new StringBuilder();
-                        musteryBuf.append("This file contains unexpected mystery bytes!\n");
+                    if (!gameState.getMysteryList().isEmpty()) {
+                        StringBuilder mysteryBuf = new StringBuilder();
+                        mysteryBuf.append("This file contains unexpected mystery bytes!\n");
                         boolean first = true;
                         for (MysteryBytes m : gameState.getMysteryList()) {
                             if (first) {
                                 first = false;
                             } else {
-                                musteryBuf.append(",\n");
+                                mysteryBuf.append(",\n");
                             }
-                            musteryBuf.append(m.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
+                            mysteryBuf.append(m.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
                         }
-                        log.warn(musteryBuf.toString());
+                        log.warn(mysteryBuf.toString());
                     }
                 } catch (FileNotFoundException f) {
                     // Don't log a whole stack trace.
@@ -1064,22 +1065,13 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
      * Returns string content of a bundled resource url, decoded as UTF-8.
      */
     private String readResourceText(URL url) throws IOException {
-        BufferedReader in = null;
-        String line = null;
-        try {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader((InputStream) url.getContent(), StandardCharsets.UTF_8))) {
+            String line = null;
             StringBuilder buf = new StringBuilder();
-            in = new BufferedReader(new InputStreamReader((InputStream) url.getContent(), "UTF-8"));
             while ((line = in.readLine()) != null) {
                 buf.append(line).append("\n");
             }
-            in.close();
-
             return buf.toString();
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException e) {
-            }
         }
     }
 

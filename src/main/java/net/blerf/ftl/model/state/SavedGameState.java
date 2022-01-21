@@ -23,7 +23,7 @@ public class SavedGameState {
     private String playerShipBlueprintId = "";
     private int sectorNumber = 1;
     private int unknownBeta = 0;
-    private Map<String, Integer> stateVars = new LinkedHashMap<>();
+    private final Map<String, Integer> stateVars = new LinkedHashMap<>();
     private ShipState playerShipState = null;
     private List<String> cargoIdList = new ArrayList<>();
     private int sectorTreeSeed = 42;      // Arbitrary default.
@@ -43,21 +43,21 @@ public class SavedGameState {
     private int rebelFlagshipBaseTurns = 0;
     private List<Boolean> sectorVisitationList = new ArrayList<>();
     private boolean sectorIsHiddenCrystalWorlds = false;
-    private List<SavedGameParser.BeaconState> beaconList = new ArrayList<>();
-    private Map<String, Integer> questEventMap = new LinkedHashMap<>();
-    private List<String> distantQuestEventList = new ArrayList<>();
+    private final List<SavedGameParser.BeaconState> beaconList = new ArrayList<>();
+    private final Map<String, Integer> questEventMap = new LinkedHashMap<>();
+    private final List<String> distantQuestEventList = new ArrayList<>();
     private int unknownMu = 0;
     private SavedGameParser.EncounterState encounter = null;
     private boolean rebelFlagshipNearby = false;
     private ShipState nearbyShipState = null;
     private SavedGameParser.NearbyShipAIState nearbyShipAI = null;
     private SavedGameParser.EnvironmentState environment = null;
-    private List<SavedGameParser.ProjectileState> projectileList = new ArrayList<>();
+    private final List<SavedGameParser.ProjectileState> projectileList = new ArrayList<>();
     private int unknownNu = 0;
     private Integer unknownXi = null;
     private boolean autofire = false;
     private SavedGameParser.RebelFlagshipState rebelFlagshipState = null;
-    private List<MysteryBytes> mysteryList = new ArrayList<>();
+    private final List<MysteryBytes> mysteryList = new ArrayList<>();
 
 
     public SavedGameState() {
@@ -217,7 +217,7 @@ public class SavedGameState {
         cargoIdList.add(cargoItemId);
     }
 
-    public void setCargoList(ArrayList<String> cargoIdList) {
+    public void setCargoList(List<String> cargoIdList) {
         this.cargoIdList = cargoIdList;
     }
 
@@ -634,8 +634,8 @@ public class SavedGameState {
      * left-to-right.
      *
      * @see #setSectorTreeSeed(int)
-     * @see net.blerf.ftl.model.SectorDot#setVisited(boolean)
-     * @see net.blerf.ftl.model.SectorTree#setSectorVisitation(List)
+     * @see net.blerf.ftl.model.sectortree.SectorDot#setVisited(boolean)
+     * @see net.blerf.ftl.model.sectortree.SectorTree#setSectorVisitation(List)
      */
     public void setSectorVisitation(List<Boolean> route) {
         sectorVisitationList = route;

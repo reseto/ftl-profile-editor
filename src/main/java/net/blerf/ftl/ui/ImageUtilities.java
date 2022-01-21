@@ -27,45 +27,45 @@ import javax.swing.ImageIcon;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.DataManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class ImageUtilities {
 
-    private static final int maxIconWidth = 64;
-    private static final int maxIconHeight = 64;
+    private static final int MAX_ICON_WIDTH = 64;
+    private static final int MAX_ICON_HEIGHT = 64;
 
     private static BufferedImage lockImage = null;
 
-    private static GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    private static GraphicsDevice gs = ge.getDefaultScreenDevice();
-    private static GraphicsConfiguration gc = gs.getDefaultConfiguration();
+    private static final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    private static final GraphicsDevice gs = ge.getDefaultScreenDevice();
+    private static final GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
+    private ImageUtilities() {}
 
-    private static Icon dummyIcon = new Icon() {
+    private static final Icon dummyIcon = new Icon() {
         @Override
         public int getIconHeight() {
-            return maxIconHeight;
+            return MAX_ICON_HEIGHT;
         }
 
         @Override
         public int getIconWidth() {
-            return maxIconWidth;
+            return MAX_ICON_WIDTH;
         }
 
         @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
+            //
         }
     };
 
 
     public static int getMaxIconWidth() {
-        return maxIconWidth;
+        return MAX_ICON_WIDTH;
     }
 
     public static int getMaxIconHeight() {
-        return maxIconHeight;
+        return MAX_ICON_HEIGHT;
     }
 
     /**
@@ -97,13 +97,13 @@ public class ImageUtilities {
      * @param cycleDifficulty
      */
     public static IconCycleButton createCycleButton(String baseImagePath, boolean cycleDifficulty) {
-        BufferedImage origImage = getProportionallyScaledImage(baseImagePath, maxIconWidth, maxIconHeight, null);
+        BufferedImage origImage = getProportionallyScaledImage(baseImagePath, MAX_ICON_WIDTH, MAX_ICON_HEIGHT, null);
 
         BufferedImage baseImage;
-        if (origImage.getWidth() == maxIconWidth && origImage.getHeight() == maxIconHeight) {
+        if (origImage.getWidth() == MAX_ICON_WIDTH && origImage.getHeight() == MAX_ICON_HEIGHT) {
             baseImage = origImage;
         } else {
-            BufferedImage paddedImage = gc.createCompatibleImage(maxIconWidth, maxIconHeight, Transparency.TRANSLUCENT);
+            BufferedImage paddedImage = gc.createCompatibleImage(MAX_ICON_WIDTH, MAX_ICON_HEIGHT, Transparency.TRANSLUCENT);
             Graphics2D paddedG = paddedImage.createGraphics();
             int padOffsetX = (paddedImage.getWidth() - origImage.getWidth()) / 2;
             int padOffsetY = (paddedImage.getHeight() - origImage.getHeight()) / 2;
@@ -132,7 +132,7 @@ public class ImageUtilities {
         lockedG.dispose();
 
         String[] labels = null;
-        if (cycleDifficulty == true) {                  // Locked / Easy / Normal / Hard.
+        if (cycleDifficulty) {
             Difficulty[] difficulties = Difficulty.values();
             labels = new String[difficulties.length];
             for (int i = difficulties.length - 1; i >= 0; i--) {
@@ -176,24 +176,19 @@ public class ImageUtilities {
      * Relative paths will be relative to the class file.
      */
     public static BufferedImage getBundledImage(String path, Class<?> clazz) throws IOException {
-        BufferedImage result = null;
-
         URL bundledImageURL = clazz.getResource(path);
         try {
             if (bundledImageURL == null) {
                 throw new IOException("Resource was not found");
             }
-
-            result = ImageIO.read(bundledImageURL);
-
+            BufferedImage result = ImageIO.read(bundledImageURL);
             if (result == null) {
                 throw new IOException("ImageIO did not recognize the file type");
             }
+            return result;
         } catch (IOException e) {
             throw new IOException(String.format("Error reading bundled image (\"%s\"): %s", path, e.getMessage()));
         }
-
-        return result;
     }
 
 
@@ -224,9 +219,7 @@ public class ImageUtilities {
             log.trace("Image not in cache, loading and scaling: {}", innerPath);
         }
 
-        InputStream in = null;
-        try {
-            in = DataManager.get().getResourceInputStream(innerPath);
+        try (InputStream in = DataManager.get().getResourceInputStream(innerPath)) {
             BufferedImage origImage = ImageIO.read(in);
 
             if (w <= 0 || h <= 0 || (origImage.getWidth() == w && origImage.getHeight() == h)) {
@@ -239,17 +232,10 @@ public class ImageUtilities {
                 g2d.dispose();
                 result = scaledImage;
             }
-        } catch (RasterFormatException e) {
-            log.error("Failed to load and scale image: " + innerPath, e);
         } catch (FileNotFoundException e) {
-            log.error(String.format("Failed to load and scale image (\"%s\"): innerPath was not found", innerPath));
-        } catch (IOException e) {
-            log.error("Failed to load and scale image: " + innerPath, e);
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException e) {
-            }
+            log.error("Failed to load and scale image {} innerPath was not found", innerPath);
+        } catch (RasterFormatException | IOException e) {
+            log.error("Failed to load and scale image: {} ", innerPath, e);
         }
 
         if (result == null) {  // Guarantee a returned image, with a stand-in.
@@ -264,7 +250,7 @@ public class ImageUtilities {
 
         if (cachedImages != null) {
             if (cacheMap == null) {
-                cacheMap = new HashMap<Rectangle, BufferedImage>();
+                cacheMap = new HashMap<>();
                 cachedImages.put(innerPath, cacheMap);
             }
             cacheMap.put(keyRect, result);
@@ -306,9 +292,7 @@ public class ImageUtilities {
             log.trace("Image not in cache, loading and proportionally scaling {} ", innerPath);
         }
 
-        InputStream in = null;
-        try {
-            in = DataManager.get().getResourceInputStream(innerPath);
+        try (InputStream in = DataManager.get().getResourceInputStream(innerPath)) {
             BufferedImage origImage = ImageIO.read(in);
             int width = origImage.getWidth();
             int height = origImage.getHeight();
@@ -331,17 +315,10 @@ public class ImageUtilities {
                 g2d.dispose();
                 result = scaledImage;
             }
-        } catch (RasterFormatException e) {
-            log.error("Failed to load and proportionally scale image: {}", innerPath, e);
         } catch (FileNotFoundException e) {
             log.error("Failed to load and proportionally scale image, innerPath was not found: {}", innerPath);
-        } catch (IOException e) {
+        } catch (RasterFormatException | IOException e) {
             log.error("Failed to load and proportionally scale image: {}", innerPath, e);
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException e) {
-            }
         }
 
         if (result == null) {  // Guarantee a returned image, with a stand-in.
@@ -354,7 +331,7 @@ public class ImageUtilities {
 
         if (cachedImages != null) {
             if (cacheMap == null) {
-                cacheMap = new HashMap<Rectangle, BufferedImage>();
+                cacheMap = new HashMap<>();
                 cachedImages.put(innerPath, cacheMap);
             }
             if (maxW < maxH) {
@@ -393,22 +370,13 @@ public class ImageUtilities {
             log.trace("Image not in cache, loading and cropping: {}", innerPath);
         }
 
-        InputStream in = null;
-        try {
-            in = DataManager.get().getResourceInputStream(innerPath);
+        try (InputStream in = DataManager.get().getResourceInputStream(innerPath)) {
             BufferedImage bigImage = ImageIO.read(in);
             result = bigImage.getSubimage(x, y, w, h);
-        } catch (RasterFormatException e) {
-            log.error("Failed to load and crop image: {}", innerPath, e);
         } catch (FileNotFoundException e) {
             log.error("Failed to load and crop image , innerPath was not found: {}", innerPath);
-        } catch (IOException e) {
+        } catch (RasterFormatException | IOException e) {
             log.error("Failed to load and crop image: {}", innerPath, e);
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException e) {
-            }
         }
 
         if (result == null) {  // Guarantee a returned image, with a stand-in.
@@ -421,7 +389,7 @@ public class ImageUtilities {
 
         if (cachedImages != null) {
             if (cacheMap == null) {
-                cacheMap = new HashMap<Rectangle, BufferedImage>();
+                cacheMap = new HashMap<>();
                 cachedImages.put(innerPath, cacheMap);
             }
             cacheMap.put(keyRect, result);
@@ -457,7 +425,7 @@ public class ImageUtilities {
 
         if (cachedTintedImages != null) {
             if (cacheMap == null) {
-                cacheMap = new HashMap<Tint, BufferedImage>();
+                cacheMap = new HashMap<>();
                 cachedTintedImages.put(srcImage, cacheMap);
             }
             cacheMap.put(tint, result);
@@ -484,9 +452,12 @@ public class ImageUtilities {
         result = srcImage;
 
         // Shrink the crop area until non-transparent pixels are hit.
-        int origW = srcImage.getWidth(), origH = srcImage.getHeight();
-        int lowX = Integer.MAX_VALUE, lowY = Integer.MAX_VALUE;
-        int highX = -1, highY = -1;
+        int origW = srcImage.getWidth();
+        int origH = srcImage.getHeight();
+        int lowX = Integer.MAX_VALUE;
+        int lowY = Integer.MAX_VALUE;
+        int highX = -1;
+        int highY = -1;
         for (int testY = 0; testY < origH; testY++) {
             for (int testX = 0; testX < origW; testX++) {
                 int pixel = result.getRGB(testX, testY);
@@ -500,7 +471,7 @@ public class ImageUtilities {
             }
         }
         log.trace("Image Trimmed to Bounds: {},{} {}x{}", lowX, lowY, highX, highY);
-        if (lowX >= 0 && lowY >= 0 && highX < origW && highY < origH && lowX < highX && lowY < highY) {
+        if (highX < origW && highY < origH && lowX < highX && lowY < highY) {
             result = result.getSubimage(lowX, lowY, highX - lowX + 1, highY - lowY + 1);
         }
 
@@ -513,8 +484,8 @@ public class ImageUtilities {
 
 
     public static class Tint {
-        public float[] scaleFactors;
-        public float[] offsets;
+        private final float[] scaleFactors;
+        private final float[] offsets;
 
         public Tint(float[] scaleFactors, float[] offsets) {
             this.scaleFactors = scaleFactors;
