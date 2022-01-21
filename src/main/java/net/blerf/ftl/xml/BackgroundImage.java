@@ -5,8 +5,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "img")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BackgroundImage {
@@ -19,30 +24,6 @@ public class BackgroundImage {
 
     @XmlValue
     private String innerPath;
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public String getInnerPath() {
-        return innerPath;
-    }
-
-    public void setInnerPath(String innerPath) {
-        this.innerPath = innerPath;
-    }
 
     @Override
     public String toString() {

@@ -5,8 +5,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "anim")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Anim {
@@ -18,42 +23,9 @@ public class Anim {
     private String sheetId;
 
     @XmlElement(name = "desc")
-    private AnimSpec spec;
+    private AnimSpec animSpec;
 
     private float time;
-
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setSheetId(String sheetId) {
-        this.sheetId = sheetId;
-    }
-
-    public String getSheetId() {
-        return sheetId;
-    }
-
-    public void setAnimSpec(AnimSpec spec) {
-        this.spec = spec;
-    }
-
-    public AnimSpec getAnimSpec() {
-        return spec;
-    }
-
-    public void setTime(float time) {
-        this.time = time;
-    }
-
-    public float getTime() {
-        return time;
-    }
 
     @Override
     public String toString() {

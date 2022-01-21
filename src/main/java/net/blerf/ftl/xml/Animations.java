@@ -6,8 +6,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
 
-
+@Getter
 @XmlRootElement(name = "animations")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Animations {
@@ -20,31 +21,6 @@ public class Animations {
 
     @XmlElement(name = "weaponAnim")
     private List<WeaponAnim> weaponAnims = new ArrayList<WeaponAnim>();
-
-
-    public void setSheets(List<AnimSheet> sheets) {
-        this.sheets = sheets;
-    }
-
-    public List<AnimSheet> getSheets() {
-        return sheets;
-    }
-
-    public void setAnims(List<Anim> anims) {
-        this.anims = anims;
-    }
-
-    public List<Anim> getAnims() {
-        return anims;
-    }
-
-    public void setWeaponAnims(List<WeaponAnim> weaponAnims) {
-        this.weaponAnims = weaponAnims;
-    }
-
-    public List<WeaponAnim> getWeaponAnims() {
-        return weaponAnims;
-    }
 
     /**
      * Returns an AnimSheet with a given id.

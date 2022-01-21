@@ -159,10 +159,10 @@ public class FTLEvent implements Cloneable {
         }
 
         if (choiceList != null) {
-            o.choiceList = new ArrayList<Choice>(choiceList.size());
+            o.choiceList = new ArrayList<>(choiceList.size());
             for (Choice c : choiceList) {
                 Choice newC = new Choice();
-                newC.setHidden(c.getHidden());
+                newC.setHidden(c.isHidden());
                 newC.setReq(c.getReq());
                 newC.setLevel(c.getLevel());
                 if (c.getText() != null)
@@ -184,7 +184,7 @@ public class FTLEvent implements Cloneable {
             ItemList il = new ItemList();
             ItemList oil = o.getItemList();
 
-            il.items = new ArrayList<Reward>(oil.items.size());
+            il.items = new ArrayList<>(oil.items.size());
             for (Reward i : oil.items) {
                 Reward newI = new Reward();
                 newI.type = i.type;

@@ -6,8 +6,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "imageList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BackgroundImageList {
@@ -17,23 +22,6 @@ public class BackgroundImageList {
 
     @XmlElement(name = "img")
     private List<BackgroundImage> images;
-
-
-    public void setImages(List<BackgroundImage> images) {
-        this.images = images;
-    }
-
-    public List<BackgroundImage> getImages() {
-        return images;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
 
     @Override
     public String toString() {

@@ -6,8 +6,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "sectorDescription")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SectorDescription {
@@ -72,68 +77,4 @@ public class SectorDescription {
         public int max;
     }
 
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setMinSector(int minSector) {
-        this.minSector = minSector;
-    }
-
-    public int getMinSector() {
-        return minSector;
-    }
-
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
-
-    public boolean isUnique() {
-        return unique;
-    }
-
-    public void setNameList(NameList nameList) {
-        this.nameList = nameList;
-    }
-
-    public NameList getNameList() {
-        return nameList;
-    }
-
-    public void setTrackList(TrackList trackList) {
-        this.trackList = trackList;
-    }
-
-    public TrackList getTrackList() {
-        return trackList;
-    }
-
-    public void setRarityList(RarityList rarityList) {
-        this.rarityList = rarityList;
-    }
-
-    public RarityList getRarityList() {
-        return rarityList;
-    }
-
-    public void setStartEvent(String startEvent) {
-        this.startEvent = startEvent;
-    }
-
-    public String getStartEvent() {
-        return startEvent;
-    }
-
-    public void setEventDistributions(List<EventDistribution> eventDistributions) {
-        this.eventDistributions = eventDistributions;
-    }
-
-    public List<EventDistribution> getEventDistributions() {
-        return eventDistributions;
-    }
 }

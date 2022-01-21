@@ -5,8 +5,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "choice")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Choice {
@@ -24,46 +29,6 @@ public class Choice {
 
     @XmlElement(name = "event")
     private FTLEvent event;
-
-    public boolean getHidden() {
-        return hidden;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    public String getReq() {
-        return req;
-    }
-
-    public void setReq(String req) {
-        this.req = req;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public NamedText getText() {
-        return text;
-    }
-
-    public void setText(NamedText text) {
-        this.text = text;
-    }
-
-    public FTLEvent getEvent() {
-        return event;
-    }
-
-    public void setEvent(FTLEvent event) {
-        this.event = event;
-    }
 
     private StringBuilder indent(StringBuilder sb, int level) {
         sb.append(new String(new char[level]).replaceAll("\0", "    "));

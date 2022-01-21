@@ -7,18 +7,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JLabel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.model.shiplayout.RoomAndSquare;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
+import net.blerf.ftl.model.state.CrewState;
+import net.blerf.ftl.model.state.CrewType;
 import net.blerf.ftl.parser.SavedGameParser.BatteryInfo;
-import net.blerf.ftl.parser.SavedGameParser.CrewState;
-import net.blerf.ftl.parser.SavedGameParser.CrewType;
 import net.blerf.ftl.parser.SavedGameParser.DoorState;
 import net.blerf.ftl.parser.SavedGameParser.DroneState;
 import net.blerf.ftl.parser.SavedGameParser.ExtendedSystemInfo;
 import net.blerf.ftl.parser.SavedGameParser.RoomState;
 import net.blerf.ftl.parser.SavedGameParser.SystemState;
-import net.blerf.ftl.parser.SavedGameParser.SystemType;
+import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.parser.SavedGameParser.WeaponState;
 import net.blerf.ftl.ui.SpriteReference;
 import net.blerf.ftl.xml.ShipBlueprint;
@@ -31,6 +35,10 @@ import net.blerf.ftl.xml.ShipChassis;
  * Had this been a regular parent component, its bounds would limit the visible
  * area of descendants.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@Slf4j
 public class ShipBundle {
 
     private FTLConstants ftlConstants = null;
@@ -38,7 +46,7 @@ public class ShipBundle {
     private ShipBlueprint shipBlueprint = null;
     private ShipLayout shipLayout = null;
     private ShipChassis shipChassis = null;
-    private String shipGfxBaseName = null;
+    private String shipGraphicsBaseName = null;
 
     private int reservePowerCapacity = 0;
     private String shipName = null;
@@ -54,323 +62,37 @@ public class ShipBundle {
     private int jumpAnimTicks = 0;
     private int cloakAnimTicks = 0;
     private boolean playerControlled = false;
-    private List<String> augmentIdList = new ArrayList<String>();
+    private List<String> augmentIdList = new ArrayList<>();
 
     private int originX = 0, originY = 0;
     private int layoutX = 0, layoutY = 0;
-    private Map<Rectangle, Integer> roomRegionRoomIdMap = new HashMap<Rectangle, Integer>();
-    private Map<Rectangle, FloorplanCoord> squareRegionCoordMap = new HashMap<Rectangle, FloorplanCoord>();
-    private List<RoomAndSquare> blockedRasList = new ArrayList<RoomAndSquare>(1);
+    private Map<Rectangle, Integer> roomRegionRoomIdMap = new HashMap<>();
+    private Map<Rectangle, FloorplanCoord> squareRegionCoordMap = new HashMap<>();
+    private List<RoomAndSquare> blockedRasList = new ArrayList<>(1);
 
-    private List<SpriteReference<DroneState>> droneRefs = new ArrayList<SpriteReference<DroneState>>();
-    private List<SpriteReference<WeaponState>> weaponRefs = new ArrayList<SpriteReference<WeaponState>>();
-    private List<SpriteReference<RoomState>> roomRefs = new ArrayList<SpriteReference<RoomState>>();
-    private List<SpriteReference<SystemState>> systemRefs = new ArrayList<SpriteReference<SystemState>>();
-    private List<SpriteReference<DoorState>> doorRefs = new ArrayList<SpriteReference<DoorState>>();
-    private List<SpriteReference<CrewState>> crewRefs = new ArrayList<SpriteReference<CrewState>>();
+    private List<SpriteReference<DroneState>> droneRefs = new ArrayList<>();
+    private List<SpriteReference<WeaponState>> weaponRefs = new ArrayList<>();
+    private List<SpriteReference<RoomState>> roomRefs = new ArrayList<>();
+    private List<SpriteReference<SystemState>> systemRefs = new ArrayList<>();
+    private List<SpriteReference<DoorState>> doorRefs = new ArrayList<>();
+    private List<SpriteReference<CrewState>> crewRefs = new ArrayList<>();
 
-    private List<DroneBoxSprite> droneBoxSprites = new ArrayList<DroneBoxSprite>();
-    private List<DroneBodySprite> droneBodySprites = new ArrayList<DroneBodySprite>();
-    private List<WeaponSprite> weaponSprites = new ArrayList<WeaponSprite>();
-    private List<RoomSprite> roomSprites = new ArrayList<RoomSprite>();
-    private List<SystemRoomSprite> systemRoomSprites = new ArrayList<SystemRoomSprite>();
-    private List<BreachSprite> breachSprites = new ArrayList<BreachSprite>();
-    private List<FireSprite> fireSprites = new ArrayList<FireSprite>();
-    private List<DoorSprite> doorSprites = new ArrayList<DoorSprite>();
-    private List<CrewSprite> crewSprites = new ArrayList<CrewSprite>();
+    private List<DroneBoxSprite> droneBoxSprites = new ArrayList<>();
+    private List<DroneBodySprite> droneBodySprites = new ArrayList<>();
+    private List<WeaponSprite> weaponSprites = new ArrayList<>();
+    private List<RoomSprite> roomSprites = new ArrayList<>();
+    private List<SystemRoomSprite> systemRoomSprites = new ArrayList<>();
+    private List<BreachSprite> breachSprites = new ArrayList<>();
+    private List<FireSprite> fireSprites = new ArrayList<>();
+    private List<DoorSprite> doorSprites = new ArrayList<>();
+    private List<CrewSprite> crewSprites = new ArrayList<>();
 
-    private List<ExtendedSystemInfo> extendedSystemInfoList = new ArrayList<ExtendedSystemInfo>();
+    private List<ExtendedSystemInfo> extendedSystemInfoList = new ArrayList<>();
 
     private JLabel baseLbl = null;
     private JLabel floorLbl = null;
     private ShipInteriorComponent interiorComp = null;
 
-
-    public ShipBundle() {
-    }
-
-    public void setFTLConstants(FTLConstants ftlConstants) {
-        this.ftlConstants = ftlConstants;
-    }
-
-    public FTLConstants getFTLConstants() {
-        return ftlConstants;
-    }
-
-    public void setShipBlueprint(ShipBlueprint shipBlueprint) {
-        this.shipBlueprint = shipBlueprint;
-    }
-
-    public ShipBlueprint getShipBlueprint() {
-        return shipBlueprint;
-    }
-
-    public void setShipLayout(ShipLayout shipLayout) {
-        this.shipLayout = shipLayout;
-    }
-
-    public ShipLayout getShipLayout() {
-        return shipLayout;
-    }
-
-    public void setShipChassis(ShipChassis shipChassis) {
-        this.shipChassis = shipChassis;
-    }
-
-    public ShipChassis getShipChassis() {
-        return shipChassis;
-    }
-
-    public void setShipGraphicsBaseName(String s) {
-        shipGfxBaseName = s;
-    }
-
-    public String getShipGraphicsBaseName() {
-        return shipGfxBaseName;
-    }
-
-
-    public void setBaseLbl(JLabel baseLbl) {
-        this.baseLbl = baseLbl;
-    }
-
-    public JLabel getBaseLbl() {
-        return baseLbl;
-    }
-
-    public void setFloorLbl(JLabel floorLbl) {
-        this.floorLbl = floorLbl;
-    }
-
-    public JLabel getFloorLbl() {
-        return floorLbl;
-    }
-
-    public void setInteriorComp(ShipInteriorComponent interiorComp) {
-        this.interiorComp = interiorComp;
-    }
-
-    public ShipInteriorComponent getInteriorComp() {
-        return interiorComp;
-    }
-
-
-    public void setReservePowerCapacity(int n) {
-        reservePowerCapacity = n;
-    }
-
-    public int getReservePowerCapacity() {
-        return reservePowerCapacity;
-    }
-
-    public void setShipName(String s) {
-        shipName = s;
-    }
-
-    public String getShipName() {
-        return shipName;
-    }
-
-    public void setHullAmt(int n) {
-        hullAmt = n;
-    }
-
-    public void setFuelAmt(int n) {
-        fuelAmt = n;
-    }
-
-    public void setDronePartsAmt(int n) {
-        dronePartsAmt = n;
-    }
-
-    public void setMissilesAmt(int n) {
-        missilesAmt = n;
-    }
-
-    public void setScrapAmt(int n) {
-        scrapAmt = n;
-    }
-
-    public int getHullAmt() {
-        return hullAmt;
-    }
-
-    public int getFuelAmt() {
-        return fuelAmt;
-    }
-
-    public int getDronePartsAmt() {
-        return dronePartsAmt;
-    }
-
-    public int getMissilesAmt() {
-        return missilesAmt;
-    }
-
-    public int getScrapAmt() {
-        return scrapAmt;
-    }
-
-    public void setHostile(boolean b) {
-        hostile = b;
-    }
-
-    public boolean isHostile() {
-        return hostile;
-    }
-
-    public void setJumpChargeTicks(int n) {
-        jumpChargeTicks = n;
-    }
-
-    public int getJumpChargeTicks() {
-        return jumpChargeTicks;
-    }
-
-    public void setJumping(boolean b) {
-        jumping = b;
-    }
-
-    public boolean isJumping() {
-        return jumping;
-    }
-
-    public void setJumpAnimTicks(int n) {
-        jumpAnimTicks = n;
-    }
-
-    public int getJumpAnimTicks() {
-        return jumpAnimTicks;
-    }
-
-    public void setCloakAnimTicks(int n) {
-        cloakAnimTicks = n;
-    }
-
-    public int getCloakAnimTicks() {
-        return cloakAnimTicks;
-    }
-
-    public void setPlayerControlled(boolean b) {
-        playerControlled = b;
-    }
-
-    public boolean isPlayerControlled() {
-        return playerControlled;
-    }
-
-    public List<String> getAugmentIdList() {
-        return augmentIdList;
-    }
-
-
-    public void setOriginX(int n) {
-        originX = n;
-    }
-
-    public void setOriginY(int n) {
-        originY = n;
-    }
-
-    public int getOriginX() {
-        return originX;
-    }
-
-    public int getOriginY() {
-        return originY;
-    }
-
-    public void setLayoutX(int n) {
-        layoutX = n;
-    }
-
-    public void setLayoutY(int n) {
-        layoutY = n;
-    }
-
-    public int getLayoutX() {
-        return layoutX;
-    }
-
-    public int getLayoutY() {
-        return layoutY;
-    }
-
-    public Map<Rectangle, Integer> getRoomRegionRoomIdMap() {
-        return roomRegionRoomIdMap;
-    }
-
-    public Map<Rectangle, FloorplanCoord> getSquareRegionCoordMap() {
-        return squareRegionCoordMap;
-    }
-
-    public List<RoomAndSquare> getBlockedRasList() {
-        return blockedRasList;
-    }
-
-    public List<SpriteReference<DroneState>> getDroneRefs() {
-        return droneRefs;
-    }
-
-    public List<SpriteReference<WeaponState>> getWeaponRefs() {
-        return weaponRefs;
-    }
-
-    public List<SpriteReference<RoomState>> getRoomRefs() {
-        return roomRefs;
-    }
-
-    public List<SpriteReference<SystemState>> getSystemRefs() {
-        return systemRefs;
-    }
-
-    public List<SpriteReference<DoorState>> getDoorRefs() {
-        return doorRefs;
-    }
-
-    public List<SpriteReference<CrewState>> getCrewRefs() {
-        return crewRefs;
-    }
-
-    public List<DroneBoxSprite> getDroneBoxSprites() {
-        return droneBoxSprites;
-    }
-
-    public List<DroneBodySprite> getDroneBodySprites() {
-        return droneBodySprites;
-    }
-
-    public List<WeaponSprite> getWeaponSprites() {
-        return weaponSprites;
-    }
-
-    public List<RoomSprite> getRoomSprites() {
-        return roomSprites;
-    }
-
-    public List<SystemRoomSprite> getSystemRoomSprites() {
-        return systemRoomSprites;
-    }
-
-    public List<BreachSprite> getBreachSprites() {
-        return breachSprites;
-    }
-
-    public List<FireSprite> getFireSprites() {
-        return fireSprites;
-    }
-
-    public List<DoorSprite> getDoorSprites() {
-        return doorSprites;
-    }
-
-    public List<CrewSprite> getCrewSprites() {
-        return crewSprites;
-    }
-
-    public List<ExtendedSystemInfo> getExtendedSystemInfoList() {
-        return extendedSystemInfoList;
-    }
 
     /**
      * Returns the first extended system info of a given class, or null.

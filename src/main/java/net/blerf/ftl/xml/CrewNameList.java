@@ -7,8 +7,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "nameList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CrewNameList {
@@ -32,27 +37,4 @@ public class CrewNameList {
         public String name;
     }
 
-    public void setRace(String race) {
-        this.race = race;
-    }
-
-    public String getRace() {
-        return race;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setNames(List<CrewName> names) {
-        this.names = names;
-    }
-
-    public List<CrewName> getNames() {
-        return names;
-    }
 }

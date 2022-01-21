@@ -7,8 +7,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "crewBlueprint")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CrewBlueprint {
@@ -20,7 +25,7 @@ public class CrewBlueprint {
     private int cost;
 
     @XmlElement(name = "bp")
-    private int bp;  // TODO: Rename this.
+    private int blueprint;
 
     private DefaultDeferredText title;
 
@@ -52,76 +57,4 @@ public class CrewBlueprint {
         }
     }
 
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setDescription(DefaultDeferredText desc) {
-        this.desc = desc;
-    }
-
-    public DefaultDeferredText getDescription() {
-        return desc;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public void setBP(int bp) {
-        this.bp = bp;
-    }
-
-    public int getBP() {
-        return bp;
-    }
-
-    public void setTitle(DefaultDeferredText title) {
-        this.title = title;
-    }
-
-    public DefaultDeferredText getTitle() {
-        return title;
-    }
-
-    public void setShortTitle(DefaultDeferredText shortTitle) {
-        this.shortTitle = shortTitle;
-    }
-
-    public DefaultDeferredText getShortTitle() {
-        return shortTitle;
-    }
-
-    public void setRarity(int rarity) {
-        this.rarity = rarity;
-    }
-
-    public int getRarity() {
-        return rarity;
-    }
-
-    public void setPowerList(List<DefaultDeferredText> powerList) {
-        this.powerList = powerList;
-    }
-
-    public List<DefaultDeferredText> getPowerList() {
-        return powerList;
-    }
-
-    public void setSpriteTintLayerList(List<SpriteTintLayer> layerList) {
-        spriteTintLayerList = layerList;
-    }
-
-    public List<SpriteTintLayer> getSpriteTintLayerList() {
-        return spriteTintLayerList;
-    }
 }

@@ -5,8 +5,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "weaponAnim")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class WeaponAnim {
@@ -31,78 +36,6 @@ public class WeaponAnim {
 
     @XmlElement(name = "chargeImage")
     private String chargeImagePath;
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setSheetId(String sheetId) {
-        this.sheetId = sheetId;
-    }
-
-    public String getSheetId() {
-        return sheetId;
-    }
-
-    public void setSpec(AnimSpec spec) {
-        this.spec = spec;
-    }
-
-    public AnimSpec getSpec() {
-        return spec;
-    }
-
-    public void setChargedFrame(int chargedFrame) {
-        this.chargedFrame = chargedFrame;
-    }
-
-    public int getChargedFrame() {
-        return chargedFrame;
-    }
-
-    public void setFireFrame(int fireFrame) {
-        this.fireFrame = fireFrame;
-    }
-
-    public int getFireFrame() {
-        return fireFrame;
-    }
-
-    public void setFirePoint(Offset firePoint) {
-        this.firePoint = firePoint;
-    }
-
-    public Offset getFirePoint() {
-        return firePoint;
-    }
-
-    public void setMountPoint(Offset mountPoint) {
-        this.mountPoint = mountPoint;
-    }
-
-    public Offset getMountPoint() {
-        return mountPoint;
-    }
-
-    public void setChargeDelay(Float chargeDelay) {
-        this.chargeDelay = chargeDelay;
-    }
-
-    public Float getChargeDelay() {
-        return chargeDelay;
-    }
-
-    public void setChargeImagePath(String chargeImagePath) {
-        this.chargeImagePath = chargeImagePath;
-    }
-
-    public String getChargeImagePath() {
-        return chargeImagePath;
-    }
 
     @Override
     public String toString() {

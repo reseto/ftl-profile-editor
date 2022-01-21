@@ -5,8 +5,13 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "nameLists")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CrewNameLists {
@@ -14,11 +19,4 @@ public class CrewNameLists {
     @XmlElement(name = "nameList")
     private List<CrewNameList> crewNameLists;
 
-    public void setCrewNameLists(List<CrewNameList> crewNameLists) {
-        this.crewNameLists = crewNameLists;
-    }
-
-    public List<CrewNameList> getCrewNameLists() {
-        return crewNameLists;
-    }
 }

@@ -6,8 +6,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import javax.swing.JComponent;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+@Getter
+@Setter
 @Slf4j
 public class BreachSprite extends JComponent {
 
@@ -42,30 +46,6 @@ public class BreachSprite extends JComponent {
         }
 
         this.setOpaque(false);
-    }
-
-    public void setRoomId(int n) {
-        roomId = n;
-    }
-
-    public void setSquareId(int n) {
-        squareId = n;
-    }
-
-    public void setHealth(int n) {
-        health = n;
-    }
-
-    public int getRoomId() {
-        return roomId;
-    }
-
-    public int getSquareId() {
-        return squareId;
-    }
-
-    public int getHealth() {
-        return health;
     }
 
     @Override

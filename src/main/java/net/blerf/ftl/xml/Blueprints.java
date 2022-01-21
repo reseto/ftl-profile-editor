@@ -6,87 +6,36 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "blueprints")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Blueprints {
 
     @XmlElement(name = "blueprintList")
-    private List<BlueprintList> blueprintLists = new ArrayList<BlueprintList>();
+    private List<BlueprintList> blueprintLists = new ArrayList<>();
 
     @XmlElement(name = "crewBlueprint")
-    private List<CrewBlueprint> crewBlueprints = new ArrayList<CrewBlueprint>();
+    private List<CrewBlueprint> crewBlueprints = new ArrayList<>();
 
     @XmlElement(name = "systemBlueprint")
-    private List<SystemBlueprint> systemBlueprints = new ArrayList<SystemBlueprint>();
+    private List<SystemBlueprint> systemBlueprints = new ArrayList<>();
 
     @XmlElement(name = "weaponBlueprint")
-    private List<WeaponBlueprint> weaponBlueprints = new ArrayList<WeaponBlueprint>();
+    private List<WeaponBlueprint> weaponBlueprints = new ArrayList<>();
 
     @XmlElement(name = "droneBlueprint")
-    private List<DroneBlueprint> droneBlueprints = new ArrayList<DroneBlueprint>();
+    private List<DroneBlueprint> droneBlueprints = new ArrayList<>();
 
     @XmlElement(name = "augBlueprint")
-    private List<AugBlueprint> augBlueprints = new ArrayList<AugBlueprint>();
+    private List<AugBlueprint> augBlueprints = new ArrayList<>();
 
     @XmlElement(name = "shipBlueprint")
-    private List<ShipBlueprint> shipBlueprints = new ArrayList<ShipBlueprint>();
+    private List<ShipBlueprint> shipBlueprints = new ArrayList<>();
 
-
-    public void setBlueprintLists(List<BlueprintList> blueprintLists) {
-        this.blueprintLists = blueprintLists;
-    }
-
-    public List<BlueprintList> getBlueprintLists() {
-        return blueprintLists;
-    }
-
-    public void setCrewBlueprints(List<CrewBlueprint> crewBlueprints) {
-        this.crewBlueprints = crewBlueprints;
-    }
-
-    public List<CrewBlueprint> getCrewBlueprints() {
-        return crewBlueprints;
-    }
-
-    public void setSystemBlueprints(List<SystemBlueprint> systemBlueprints) {
-        this.systemBlueprints = systemBlueprints;
-    }
-
-    public List<SystemBlueprint> getSystemBlueprints() {
-        return systemBlueprints;
-    }
-
-    public void setWeaponBlueprints(List<WeaponBlueprint> weaponBlueprints) {
-        this.weaponBlueprints = weaponBlueprints;
-    }
-
-    public List<WeaponBlueprint> getWeaponBlueprints() {
-        return weaponBlueprints;
-    }
-
-    public void setDroneBlueprints(List<DroneBlueprint> droneBlueprints) {
-        this.droneBlueprints = droneBlueprints;
-    }
-
-    public List<DroneBlueprint> getDroneBlueprints() {
-        return droneBlueprints;
-    }
-
-    public void setAugBlueprints(List<AugBlueprint> augBlueprints) {
-        this.augBlueprints = augBlueprints;
-    }
-
-    public List<AugBlueprint> getAugBlueprints() {
-        return augBlueprints;
-    }
-
-    public void setShipBlueprint(List<ShipBlueprint> shipBlueprints) {
-        this.shipBlueprints = shipBlueprints;
-    }
-
-    public List<ShipBlueprint> getShipBlueprints() {
-        return shipBlueprints;
-    }
 }

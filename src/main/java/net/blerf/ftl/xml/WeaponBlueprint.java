@@ -7,8 +7,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "weaponBlueprint")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class WeaponBlueprint {
@@ -32,7 +37,7 @@ public class WeaponBlueprint {
     private int shieldPiercing;
 
     @XmlElement(name = "bp")
-    private int bp;  // TODO: Rename this.
+    private int blueprint;
 
     private int damage;
     private int shots;
@@ -64,191 +69,6 @@ public class WeaponBlueprint {
 
     @XmlElement(name = "weaponArt")
     private String weaponAnimId;
-
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setTitle(DefaultDeferredText title) {
-        this.title = title;
-    }
-
-    public DefaultDeferredText getTitle() {
-        return title;
-    }
-
-    public void setShortTitle(DefaultDeferredText shortTitle) {
-        this.shortTitle = shortTitle;
-    }
-
-    public DefaultDeferredText getShortTitle() {
-        return shortTitle;
-    }
-
-    public void setLocked(Integer locked) {
-        this.locked = locked;
-    }
-
-    public Integer getLocked() {
-        return locked;
-    }
-
-    public void setDescription(DefaultDeferredText desc) {
-        this.desc = desc;
-    }
-
-    public DefaultDeferredText getDescription() {
-        return desc;
-    }
-
-    public void setTooltip(DefaultDeferredText tooltip) {
-        this.tooltip = tooltip;
-    }
-
-    public DefaultDeferredText getTooltip() {
-        return tooltip;
-    }
-
-    public void setShieldPiercing(int shieldPiercing) {
-        this.shieldPiercing = shieldPiercing;
-    }
-
-    public int getShieldPiercing() {
-        return shieldPiercing;
-    }
-
-    public void setBP(int bp) {
-        this.bp = bp;
-    }
-
-    public int getBP() {
-        return bp;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public void setShots(int shots) {
-        this.shots = shots;
-    }
-
-    public int getShots() {
-        return shots;
-    }
-
-    public void setFireChance(int fireChance) {
-        this.fireChance = fireChance;
-    }
-
-    public int getFireChance() {
-        return fireChance;
-    }
-
-    public void setBreachChance(int breachChance) {
-        this.breachChance = breachChance;
-    }
-
-    public int getBreachChance() {
-        return breachChance;
-    }
-
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
-    }
-
-    public int getCooldown() {
-        return cooldown;
-    }
-
-    public void setPower(int power) {
-        this.power = power;
-    }
-
-    public int getPower() {
-        return power;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public void setRarity(int rarity) {
-        this.rarity = rarity;
-    }
-
-    public int getRarity() {
-        return rarity;
-    }
-
-    public void setProjectileAnimId(String projectileAnimId) {
-        this.projectileAnimId = projectileAnimId;
-    }
-
-    public String getProjectileAnimId() {
-        return projectileAnimId;
-    }
-
-    public void setLaunchSounds(List<String> launchSounds) {
-        this.launchSounds = launchSounds;
-    }
-
-    public List<String> getLaunchSounds() {
-        return launchSounds;
-    }
-
-    public void setHitShipSounds(List<String> hitShipSounds) {
-        this.hitShipSounds = hitShipSounds;
-    }
-
-    public List<String> getHitShipSounds() {
-        return hitShipSounds;
-    }
-
-    public void setHitShieldSounds(List<String> hitShieldSounds) {
-        this.hitShieldSounds = hitShieldSounds;
-    }
-
-    public List<String> getHitShieldSounds() {
-        return hitShieldSounds;
-    }
-
-    public void setMissSounds(List<String> missSounds) {
-        this.missSounds = missSounds;
-    }
-
-    public List<String> getMissSounds() {
-        return missSounds;
-    }
-
-    public void setWeaponAnimId(String weaponAnimId) {
-        this.weaponAnimId = weaponAnimId;
-    }
-
-    public String getWeaponAnimId() {
-        return weaponAnimId;
-    }
 
     @Override
     public String toString() {

@@ -6,56 +6,28 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "events")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Encounters {
 
     @XmlElement(name = "event")
-    private List<FTLEvent> events = new ArrayList<FTLEvent>();
+    private List<FTLEvent> events = new ArrayList<>();
 
     @XmlElement(name = "eventList")
-    private List<FTLEventList> eventLists = new ArrayList<FTLEventList>();
+    private List<FTLEventList> eventLists = new ArrayList<>();
 
     @XmlElement(name = "textList")
-    private List<TextList> textLists = new ArrayList<TextList>();
+    private List<TextList> textLists = new ArrayList<>();
 
     @XmlElement(name = "ship")
-    private List<ShipEvent> shipEvents = new ArrayList<ShipEvent>();
-
-
-    public void setEvents(List<FTLEvent> events) {
-        this.events = events;
-    }
-
-    public List<FTLEvent> getEvents() {
-        return events;
-    }
-
-    public void setEventLists(List<FTLEventList> eventLists) {
-        this.eventLists = eventLists;
-    }
-
-    public List<FTLEventList> getEventLists() {
-        return eventLists;
-    }
-
-    public void setTextLists(List<TextList> textLists) {
-        this.textLists = textLists;
-    }
-
-    public List<TextList> getTextLists() {
-        return textLists;
-    }
-
-    public void setShipEvents(List<ShipEvent> shipEvents) {
-        this.shipEvents = shipEvents;
-    }
-
-    public List<ShipEvent> getShipEvents() {
-        return shipEvents;
-    }
+    private List<ShipEvent> shipEvents = new ArrayList<>();
 
     /**
      * Returns an Event with a given id.

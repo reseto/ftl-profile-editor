@@ -6,8 +6,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "eventList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FTLEventList {
@@ -16,22 +21,6 @@ public class FTLEventList {
 
     @XmlElement(name = "event")
     private List<FTLEvent> eventList;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<FTLEvent> getEventList() {
-        return eventList;
-    }
-
-    public void setEventList(List<FTLEvent> eventList) {
-        this.eventList = eventList;
-    }
 
     @Override
     public String toString() {
