@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JPanel;
-import net.blerf.ftl.parser.SavedGameParser;
+import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.SavedGameParser.StateVar;
 
 
@@ -55,7 +55,7 @@ public class SavedGameStateVarsPanel extends JPanel {
         setGameState(null);
     }
 
-    public void setGameState(SavedGameParser.SavedGameState gameState) {
+    public void setGameState(SavedGameState gameState) {
         varsOnePanel.removeAll();
         varsTwoPanel.removeAll();
 
@@ -92,7 +92,7 @@ public class SavedGameStateVarsPanel extends JPanel {
         this.repaint();
     }
 
-    public void updateGameState(SavedGameParser.SavedGameState gameState) {
+    public void updateGameState(SavedGameState gameState) {
         String newString = null;
         gameState.getStateVars().clear();
 

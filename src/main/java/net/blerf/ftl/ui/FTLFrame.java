@@ -55,6 +55,7 @@ import javax.swing.filechooser.FileFilter;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.core.EditorConfig;
 import net.blerf.ftl.model.Profile;
+import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.MysteryBytes;
 import net.blerf.ftl.parser.ProfileParser;
@@ -80,7 +81,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
     private static final String SAVE_STATE_VARS = "State Vars";
 
     private Profile profile = null;
-    private SavedGameParser.SavedGameState gameState = null;
+    private SavedGameState gameState = null;
     private StringBuilder profileHex = null;
     private StringBuilder gameStateHex = null;
 
@@ -95,7 +96,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
     private boolean ranInit = false;
     private Thread.UncaughtExceptionHandler previousUncaughtExceptionHandler = null;
 
-    private List<JButton> updatesButtonList = new ArrayList<JButton>();
+    private List<JButton> updatesButtonList = new ArrayList<>();
     private Runnable updatesCallback;
 
     private ImageIcon openIcon;
@@ -844,7 +845,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
                     in.getChannel().position(0);
 
                     SavedGameParser parser = new SavedGameParser();
-                    SavedGameParser.SavedGameState gs = parser.readSavedGame(in);
+                    SavedGameState gs = parser.readSavedGame(in);
                     loadGameState(gs);
                     gameStateHex = hexBuf;
 
@@ -1248,11 +1249,11 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
      * needs to pull the state, make a major change,
      * and reload it.
      */
-    public SavedGameParser.SavedGameState getGameState() {
+    public SavedGameState getGameState() {
         return gameState;
     }
 
-    public void loadGameState(SavedGameParser.SavedGameState gs) {
+    public void loadGameState(SavedGameState gs) {
 
         Runnable scrollAll = new Runnable() {
             @Override
@@ -1312,12 +1313,11 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
         }
     }
 
-    public void updateGameState(SavedGameParser.SavedGameState gs) {
+    public void updateGameState(SavedGameState gs) {
 
-        if (gs == null) {
-        }
+
         // todo jesus, get rid of all these numbers everywhere, create an enum
-        else if (Arrays.binarySearch(new int[]{2, 7, 8, 9, 11}, gs.getFileFormat()) >= 0) {
+        if (Arrays.binarySearch(new int[]{2, 7, 8, 9, 11}, gs.getFileFormat()) >= 0) {
             // savedGameDumpPanel doesn't modify anything.
             savedGameGeneralPanel.updateGameState(gs);
             savedGameFloorplanPanel.updateGameState(gs);

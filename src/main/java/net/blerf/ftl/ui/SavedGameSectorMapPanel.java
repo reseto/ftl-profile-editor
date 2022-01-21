@@ -56,6 +56,7 @@ import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
+import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.parser.SavedGameParser.BeaconState;
@@ -380,7 +381,7 @@ public class SavedGameSectorMapPanel extends JPanel {
         fitViewToViewport();
     }
 
-    public void setGameState(SavedGameParser.SavedGameState gameState) {
+    public void setGameState(SavedGameState gameState) {
         mapPanel.removeAll();
         mapLayout.setBeaconLocations(null);
         mapLayout.setBeaconRegionSize(null);
@@ -463,7 +464,7 @@ public class SavedGameSectorMapPanel extends JPanel {
         // Quests.
         for (Map.Entry<String, Integer> entry : gameState.getQuestEventMap().entrySet()) {
             String questEventId = entry.getKey();
-            int questBeaconId = entry.getValue().intValue();
+            int questBeaconId = entry.getValue();
 
             QuestSprite questSprite = new QuestSprite(questEventId);
             SectorMapConstraints questC = new SectorMapConstraints(SectorMapConstraints.MISC_BOX);
@@ -500,7 +501,7 @@ public class SavedGameSectorMapPanel extends JPanel {
         mapViewport.repaint();
     }
 
-    public void updateGameState(SavedGameParser.SavedGameState gameState) {
+    public void updateGameState(SavedGameState gameState) {
         if (gameState == null) return;
 
         List<BeaconState> beaconStateList = gameState.getBeaconList();

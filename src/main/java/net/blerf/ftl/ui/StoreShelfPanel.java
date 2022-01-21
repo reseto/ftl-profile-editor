@@ -13,12 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.FTLConstants;
+import net.blerf.ftl.model.state.CrewType;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser.CrewType;
 import net.blerf.ftl.parser.SavedGameParser.StoreItem;
 import net.blerf.ftl.parser.SavedGameParser.StoreItemType;
 import net.blerf.ftl.parser.SavedGameParser.StoreShelf;
-import net.blerf.ftl.parser.SavedGameParser.SystemType;
+import net.blerf.ftl.model.state.SystemType;
 
 @Slf4j
 public class StoreShelfPanel extends JPanel implements ActionListener {
@@ -41,9 +41,9 @@ public class StoreShelfPanel extends JPanel implements ActionListener {
     private FTLFrame frame;
 
     private StoreItemType[] itemTypes = StoreItemType.values();
-    private Map<StoreItemType, Map<String, ?>> itemLookups = new HashMap<StoreItemType, Map<String, ?>>();
+    private Map<StoreItemType, Map<String, ?>> itemLookups = new HashMap<>();
 
-    private FieldEditorPanel editorPanel = null;
+    private FieldEditorPanel editorPanel;
     private boolean ignoreChanges = false;
 
     private FTLConstants ftlConstants;
@@ -98,12 +98,12 @@ public class StoreShelfPanel extends JPanel implements ActionListener {
         Map<String, ?> weaponLookup = DataManager.get().getWeapons();
         Map<String, ?> droneLookup = DataManager.get().getDrones();
         Map<String, ?> augmentLookup = DataManager.get().getAugments();
-        Map<String, CrewType> crewLookup = new LinkedHashMap<String, CrewType>();
+        Map<String, CrewType> crewLookup = new LinkedHashMap<>();
         for (CrewType crewType : ftlConstants.getCrewTypes()) {
             crewLookup.put(crewType.getId(), crewType);
         }
 
-        Map<String, SystemType> systemLookup = new LinkedHashMap<String, SystemType>();
+        Map<String, SystemType> systemLookup = new LinkedHashMap<>();
         for (SystemType systemType : SystemType.values()) {
             systemLookup.put(systemType.getId(), systemType);
         }
@@ -141,7 +141,7 @@ public class StoreShelfPanel extends JPanel implements ActionListener {
 
         Map<String, ?> lookupMap = itemLookups.get(itemType);
 
-        List<String> badIds = new ArrayList<String>();
+        List<String> badIds = new ArrayList<>();
 
         for (int i = 0; i < SLOTS.length; i++) {
             if (i < shelf.getItems().size()) {
@@ -186,7 +186,7 @@ public class StoreShelfPanel extends JPanel implements ActionListener {
      */
     @SuppressWarnings("unchecked")
     public List<StoreItem> getItems() {
-        List<StoreItem> result = new ArrayList<StoreItem>(3);
+        List<StoreItem> result = new ArrayList<>(3);
 
         Map<String, ?> lookupMap = null;
         Object selectedTypeObj = editorPanel.getCombo(SHELF_TYPE).getSelectedItem();

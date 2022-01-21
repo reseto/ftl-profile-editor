@@ -3,9 +3,9 @@ package net.blerf.ftl.constants;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import net.blerf.ftl.parser.SavedGameParser.CrewType;
+import net.blerf.ftl.model.state.CrewType;
 import net.blerf.ftl.parser.SavedGameParser.StationDirection;
-import net.blerf.ftl.parser.SavedGameParser.SystemType;
+import net.blerf.ftl.model.state.SystemType;
 
 
 /**
@@ -18,7 +18,7 @@ public class OriginalFTLConstants implements FTLConstants {
 
 
     public OriginalFTLConstants() {
-        List<CrewType> mutableCrewTypes = new ArrayList<CrewType>();
+        List<CrewType> mutableCrewTypes = new ArrayList<>();
         mutableCrewTypes.add(CrewType.BATTLE);
         mutableCrewTypes.add(CrewType.CRYSTAL);
         mutableCrewTypes.add(CrewType.ENERGY);
@@ -30,7 +30,7 @@ public class OriginalFTLConstants implements FTLConstants {
         mutableCrewTypes.add(CrewType.SLUG);
         crewTypes = Collections.unmodifiableList(mutableCrewTypes);
 
-        List<SystemType> mutableSystemTypes = new ArrayList<SystemType>();
+        List<SystemType> mutableSystemTypes = new ArrayList<>();
         mutableSystemTypes.add(SystemType.PILOT);
         mutableSystemTypes.add(SystemType.DOORS);
         mutableSystemTypes.add(SystemType.SENSORS);

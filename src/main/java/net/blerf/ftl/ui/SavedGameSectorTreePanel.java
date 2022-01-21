@@ -23,7 +23,7 @@ import net.blerf.ftl.model.sectortree.SectorTree;
 import net.blerf.ftl.model.sectortree.SectorTreeEvent;
 import net.blerf.ftl.model.sectortree.SectorTreeException;
 import net.blerf.ftl.model.sectortree.SectorTreeListener;
-import net.blerf.ftl.parser.SavedGameParser;
+import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.random.FTL_1_6_Random;
 import net.blerf.ftl.parser.random.GNULibCRandom;
 import net.blerf.ftl.parser.random.MsRandom;
@@ -320,7 +320,7 @@ public class SavedGameSectorTreePanel extends JPanel implements ActionListener {
     }
 
 
-    public void setGameState(SavedGameParser.SavedGameState gameState) {
+    public void setGameState(SavedGameState gameState) {
         fileFormat = 2;
         forcedRNG = null;
         dlcEnabled = true;
@@ -374,7 +374,7 @@ public class SavedGameSectorTreePanel extends JPanel implements ActionListener {
         }
     }
 
-    public void updateGameState(SavedGameParser.SavedGameState gameState) {
+    public void updateGameState(SavedGameState gameState) {
         if (tree.isEmpty()) {
             gameState.setSectorTreeSeed(originalSectorTreeSeed);
 

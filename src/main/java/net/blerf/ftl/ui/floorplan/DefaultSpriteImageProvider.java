@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import lombok.extern.slf4j.Slf4j;
+import net.blerf.ftl.model.state.CrewType;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser.CrewType;
 import net.blerf.ftl.parser.SavedGameParser.DroneType;
-import net.blerf.ftl.parser.SavedGameParser.SystemType;
+import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.ui.ImageUtilities;
 import net.blerf.ftl.ui.ImageUtilities.Tint;
 import net.blerf.ftl.xml.Anim;
@@ -556,7 +556,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
         AnimAtlas animAtlas;
 
         List<Anim> animsList = DataManager.get().getAnimsBySheetId(sheetId);
-        Map<String, Point[]> framesetsMap = new HashMap<String, Point[]>(animsList.size());
+        Map<String, Point[]> framesetsMap = new HashMap<>(animsList.size());
 
         for (Anim anim : animsList) {
             int frameCount = anim.getAnimSpec().frameCount;

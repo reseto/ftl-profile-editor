@@ -12,6 +12,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
+import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.xml.DroneBlueprint;
@@ -308,7 +309,7 @@ public class SavedGameGeneralPanel extends JPanel {
     }
 
 
-    public void setGameState(SavedGameParser.SavedGameState gameState) {
+    public void setGameState(SavedGameState gameState) {
         sessionPanel.reset();
         cargoPanel.reset();
         envPanel.reset();
@@ -474,7 +475,7 @@ public class SavedGameGeneralPanel extends JPanel {
     }
 
     @SuppressWarnings("unchecked")
-    public void updateGameState(SavedGameParser.SavedGameState gameState) {
+    public void updateGameState(SavedGameState gameState) {
 
         try {
             gameState.setTotalShipsDefeated(sessionPanel.parseInt(TOTAL_SHIPS_DEFEATED));

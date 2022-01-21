@@ -24,8 +24,8 @@ import javax.swing.SwingConstants;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
+import net.blerf.ftl.model.state.CrewType;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser.CrewType;
 
 @Slf4j
 public class StatsSubPanel extends JPanel implements ActionListener {
@@ -42,8 +42,8 @@ public class StatsSubPanel extends JPanel implements ActionListener {
     private final String NAME = "Name";
     private final String SCORE = "Score";
 
-    private HashMap<JButton, String> editMap = new HashMap<JButton, String>();
-    private HashMap<String, StatRow> rowMap = new HashMap<String, StatRow>();
+    private HashMap<JButton, String> editMap = new HashMap<>();
+    private HashMap<String, StatRow> rowMap = new HashMap<>();
 
     private GridBagConstraints gridC = null;
 

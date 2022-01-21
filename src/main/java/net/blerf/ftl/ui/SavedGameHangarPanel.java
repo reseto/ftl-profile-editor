@@ -14,8 +14,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import net.blerf.ftl.model.state.SavedGameState;
+import net.blerf.ftl.model.state.ShipState;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.xml.ShipBlueprint;
 
 
@@ -137,7 +138,7 @@ public class SavedGameHangarPanel extends JPanel {
      * still need to be outfitted manually.
      */
     private void createShip(ShipBlueprint shipBlueprint, boolean auto) {
-        SavedGameParser.SavedGameState gameState = frame.getGameState();
+        SavedGameState gameState = frame.getGameState();
         if (gameState == null) return;
 
         // Apply all other pending changes.
@@ -151,7 +152,7 @@ public class SavedGameHangarPanel extends JPanel {
         int response = JOptionPane.showConfirmDialog(frame, nag, "Change Player Ship", JOptionPane.YES_NO_OPTION);
         if (response != JOptionPane.YES_OPTION) return;
 
-        SavedGameParser.ShipState shipState = new SavedGameParser.ShipState("The Nameless One", shipBlueprint, auto);
+        ShipState shipState = new ShipState("The Nameless One", shipBlueprint, auto);
         shipState.refit();
         gameState.setPlayerShip(shipState);
 
@@ -163,7 +164,7 @@ public class SavedGameHangarPanel extends JPanel {
     }
 
     private void stealNearbyShip() {
-        SavedGameParser.SavedGameState gameState = frame.getGameState();
+        SavedGameState gameState = frame.getGameState();
         if (gameState == null) return;
 
         String nag = ""
@@ -184,7 +185,7 @@ public class SavedGameHangarPanel extends JPanel {
             return;
         }
 
-        SavedGameParser.ShipState shipState = gameState.getNearbyShip();
+        ShipState shipState = gameState.getNearbyShip();
         gameState.setNearbyShip(null);
         gameState.setNearbyShipAI(null);
         shipState.commandeer();
@@ -211,7 +212,7 @@ public class SavedGameHangarPanel extends JPanel {
     }
 
 
-    public void setGameState(SavedGameParser.SavedGameState gameState) {
+    public void setGameState(SavedGameState gameState) {
         // This panel doesn't cache anything of the state. This just toggles the UI.
 
         if (gameState != null && gameState.getFileFormat() == 2) {
@@ -240,7 +241,7 @@ public class SavedGameHangarPanel extends JPanel {
         }
     }
 
-    public void updateGameState(SavedGameParser.SavedGameState gameState) {
+    public void updateGameState(SavedGameState gameState) {
         // This panel makes its changes immediately. Nothing to do here.
     }
 }

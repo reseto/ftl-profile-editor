@@ -55,11 +55,12 @@ import net.blerf.ftl.model.shiplayout.DoorCoordinate;
 import net.blerf.ftl.model.shiplayout.RoomAndSquare;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
+import net.blerf.ftl.model.state.CrewState;
+import net.blerf.ftl.model.state.CrewType;
+import net.blerf.ftl.model.state.SavedGameState;
+import net.blerf.ftl.model.state.ShipState;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser;
-import net.blerf.ftl.parser.SavedGameParser.BoarderDronePodInfo;
-import net.blerf.ftl.parser.SavedGameParser.CrewState;
-import net.blerf.ftl.parser.SavedGameParser.CrewType;
+import net.blerf.ftl.model.pod.BoarderDronePodInfo;
 import net.blerf.ftl.parser.SavedGameParser.DoorState;
 import net.blerf.ftl.parser.SavedGameParser.DronePodState;
 import net.blerf.ftl.parser.SavedGameParser.DroneState;
@@ -67,11 +68,10 @@ import net.blerf.ftl.parser.SavedGameParser.DroneType;
 import net.blerf.ftl.parser.SavedGameParser.ExtendedDroneInfo;
 import net.blerf.ftl.parser.SavedGameParser.ExtendedSystemInfo;
 import net.blerf.ftl.parser.SavedGameParser.RoomState;
-import net.blerf.ftl.parser.SavedGameParser.ShipState;
 import net.blerf.ftl.parser.SavedGameParser.SquareState;
 import net.blerf.ftl.parser.SavedGameParser.StationDirection;
 import net.blerf.ftl.parser.SavedGameParser.SystemState;
-import net.blerf.ftl.parser.SavedGameParser.SystemType;
+import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.parser.SavedGameParser.WeaponState;
 import net.blerf.ftl.ui.floorplan.AnimAtlas;
 import net.blerf.ftl.ui.floorplan.BreachSprite;
@@ -972,7 +972,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         }
     }
 
-    public void setGameState(SavedGameParser.SavedGameState gameState) {
+    public void setGameState(SavedGameState gameState) {
         defaultSelector.setVisible(false);
         defaultSelector.setMousePoint(-1, -1);
         defaultSelector.clearSpriteLists();
@@ -1035,13 +1035,13 @@ public class SavedGameFloorplanPanel extends JPanel {
         }
 
         playerBundle = new ShipBundle();
-        playerBundle.setFTLConstants(ftlConstants);
+        playerBundle.setFtlConstants(ftlConstants);
         shipBundles.add(playerBundle);
         addBundle(playerBundle, gameState.getPlayerShip(), true);
 
         if (gameState.getNearbyShip() != null) {
             nearbyBundle = new ShipBundle();
-            nearbyBundle.setFTLConstants(ftlConstants);
+            nearbyBundle.setFtlConstants(ftlConstants);
             shipBundles.add(nearbyBundle);
             addBundle(nearbyBundle, gameState.getNearbyShip(), false);
 
@@ -1235,7 +1235,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         }
     }
 
-    public void updateGameState(SavedGameParser.SavedGameState gameState) {
+    public void updateGameState(SavedGameState gameState) {
         updateShipState(gameState.getPlayerShip(), playerBundle);
 
         if (gameState.getNearbyShip() != null && nearbyBundle != null) {
@@ -1551,7 +1551,7 @@ public class SavedGameFloorplanPanel extends JPanel {
                 crewState.setMale(DataManager.get().getCrewSex());
                 crewState.setName(DataManager.get().getCrewName(crewState.isMale()));
 
-                SpriteReference<CrewState> crewRef = new SpriteReference<CrewState>(crewState);
+                SpriteReference<CrewState> crewRef = new SpriteReference<>(crewState);
                 shipBundle.getCrewRefs().add(crewRef);
 
                 addCrewSprite(shipBundle, crewRef, center.x, center.y);
@@ -3624,21 +3624,21 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.getInt(LAMBDA).setText("" + crewRef.get().getUnknownLambda());
         editorPanel.getInt(UNIV_DEATH_COUNT).setText("" + crewRef.get().getUniversalDeathCount());
 
-        editorPanel.getBoolean(PILOT_MASTERY_ONE).setSelected(crewRef.get().getPilotMasteryOne());
-        editorPanel.getBoolean(PILOT_MASTERY_TWO).setSelected(crewRef.get().getPilotMasteryTwo());
-        editorPanel.getBoolean(ENGINE_MASTERY_ONE).setSelected(crewRef.get().getEngineMasteryOne());
-        editorPanel.getBoolean(ENGINE_MASTERY_TWO).setSelected(crewRef.get().getEngineMasteryTwo());
-        editorPanel.getBoolean(SHIELD_MASTERY_ONE).setSelected(crewRef.get().getShieldMasteryOne());
-        editorPanel.getBoolean(SHIELD_MASTERY_TWO).setSelected(crewRef.get().getShieldMasteryTwo());
-        editorPanel.getBoolean(WEAPON_MASTERY_ONE).setSelected(crewRef.get().getWeaponMasteryOne());
-        editorPanel.getBoolean(WEAPON_MASTERY_TWO).setSelected(crewRef.get().getWeaponMasteryTwo());
-        editorPanel.getBoolean(REPAIR_MASTERY_ONE).setSelected(crewRef.get().getRepairMasteryOne());
-        editorPanel.getBoolean(REPAIR_MASTERY_TWO).setSelected(crewRef.get().getRepairMasteryTwo());
-        editorPanel.getBoolean(COMBAT_MASTERY_ONE).setSelected(crewRef.get().getCombatMasteryOne());
-        editorPanel.getBoolean(COMBAT_MASTERY_TWO).setSelected(crewRef.get().getCombatMasteryTwo());
+        editorPanel.getBoolean(PILOT_MASTERY_ONE).setSelected(crewRef.get().isPilotMasteryOne());
+        editorPanel.getBoolean(PILOT_MASTERY_TWO).setSelected(crewRef.get().isPilotMasteryTwo());
+        editorPanel.getBoolean(ENGINE_MASTERY_ONE).setSelected(crewRef.get().isEngineMasteryOne());
+        editorPanel.getBoolean(ENGINE_MASTERY_TWO).setSelected(crewRef.get().isEngineMasteryTwo());
+        editorPanel.getBoolean(SHIELD_MASTERY_ONE).setSelected(crewRef.get().isShieldMasteryOne());
+        editorPanel.getBoolean(SHIELD_MASTERY_TWO).setSelected(crewRef.get().isShieldMasteryTwo());
+        editorPanel.getBoolean(WEAPON_MASTERY_ONE).setSelected(crewRef.get().isWeaponMasteryOne());
+        editorPanel.getBoolean(WEAPON_MASTERY_TWO).setSelected(crewRef.get().isWeaponMasteryTwo());
+        editorPanel.getBoolean(REPAIR_MASTERY_ONE).setSelected(crewRef.get().isRepairMasteryOne());
+        editorPanel.getBoolean(REPAIR_MASTERY_TWO).setSelected(crewRef.get().isRepairMasteryTwo());
+        editorPanel.getBoolean(COMBAT_MASTERY_ONE).setSelected(crewRef.get().isCombatMasteryOne());
+        editorPanel.getBoolean(COMBAT_MASTERY_TWO).setSelected(crewRef.get().isCombatMasteryTwo());
 
-        editorPanel.getBoolean(NU).setSelected(crewRef.get().getUnknownNu());
-        editorPanel.getBoolean(PHI).setSelected(crewRef.get().getUnknownPhi());
+        editorPanel.getBoolean(NU).setSelected(crewRef.get().isUnknownNu());
+        editorPanel.getBoolean(PHI).setSelected(crewRef.get().isUnknownPhi());
         editorPanel.getInt(LOCKDOWN_RECHARGE_TICKS).setText("" + crewRef.get().getLockdownRechargeTicks());
         editorPanel.getInt(LOCKDOWN_RECHARGE_GOAL).setText("" + crewRef.get().getLockdownRechargeTicksGoal());
         editorPanel.getInt(OMEGA).setText("" + crewRef.get().getUnknownOmega());

@@ -132,7 +132,7 @@ public class Parser {
      * <p>
      * Unicode strings were introduced in FTL 1.6.1.
      */
-    protected void setUnicode(boolean b) {
+    public void setUnicode(boolean b) {
         unicodeStrings = b;
     }
 
