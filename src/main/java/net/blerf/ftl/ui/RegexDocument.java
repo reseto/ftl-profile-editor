@@ -5,21 +5,23 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
-
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * A Document thats restricts characters based on a regex.
+ * A Document that restricts characters based on a regex.
  *
- * @see javax.swing.JTextField.setDocument(javax.swing.text.Ducument)
+ * @see javax.swing.JTextField#setDocument(Document)
  */
+@Slf4j
 public class RegexDocument extends PlainDocument {
 
+    private static final String NUMBERS_ONLY = "-?[0-9]*";
     private Pattern pattern = null;
 
-
-    public RegexDocument(Pattern p) {
-        pattern = p;
+    public RegexDocument() {
+        this(NUMBERS_ONLY);
     }
 
     public RegexDocument(String regex) {
@@ -28,12 +30,9 @@ public class RegexDocument extends PlainDocument {
                 pattern = Pattern.compile(regex);
             }
         } catch (PatternSyntaxException e) {
+            log.error("Invalid regex {}", regex, e);
         }
     }
-
-    public RegexDocument() {
-    }
-
 
     @Override
     public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
@@ -47,7 +46,7 @@ public class RegexDocument extends PlainDocument {
             proceed = m.matches();
         }
 
-        if (proceed == true) super.insertString(offs, str, a);
+        if (proceed) super.insertString(offs, str, a);
     }
 
 
@@ -61,9 +60,10 @@ public class RegexDocument extends PlainDocument {
                 Matcher m = pattern.matcher(tmp);
                 proceed = m.matches();
             } catch (BadLocationException e) {
+                log.warn("Failed to remove with parameters offs: {} len: {}", offs, len, e);
             }
         }
 
-        if (proceed == true) super.remove(offs, len);
+        if (proceed) super.remove(offs, len);
     }
 }

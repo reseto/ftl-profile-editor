@@ -2834,7 +2834,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.getSlider(IGNITION).setMaximum(100);
         editorPanel.getSlider(IGNITION).addMouseListener(new StatusbarMouseListener(frame, "A new fire spawns in this square at 100."));
         editorPanel.addRow(EXTINGUISHMENT, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(EXTINGUISHMENT).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(EXTINGUISHMENT).setDocument(new RegexDocument());
         editorPanel.getInt(EXTINGUISHMENT).addMouseListener(new StatusbarMouseListener(frame, "Unknown. Usually -1. When fire disappears in a puff of smoke, it's 9,8...,1,0."));
 
         editorPanel.getCombo(STATION_DIR).addItem(StationDirection.DOWN);
@@ -2946,7 +2946,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.addRow(DAMAGE_PROGRESS, FieldEditorPanel.ContentType.SLIDER);
         editorPanel.getSlider(DAMAGE_PROGRESS).addMouseListener(new StatusbarMouseListener(frame, "Turns an undamaged bar red until damaged."));
         editorPanel.addRow(DEIONIZATION_TICKS, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(DEIONIZATION_TICKS).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(DEIONIZATION_TICKS).setDocument(new RegexDocument());
         editorPanel.getInt(DEIONIZATION_TICKS).addMouseListener(new StatusbarMouseListener(frame, "Time elapsed deionizing a bar: 0-5000 (Resets upon loading, weird values sometimes, -2147...=N/A, 0 is safe)."));
 
         editorPanel.getSlider(RESERVE_CAPACITY).setMaximum(ftlConstants.getMaxReservePoolCapacity());
@@ -3482,18 +3482,18 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.addRow(ENEMY_DRONE, FieldEditorPanel.ContentType.BOOLEAN);
         editorPanel.addRow(PLAYER_CONTROLLED, FieldEditorPanel.ContentType.BOOLEAN);
         editorPanel.addRow(CLONE_READY, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(CLONE_READY).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(CLONE_READY).setDocument(new RegexDocument());
         editorPanel.addRow(MIND_CONTROLLED, FieldEditorPanel.ContentType.BOOLEAN);
         editorPanel.addBlankRow();
         editorPanel.addRow(STUN_TICKS, FieldEditorPanel.ContentType.INTEGER);
         editorPanel.addRow(HEALTH_BOOST, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(HEALTH_BOOST).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(HEALTH_BOOST).setDocument(new RegexDocument());
         editorPanel.addRow(CLONEBAY_PRIORITY, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(CLONEBAY_PRIORITY).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(CLONEBAY_PRIORITY).setDocument(new RegexDocument());
         editorPanel.addRow(DAMAGE_BOOST, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(DAMAGE_BOOST).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(DAMAGE_BOOST).setDocument(new RegexDocument());
         editorPanel.addRow(LAMBDA, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(LAMBDA).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(LAMBDA).setDocument(new RegexDocument());
         editorPanel.addRow(UNIV_DEATH_COUNT, FieldEditorPanel.ContentType.INTEGER);
         editorPanel.addBlankRow();
         editorPanel.addRow(PILOT_MASTERY_ONE, FieldEditorPanel.ContentType.BOOLEAN);
@@ -3515,7 +3515,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.addRow(LOCKDOWN_RECHARGE_TICKS, FieldEditorPanel.ContentType.INTEGER);
         editorPanel.addRow(LOCKDOWN_RECHARGE_GOAL, FieldEditorPanel.ContentType.INTEGER);
         editorPanel.addRow(OMEGA, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(OMEGA).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(OMEGA).setDocument(new RegexDocument());
 
         editorPanel.getInt(HEALTH).addMouseListener(new StatusbarMouseListener(frame, "Current health, including temporary boost. FTL 1.01-1.03.3 capped this at the race's max."));
 

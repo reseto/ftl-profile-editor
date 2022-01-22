@@ -100,7 +100,7 @@ public class SavedGameSectorTreePanel extends JPanel implements ActionListener {
         genPanel.addRow(TREE_TYPE, FieldEditorPanel.ContentType.COMBO);
         genPanel.addBlankRow();
         genPanel.addRow(SECTOR_TREE_SEED, FieldEditorPanel.ContentType.INTEGER);
-        genPanel.getInt(SECTOR_TREE_SEED).setDocument(new RegexDocument("-?[0-9]*"));
+        genPanel.getInt(SECTOR_TREE_SEED).setDocument(new RegexDocument());
         genPanel.addBlankRow();
         genApplyBtn = new JButton("Apply");
         genPanel.addComponent(genApplyBtn);

@@ -1056,7 +1056,7 @@ public class SavedGameSectorMapPanel extends JPanel {
         editorPanel.addRow(LAYOUT, FieldEditorPanel.ContentType.COMBO);
         editorPanel.addBlankRow();
         editorPanel.addRow(LAYOUT_SEED, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(LAYOUT_SEED).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(LAYOUT_SEED).setDocument(new RegexDocument());
 
         editorPanel.getCombo(ALGORITHM).addMouseListener(new StatusbarMouseListener(frame, "Algorithm of the OS the saved game was created under, or native for the current OS."));
         editorPanel.getCombo(LAYOUT).addMouseListener(new StatusbarMouseListener(frame, "The type of map to generate."));
@@ -1243,11 +1243,11 @@ public class SavedGameSectorMapPanel extends JPanel {
 
         final FieldEditorPanel editorPanel = new FieldEditorPanel(true);
         editorPanel.addRow(REBEL_FLEET_OFFSET, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(REBEL_FLEET_OFFSET).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(REBEL_FLEET_OFFSET).setDocument(new RegexDocument());
         editorPanel.addRow(REBEL_FLEET_FUDGE, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(REBEL_FLEET_FUDGE).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(REBEL_FLEET_FUDGE).setDocument(new RegexDocument());
         editorPanel.addRow(REBEL_PURSUIT_MOD, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(REBEL_PURSUIT_MOD).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(REBEL_PURSUIT_MOD).setDocument(new RegexDocument());
         editorPanel.addRow(HIDDEN_SECTOR, FieldEditorPanel.ContentType.BOOLEAN);
         editorPanel.addRow(HAZARDS_VISIBLE, FieldEditorPanel.ContentType.BOOLEAN);
 
@@ -1317,11 +1317,11 @@ public class SavedGameSectorMapPanel extends JPanel {
         editorPanel.addRow(FLAGSHIP_NEARBY, FieldEditorPanel.ContentType.BOOLEAN);
         editorPanel.addBlankRow();
         editorPanel.addRow(FLAGSHIP_ALPHA, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(FLAGSHIP_ALPHA).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(FLAGSHIP_ALPHA).setDocument(new RegexDocument());
         editorPanel.addRow(FLAGSHIP_GAMMA, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(FLAGSHIP_GAMMA).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(FLAGSHIP_GAMMA).setDocument(new RegexDocument());
         editorPanel.addRow(FLAGSHIP_DELTA, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(FLAGSHIP_DELTA).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(FLAGSHIP_DELTA).setDocument(new RegexDocument());
 
         editorPanel.getBoolean(FLAGSHIP_VISIBLE).addMouseListener(new StatusbarMouseListener(frame, "Toggle the rebel flagship on the map. (FTL 1.01-1.03.3: Instant loss if not in sector 8)"));
         editorPanel.getSlider(FLAGSHIP_HOP).addMouseListener(new StatusbarMouseListener(frame, "The flagship is at it's Nth random beacon. (0-based) Sector layout seed affects where that will be. (FTL 1.01-1.03.3: Instant loss may occur beyond 4)"));
@@ -1466,7 +1466,7 @@ public class SavedGameSectorMapPanel extends JPanel {
         editorPanel.getInt(SPRITE_Y).setEnabled(false);
         editorPanel.getInt(SPRITE_Y).addMouseListener(new StatusbarMouseListener(frame, "Background sprite Y position."));
         editorPanel.addRow(SPRITE_ROT, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(SPRITE_ROT).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(SPRITE_ROT).setDocument(new RegexDocument());
         editorPanel.getInt(SPRITE_ROT).setText("0");
         editorPanel.getInt(SPRITE_ROT).setEnabled(false);
         editorPanel.getInt(SPRITE_ROT).addMouseListener(new StatusbarMouseListener(frame, "Background sprite rotation. (degrees, positive = clockwise)"));
@@ -1484,7 +1484,7 @@ public class SavedGameSectorMapPanel extends JPanel {
         editorPanel.getString(AUTO_SHIP).setEnabled(false);
         editorPanel.getString(AUTO_SHIP).addMouseListener(new StatusbarMouseListener(frame, "The blueprint (or blueprintList) of an auto ship to appear."));
         editorPanel.addRow(SHIP_EVENT_SEED, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(SHIP_EVENT_SEED).setDocument(new RegexDocument("-?[0-9]*"));
+        editorPanel.getInt(SHIP_EVENT_SEED).setDocument(new RegexDocument());
         editorPanel.getInt(SHIP_EVENT_SEED).setText("0");
         editorPanel.getInt(SHIP_EVENT_SEED).setEnabled(false);
         editorPanel.getInt(SHIP_EVENT_SEED).addMouseListener(new StatusbarMouseListener(frame, "A constant that seeds the random generation of the enemy ship."));
