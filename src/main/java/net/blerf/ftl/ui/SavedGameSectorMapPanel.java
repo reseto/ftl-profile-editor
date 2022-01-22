@@ -60,7 +60,7 @@ import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.parser.SavedGameParser.BeaconState;
-import net.blerf.ftl.parser.SavedGameParser.FleetPresence;
+import net.blerf.ftl.constants.FleetPresence;
 import net.blerf.ftl.parser.SavedGameParser.RebelFlagshipState;
 import net.blerf.ftl.parser.SavedGameParser.StoreShelf;
 import net.blerf.ftl.parser.SavedGameParser.StoreState;

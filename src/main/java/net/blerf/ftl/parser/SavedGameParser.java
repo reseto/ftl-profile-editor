@@ -13,13 +13,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
+import net.blerf.ftl.constants.FleetPresence;
 import net.blerf.ftl.constants.HazardVulnerability;
 import net.blerf.ftl.model.XYPair;
 import net.blerf.ftl.model.pod.BoarderDronePodInfo;
@@ -57,216 +57,212 @@ public class SavedGameParser extends Parser {
     }
 
     public SavedGameState readSavedGame(FileInputStream in) throws IOException {
-        try {
-            SavedGameState gameState = new SavedGameState();
+        SavedGameState gameState = new SavedGameState();
 
-            int fileFormat = readInt(in);
-            gameState.setFileFormat(fileFormat);
+        int fileFormat = readInt(in);
+        gameState.setFileFormat(fileFormat);
 
-            // FTL 1.6.1 introduced UTF-8 strings.
-            super.setUnicode(fileFormat >= 11);
+        // FTL 1.6.1 introduced UTF-8 strings.
+        super.setUnicode(fileFormat >= 11);
 
-            if (fileFormat == 11) {
-                gameState.setRandomNative(readBool(in));
-            } else {
-                gameState.setRandomNative(true);  // Always native before FTL 1.6.1.
-            }
-
-            if (fileFormat == 2) {
-                // FTL 1.03.3 and earlier.
-                gameState.setDLCEnabled(false);  // Not present before FTL 1.5.4.
-            } else if (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11) {
-                // FTL 1.5.4-1.5.10, 1.5.12, 1.5.13, or 1.6.1.
-                gameState.setDLCEnabled(readBool(in));
-            } else {
-                throw new IOException(String.format("Unexpected first byte (%d) for a SAVED GAME.", fileFormat));
-            }
-
-            int diffFlag = readInt(in);
-            Difficulty diff;
-            if (diffFlag == 0) {
-                diff = Difficulty.EASY;
-            } else if (diffFlag == 1) {
-                diff = Difficulty.NORMAL;
-            } else if (diffFlag == 2 && (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11)) {
-                diff = Difficulty.HARD;
-            } else {
-                throw new IOException(String.format("Unsupported difficulty flag for saved game: %d", diffFlag));
-            }
-
-            gameState.setDifficulty(diff);
-            gameState.setTotalShipsDefeated(readInt(in));
-            gameState.setTotalBeaconsExplored(readInt(in));
-            gameState.setTotalScrapCollected(readInt(in));
-            gameState.setTotalCrewHired(readInt(in));
-
-            String playerShipName = readString(in);         // Redundant.
-            gameState.setPlayerShipName(playerShipName);
-
-            String playerShipBlueprintId = readString(in);  // Redundant.
-            gameState.setPlayerShipBlueprintId(playerShipBlueprintId);
-
-            int oneBasedSectorNumber = readInt(in);  // Redundant.
-
-            // Always 0?
-            gameState.setUnknownBeta(readInt(in));
-
-            int stateVarCount = readInt(in);
-            for (int i = 0; i < stateVarCount; i++) {
-                String stateVarId = readString(in);
-                Integer stateVarValue = readInt(in);
-                gameState.setStateVar(stateVarId, stateVarValue);
-            }
-
-            ShipState playerShipState = readShip(in, false, fileFormat, gameState.isDLCEnabled());
-            gameState.setPlayerShip(playerShipState);
-
-            // Nearby ships have no cargo, so this isn't in readShip().
-            int cargoCount = readInt(in);
-            for (int i = 0; i < cargoCount; i++) {
-                gameState.addCargoItemId(readString(in));
-            }
-
-            gameState.setSectorTreeSeed(readInt(in));
-
-            gameState.setSectorLayoutSeed(readInt(in));
-
-            gameState.setRebelFleetOffset(readInt(in));
-
-            gameState.setRebelFleetFudge(readInt(in));
-
-            gameState.setRebelPursuitMod(readInt(in));
-
-            if (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11) {
-                gameState.setCurrentBeaconId(readInt(in));
-
-                gameState.setWaiting(readBool(in));
-                gameState.setWaitEventSeed(readInt(in));
-                gameState.setUnknownEpsilon(readString(in));
-                gameState.setSectorHazardsVisible(readBool(in));
-                gameState.setRebelFlagshipVisible(readBool(in));
-                gameState.setRebelFlagshipHop(readInt(in));
-                gameState.setRebelFlagshipMoving(readBool(in));
-                gameState.setRebelFlagshipRetreating(readBool(in));
-                gameState.setRebelFlagshipBaseTurns(readInt(in));
-            } else if (fileFormat == 2) {
-                gameState.setSectorHazardsVisible(readBool(in));
-
-                gameState.setRebelFlagshipVisible(readBool(in));
-
-                gameState.setRebelFlagshipHop(readInt(in));
-
-                gameState.setRebelFlagshipMoving(readBool(in));
-            }
-
-            int sectorVisitationCount = readInt(in);
-            List<Boolean> route = new ArrayList<>();
-            for (int i = 0; i < sectorVisitationCount; i++) {
-                route.add(readBool(in));
-            }
-            gameState.setSectorVisitation(route);
-
-            int sectorNumber = readInt(in);
-            gameState.setSectorNumber(sectorNumber);
-
-            gameState.setSectorIsHiddenCrystalWorlds(readBool(in));
-
-            int beaconCount = readInt(in);
-            for (int i = 0; i < beaconCount; i++) {
-                gameState.addBeacon(readBeacon(in, fileFormat));
-            }
-
-            int questEventCount = readInt(in);
-            for (int i = 0; i < questEventCount; i++) {
-                String questEventId = readString(in);
-                int questBeaconId = readInt(in);
-                gameState.addQuestEvent(questEventId, questBeaconId);
-            }
-
-            int distantQuestEventCount = readInt(in);
-            for (int i = 0; i < distantQuestEventCount; i++) {
-                String distantQuestEventId = readString(in);
-                gameState.addDistantQuestEvent(distantQuestEventId);
-            }
-
-            if (fileFormat == 2) {
-                gameState.setCurrentBeaconId(readInt(in));
-
-                boolean shipNearby = readBool(in);
-                if (shipNearby) {
-                    ShipState nearbyShipState = readShip(in, true, fileFormat, gameState.isDLCEnabled());
-                    gameState.setNearbyShip(nearbyShipState);
-                }
-
-                RebelFlagshipState flagshipState = readRebelFlagship(in);
-                gameState.setRebelFlagshipState(flagshipState);
-            } else if (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11) {
-                // Current beaconId was set earlier.
-
-                gameState.setUnknownMu(readInt(in));
-
-                EncounterState encounter = readEncounter(in, fileFormat);
-                gameState.setEncounter(encounter);
-
-                boolean shipNearby = readBool(in);
-                if (shipNearby) {
-                    gameState.setRebelFlagshipNearby(readBool(in));
-
-                    ShipState nearbyShipState = readShip(in, true, fileFormat, gameState.isDLCEnabled());
-                    gameState.setNearbyShip(nearbyShipState);
-
-                    gameState.setNearbyShipAI(readNearbyShipAI(in));
-                }
-
-                gameState.setEnvironment(readEnvironment(in));
-
-                // Flagship state is set much later.
-
-                int projectileCount = readInt(in);
-                for (int i = 0; i < projectileCount; i++) {
-                    gameState.addProjectile(readProjectile(in, fileFormat));
-                }
-
-                readExtendedShipInfo(in, gameState.getPlayerShip(), fileFormat);
-
-                if (gameState.getNearbyShip() != null) {
-                    readExtendedShipInfo(in, gameState.getNearbyShip(), fileFormat);
-                }
-
-                gameState.setUnknownNu(readInt(in));
-
-                if (gameState.getNearbyShip() != null) {
-                    gameState.setUnknownXi(readInt(in));
-                }
-
-                gameState.setAutofire(readBool(in));
-
-                RebelFlagshipState flagship = new RebelFlagshipState();
-
-                flagship.setUnknownAlpha(readInt(in));
-                flagship.setPendingStage(readInt(in));
-                flagship.setUnknownGamma(readInt(in));
-                flagship.setUnknownDelta(readInt(in));
-
-                int flagshipOccupancyCount = readInt(in);
-                for (int i = 0; i < flagshipOccupancyCount; i++) {
-                    flagship.setPreviousOccupancy(i, readInt(in));
-                }
-
-                gameState.setRebelFlagshipState(flagship);
-            }
-
-            // The stream should end here.
-
-            int bytesRemaining = (int) (in.getChannel().size() - in.getChannel().position());
-            if (bytesRemaining > 0) {
-                gameState.addMysteryBytes(new MysteryBytes(in, bytesRemaining));
-            }
-
-            return gameState;  // The finally block will still be executed.
-        } finally {
-            // TODO remove finally block - does nothing
+        if (fileFormat == 11) {
+            gameState.setRandomNative(readBool(in));
+        } else {
+            gameState.setRandomNative(true);  // Always native before FTL 1.6.1.
         }
+
+        if (fileFormat == 2) {
+            // FTL 1.03.3 and earlier.
+            gameState.setDLCEnabled(false);  // Not present before FTL 1.5.4.
+        } else if (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11) {
+            // FTL 1.5.4-1.5.10, 1.5.12, 1.5.13, or 1.6.1.
+            gameState.setDLCEnabled(readBool(in));
+        } else {
+            throw new IOException(String.format("Unexpected first byte (%d) for a SAVED GAME.", fileFormat));
+        }
+
+        int diffFlag = readInt(in);
+        Difficulty diff;
+        if (diffFlag == 0) {
+            diff = Difficulty.EASY;
+        } else if (diffFlag == 1) {
+            diff = Difficulty.NORMAL;
+        } else if (diffFlag == 2 && (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11)) {
+            diff = Difficulty.HARD;
+        } else {
+            throw new IOException(String.format("Unsupported difficulty flag for saved game: %d", diffFlag));
+        }
+
+        gameState.setDifficulty(diff);
+        gameState.setTotalShipsDefeated(readInt(in));
+        gameState.setTotalBeaconsExplored(readInt(in));
+        gameState.setTotalScrapCollected(readInt(in));
+        gameState.setTotalCrewHired(readInt(in));
+
+        String playerShipName = readString(in);         // Redundant.
+        gameState.setPlayerShipName(playerShipName);
+
+        String playerShipBlueprintId = readString(in);  // Redundant.
+        gameState.setPlayerShipBlueprintId(playerShipBlueprintId);
+
+        int oneBasedSectorNumber = readInt(in);  // Redundant.
+
+        // Always 0?
+        gameState.setUnknownBeta(readInt(in));
+
+        int stateVarCount = readInt(in);
+        for (int i = 0; i < stateVarCount; i++) {
+            String stateVarId = readString(in);
+            Integer stateVarValue = readInt(in);
+            gameState.setStateVar(stateVarId, stateVarValue);
+        }
+
+        ShipState playerShipState = readShip(in, false, fileFormat, gameState.isDLCEnabled());
+        gameState.setPlayerShip(playerShipState);
+
+        // Nearby ships have no cargo, so this isn't in readShip().
+        int cargoCount = readInt(in);
+        for (int i = 0; i < cargoCount; i++) {
+            gameState.addCargoItemId(readString(in));
+        }
+
+        gameState.setSectorTreeSeed(readInt(in));
+
+        gameState.setSectorLayoutSeed(readInt(in));
+
+        gameState.setRebelFleetOffset(readInt(in));
+
+        gameState.setRebelFleetFudge(readInt(in));
+
+        gameState.setRebelPursuitMod(readInt(in));
+
+        if (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11) {
+            gameState.setCurrentBeaconId(readInt(in));
+
+            gameState.setWaiting(readBool(in));
+            gameState.setWaitEventSeed(readInt(in));
+            gameState.setUnknownEpsilon(readString(in));
+            gameState.setSectorHazardsVisible(readBool(in));
+            gameState.setRebelFlagshipVisible(readBool(in));
+            gameState.setRebelFlagshipHop(readInt(in));
+            gameState.setRebelFlagshipMoving(readBool(in));
+            gameState.setRebelFlagshipRetreating(readBool(in));
+            gameState.setRebelFlagshipBaseTurns(readInt(in));
+        } else if (fileFormat == 2) {
+            gameState.setSectorHazardsVisible(readBool(in));
+
+            gameState.setRebelFlagshipVisible(readBool(in));
+
+            gameState.setRebelFlagshipHop(readInt(in));
+
+            gameState.setRebelFlagshipMoving(readBool(in));
+        }
+
+        int sectorVisitationCount = readInt(in);
+        List<Boolean> route = new ArrayList<>();
+        for (int i = 0; i < sectorVisitationCount; i++) {
+            route.add(readBool(in));
+        }
+        gameState.setSectorVisitation(route);
+
+        int sectorNumber = readInt(in);
+        gameState.setSectorNumber(sectorNumber);
+
+        gameState.setSectorIsHiddenCrystalWorlds(readBool(in));
+
+        int beaconCount = readInt(in);
+        for (int i = 0; i < beaconCount; i++) {
+            gameState.addBeacon(readBeacon(in, fileFormat));
+        }
+
+        int questEventCount = readInt(in);
+        for (int i = 0; i < questEventCount; i++) {
+            String questEventId = readString(in);
+            int questBeaconId = readInt(in);
+            gameState.addQuestEvent(questEventId, questBeaconId);
+        }
+
+        int distantQuestEventCount = readInt(in);
+        for (int i = 0; i < distantQuestEventCount; i++) {
+            String distantQuestEventId = readString(in);
+            gameState.addDistantQuestEvent(distantQuestEventId);
+        }
+
+        if (fileFormat == 2) {
+            gameState.setCurrentBeaconId(readInt(in));
+
+            boolean shipNearby = readBool(in);
+            if (shipNearby) {
+                ShipState nearbyShipState = readShip(in, true, fileFormat, gameState.isDLCEnabled());
+                gameState.setNearbyShip(nearbyShipState);
+            }
+
+            RebelFlagshipState flagshipState = readRebelFlagship(in);
+            gameState.setRebelFlagshipState(flagshipState);
+        } else if (fileFormat == 7 || fileFormat == 8 || fileFormat == 9 || fileFormat == 11) {
+            // Current beaconId was set earlier.
+
+            gameState.setUnknownMu(readInt(in));
+
+            EncounterState encounter = readEncounter(in, fileFormat);
+            gameState.setEncounter(encounter);
+
+            boolean shipNearby = readBool(in);
+            if (shipNearby) {
+                gameState.setRebelFlagshipNearby(readBool(in));
+
+                ShipState nearbyShipState = readShip(in, true, fileFormat, gameState.isDLCEnabled());
+                gameState.setNearbyShip(nearbyShipState);
+
+                gameState.setNearbyShipAI(readNearbyShipAI(in));
+            }
+
+            gameState.setEnvironment(readEnvironment(in));
+
+            // Flagship state is set much later.
+
+            int projectileCount = readInt(in);
+            for (int i = 0; i < projectileCount; i++) {
+                gameState.addProjectile(readProjectile(in, fileFormat));
+            }
+
+            readExtendedShipInfo(in, gameState.getPlayerShip(), fileFormat);
+
+            if (gameState.getNearbyShip() != null) {
+                readExtendedShipInfo(in, gameState.getNearbyShip(), fileFormat);
+            }
+
+            gameState.setUnknownNu(readInt(in));
+
+            if (gameState.getNearbyShip() != null) {
+                gameState.setUnknownXi(readInt(in));
+            }
+
+            gameState.setAutofire(readBool(in));
+
+            RebelFlagshipState flagship = new RebelFlagshipState();
+
+            flagship.setUnknownAlpha(readInt(in));
+            flagship.setPendingStage(readInt(in));
+            flagship.setUnknownGamma(readInt(in));
+            flagship.setUnknownDelta(readInt(in));
+
+            int flagshipOccupancyCount = readInt(in);
+            for (int i = 0; i < flagshipOccupancyCount; i++) {
+                flagship.setPreviousOccupancy(i, readInt(in));
+            }
+
+            gameState.setRebelFlagshipState(flagship);
+        }
+
+        // The stream should end here.
+
+        int bytesRemaining = (int) (in.getChannel().size() - in.getChannel().position());
+        if (bytesRemaining > 0) {
+            gameState.addMysteryBytes(new MysteryBytes(in, bytesRemaining));
+        }
+
+        return gameState;
     }
 
     /**
@@ -1319,24 +1315,7 @@ public class SavedGameParser extends Parser {
             // current encounter's seed.
         }
 
-        int fleetPresence = readInt(in);
-        switch (fleetPresence) {
-            case 0:
-                beacon.setFleetPresence(FleetPresence.NONE);
-                break;
-            case 1:
-                beacon.setFleetPresence(FleetPresence.REBEL);
-                break;
-            case 2:
-                beacon.setFleetPresence(FleetPresence.FEDERATION);
-                break;
-            case 3:
-                beacon.setFleetPresence(FleetPresence.BOTH);
-                break;
-            default:
-                throw new RuntimeException("Unknown fleet presence: " + fleetPresence);
-        }
-
+        beacon.setFleetPresence(FleetPresence.fromInt(readInt(in)));
         beacon.setUnderAttack(readBool(in));
 
         boolean storePresent = readBool(in);
@@ -1380,12 +1359,7 @@ public class SavedGameParser extends Parser {
             writeInt(out, beacon.getShipEventSeed());
         }
 
-        FleetPresence fleetPresence = beacon.getFleetPresence();
-        if (fleetPresence == FleetPresence.NONE) writeInt(out, 0);
-        else if (fleetPresence == FleetPresence.REBEL) writeInt(out, 1);
-        else if (fleetPresence == FleetPresence.FEDERATION) writeInt(out, 2);
-        else if (fleetPresence == FleetPresence.BOTH) writeInt(out, 3);
-        else throw new RuntimeException("Unknown fleet presence: " + fleetPresence);
+        writeInt(out, beacon.getFleetPresence().toInt());
 
         writeBool(out, beacon.isUnderAttack());
 
@@ -1411,8 +1385,7 @@ public class SavedGameParser extends Parser {
                 // FTL 1.5.4+ requires at least one shelf.
                 int shelfReq = 1;
 
-                List<StoreShelf> pendingShelves = new ArrayList<StoreShelf>();
-                pendingShelves.addAll(store.getShelfList());
+                List<StoreShelf> pendingShelves = new ArrayList<>(store.getShelfList());
 
                 while (pendingShelves.size() < shelfReq) {
                     StoreShelf dummyShelf = new StoreShelf();
@@ -3487,20 +3460,6 @@ public class SavedGameParser extends Parser {
         }
     }
 
-
-    public static enum FleetPresence {
-        NONE("None"), REBEL("Rebel"), FEDERATION("Federation"), BOTH("Both");
-
-        private String title;
-
-        private FleetPresence(String title) {
-            this.title = title;
-        }
-
-        public String toString() {
-            return title;
-        }
-    }
 
     /**
      * A beacon on the sector map.
