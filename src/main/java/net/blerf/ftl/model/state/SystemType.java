@@ -51,7 +51,7 @@ public enum SystemType {
     }
 
     public static SystemType findById(String id) {
-        for (SystemType s : values()){
+        for (SystemType s : values()) {
             if (s.getId().equals(id)) return s;
         }
         return null;

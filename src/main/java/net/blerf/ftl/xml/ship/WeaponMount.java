@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter@NoArgsConstructor
+@Setter
+@NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 public class WeaponMount {
 

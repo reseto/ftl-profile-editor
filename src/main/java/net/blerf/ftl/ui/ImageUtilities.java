@@ -40,7 +40,8 @@ public class ImageUtilities {
     private static final GraphicsDevice gs = ge.getDefaultScreenDevice();
     private static final GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-    private ImageUtilities() {}
+    private ImageUtilities() {
+    }
 
     private static final Icon dummyIcon = new Icon() {
         @Override

@@ -780,7 +780,6 @@ public class SavedGameState {
      * To set this, the nearby ship must be non-null.
      * <p>
      * This was introduced in FTL 1.5.4.
-     *
      */
     public void setNearbyShipAI(SavedGameParser.NearbyShipAIState ai) {
         nearbyShipAI = ai;

@@ -151,7 +151,6 @@ public class CrewState {
      * <p>
      * FTL 1.5.12 added methods to track each level of each skill
      * individually.
-     *
      */
     private int skillMasteriesEarned = 0;
     private int stunTicks = 0;
@@ -374,7 +373,6 @@ public class CrewState {
     public void setClonebayPriority(int n) {
         clonebayPriority = n;
     }
-
 
 
     /**

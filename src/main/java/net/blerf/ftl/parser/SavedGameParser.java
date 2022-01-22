@@ -2081,10 +2081,6 @@ public class SavedGameParser extends Parser {
     }
 
 
-
-
-
-
     public static class StartingCrewState {
 
         private String name = "Frank";
