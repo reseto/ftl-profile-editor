@@ -16,7 +16,7 @@ public class RoomSprite extends JComponent implements ReferenceSprite<RoomState>
     private final Color vacuumBorderColor = new Color(255, 180, 0);
     private Color bgColor = maxColor;
 
-    private SpriteReference<RoomState> roomRef;
+    private final SpriteReference<RoomState> roomRef;
     private int roomId;
 
 

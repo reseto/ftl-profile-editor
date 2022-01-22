@@ -86,69 +86,69 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
     private StringBuilder profileHex = null;
     private StringBuilder gameStateHex = null;
 
-    private URL aboutPageURL = FTLFrame.class.getResource("about.html");
-    private URL historyTemplateMainURL = FTLFrame.class.getResource("history_template_main.html");
-    private URL historyTemplateReleaseURL = FTLFrame.class.getResource("history_template_release.html");
+    private final URL aboutPageURL = FTLFrame.class.getResource("about.html");
+    private final URL historyTemplateMainURL = FTLFrame.class.getResource("history_template_main.html");
+    private final URL historyTemplateReleaseURL = FTLFrame.class.getResource("history_template_release.html");
 
-    private String bugReportUrl = "https://github.com/Vhati/ftl-profile-editor/issues/new";
-    private String forumThreadUrl = "http://subsetgames.com/forum/viewtopic.php?f=7&t=10959";
+    private final String bugReportUrl = "https://github.com/Vhati/ftl-profile-editor/issues/new";
+    private final String forumThreadUrl = "http://subsetgames.com/forum/viewtopic.php?f=7&t=10959";
 
     private boolean disposeNormally = true;
     private boolean ranInit = false;
     private Thread.UncaughtExceptionHandler previousUncaughtExceptionHandler = null;
 
-    private List<JButton> updatesButtonList = new ArrayList<>();
+    private final List<JButton> updatesButtonList = new ArrayList<>();
     private Runnable updatesCallback;
 
-    private ImageIcon openIcon;
-    private ImageIcon saveIcon;
-    private ImageIcon unlockIcon;
-    private ImageIcon aboutIcon;
+    private final ImageIcon openIcon;
+    private final ImageIcon saveIcon;
+    private final ImageIcon unlockIcon;
+    private final ImageIcon aboutIcon;
     private final ImageIcon updateIcon;
 
-    private String bugReportInstructions;
+    private final String bugReportInstructions;
 
-    private File stockProfileFile;
-    private Profile stockProfile;
+    private final File stockProfileFile;
+    private final Profile stockProfile;
 
     private JFileChooser profileChooser;
     private JButton profileOpenBtn;
     private JButton profileSaveBtn;
     private JButton profileDumpBtn;
 
-    private JTabbedPane profileTabsPane;
-    private ProfileShipUnlockPanel profileShipUnlockPanel;
-    private ProfileGeneralAchievementsPanel profileGeneralAchsPanel;
-    private ProfileGeneralStatsPanel profileGeneralStatsPanel;
-    private ProfileShipStatsPanel profileShipStatsPanel;
-    private DumpPanel profileDumpPanel;
+    private final JTabbedPane profileTabsPane;
+    private final ProfileShipUnlockPanel profileShipUnlockPanel;
+    private final ProfileGeneralAchievementsPanel profileGeneralAchsPanel;
+    private final ProfileGeneralStatsPanel profileGeneralStatsPanel;
+    private final ProfileShipStatsPanel profileShipStatsPanel;
+    private final DumpPanel profileDumpPanel;
 
-    private JScrollPane profileShipUnlockScroll;
-    private JScrollPane profileGeneralAchsScroll;
-    private JScrollPane profileGeneralStatsScroll;
-    private JScrollPane profileShipStatsScroll;
+    private final JScrollPane profileShipUnlockScroll;
+    private final JScrollPane profileGeneralAchsScroll;
+    private final JScrollPane profileGeneralStatsScroll;
+    private final JScrollPane profileShipStatsScroll;
 
     private JFileChooser gameStateChooser;
     private JButton gameStateOpenBtn;
     private JButton gameStateSaveBtn;
     private JButton gameStateDumpBtn;
 
-    private JTabbedPane savedGameTabsPane;
-    private DumpPanel savedGameDumpPanel;
-    private SavedGameGeneralPanel savedGameGeneralPanel;
-    private SavedGameFloorplanPanel savedGameFloorplanPanel;
-    private SavedGameHangarPanel savedGameHangarPanel;
-    private SavedGameSectorMapPanel savedGameSectorMapPanel;
-    private SavedGameSectorTreePanel savedGameSectorTreePanel;
-    private SavedGameStateVarsPanel savedGameStateVarsPanel;
+    private final JTabbedPane savedGameTabsPane;
+    private final DumpPanel savedGameDumpPanel;
+    private final SavedGameGeneralPanel savedGameGeneralPanel;
+    private final SavedGameFloorplanPanel savedGameFloorplanPanel;
+    private final SavedGameHangarPanel savedGameHangarPanel;
+    private final SavedGameSectorMapPanel savedGameSectorMapPanel;
+    private final SavedGameSectorTreePanel savedGameSectorTreePanel;
+    private final SavedGameStateVarsPanel savedGameStateVarsPanel;
 
-    private JScrollPane savedGameGeneralScroll;
-    private JScrollPane savedGameSectorTreeScroll;
+    private final JScrollPane savedGameGeneralScroll;
+    private final JScrollPane savedGameSectorTreeScroll;
 
-    private JLabel statusLbl;
+    private final JLabel statusLbl;
     private final HyperlinkListener linkListener;
 
-    private EditorConfig appConfig;
+    private final EditorConfig appConfig;
     private final String appName;
     private final int appVersion;
 
@@ -381,8 +381,7 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
             public boolean accept(File f) {
                 if (f.isDirectory()) return true;
                 if (f.getName().equalsIgnoreCase("ae_prof.sav")) return true;
-                if (f.getName().equalsIgnoreCase("prof.sav")) return true;
-                return false;
+                return f.getName().equalsIgnoreCase("prof.sav");
             }
         });
 

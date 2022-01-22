@@ -8,7 +8,7 @@ import javax.swing.JViewport;
 
 
 public class StatusViewport extends JViewport {
-    private Color statusBgColor = new Color(212, 208, 200);
+    private final Color statusBgColor = new Color(212, 208, 200);
     private String statusString = null;
 
     public void setStatusString(String s) {

@@ -17,9 +17,9 @@ import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
 import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.SectorDescription;
-import net.blerf.ftl.xml.ship.ShipEvent;
 import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.WeaponBlueprint;
+import net.blerf.ftl.xml.ship.ShipEvent;
 
 
 /**
@@ -28,14 +28,14 @@ import net.blerf.ftl.xml.WeaponBlueprint;
 @Slf4j
 public final class RandomEvent {
 
-    private static boolean fast = true;
+    private static final boolean fast = true;
 
     private static String sectorId = "STANDARD_SPACE";
     private static int sectorNumber = 0; // between 0 and 7
     private static Difficulty difficulty = Difficulty.EASY; // between 0 and 2
     private static boolean dlcEnabled = true;
 
-    private static Set<String> uniqueSectors = new HashSet<String>();
+    private static final Set<String> uniqueSectors = new HashSet<String>();
 
     private static Set<Integer> uniqueCrewNames = null;
 
@@ -261,8 +261,8 @@ public final class RandomEvent {
 
                 /* 0x4a3d3d */
                 /* Pick an amount to raise skills */
-                int skillMins[] = {0, 0, 0, 0, 1, 1, 1, 2, 0};
-                int skillMaxs[] = {0, 0, 1, 2, 2, 2, 3, 3, 0};
+                int[] skillMins = {0, 0, 0, 0, 1, 1, 1, 2, 0};
+                int[] skillMaxs = {0, 0, 1, 2, 2, 2, 3, 3, 0};
 
                 int skillMin = skillMins[sectorNumber];
                 int skillMax = skillMaxs[sectorNumber];
@@ -343,7 +343,7 @@ public final class RandomEvent {
                  */
                 rewardLevel = rng.rand() % 3;
 
-            String resources[] = {"fuel", "missiles", "droneparts"};
+            String[] resources = {"fuel", "missiles", "droneparts"};
 
             boolean extraItem = false;
 
@@ -507,17 +507,17 @@ public final class RandomEvent {
      */
     private static int autoRewardQuantity(RandRNG rng, String resource, int reward_level, int sector_level) {
 
-        final float scrap_min[] = {0.5f, 0.8f, 1.3f};
-        final float scrap_max[] = {0.7f, 1.3f, 1.55f};
+        final float[] scrap_min = {0.5f, 0.8f, 1.3f};
+        final float[] scrap_max = {0.7f, 1.3f, 1.55f};
 
-        final int fuel_min[] = {1, 2, 3};
-        final int fuel_max[] = {3, 4, 6};
+        final int[] fuel_min = {1, 2, 3};
+        final int[] fuel_max = {3, 4, 6};
 
-        final int missiles_min[] = {1, 2, 4};
-        final int missiles_max[] = {2, 4, 8};
+        final int[] missiles_min = {1, 2, 4};
+        final int[] missiles_max = {2, 4, 8};
 
-        final int droneparts_min[] = {1, 1, 1};
-        final int droneparts_max[] = {1, 1, 2};
+        final int[] droneparts_min = {1, 1, 1};
+        final int[] droneparts_max = {1, 1, 2};
 
         if (resource.equals("scrap")) {
             float min = scrap_min[reward_level];
@@ -555,7 +555,7 @@ public final class RandomEvent {
         public int rarityChildren = 0;
     }
 
-    private static List<ItemRarity> crewRarities = new ArrayList<ItemRarity>();
+    private static final List<ItemRarity> crewRarities = new ArrayList<ItemRarity>();
 
     /**
      * Pick a random weapon, accounting for rarity
@@ -610,7 +610,7 @@ public final class RandomEvent {
     }
 
 
-    private static List<ItemRarity> weaponRarities = new ArrayList<ItemRarity>();
+    private static final List<ItemRarity> weaponRarities = new ArrayList<ItemRarity>();
 
     /**
      * Pick a random weapon, accounting for rarity
@@ -664,7 +664,7 @@ public final class RandomEvent {
     }
 
 
-    private static List<ItemRarity> augRarities = new ArrayList<ItemRarity>();
+    private static final List<ItemRarity> augRarities = new ArrayList<ItemRarity>();
 
     /**
      * Pick a random augment, accounting for rarity
@@ -717,7 +717,7 @@ public final class RandomEvent {
         return augs.get(id);
     }
 
-    private static List<ItemRarity> droneRarities = new ArrayList<ItemRarity>();
+    private static final List<ItemRarity> droneRarities = new ArrayList<ItemRarity>();
 
     /**
      * Pick a random drone, accounting for rarity

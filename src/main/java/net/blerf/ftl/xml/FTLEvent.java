@@ -70,7 +70,7 @@ public class FTLEvent implements Cloneable {
         public String reward;
 
         public int scrap = 0;
-        public int resources[] = {0, 0, 0};
+        public int[] resources = {0, 0, 0};
         public String weapon = null;
         public String augment = null;
         public String drone = null;

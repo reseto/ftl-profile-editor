@@ -12,8 +12,6 @@ import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.random.RandRNG;
 import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.SectorDescription;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

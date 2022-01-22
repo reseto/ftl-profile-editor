@@ -22,7 +22,7 @@ import net.blerf.ftl.xml.ship.ShipBlueprint;
 
 public class SavedGameHangarPanel extends JPanel {
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
     private JComboBox shipCombo = null;
     private JButton createShipBtn = null;
     private JComboBox autoCombo = null;

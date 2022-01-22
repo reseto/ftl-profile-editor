@@ -262,10 +262,10 @@ public class RandomSectorTreeGenerator {
 
 
     protected static class Sector {
-        private boolean unique;
+        private final boolean unique;
         private int min;
-        private String id;
-        private List<String> titleList;
+        private final String id;
+        private final List<String> titleList;
 
         public Sector(boolean unique, int min, String id, List<String> titleList) {
             this.unique = unique;

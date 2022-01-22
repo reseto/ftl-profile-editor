@@ -28,7 +28,7 @@ public class SeedSearch {
     boolean dlcEnabled = true;
     Difficulty difficulty = Difficulty.HARD;
 
-    private static Set<Integer> uniqueCrewNames = new HashSet<Integer>();
+    private static final Set<Integer> uniqueCrewNames = new HashSet<Integer>();
 
     RandomShipLayout ship = new RandomShipLayout("kestral", uniqueCrewNames); // TODO maybe kestrel?
 

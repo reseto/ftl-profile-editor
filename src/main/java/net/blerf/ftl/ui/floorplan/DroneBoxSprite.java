@@ -12,11 +12,12 @@ import net.blerf.ftl.ui.SpriteReference;
 
 public class DroneBoxSprite extends JComponent implements ReferenceSprite<DroneState> {
 
-    private int preferredW = 45, preferredH = 45;
+    private final int preferredW = 45;
+    private final int preferredH = 45;
 
-    private SpriteReference<DroneState> droneRef;
+    private final SpriteReference<DroneState> droneRef;
     private int slot;
-    private String slotString;
+    private final String slotString;
 
 
     public DroneBoxSprite(SpriteReference<DroneState> droneRef, int slot) {

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class SpriteReference<T> {
 
-    private List<ReferenceSprite<T>> spriteList = new ArrayList<ReferenceSprite<T>>(1);
+    private final List<ReferenceSprite<T>> spriteList = new ArrayList<ReferenceSprite<T>>(1);
     private T referent;
 
 

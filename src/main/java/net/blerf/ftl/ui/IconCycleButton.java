@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
  */
 public class IconCycleButton extends JButton implements ActionListener {
 
-    private Icon[] icons;
+    private final Icon[] icons;
     private int state = 0;
     private boolean disabled;
 

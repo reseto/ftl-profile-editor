@@ -2024,7 +2024,7 @@ public class SavedGameParser extends Parser {
      * <p>
      * FTL 1.5.4 introduced HIGH_O2 and SUFFOCATED_CREW.
      */
-    public static enum StateVar {
+    public enum StateVar {
         // TODO: Magic strings.
         BLUE_ALIEN("blue_alien", "Blue event choices clicked. (Only ones that require a race.)"),
         DEAD_CREW("dead_crew", "Ships defeated by killing all enemy crew."),
@@ -2046,10 +2046,10 @@ public class SavedGameParser extends Parser {
         USED_MISSILE("used_missile", "Missile/bomb weapon discharges. (See also: fired_shot)"),
         WEAPON_UPGRADE("weapon_upgrade", "Weapons system upgrades beyond the ship's default levels. (See also: system_upgrade)");
 
-        private String id;
-        private String description;
+        private final String id;
+        private final String description;
 
-        private StateVar(String id, String description) {
+        StateVar(String id, String description) {
             this.id = id;
             this.description = description;
         }
@@ -2117,7 +2117,7 @@ public class SavedGameParser extends Parser {
 
 
     public static class SystemState {
-        private SystemType systemType;
+        private final SystemType systemType;
         private int capacity = 0;
         private int power = 0;
         private int damagedBars = 0;
@@ -2564,11 +2564,11 @@ public class SavedGameParser extends Parser {
     /**
      * The direction crew will face when standing at a system room's terminal.
      */
-    public static enum StationDirection {DOWN, RIGHT, UP, LEFT, NONE}
+    public enum StationDirection {DOWN, RIGHT, UP, LEFT, NONE}
 
     public static class RoomState {
         private int oxygen = 100;
-        private List<SquareState> squareList = new ArrayList<SquareState>();
+        private final List<SquareState> squareList = new ArrayList<SquareState>();
         private int stationSquare = -1;
         private StationDirection stationDirection = StationDirection.NONE;
 
@@ -3213,7 +3213,7 @@ public class SavedGameParser extends Parser {
      * <p>
      * FTL 1.5.4 introduced HACKING, BEAM, and SHIELD.
      */
-    public static enum DroneType {
+    public enum DroneType {
         // TODO: Magic numbers.
         BATTLE("BATTLE", 150),
         REPAIR("REPAIR", 25),
@@ -3225,10 +3225,10 @@ public class SavedGameParser extends Parser {
         SHIELD("SHIELD", 1),
         SHIP_REPAIR("SHIP_REPAIR", 1);
 
-        private String id;
-        private int maxHealth;
+        private final String id;
+        private final int maxHealth;
 
-        private DroneType(String id, int maxHealth) {
+        DroneType(String id, int maxHealth) {
             this.id = id;
             this.maxHealth = maxHealth;
         }
@@ -3835,13 +3835,13 @@ public class SavedGameParser extends Parser {
         }
     }
 
-    public static enum StoreItemType {
+    public enum StoreItemType {
         WEAPON("Weapon"), DRONE("Drone"), AUGMENT("Augment"),
         CREW("Crew"), SYSTEM("System");
 
-        private String title;
+        private final String title;
 
-        private StoreItemType(String title) {
+        StoreItemType(String title) {
             this.title = title;
         }
 
@@ -3852,7 +3852,7 @@ public class SavedGameParser extends Parser {
 
     public static class StoreShelf {
         private StoreItemType itemType = StoreItemType.WEAPON;
-        private List<StoreItem> items = new ArrayList<StoreItem>(3);  // TODO: Magic number.
+        private final List<StoreItem> items = new ArrayList<StoreItem>(3);  // TODO: Magic number.
 
 
         /**
@@ -4618,7 +4618,7 @@ public class SavedGameParser extends Parser {
         private int pendingStage = 1;
         private int unknownGamma = 30000;
         private int unknownDelta = 0;
-        private Map<Integer, Integer> occupancyMap = new LinkedHashMap<Integer, Integer>();
+        private final Map<Integer, Integer> occupancyMap = new LinkedHashMap<Integer, Integer>();
 
 
         /**
@@ -5855,7 +5855,7 @@ public class SavedGameParser extends Parser {
     }
 
 
-    public static enum ProjectileType {
+    public enum ProjectileType {
         BEAM, BOMB, LASER_OR_BURST, MISSILE, ROCK_OR_EXPLOSION, PDS, INVALID
     }
 
@@ -5865,7 +5865,7 @@ public class SavedGameParser extends Parser {
      * <p>
      * OwnerId (-1, 0, 1)
      */
-    public static enum Affiliation {
+    public enum Affiliation {
         OTHER, PLAYER_SHIP, NEARBY_SHIP
     }
 
@@ -6693,7 +6693,7 @@ public class SavedGameParser extends Parser {
     }
 
     public static class IntegerProjectileInfo extends ExtendedProjectileInfo {
-        private int[] unknownAlpha;
+        private final int[] unknownAlpha;
 
         /**
          * Constructs an incomplete IntegerProjectileInfo.

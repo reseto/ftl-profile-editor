@@ -51,6 +51,7 @@ import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
 import net.blerf.ftl.model.XYPair;
+import net.blerf.ftl.model.pod.BoarderDronePodInfo;
 import net.blerf.ftl.model.shiplayout.DoorCoordinate;
 import net.blerf.ftl.model.shiplayout.RoomAndSquare;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
@@ -59,8 +60,8 @@ import net.blerf.ftl.model.state.CrewState;
 import net.blerf.ftl.model.state.CrewType;
 import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.model.state.ShipState;
+import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.model.pod.BoarderDronePodInfo;
 import net.blerf.ftl.parser.SavedGameParser.DoorState;
 import net.blerf.ftl.parser.SavedGameParser.DronePodState;
 import net.blerf.ftl.parser.SavedGameParser.DroneState;
@@ -71,7 +72,6 @@ import net.blerf.ftl.parser.SavedGameParser.RoomState;
 import net.blerf.ftl.parser.SavedGameParser.SquareState;
 import net.blerf.ftl.parser.SavedGameParser.StationDirection;
 import net.blerf.ftl.parser.SavedGameParser.SystemState;
-import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.parser.SavedGameParser.WeaponState;
 import net.blerf.ftl.ui.floorplan.AnimAtlas;
 import net.blerf.ftl.ui.floorplan.BreachSprite;
@@ -98,11 +98,11 @@ import net.blerf.ftl.ui.hud.StatusViewport;
 import net.blerf.ftl.xml.AugBlueprint;
 import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.Offset;
+import net.blerf.ftl.xml.SystemBlueprint;
+import net.blerf.ftl.xml.WeaponBlueprint;
 import net.blerf.ftl.xml.ship.RoomSlot;
 import net.blerf.ftl.xml.ship.ShipBlueprint;
 import net.blerf.ftl.xml.ship.ShipChassis;
-import net.blerf.ftl.xml.SystemBlueprint;
-import net.blerf.ftl.xml.WeaponBlueprint;
 import net.blerf.ftl.xml.ship.SystemRoom;
 import net.blerf.ftl.xml.ship.WeaponMount;
 
@@ -133,19 +133,19 @@ public class SavedGameFloorplanPanel extends JPanel {
     private static final int squareSize = 35;
     private static final int tileEdge = 1;
 
-    private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    private GraphicsDevice gs = ge.getDefaultScreenDevice();
-    private GraphicsConfiguration gc = gs.getDefaultConfiguration();
+    private final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    private final GraphicsDevice gs = ge.getDefaultScreenDevice();
+    private final GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
     private FTLConstants ftlConstants = new OriginalFTLConstants();
-    private List<ShipBundle> shipBundles = new ArrayList(2);
+    private final List<ShipBundle> shipBundles = new ArrayList(2);
     private ShipBundle playerBundle = null;
     private ShipBundle nearbyBundle = null;
 
-    private DefaultSpriteImageProvider spriteImageProvider = new DefaultSpriteImageProvider();
-    private Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
+    private final DefaultSpriteImageProvider spriteImageProvider = new DefaultSpriteImageProvider();
+    private final Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
 
     private JLayeredPane shipPanel = null;
     private StatusViewport shipViewport = null;
@@ -1335,8 +1335,7 @@ public class SavedGameFloorplanPanel extends JPanel {
             @Override
             public boolean isSpriteValid(SpriteSelector spriteSelector, JComponent sprite) {
                 if (sprite == null || !sprite.isVisible()) return false;
-                if (sprite instanceof SystemRoomSprite) return true;
-                return false;
+                return sprite instanceof SystemRoomSprite;
             }
         });
         miscSelector.setCallback(new SpriteSelectionCallback() {
@@ -1380,8 +1379,7 @@ public class SavedGameFloorplanPanel extends JPanel {
             @Override
             public boolean isSpriteValid(SpriteSelector spriteSelector, JComponent sprite) {
                 if (sprite == null || !sprite.isVisible()) return false;
-                if (sprite instanceof CrewSprite) return true;
-                return false;
+                return sprite instanceof CrewSprite;
             }
         });
         miscSelector.setCallback(new SpriteSelectionCallback() {
@@ -1680,8 +1678,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 
             @Override
             public boolean isSquareValid(SquareSelector squareSelector, FloorplanCoord squareCoord) {
-                if (squareCoord == null) return false;
-                return true;
+                return squareCoord != null;
             }
         });
         squareSelector.setCallback(new SquareSelectionCallback<FloorplanCoord>() {
@@ -1715,8 +1712,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 
             @Override
             public boolean isSquareValid(SquareSelector squareSelector, FloorplanCoord squareCoord) {
-                if (squareCoord == null) return false;
-                return true;
+                return squareCoord != null;
             }
         });
         squareSelector.setCallback(new SquareSelectionCallback<FloorplanCoord>() {
@@ -2539,11 +2535,11 @@ public class SavedGameFloorplanPanel extends JPanel {
         createSidePanel(title, editorPanel, applyCallback);
 
         ActionListener droneListener = new ActionListener() {
-            private JSlider availablePowerSlider = editorPanel.getSlider(AVAILABLE_POWER);
-            private JComboBox idCombo = editorPanel.getCombo(ID);
-            private JCheckBox armedCheck = editorPanel.getBoolean(ARMED);
-            private JCheckBox playerControlledCheck = editorPanel.getBoolean(PLAYER_CONTROLLED);
-            private JSlider healthSlider = editorPanel.getSlider(HEALTH);
+            private final JSlider availablePowerSlider = editorPanel.getSlider(AVAILABLE_POWER);
+            private final JComboBox idCombo = editorPanel.getCombo(ID);
+            private final JCheckBox armedCheck = editorPanel.getBoolean(ARMED);
+            private final JCheckBox playerControlledCheck = editorPanel.getBoolean(PLAYER_CONTROLLED);
+            private final JSlider healthSlider = editorPanel.getSlider(HEALTH);
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2756,10 +2752,10 @@ public class SavedGameFloorplanPanel extends JPanel {
         createSidePanel(title, editorPanel, applyCallback);
 
         ActionListener weaponListener = new ActionListener() {
-            private JSlider availablePowerSlider = editorPanel.getSlider(AVAILABLE_POWER);
-            private JComboBox idCombo = editorPanel.getCombo(ID);
-            private JCheckBox armedCheck = editorPanel.getBoolean(ARMED);
-            private JSlider cooldownSlider = editorPanel.getSlider(COOLDOWN_TICKS);
+            private final JSlider availablePowerSlider = editorPanel.getSlider(AVAILABLE_POWER);
+            private final JComboBox idCombo = editorPanel.getCombo(ID);
+            private final JCheckBox armedCheck = editorPanel.getBoolean(ARMED);
+            private final JSlider cooldownSlider = editorPanel.getSlider(COOLDOWN_TICKS);
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2992,14 +2988,14 @@ public class SavedGameFloorplanPanel extends JPanel {
         }
 
         ChangeListener barListener = new ChangeListener() {
-            private JSlider reserveCapacitySlider = editorPanel.getSlider(RESERVE_CAPACITY);
-            private JSlider reservePowerSlider = editorPanel.getSlider(RESERVE_POWER);
-            private JSlider capacitySlider = editorPanel.getSlider(CAPACITY);
-            private JSlider powerSlider = editorPanel.getSlider(POWER);
-            private JSlider batterySlider = editorPanel.getSlider(BATTERY);
-            private JSlider damagedBarsSlider = editorPanel.getSlider(DAMAGED_BARS);
-            private JSlider repairProgressSlider = editorPanel.getSlider(REPAIR_PROGRESS);
-            private JSlider damageProgressSlider = editorPanel.getSlider(DAMAGE_PROGRESS);
+            private final JSlider reserveCapacitySlider = editorPanel.getSlider(RESERVE_CAPACITY);
+            private final JSlider reservePowerSlider = editorPanel.getSlider(RESERVE_POWER);
+            private final JSlider capacitySlider = editorPanel.getSlider(CAPACITY);
+            private final JSlider powerSlider = editorPanel.getSlider(POWER);
+            private final JSlider batterySlider = editorPanel.getSlider(BATTERY);
+            private final JSlider damagedBarsSlider = editorPanel.getSlider(DAMAGED_BARS);
+            private final JSlider repairProgressSlider = editorPanel.getSlider(REPAIR_PROGRESS);
+            private final JSlider damageProgressSlider = editorPanel.getSlider(DAMAGE_PROGRESS);
             private boolean ignoreChanges = false;
             // Avoid getValueIsAdjusting() checks, which can fail on brief drags.
 
@@ -3559,8 +3555,8 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.getInt(OMEGA).addMouseListener(new StatusbarMouseListener(frame, "Unknown (Crystal only)."));
 
         ActionListener crewListener = new ActionListener() {
-            private JComboBox raceCombo = editorPanel.getCombo(RACE);
-            private JTextField healthField = editorPanel.getInt(HEALTH);
+            private final JComboBox raceCombo = editorPanel.getCombo(RACE);
+            private final JTextField healthField = editorPanel.getInt(HEALTH);
 
             @Override
             public void actionPerformed(ActionEvent e) {

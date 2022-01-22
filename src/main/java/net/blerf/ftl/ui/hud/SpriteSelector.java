@@ -20,15 +20,15 @@ import javax.swing.SwingUtilities;
  */
 public class SpriteSelector extends JComponent {
 
-    private SpriteCriteria defaultCriteria = new SpriteCriteria();
+    private final SpriteCriteria defaultCriteria = new SpriteCriteria();
 
-    private ArrayList<List<? extends JComponent>> spriteLists = new ArrayList<List<? extends JComponent>>();
+    private final ArrayList<List<? extends JComponent>> spriteLists = new ArrayList<List<? extends JComponent>>();
     private SpriteCriteria spriteCriteria = defaultCriteria;
     private SpriteSelectionCallback callback = null;
-    private Point mousePoint = new Point(-1, -1);
+    private final Point mousePoint = new Point(-1, -1);
     private JComponent currentSprite = null;
     private boolean paintDescription = false;
-    private Color descriptionBgColor = new Color(212, 208, 200);
+    private final Color descriptionBgColor = new Color(212, 208, 200);
 
 
     public SpriteSelector() {
@@ -182,8 +182,7 @@ public class SpriteSelector extends JComponent {
          * Returns true if a square can be selected, false otherwise.
          */
         public boolean isSpriteValid(SpriteSelector spriteSelector, JComponent sprite) {
-            if (sprite == null || !sprite.isVisible()) return false;
-            return true;
+            return sprite != null && sprite.isVisible();
         }
     }
 

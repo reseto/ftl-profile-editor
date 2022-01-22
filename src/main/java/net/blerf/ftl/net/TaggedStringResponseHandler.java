@@ -22,7 +22,7 @@ import org.apache.http.util.EntityUtils;
 public class TaggedStringResponseHandler implements ResponseHandler<TaggedString> {
 
     @Override
-    public TaggedString handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+    public TaggedString handleResponse(HttpResponse response) throws IOException {
 
         int status = response.getStatusLine().getStatusCode();
         if (status >= 200 && status < 300) {

@@ -83,7 +83,7 @@ public class SavedGameGeneralPanel extends JPanel {
     private static final String ENC_CHOICES = "Last Event Choices";
     private static final String WARN_INVALID_INPUTS = "please provide valid number inputs";
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
     private FieldEditorPanel sessionPanel = null;
     private FieldEditorPanel cargoPanel = null;

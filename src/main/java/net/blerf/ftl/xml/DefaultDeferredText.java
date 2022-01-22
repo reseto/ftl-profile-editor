@@ -11,10 +11,10 @@ import javax.xml.bind.annotation.XmlValue;
 public class DefaultDeferredText implements DeferredText {
 
     @XmlValue
-    private String ownText;
+    private final String ownText;
 
     @XmlAttribute(name = "id")
-    private String textId = null;
+    private final String textId = null;
 
     @XmlTransient
     private String resolvedText = null;

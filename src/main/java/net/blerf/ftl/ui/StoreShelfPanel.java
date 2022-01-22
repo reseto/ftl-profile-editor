@@ -14,11 +14,11 @@ import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.model.state.CrewType;
+import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser.StoreItem;
 import net.blerf.ftl.parser.SavedGameParser.StoreItemType;
 import net.blerf.ftl.parser.SavedGameParser.StoreShelf;
-import net.blerf.ftl.model.state.SystemType;
 
 @Slf4j
 public class StoreShelfPanel extends JPanel implements ActionListener {
@@ -38,12 +38,12 @@ public class StoreShelfPanel extends JPanel implements ActionListener {
     private static final String[] AVAIL = new String[]{AVAIL_ZERO, AVAIL_ONE, AVAIL_TWO};
     private static final String[] EXTRA = new String[]{EXTRA_ZERO, EXTRA_ONE, EXTRA_TWO};
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
-    private StoreItemType[] itemTypes = StoreItemType.values();
-    private Map<StoreItemType, Map<String, ?>> itemLookups = new HashMap<>();
+    private final StoreItemType[] itemTypes = StoreItemType.values();
+    private final Map<StoreItemType, Map<String, ?>> itemLookups = new HashMap<>();
 
-    private FieldEditorPanel editorPanel;
+    private final FieldEditorPanel editorPanel;
     private boolean ignoreChanges = false;
 
     private FTLConstants ftlConstants;

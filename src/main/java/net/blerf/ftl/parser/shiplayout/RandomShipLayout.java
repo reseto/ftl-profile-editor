@@ -9,7 +9,6 @@ import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.random.RandRNG;
-import net.blerf.ftl.parser.shiplayout.RandomShipLayout.RoomSquare;
 
 /**
  * A generator of ship layout.
@@ -26,7 +25,7 @@ public class RandomShipLayout {
 
     ShipLayout shipLayout = null;
     List<RoomSquare> roomSquares = new ArrayList<RoomSquare>();
-    boolean squarePairs[];
+    boolean[] squarePairs;
 
     public RandomShipLayout(String shipLayoutId, Set<Integer> un) {
         uniqueCrewNames = un;
@@ -200,14 +199,11 @@ public class RandomShipLayout {
         if ((square1.x == square2.x) && (square1.x == square3.x)) {
             if ((square1.y < square3.y) && (square3.y < square2.y))
                 return true;
-            if ((square2.y < square3.y) && (square3.y < square1.y))
-                return true;
-            return false;
+            return (square2.y < square3.y) && (square3.y < square1.y);
         } else if ((square1.y == square2.y) && (square1.y == square3.y)) {
             if ((square1.x < square3.x) && (square3.x < square2.x))
                 return true;
-            if ((square2.x < square3.x) && (square3.x < square1.x))
-                return true;
+            return (square2.x < square3.x) && (square3.x < square1.x);
         }
 
         return false;

@@ -33,13 +33,13 @@ import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.SectorData;
 import net.blerf.ftl.xml.SectorDescription;
 import net.blerf.ftl.xml.SectorType;
-import net.blerf.ftl.xml.ship.ShipBlueprint;
-import net.blerf.ftl.xml.ship.ShipChassis;
-import net.blerf.ftl.xml.ship.ShipEvent;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.WeaponAnim;
 import net.blerf.ftl.xml.WeaponBlueprint;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipChassis;
+import net.blerf.ftl.xml.ship.ShipEvent;
 import net.vhati.ftldat.AbstractPack;
 import net.vhati.ftldat.FTLPack;
 import net.vhati.ftldat.FolderPack;
@@ -50,78 +50,78 @@ import org.jdom2.JDOMException;
 @Slf4j
 public class DefaultDataManager extends DataManager {
 
-    private List<String> stdPlayerShipBaseIds;
-    private List<String> dlcPlayerShipBaseIds;
-    private List<String> stdPlayerShipIds;
-    private List<String> dlcPlayerShipIds;
+    private final List<String> stdPlayerShipBaseIds;
+    private final List<String> dlcPlayerShipBaseIds;
+    private final List<String> stdPlayerShipIds;
+    private final List<String> dlcPlayerShipIds;
 
-    private Map<String, String> textLookupMap;
+    private final Map<String, String> textLookupMap;
 
-    private Map<String, Blueprints> stdBlueprintsFileMap;
-    private Map<String, Blueprints> dlcBlueprintsFileMap;
+    private final Map<String, Blueprints> stdBlueprintsFileMap;
+    private final Map<String, Blueprints> dlcBlueprintsFileMap;
 
-    private Map<String, Encounters> stdEventsFileMap;
-    private Map<String, Encounters> dlcEventsFileMap;
+    private final Map<String, Encounters> stdEventsFileMap;
+    private final Map<String, Encounters> dlcEventsFileMap;
 
-    private Map<String, FTLEvent> stdEventIdMap;
-    private Map<String, FTLEvent> dlcEventIdMap;
+    private final Map<String, FTLEvent> stdEventIdMap;
+    private final Map<String, FTLEvent> dlcEventIdMap;
 
-    private Map<String, FTLEventList> stdEventListIdMap;
-    private Map<String, FTLEventList> dlcEventListIdMap;
+    private final Map<String, FTLEventList> stdEventListIdMap;
+    private final Map<String, FTLEventList> dlcEventListIdMap;
 
-    private Map<String, TextList> stdTextListIdMap;
-    private Map<String, TextList> dlcTextListIdMap;
+    private final Map<String, TextList> stdTextListIdMap;
+    private final Map<String, TextList> dlcTextListIdMap;
 
-    private Map<String, AugBlueprint> stdAugmentIdMap;
-    private Map<String, AugBlueprint> dlcAugmentIdMap;
+    private final Map<String, AugBlueprint> stdAugmentIdMap;
+    private final Map<String, AugBlueprint> dlcAugmentIdMap;
 
-    private Map<String, CrewBlueprint> stdCrewIdMap;
-    private Map<String, CrewBlueprint> dlcCrewIdMap;
+    private final Map<String, CrewBlueprint> stdCrewIdMap;
+    private final Map<String, CrewBlueprint> dlcCrewIdMap;
 
-    private Map<String, DroneBlueprint> stdDroneIdMap;
-    private Map<String, DroneBlueprint> dlcDroneIdMap;
+    private final Map<String, DroneBlueprint> stdDroneIdMap;
+    private final Map<String, DroneBlueprint> dlcDroneIdMap;
 
-    private Map<String, SystemBlueprint> stdSystemIdMap;
-    private Map<String, SystemBlueprint> dlcSystemIdMap;
+    private final Map<String, SystemBlueprint> stdSystemIdMap;
+    private final Map<String, SystemBlueprint> dlcSystemIdMap;
 
-    private Map<String, WeaponBlueprint> stdWeaponIdMap;
-    private Map<String, WeaponBlueprint> dlcWeaponIdMap;
+    private final Map<String, WeaponBlueprint> stdWeaponIdMap;
+    private final Map<String, WeaponBlueprint> dlcWeaponIdMap;
 
-    private Map<String, ShipBlueprint> stdShipIdMap;
-    private Map<String, ShipBlueprint> dlcShipIdMap;
+    private final Map<String, ShipBlueprint> stdShipIdMap;
+    private final Map<String, ShipBlueprint> dlcShipIdMap;
 
-    private Map<String, List<ShipBlueprint>> stdPlayerShipVariantsMap;
-    private Map<String, List<ShipBlueprint>> dlcPlayerShipVariantsMap;
-    private Map<String, ShipBlueprint> stdPlayerShipIdMap;
-    private Map<String, ShipBlueprint> dlcPlayerShipIdMap;
-    private Map<String, ShipBlueprint> stdAutoShipIdMap;
-    private Map<String, ShipBlueprint> dlcAutoShipIdMap;
+    private final Map<String, List<ShipBlueprint>> stdPlayerShipVariantsMap;
+    private final Map<String, List<ShipBlueprint>> dlcPlayerShipVariantsMap;
+    private final Map<String, ShipBlueprint> stdPlayerShipIdMap;
+    private final Map<String, ShipBlueprint> dlcPlayerShipIdMap;
+    private final Map<String, ShipBlueprint> stdAutoShipIdMap;
+    private final Map<String, ShipBlueprint> dlcAutoShipIdMap;
 
-    private Map<String, ShipEvent> stdShipEventIdMap;
-    private Map<String, ShipEvent> dlcShipEventIdMap;
+    private final Map<String, ShipEvent> stdShipEventIdMap;
+    private final Map<String, ShipEvent> dlcShipEventIdMap;
 
-    private Map<String, Achievement> achievementIdMap;
-    private Map<ShipBlueprint, List<Achievement>> stdShipAchievementIdMap;
-    private Map<ShipBlueprint, List<Achievement>> dlcShipAchievementIdMap;
-    private List<Achievement> generalAchievements;
+    private final Map<String, Achievement> achievementIdMap;
+    private final Map<ShipBlueprint, List<Achievement>> stdShipAchievementIdMap;
+    private final Map<ShipBlueprint, List<Achievement>> dlcShipAchievementIdMap;
+    private final List<Achievement> generalAchievements;
 
-    private Map<String, ShipLayout> shipLayoutIdMap;
-    private Map<String, ShipChassis> shipChassisIdMap;
-    private List<CrewNameList.CrewName> crewNamesMale;
-    private List<CrewNameList.CrewName> crewNamesFemale;
+    private final Map<String, ShipLayout> shipLayoutIdMap;
+    private final Map<String, ShipChassis> shipChassisIdMap;
+    private final List<CrewNameList.CrewName> crewNamesMale;
+    private final List<CrewNameList.CrewName> crewNamesFemale;
 
-    private Map<String, SectorDescription> sectorDescriptionIdMap;
-    private Map<String, SectorType> stdSectorTypeIdMap;
-    private Map<String, SectorType> dlcSectorTypeIdMap;
+    private final Map<String, SectorDescription> sectorDescriptionIdMap;
+    private final Map<String, SectorType> stdSectorTypeIdMap;
+    private final Map<String, SectorType> dlcSectorTypeIdMap;
 
-    private Map<String, BackgroundImageList> backgroundImageListIdMap;
+    private final Map<String, BackgroundImageList> backgroundImageListIdMap;
 
-    private Map<String, AnimSheet> stdAnimSheetIdMap;
-    private Map<String, AnimSheet> dlcAnimSheetIdMap;
-    private Map<String, Anim> stdAnimIdMap;
-    private Map<String, Anim> dlcAnimIdMap;
-    private Map<String, WeaponAnim> stdWeaponAnimIdMap;
-    private Map<String, WeaponAnim> dlcWeaponAnimIdMap;
+    private final Map<String, AnimSheet> stdAnimSheetIdMap;
+    private final Map<String, AnimSheet> dlcAnimSheetIdMap;
+    private final Map<String, Anim> stdAnimIdMap;
+    private final Map<String, Anim> dlcAnimIdMap;
+    private final Map<String, WeaponAnim> stdWeaponAnimIdMap;
+    private final Map<String, WeaponAnim> dlcWeaponAnimIdMap;
 
     private PackContainer packContainer = null;
     private DatParser datParser = null;
@@ -785,11 +785,7 @@ public class DefaultDataManager extends DataManager {
     @Override
     public boolean hasResourceInputStream(String innerPath) {
         AbstractPack pack = packContainer.getPackFor(innerPath);
-        if (pack != null && pack.contains(innerPath)) {
-            return true;
-        } else {
-            return false;
-        }
+        return pack != null && pack.contains(innerPath);
     }
 
     @Override

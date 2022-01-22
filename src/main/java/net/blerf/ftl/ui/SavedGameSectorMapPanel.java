@@ -55,12 +55,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.FTLConstants;
+import net.blerf.ftl.constants.FleetPresence;
 import net.blerf.ftl.constants.OriginalFTLConstants;
 import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.parser.SavedGameParser.BeaconState;
-import net.blerf.ftl.constants.FleetPresence;
 import net.blerf.ftl.parser.SavedGameParser.RebelFlagshipState;
 import net.blerf.ftl.parser.SavedGameParser.StoreShelf;
 import net.blerf.ftl.parser.SavedGameParser.StoreState;
@@ -101,18 +101,18 @@ public class SavedGameSectorMapPanel extends JPanel {
     private static final Integer MAP_LAYER = 10;
     private static final Integer MISC_SELECTION_LAYER = 50;
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
-    private List<SpriteReference<BeaconState>> beaconRefs = new ArrayList<SpriteReference<BeaconState>>();
+    private final List<SpriteReference<BeaconState>> beaconRefs = new ArrayList<SpriteReference<BeaconState>>();
 
-    private List<BeaconSprite> beaconSprites = new ArrayList<BeaconSprite>();
-    private List<StoreSprite> storeSprites = new ArrayList<StoreSprite>();
-    private List<QuestSprite> questSprites = new ArrayList<QuestSprite>();
-    private List<PlayerShipSprite> playerShipSprites = new ArrayList<PlayerShipSprite>();
+    private final List<BeaconSprite> beaconSprites = new ArrayList<BeaconSprite>();
+    private final List<StoreSprite> storeSprites = new ArrayList<StoreSprite>();
+    private final List<QuestSprite> questSprites = new ArrayList<QuestSprite>();
+    private final List<PlayerShipSprite> playerShipSprites = new ArrayList<PlayerShipSprite>();
 
-    private Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
+    private final Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
 
-    private Random javaRandom = new Random();
+    private final Random javaRandom = new Random();
     private int fileFormat = 2;
     private FTLConstants ftlConstants = new AdvancedFTLConstants();
 
@@ -142,7 +142,7 @@ public class SavedGameSectorMapPanel extends JPanel {
     private JScrollPane sideScroll = null;
 
     private SpriteSelector miscSelector = null;
-    private ActionListener columnCtrlListener = null;
+    private final ActionListener columnCtrlListener = null;
 
     private boolean dlcEnabled = false;
     private Difficulty difficulty = Difficulty.NORMAL;
@@ -657,10 +657,7 @@ public class SavedGameSectorMapPanel extends JPanel {
             @Override
             public boolean isSpriteValid(SpriteSelector spriteSelector, JComponent sprite) {
                 if (sprite == null || !sprite.isVisible()) return false;
-                if (sprite instanceof BeaconSprite) {
-                    return true;
-                }
-                return false;
+                return sprite instanceof BeaconSprite;
             }
         });
         miscSelector.setCallback(new SpriteSelectionCallback() {
@@ -690,10 +687,7 @@ public class SavedGameSectorMapPanel extends JPanel {
             @Override
             public boolean isSpriteValid(SpriteSelector spriteSelector, JComponent sprite) {
                 if (sprite == null || !sprite.isVisible()) return false;
-                if (sprite instanceof PlayerShipSprite) {
-                    return true;
-                }
-                return false;
+                return sprite instanceof PlayerShipSprite;
             }
         });
         miscSelector.setCallback(new SpriteSelectionCallback() {
@@ -723,10 +717,7 @@ public class SavedGameSectorMapPanel extends JPanel {
             @Override
             public boolean isSpriteValid(SpriteSelector spriteSelector, JComponent sprite) {
                 if (sprite == null || !sprite.isVisible()) return false;
-                if (sprite instanceof StoreSprite) {
-                    return true;
-                }
-                return false;
+                return sprite instanceof StoreSprite;
             }
         });
         miscSelector.setCallback(new SpriteSelectionCallback() {
@@ -757,10 +748,7 @@ public class SavedGameSectorMapPanel extends JPanel {
             @Override
             public boolean isSpriteValid(SpriteSelector spriteSelector, JComponent sprite) {
                 if (sprite == null || !sprite.isVisible()) return false;
-                if (sprite instanceof QuestSprite) {
-                    return true;
-                }
-                return false;
+                return sprite instanceof QuestSprite;
             }
         });
         miscSelector.setCallback(new SpriteSelectionCallback() {
@@ -793,9 +781,7 @@ public class SavedGameSectorMapPanel extends JPanel {
                 if (sprite instanceof BeaconSprite) {
                     int beaconId = mapLayout.getBeaconId(sprite);
 
-                    if (beaconId != -1 && mapLayout.getMiscBoxAtBeaconId(beaconId) == null) {
-                        return true;
-                    }
+                    return beaconId != -1 && mapLayout.getMiscBoxAtBeaconId(beaconId) == null;
                 }
                 return false;
             }
@@ -847,9 +833,7 @@ public class SavedGameSectorMapPanel extends JPanel {
                 if (sprite instanceof BeaconSprite) {
                     int beaconId = mapLayout.getBeaconId(sprite);
 
-                    if (beaconId != -1 && mapLayout.getMiscBoxAtBeaconId(beaconId) == null) {
-                        return true;
-                    }
+                    return beaconId != -1 && mapLayout.getMiscBoxAtBeaconId(beaconId) == null;
                 }
                 return false;
             }
@@ -893,10 +877,7 @@ public class SavedGameSectorMapPanel extends JPanel {
             @Override
             public boolean isSpriteValid(SpriteSelector spriteSelector, JComponent sprite) {
                 if (sprite == null || !sprite.isVisible()) return false;
-                if (sprite instanceof BeaconSprite) {
-                    return true;
-                }
-                return false;
+                return sprite instanceof BeaconSprite;
             }
         });
         miscSelector.setCallback(new SpriteSelectionCallback() {
@@ -1133,7 +1114,7 @@ public class SavedGameSectorMapPanel extends JPanel {
                             newGenMap = randomMapGen.generateSectorMap(selectedRNG, fileFormat);
                         } catch (IllegalStateException e) {
                             log.error("Map generation failed", e);
-                            JOptionPane.showMessageDialog(frame, "Map generation failed:\n" + e.toString(), "Map generation failed", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(frame, "Map generation failed:\n" + e, "Map generation failed", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
@@ -1207,7 +1188,7 @@ public class SavedGameSectorMapPanel extends JPanel {
                             newGenMap = randomMapGen.generateSectorMap(selectedRNG, fileFormat);
                         } catch (IllegalStateException f) {
                             log.error("Map generation failed", f);
-                            JOptionPane.showMessageDialog(frame, "Map generation failed:\n" + f.toString(), "Map generation failed", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(frame, "Map generation failed:\n" + f, "Map generation failed", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
@@ -1682,18 +1663,18 @@ public class SavedGameSectorMapPanel extends JPanel {
         createSidePanel(title, editorPanel, null, applyCallback);
 
         ActionListener beaconListener = new ActionListener() {
-            private JComboBox starsListCombo = editorPanel.getCombo(STARS_LIST);
-            private JComboBox starsImageCombo = editorPanel.getCombo(STARS_IMAGE);
-            private JComboBox spriteListCombo = editorPanel.getCombo(SPRITE_LIST);
-            private JComboBox spriteImageCombo = editorPanel.getCombo(SPRITE_IMAGE);
-            private JTextField spriteXField = editorPanel.getInt(SPRITE_X);
-            private JTextField spriteYField = editorPanel.getInt(SPRITE_Y);
-            private JTextField spriteRotField = editorPanel.getInt(SPRITE_ROT);
+            private final JComboBox starsListCombo = editorPanel.getCombo(STARS_LIST);
+            private final JComboBox starsImageCombo = editorPanel.getCombo(STARS_IMAGE);
+            private final JComboBox spriteListCombo = editorPanel.getCombo(SPRITE_LIST);
+            private final JComboBox spriteImageCombo = editorPanel.getCombo(SPRITE_IMAGE);
+            private final JTextField spriteXField = editorPanel.getInt(SPRITE_X);
+            private final JTextField spriteYField = editorPanel.getInt(SPRITE_Y);
+            private final JTextField spriteRotField = editorPanel.getInt(SPRITE_ROT);
 
-            private JCheckBox enemyPresentCheck = editorPanel.getBoolean(ENEMY_PRESENT);
-            private JComboBox shipEventCombo = editorPanel.getCombo(SHIP_EVENT);
-            private JTextField autoShipField = editorPanel.getString(AUTO_SHIP);
-            private JTextField shipEventSeedField = editorPanel.getInt(SHIP_EVENT_SEED);
+            private final JCheckBox enemyPresentCheck = editorPanel.getBoolean(ENEMY_PRESENT);
+            private final JComboBox shipEventCombo = editorPanel.getCombo(SHIP_EVENT);
+            private final JTextField autoShipField = editorPanel.getString(AUTO_SHIP);
+            private final JTextField shipEventSeedField = editorPanel.getInt(SHIP_EVENT_SEED);
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1751,14 +1732,14 @@ public class SavedGameSectorMapPanel extends JPanel {
         editorPanel.getCombo(SHIP_EVENT).addActionListener(beaconListener);
 
         ChangeListener visitListener = new ChangeListener() {
-            private JSpinner visitCountSpinner = editorPanel.getSpinner(VISIT_COUNT);
-            private JComboBox starsListCombo = editorPanel.getCombo(STARS_LIST);
-            private JComboBox starsImageCombo = editorPanel.getCombo(STARS_IMAGE);
-            private JComboBox spriteListCombo = editorPanel.getCombo(SPRITE_LIST);
-            private JComboBox spriteImageCombo = editorPanel.getCombo(SPRITE_IMAGE);
-            private JTextField spriteXField = editorPanel.getInt(SPRITE_X);
-            private JTextField spriteYField = editorPanel.getInt(SPRITE_Y);
-            private JTextField spriteRotField = editorPanel.getInt(SPRITE_ROT);
+            private final JSpinner visitCountSpinner = editorPanel.getSpinner(VISIT_COUNT);
+            private final JComboBox starsListCombo = editorPanel.getCombo(STARS_LIST);
+            private final JComboBox starsImageCombo = editorPanel.getCombo(STARS_IMAGE);
+            private final JComboBox spriteListCombo = editorPanel.getCombo(SPRITE_LIST);
+            private final JComboBox spriteImageCombo = editorPanel.getCombo(SPRITE_IMAGE);
+            private final JTextField spriteXField = editorPanel.getInt(SPRITE_X);
+            private final JTextField spriteYField = editorPanel.getInt(SPRITE_Y);
+            private final JTextField spriteRotField = editorPanel.getInt(SPRITE_ROT);
 
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -2078,8 +2059,8 @@ public class SavedGameSectorMapPanel extends JPanel {
         createSidePanel(title, editorPanel, null, applyCallback);
 
         ActionListener questListener = new ActionListener() {
-            private JComboBox fileCombo = editorPanel.getCombo(ENCOUNTERS_FILE);
-            private JComboBox eventCombo = editorPanel.getCombo(EVENT);
+            private final JComboBox fileCombo = editorPanel.getCombo(ENCOUNTERS_FILE);
+            private final JComboBox eventCombo = editorPanel.getCombo(EVENT);
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2153,15 +2134,15 @@ public class SavedGameSectorMapPanel extends JPanel {
      */
     public static class MapBoxComponent extends JComponent {
 
-        private Font titleFont = new Font(Font.SANS_SERIF, Font.BOLD, 8);
-        private Insets boxMargin = new Insets(6, 12, 12, 8);
-        private Insets boxPadding = new Insets(2, 3, 2, 3);
-        private int boxThickness = 2;
-        private int reticleInner = 0;  // Stroke extends inward already.
-        private int reticleOuter = 2;
-        private BasicStroke boxStroke = new BasicStroke(boxThickness);
+        private final Font titleFont = new Font(Font.SANS_SERIF, Font.BOLD, 8);
+        private final Insets boxMargin = new Insets(6, 12, 12, 8);
+        private final Insets boxPadding = new Insets(2, 3, 2, 3);
+        private final int boxThickness = 2;
+        private final int reticleInner = 0;  // Stroke extends inward already.
+        private final int reticleOuter = 2;
+        private final BasicStroke boxStroke = new BasicStroke(boxThickness);
 
-        private String title;
+        private final String title;
 
 
         public MapBoxComponent(String title) {
@@ -2260,7 +2241,7 @@ public class SavedGameSectorMapPanel extends JPanel {
 
     public class StoreSprite extends MapBoxComponent implements ReferenceSprite<BeaconState> {
 
-        private SpriteReference<BeaconState> beaconRef;
+        private final SpriteReference<BeaconState> beaconRef;
 
 
         public StoreSprite(SpriteReference<BeaconState> beaconRef) {
@@ -2285,7 +2266,7 @@ public class SavedGameSectorMapPanel extends JPanel {
     public class QuestSprite extends MapBoxComponent {
 
         private String questId = null;
-        private BufferedImage currentImage = null;
+        private final BufferedImage currentImage = null;
 
 
         public QuestSprite(String questId) {
@@ -2306,7 +2287,7 @@ public class SavedGameSectorMapPanel extends JPanel {
     public class BeaconSprite extends JComponent implements ReferenceSprite<BeaconState> {
         private BufferedImage currentImage = null;
 
-        private SpriteReference<BeaconState> beaconRef;
+        private final SpriteReference<BeaconState> beaconRef;
 
 
         public BeaconSprite(SpriteReference<BeaconState> beaconRef) {

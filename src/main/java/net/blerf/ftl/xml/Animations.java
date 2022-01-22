@@ -14,13 +14,13 @@ import lombok.Getter;
 public class Animations {
 
     @XmlElement(name = "animSheet")
-    private List<AnimSheet> sheets = new ArrayList<AnimSheet>();
+    private final List<AnimSheet> sheets = new ArrayList<AnimSheet>();
 
     @XmlElement(name = "anim")
-    private List<Anim> anims = new ArrayList<Anim>();
+    private final List<Anim> anims = new ArrayList<Anim>();
 
     @XmlElement(name = "weaponAnim")
-    private List<WeaponAnim> weaponAnims = new ArrayList<WeaponAnim>();
+    private final List<WeaponAnim> weaponAnims = new ArrayList<WeaponAnim>();
 
     /**
      * Returns an AnimSheet with a given id.

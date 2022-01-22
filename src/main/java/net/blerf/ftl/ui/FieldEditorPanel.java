@@ -32,23 +32,23 @@ import javax.swing.event.ChangeListener;
 public class FieldEditorPanel extends JPanel {
     public enum ContentType {WRAPPED_LABEL, LABEL, STRING, TEXT_AREA, INTEGER, BOOLEAN, SLIDER, COMBO, SPINNER}
 
-    private Map<String, JTextArea> wrappedLabelMap = new HashMap<String, JTextArea>();
-    private Map<String, JLabel> labelMap = new HashMap<String, JLabel>();
-    private Map<String, JTextField> stringMap = new HashMap<String, JTextField>();
-    private Map<String, JTextArea> textAreaMap = new HashMap<String, JTextArea>();
-    private Map<String, JTextField> intMap = new HashMap<String, JTextField>();
-    private Map<String, JCheckBox> boolMap = new HashMap<String, JCheckBox>();
-    private Map<String, JSlider> sliderMap = new HashMap<String, JSlider>();
-    private Map<String, JComboBox> comboMap = new HashMap<String, JComboBox>();
-    private Map<String, JSpinner> spinnerMap = new HashMap<String, JSpinner>();
-    private Map<String, JLabel> reminderMap = new HashMap<String, JLabel>();
+    private final Map<String, JTextArea> wrappedLabelMap = new HashMap<>();
+    private final Map<String, JLabel> labelMap = new HashMap<>();
+    private final Map<String, JTextField> stringMap = new HashMap<>();
+    private final Map<String, JTextArea> textAreaMap = new HashMap<>();
+    private final Map<String, JTextField> intMap = new HashMap<>();
+    private final Map<String, JCheckBox> boolMap = new HashMap<>();
+    private final Map<String, JSlider> sliderMap = new HashMap<>();
+    private final Map<String, JComboBox> comboMap = new HashMap<>();
+    private final Map<String, JSpinner> spinnerMap = new HashMap<>();
+    private final Map<String, JLabel> reminderMap = new HashMap<>();
 
     private GridBagConstraints gridC = new GridBagConstraints();
 
-    private Component valueStrut = Box.createHorizontalStrut(120);
-    private Component reminderStrut = Box.createHorizontalStrut(90);
+    private final Component valueStrut = Box.createHorizontalStrut(120);
+    private final Component reminderStrut = Box.createHorizontalStrut(90);
 
-    private boolean remindersVisible;
+    private final boolean remindersVisible;
 
 
     public FieldEditorPanel(boolean remindersVisible) {

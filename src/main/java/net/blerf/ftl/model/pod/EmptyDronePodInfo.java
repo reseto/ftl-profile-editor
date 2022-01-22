@@ -1,7 +1,5 @@
 package net.blerf.ftl.model.pod;
 
-import net.blerf.ftl.parser.SavedGameParser;
-
 public class EmptyDronePodInfo extends ExtendedDronePodInfo {
 
     /**

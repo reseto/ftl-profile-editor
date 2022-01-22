@@ -12,12 +12,13 @@ import net.blerf.ftl.ui.SpriteReference;
 
 public class WeaponSprite extends JComponent implements ReferenceSprite<WeaponState> {
 
-    private int longSide = 64, shortSide = 25;
+    private final int longSide = 64;
+    private final int shortSide = 25;
 
-    private SpriteReference<WeaponState> weaponRef;
+    private final SpriteReference<WeaponState> weaponRef;
     private int slot;
-    private boolean rotated;
-    private String slotString;
+    private final boolean rotated;
+    private final String slotString;
 
 
     public WeaponSprite(SpriteReference<WeaponState> weaponRef, int slot, boolean rotated) {

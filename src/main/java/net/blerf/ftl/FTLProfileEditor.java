@@ -108,7 +108,7 @@ public class FTLProfileEditor {
                 if (configFile.exists()) {
                     log.trace("Loading properties from config file.");
                     in = new FileInputStream(configFile);
-                    props.load(new InputStreamReader(in, "UTF-8"));
+                    props.load(new InputStreamReader(in, StandardCharsets.UTF_8));
                 } else {
                     writeConfig = true; // Create a new cfg, but only if necessary.
                 }
@@ -206,9 +206,7 @@ public class FTLProfileEditor {
             }
 
             // Prompt if update_catalog is invalid or hasn't been set.
-            boolean askAboutUpdates = false;
-            if (!appConfig.getProperty(EditorConfig.UPDATE_APP, "").matches("^\\d+$"))
-                askAboutUpdates = true;
+            boolean askAboutUpdates = !appConfig.getProperty(EditorConfig.UPDATE_APP, "").matches("^\\d+$");
 
             if (askAboutUpdates) {
                 String updatePrompt = "Would you like to periodically check for updates?";

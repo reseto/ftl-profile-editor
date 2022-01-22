@@ -32,27 +32,27 @@ public class ProfileShipStatsPanel extends JPanel implements ActionListener {
     private static final int ACH_LOCKED = 0;
     private static final int MAX_SCORE_PANELS = 4;
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
-    private Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
+    private final Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
     private BufferedImage questImage = null;
     private BufferedImage victoryAImage = null;
     private BufferedImage victoryBImage = null;
     private BufferedImage victoryCImage = null;
 
-    private Map<String, List<Score>> allBestMap = new LinkedHashMap<String, List<Score>>();
+    private final Map<String, List<Score>> allBestMap = new LinkedHashMap<String, List<Score>>();
     private String currentShipId = null;
 
     private JComboBox bestCombo = null;
     private JPanel bestScoresPanel = null;
-    private List<ScorePanel> bestScorePanels = new ArrayList<ScorePanel>();
+    private final List<ScorePanel> bestScorePanels = new ArrayList<ScorePanel>();
 
-    private Map<String, Achievement> questAchs = new HashMap<String, Achievement>();
-    private Map<String, Achievement> victoryAchs = new HashMap<String, Achievement>();
-    private Map<String, IconCycleButton> questBoxes = new HashMap<String, IconCycleButton>();
-    private Map<String, IconCycleButton> victoryABoxes = new HashMap<String, IconCycleButton>();
-    private Map<String, IconCycleButton> victoryBBoxes = new HashMap<String, IconCycleButton>();
-    private Map<String, IconCycleButton> victoryCBoxes = new HashMap<String, IconCycleButton>();
+    private final Map<String, Achievement> questAchs = new HashMap<String, Achievement>();
+    private final Map<String, Achievement> victoryAchs = new HashMap<String, Achievement>();
+    private final Map<String, IconCycleButton> questBoxes = new HashMap<String, IconCycleButton>();
+    private final Map<String, IconCycleButton> victoryABoxes = new HashMap<String, IconCycleButton>();
+    private final Map<String, IconCycleButton> victoryBBoxes = new HashMap<String, IconCycleButton>();
+    private final Map<String, IconCycleButton> victoryCBoxes = new HashMap<String, IconCycleButton>();
 
 
     public ProfileShipStatsPanel(FTLFrame frame) throws IOException {

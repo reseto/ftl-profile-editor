@@ -19,12 +19,12 @@ import javax.swing.JComponent;
  */
 public class SquareSelector<T> extends JComponent {
 
-    private SquareCriteria defaultCriteria = new SquareCriteria();
+    private final SquareCriteria defaultCriteria = new SquareCriteria();
 
-    private Map<Rectangle, T> squareRegionCoordMap = new LinkedHashMap<Rectangle, T>();
+    private final Map<Rectangle, T> squareRegionCoordMap = new LinkedHashMap<Rectangle, T>();
     private SquareCriteria squareCriteria = defaultCriteria;
     private SquareSelectionCallback callback = null;
-    private Point mousePoint = new Point(-1, -1);
+    private final Point mousePoint = new Point(-1, -1);
     private Rectangle currentRect = null;
     private boolean paintDescription = false;
 
@@ -161,8 +161,8 @@ public class SquareSelector<T> extends JComponent {
 
 
     public static class SquareCriteria<T> {
-        private Color validColor = Color.GREEN.darker();
-        private Color invalidColor = Color.RED.darker();
+        private final Color validColor = Color.GREEN.darker();
+        private final Color invalidColor = Color.RED.darker();
 
         /**
          * Returns a message describing what will be selected.
@@ -187,8 +187,7 @@ public class SquareSelector<T> extends JComponent {
          * Returns true if a square can be selected, false otherwise.
          */
         public boolean isSquareValid(SquareSelector squareSelector, T squareCoord) {
-            if (squareCoord == null) return false;
-            return true;
+            return squareCoord != null;
         }
     }
 

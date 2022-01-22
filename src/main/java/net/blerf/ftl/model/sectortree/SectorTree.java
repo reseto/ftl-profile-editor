@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SectorTree {
 
-    private List<SectorTreeListener> treeListenerList = new ArrayList<SectorTreeListener>();
+    private final List<SectorTreeListener> treeListenerList = new ArrayList<SectorTreeListener>();
 
     private List<List<SectorDot>> dotColumns;
 

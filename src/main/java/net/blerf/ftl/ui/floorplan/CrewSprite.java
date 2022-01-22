@@ -12,11 +12,12 @@ import net.blerf.ftl.ui.SpriteReference;
 
 public class CrewSprite extends JComponent implements ReferenceSprite<CrewState> {
 
-    private int w = 35, h = 35;
+    private final int w = 35;
+    private final int h = 35;
     private BufferedImage crewImage = null;
 
-    private SpriteReference<CrewState> crewRef;
-    private SpriteImageProvider spriteImageProvider;
+    private final SpriteReference<CrewState> crewRef;
+    private final SpriteImageProvider spriteImageProvider;
 
 
     public CrewSprite(SpriteReference<CrewState> crewRef, SpriteImageProvider spriteImageProvider) {

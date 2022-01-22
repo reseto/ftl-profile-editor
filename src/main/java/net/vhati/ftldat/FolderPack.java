@@ -29,7 +29,7 @@ import java.util.Stack;
  */
 public class FolderPack extends AbstractPack {
 
-    private File rootDir;
+    private final File rootDir;
 
 
     public FolderPack(File rootDir) {
@@ -134,7 +134,7 @@ public class FolderPack extends AbstractPack {
     }
 
     @Override
-    public InputStream getInputStream(String innerPath) throws FileNotFoundException, IOException {
+    public InputStream getInputStream(String innerPath) throws IOException {
         return new FileInputStream(getFile(innerPath));
     }
 

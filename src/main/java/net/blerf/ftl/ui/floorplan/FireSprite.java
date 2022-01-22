@@ -17,7 +17,7 @@ public class FireSprite extends JComponent {
 
     private Point currentFrame = null;
 
-    private AnimAtlas fireAtlas;
+    private final AnimAtlas fireAtlas;
     private int roomId;
     private int squareId;
     private int health;

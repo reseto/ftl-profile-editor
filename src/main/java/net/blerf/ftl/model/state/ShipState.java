@@ -12,9 +12,9 @@ import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser;
+import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.ship.AugmentId;
 import net.blerf.ftl.xml.ship.ShipBlueprint;
-import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.ship.SystemList;
 import net.blerf.ftl.xml.ship.SystemRoom;
 
@@ -25,25 +25,25 @@ public class ShipState {
     private String shipGfxBaseName;
     private boolean auto;
 
-    private List<SavedGameParser.StartingCrewState> startingCrewList = new ArrayList<>();
+    private final List<SavedGameParser.StartingCrewState> startingCrewList = new ArrayList<>();
     private boolean hostile = false;
     private int jumpChargeTicks = 0;
     private boolean jumping = false;
     private int jumpAnimTicks = 0;
     private int hullAmt = 0, fuelAmt = 0, dronePartsAmt = 0, missilesAmt = 0, scrapAmt = 0;
-    private List<CrewState> crewList = new ArrayList<>();
+    private final List<CrewState> crewList = new ArrayList<>();
     private int reservePowerCapacity = 0;
-    private Map<SystemType, List<SavedGameParser.SystemState>> systemsMap = new LinkedHashMap<>();
+    private final Map<SystemType, List<SavedGameParser.SystemState>> systemsMap = new LinkedHashMap<>();
     private List<SavedGameParser.ExtendedSystemInfo> extendedSystemInfoList = new ArrayList<>();
-    private List<SavedGameParser.RoomState> roomList = new ArrayList<>();
-    private Map<XYPair, Integer> breachMap = new LinkedHashMap<>();
-    private Map<DoorCoordinate, SavedGameParser.DoorState> doorMap = new LinkedHashMap<>();
+    private final List<SavedGameParser.RoomState> roomList = new ArrayList<>();
+    private final Map<XYPair, Integer> breachMap = new LinkedHashMap<>();
+    private final Map<DoorCoordinate, SavedGameParser.DoorState> doorMap = new LinkedHashMap<>();
     private int cloakAnimTicks = 0;
     private List<SavedGameParser.LockdownCrystal> lockdownCrystalList = new ArrayList<>();
-    private List<SavedGameParser.WeaponState> weaponList = new ArrayList<>();
-    private List<SavedGameParser.DroneState> droneList = new ArrayList<>();
-    private List<String> augmentIdList = new ArrayList<>();
-    private List<SavedGameParser.StandaloneDroneState> standaloneDroneList = new ArrayList<>();
+    private final List<SavedGameParser.WeaponState> weaponList = new ArrayList<>();
+    private final List<SavedGameParser.DroneState> droneList = new ArrayList<>();
+    private final List<String> augmentIdList = new ArrayList<>();
+    private final List<SavedGameParser.StandaloneDroneState> standaloneDroneList = new ArrayList<>();
 
 
     /**

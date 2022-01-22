@@ -28,14 +28,14 @@ public class ShipInteriorComponent extends JComponent {
     private static final int jambLength = 5;
     private static final int margin = 4;  // Claim to be a little bigger to avoid clipping thick walls.
 
-    private Color floorCrackColor = new Color(125, 125, 125);
-    private Stroke floorCrackStroke = new BasicStroke(1);
-    private Color roomBorderColor = new Color(15, 15, 15);
-    private Stroke roomBorderStroke = new BasicStroke(4);
+    private final Color floorCrackColor = new Color(125, 125, 125);
+    private final Stroke floorCrackStroke = new BasicStroke(1);
+    private final Color roomBorderColor = new Color(15, 15, 15);
+    private final Stroke roomBorderStroke = new BasicStroke(4);
 
-    private Map<Integer, BufferedImage> decorMap = new LinkedHashMap<Integer, BufferedImage>();
+    private final Map<Integer, BufferedImage> decorMap = new LinkedHashMap<Integer, BufferedImage>();
 
-    private ShipLayout shipLayout;
+    private final ShipLayout shipLayout;
 
 
     public ShipInteriorComponent(ShipLayout shipLayout) {

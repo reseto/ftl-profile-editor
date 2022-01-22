@@ -43,14 +43,14 @@ public abstract class AbstractPack {
     /**
      * Writes the contents of the file with innerPath to dstFile.
      */
-    public void extractTo(String innerPath, OutputStream os) throws FileNotFoundException, IOException {
+    public void extractTo(String innerPath, OutputStream os) throws IOException {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Removes the file with innerPath from the pack.
      */
-    public void remove(String innerPath) throws FileNotFoundException, IOException {
+    public void remove(String innerPath) throws IOException {
         throw new UnsupportedOperationException();
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractPack {
      * modify this dat. Do not pass an input stream from
      * this dat instance into another of its own methods.
      */
-    public InputStream getInputStream(String innerPath) throws FileNotFoundException, IOException {
+    public InputStream getInputStream(String innerPath) throws IOException {
         throw new UnsupportedOperationException();
     }
 

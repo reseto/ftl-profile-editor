@@ -34,9 +34,9 @@ public class SectorTreePreviewPanel extends JPanel implements SectorTreeListener
     protected Color traveledRouteColor = new Color(255, 255, 50);
     protected Color inaccessibleRouteColor = new Color(125, 125, 125);
 
-    private Point aXY = new Point();
-    private Point bXY = new Point();
-    private List<SectorDot> tmpList = new ArrayList<SectorDot>(4);
+    private final Point aXY = new Point();
+    private final Point bXY = new Point();
+    private final List<SectorDot> tmpList = new ArrayList<SectorDot>(4);
 
 
     public SectorTreePreviewPanel() {

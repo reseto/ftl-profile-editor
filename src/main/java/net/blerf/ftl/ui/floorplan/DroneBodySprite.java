@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
-import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.model.pod.BoarderDronePodInfo;
+import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser.DronePodState;
 import net.blerf.ftl.parser.SavedGameParser.DroneState;
 import net.blerf.ftl.parser.SavedGameParser.DroneType;
@@ -18,8 +18,8 @@ import net.blerf.ftl.xml.DroneBlueprint;
 
 public class DroneBodySprite extends JComponent implements ReferenceSprite<DroneState> {
 
-    private SpriteReference<DroneState> droneRef;
-    private BufferedImage bodyImage;
+    private final SpriteReference<DroneState> droneRef;
+    private final BufferedImage bodyImage;
 
 
     public DroneBodySprite(SpriteReference<DroneState> droneRef, BufferedImage bodyImage) {

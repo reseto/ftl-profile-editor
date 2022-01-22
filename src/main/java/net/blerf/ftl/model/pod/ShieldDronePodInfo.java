@@ -1,7 +1,5 @@
 package net.blerf.ftl.model.pod;
 
-import net.blerf.ftl.parser.SavedGameParser;
-
 public class ShieldDronePodInfo extends ExtendedDronePodInfo {
     private int unknownAlpha = -1000;
 

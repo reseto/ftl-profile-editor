@@ -15,25 +15,26 @@ import net.blerf.ftl.ui.SpriteReference;
 public class SystemRoomSprite extends JComponent implements ReferenceSprite<SystemState> {
 
     // Absent, brown.
-    private Tint absentTint = new Tint(new float[]{0.792f, 0.467f, 0.275f, 1f}, new float[]{0, 0, 0, 0});
+    private final Tint absentTint = new Tint(new float[]{0.792f, 0.467f, 0.275f, 1f}, new float[]{0, 0, 0, 0});
 
     // Ionized, blue.
-    private Tint ionizedTint = new Tint(new float[]{0.51f, 0.898f, 0.937f, 1f}, new float[]{0, 0, 0, 0});
+    private final Tint ionizedTint = new Tint(new float[]{0.51f, 0.898f, 0.937f, 1f}, new float[]{0, 0, 0, 0});
 
     // Destroyed, red (softer shade than in-game).
-    private Tint destroyedTint = new Tint(new float[]{0.85f, 0.24f, 0.24f, 1f}, new float[]{0, 0, 0, 0});
+    private final Tint destroyedTint = new Tint(new float[]{0.85f, 0.24f, 0.24f, 1f}, new float[]{0, 0, 0, 0});
 
     // Damaged, orange.
-    private Tint damagedTint = new Tint(new float[]{0.99f, 0.6f, 0.3f, 1f}, new float[]{0, 0, 0, 0});
+    private final Tint damagedTint = new Tint(new float[]{0.99f, 0.6f, 0.3f, 1f}, new float[]{0, 0, 0, 0});
 
     // Default, gray.
-    private Tint defaultTint = new Tint(new float[]{0.49f, 0.49f, 0.49f, 1f}, new float[]{0, 0, 0, 0});
+    private final Tint defaultTint = new Tint(new float[]{0.49f, 0.49f, 0.49f, 1f}, new float[]{0, 0, 0, 0});
 
-    private int scaleW = 32, scaleH = 32;
-    private BufferedImage overlayImage;
+    private final int scaleW = 32;
+    private final int scaleH = 32;
+    private final BufferedImage overlayImage;
     private BufferedImage currentImage = null;
 
-    private SpriteReference<SystemState> systemRef;
+    private final SpriteReference<SystemState> systemRef;
 
 
     public SystemRoomSprite(SpriteReference<SystemState> systemRef, BufferedImage overlayImage) {

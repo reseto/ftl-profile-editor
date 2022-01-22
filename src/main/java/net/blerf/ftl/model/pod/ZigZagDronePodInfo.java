@@ -1,7 +1,5 @@
 package net.blerf.ftl.model.pod;
 
-import net.blerf.ftl.parser.SavedGameParser;
-
 /**
  * Extended Combat/Beam/Ship_Repair drone info.
  * <p>

@@ -1,7 +1,5 @@
 package net.blerf.ftl.model.pod;
 
-import net.blerf.ftl.parser.SavedGameParser;
-
 /**
  * Generic drone pod info consisting of an int array.
  * <p>
@@ -9,7 +7,7 @@ import net.blerf.ftl.parser.SavedGameParser;
  * structures each with different lengths.
  */
 public class IntegerDronePodInfo extends ExtendedDronePodInfo {
-    private int[] unknownAlpha;
+    private final int[] unknownAlpha;
 
     /**
      * Constructs an incomplete IntegerDronePodInfo.

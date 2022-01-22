@@ -25,16 +25,16 @@ public class ProfileGeneralStatsPanel extends JPanel {
 
     private static final int MAX_SCORE_PANELS = 5;
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
-    private Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
+    private final Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
 
-    private JPanel topScoresPanel;
-    private StatsSubPanel sessionRecordsPanel;
-    private StatsSubPanel crewRecordsPanel;
-    private StatsSubPanel totalStatsPanel;
+    private final JPanel topScoresPanel;
+    private final StatsSubPanel sessionRecordsPanel;
+    private final StatsSubPanel crewRecordsPanel;
+    private final StatsSubPanel totalStatsPanel;
 
-    private List<ScorePanel> topScorePanels = new ArrayList<ScorePanel>();
+    private final List<ScorePanel> topScorePanels = new ArrayList<ScorePanel>();
 
 
     public ProfileGeneralStatsPanel(FTLFrame frame) {

@@ -27,10 +27,10 @@ import net.blerf.ftl.xml.Encounters;
 import net.blerf.ftl.xml.NamedText;
 import net.blerf.ftl.xml.NamedTexts;
 import net.blerf.ftl.xml.SectorData;
+import net.blerf.ftl.xml.TextLookupUnmarshalListener;
 import net.blerf.ftl.xml.ship.ShipChassis;
 import net.blerf.ftl.xml.ship.ShipEvent;
 import net.blerf.ftl.xml.ship.ShipEvents;
-import net.blerf.ftl.xml.TextLookupUnmarshalListener;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.output.DOMOutputter;
@@ -38,10 +38,10 @@ import org.jdom2.output.DOMOutputter;
 
 public class DatParser {
 
-    private Pattern xmlDeclPtn = Pattern.compile("<[?]xml [^>]*?[?]>\n*");
-    private Pattern rootTagPtn = Pattern.compile("</?FTL>\n*");
+    private final Pattern xmlDeclPtn = Pattern.compile("<[?]xml [^>]*?[?]>\n*");
+    private final Pattern rootTagPtn = Pattern.compile("</?FTL>\n*");
 
-    private Pattern scrubPtn = Pattern.compile(xmlDeclPtn.pattern() + "|" + rootTagPtn.pattern());
+    private final Pattern scrubPtn = Pattern.compile(xmlDeclPtn.pattern() + "|" + rootTagPtn.pattern());
 
 
     public DatParser() {

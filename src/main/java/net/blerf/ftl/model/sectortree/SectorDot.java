@@ -2,9 +2,9 @@ package net.blerf.ftl.model.sectortree;
 
 
 public class SectorDot {
-    private String sectorType;
-    private String sectorId;
-    private String sectorTitle;
+    private final String sectorType;
+    private final String sectorId;
+    private final String sectorTitle;
     private boolean visited = false;
 
 
@@ -70,11 +70,7 @@ public class SectorDot {
         }
 
         if (sectorTitle != null) {
-            if (!sectorTitle.equals(otherDot.getTitle())) return false;
-        } else if (otherDot.getTitle() != null) {
-            return false;
-        }
-
-        return true;
+            return sectorTitle.equals(otherDot.getTitle());
+        } else return otherDot.getTitle() == null;
     }
 }

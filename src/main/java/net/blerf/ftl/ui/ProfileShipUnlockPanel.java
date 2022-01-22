@@ -31,14 +31,14 @@ public class ProfileShipUnlockPanel extends JPanel implements ActionListener {
     private static final int SHIP_LOCKED = 0;
     private static final int SHIP_UNLOCKED = 1;
 
-    private Map<String, IconCycleButton> shipABoxes = new HashMap<String, IconCycleButton>();
-    private Map<String, IconCycleButton> shipCBoxes = new HashMap<String, IconCycleButton>();
-    private Map<Achievement, IconCycleButton> shipAchBoxes = new HashMap<Achievement, IconCycleButton>();
+    private final Map<String, IconCycleButton> shipABoxes = new HashMap<String, IconCycleButton>();
+    private final Map<String, IconCycleButton> shipCBoxes = new HashMap<String, IconCycleButton>();
+    private final Map<Achievement, IconCycleButton> shipAchBoxes = new HashMap<Achievement, IconCycleButton>();
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
-    private JButton allShipsBtn;
-    private JButton allShipAchsBtn;
+    private final JButton allShipsBtn;
+    private final JButton allShipAchsBtn;
 
 
     public ProfileShipUnlockPanel(FTLFrame frame) throws IOException {

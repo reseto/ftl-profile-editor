@@ -22,8 +22,8 @@ public class EditorConfig {
     public static final String APP_UPDATE_ETAG = "app_update_etag";
     public static final String APP_UPDATE_AVAILABLE = "app_update_available";
 
-    private Properties config;
-    private File configFile;
+    private final Properties config;
+    private final File configFile;
 
 
     public EditorConfig(Properties config, File configFile) {

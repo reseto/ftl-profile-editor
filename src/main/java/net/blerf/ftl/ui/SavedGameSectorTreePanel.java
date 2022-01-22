@@ -45,7 +45,7 @@ public class SavedGameSectorTreePanel extends JPanel implements ActionListener {
     private static final String TREE_TYPE_LINEAR = "Linear";
     private static final String TREE_TYPE_EXPANDED = "Expanded";
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
     private LinearSectorTreeGenerator linearTreeGen = null;
     private RandomSectorTreeGenerator expandedTreeGen = null;
@@ -59,9 +59,9 @@ public class SavedGameSectorTreePanel extends JPanel implements ActionListener {
     private JButton miscRandomSeedBtn = null;
     private JButton miscRestoreBtn = null;
 
-    private Font noticeFont = new Font("Monospaced", Font.PLAIN, 13);
+    private final Font noticeFont = new Font("Monospaced", Font.PLAIN, 13);
 
-    private Random javaRandom = new Random();
+    private final Random javaRandom = new Random();
     private int fileFormat = 2;
     private RandRNG forcedRNG = null;
     private boolean dlcEnabled = true;

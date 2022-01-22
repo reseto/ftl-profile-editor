@@ -13,9 +13,9 @@ import java.nio.channels.FileChannel;
 
 public class FileChannelRegionInputStream extends InputStream {
 
-    private FileChannel channel;
-    private long regionOffset;
-    private long regionLength;
+    private final FileChannel channel;
+    private final long regionOffset;
+    private final long regionLength;
 
     // A buffer holds an even narrower region of the file.
     // When possible read() calls will reuse this,

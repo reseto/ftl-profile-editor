@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,7 +31,7 @@ import java.util.Map;
  */
 public class FTLPack extends AbstractPack {
 
-    private CharsetEncoder asciiEncoder = Charset.forName("US-ASCII").newEncoder();
+    private final CharsetEncoder asciiEncoder = StandardCharsets.US_ASCII.newEncoder();
 
     private ByteBuffer byteBuffer = null;
     private File datFile = null;
@@ -361,7 +362,7 @@ public class FTLPack extends AbstractPack {
     }
 
     @Override
-    public void extractTo(String innerPath, OutputStream os) throws FileNotFoundException, IOException {
+    public void extractTo(String innerPath, OutputStream os) throws IOException {
         if (innerPath.contains("\\")) {
             throw new IllegalArgumentException("InnerPath contains backslashes: " + innerPath);
         }
@@ -389,7 +390,7 @@ public class FTLPack extends AbstractPack {
     }
 
     @Override
-    public void remove(String innerPath) throws FileNotFoundException, IOException {
+    public void remove(String innerPath) throws IOException {
         if (innerPath.contains("\\")) {
             throw new IllegalArgumentException("InnerPath contains backslashes: " + innerPath);
         }
@@ -419,7 +420,7 @@ public class FTLPack extends AbstractPack {
     }
 
     @Override
-    public InputStream getInputStream(String innerPath) throws FileNotFoundException, IOException {
+    public InputStream getInputStream(String innerPath) throws IOException {
         if (innerPath.contains("\\")) {
             throw new IllegalArgumentException("InnerPath contains backslashes: " + innerPath);
         }
@@ -571,7 +572,7 @@ public class FTLPack extends AbstractPack {
 
         @Override
         public boolean equals(Object o) {
-            return (o != null ? o == this : false);
+            return (o != null && o == this);
         }
     }
 }

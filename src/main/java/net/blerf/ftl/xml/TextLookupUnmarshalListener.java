@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TextLookupUnmarshalListener extends Unmarshaller.Listener {
 
-    private Map<String, String> lookupMap = new HashMap<String, String>();
+    private final Map<String, String> lookupMap = new HashMap<>();
 
 
     public TextLookupUnmarshalListener() {

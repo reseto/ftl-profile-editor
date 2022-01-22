@@ -37,11 +37,7 @@ public class FTLUtilities {
 
         if (new File(d, "ftl.dat").exists()) return true;
 
-        if (new File(d, "data.dat").exists() && new File(d, "resource.dat").exists()) {
-            return true;
-        }
-
-        return false;
+        return new File(d, "data.dat").exists() && new File(d, "resource.dat").exists();
     }
 
     /**

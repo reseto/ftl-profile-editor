@@ -42,8 +42,8 @@ public class StatsSubPanel extends JPanel implements ActionListener {
     private final String NAME = "Name";
     private final String SCORE = "Score";
 
-    private HashMap<JButton, String> editMap = new HashMap<>();
-    private HashMap<String, StatRow> rowMap = new HashMap<>();
+    private final HashMap<JButton, String> editMap = new HashMap<>();
+    private final HashMap<String, StatRow> rowMap = new HashMap<>();
 
     private GridBagConstraints gridC = null;
 

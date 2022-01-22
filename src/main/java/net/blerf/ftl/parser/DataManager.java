@@ -19,12 +19,12 @@ import net.blerf.ftl.xml.FTLEvent;
 import net.blerf.ftl.xml.FTLEventList;
 import net.blerf.ftl.xml.SectorDescription;
 import net.blerf.ftl.xml.SectorType;
-import net.blerf.ftl.xml.ship.ShipBlueprint;
-import net.blerf.ftl.xml.ship.ShipChassis;
-import net.blerf.ftl.xml.ship.ShipEvent;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.TextList;
 import net.blerf.ftl.xml.WeaponBlueprint;
+import net.blerf.ftl.xml.ship.ShipBlueprint;
+import net.blerf.ftl.xml.ship.ShipChassis;
+import net.blerf.ftl.xml.ship.ShipEvent;
 
 public abstract class DataManager implements Closeable {
 

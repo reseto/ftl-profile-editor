@@ -48,16 +48,16 @@ public class ScorePanel extends JPanel {
     private boolean victory = false;
     private boolean dlcEnabled = false;
 
-    private JLabel valueDescLbl = new JLabel("Score: ", JLabel.RIGHT);
-    private JLabel sectorDescLbl = new JLabel("Sector: ", JLabel.RIGHT);
+    private final JLabel valueDescLbl = new JLabel("Score: ", JLabel.RIGHT);
+    private final JLabel sectorDescLbl = new JLabel("Sector: ", JLabel.RIGHT);
 
-    private JLabel shipImageLbl = new JLabel("", JLabel.LEFT);
-    private JLabel shipNameLbl = new JLabel("", JLabel.CENTER);
-    private JLabel valueLbl = new JLabel("", JLabel.LEFT);
-    private JLabel sectorLbl = new JLabel("", JLabel.LEFT);
-    private JLabel difficultyLbl = new JLabel("", JLabel.CENTER);
-    private JLabel victoryLbl = new JLabel("", JLabel.RIGHT);
-    private JLabel dlcLbl = new JLabel("", JLabel.RIGHT);
+    private final JLabel shipImageLbl = new JLabel("", JLabel.LEFT);
+    private final JLabel shipNameLbl = new JLabel("", JLabel.CENTER);
+    private final JLabel valueLbl = new JLabel("", JLabel.LEFT);
+    private final JLabel sectorLbl = new JLabel("", JLabel.LEFT);
+    private final JLabel difficultyLbl = new JLabel("", JLabel.CENTER);
+    private final JLabel victoryLbl = new JLabel("", JLabel.RIGHT);
+    private final JLabel dlcLbl = new JLabel("", JLabel.RIGHT);
     private JButton editBtn = null;
 
 

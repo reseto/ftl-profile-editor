@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Stats {
 
-    public static enum StatType {
+    public enum StatType {
         // IntRecords
         MOST_SHIPS_DEFEATED("Most Ships Defeated"),
         MOST_BEACONS_EXPLORED("Most Beacons Explored"),
@@ -31,9 +31,9 @@ public class Stats {
         TOTAL_GAMES_PLAYED("Total Games Played"),
         TOTAL_VICTORIES("Total Victories");
 
-        private String name;
+        private final String name;
 
-        private StatType(String name) {
+        StatType(String name) {
             this.name = name;
         }
 
@@ -49,8 +49,8 @@ public class Stats {
     private List<Score> topScores = new ArrayList<Score>();
     private List<Score> shipBest = new ArrayList<Score>();
 
-    private Map<StatType, CrewRecord> crewMap = new EnumMap<StatType, CrewRecord>(StatType.class);
-    private Map<StatType, Integer> intMap = new EnumMap<StatType, Integer>(StatType.class);
+    private final Map<StatType, CrewRecord> crewMap = new EnumMap<StatType, CrewRecord>(StatType.class);
+    private final Map<StatType, Integer> intMap = new EnumMap<StatType, Integer>(StatType.class);
 
 
     public Stats() {

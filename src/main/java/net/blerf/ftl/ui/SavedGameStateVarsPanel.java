@@ -13,7 +13,7 @@ import net.blerf.ftl.parser.SavedGameParser.StateVar;
 
 public class SavedGameStateVarsPanel extends JPanel {
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
     private ArrayList<String> allVars = new ArrayList<String>();
     private FieldEditorPanel varsOnePanel = null;
     private FieldEditorPanel varsTwoPanel = null;

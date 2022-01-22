@@ -3,8 +3,6 @@ package net.blerf.ftl.parser.random;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
-import org.slf4j.Logger;
-import org.slf4j.helpers.NOPLogger;
 
 
 /**
@@ -56,7 +54,7 @@ public class NativeRandom implements RandRNG {
         /**
          * A singleton to use for making native function calls.
          */
-        CLibrary INSTANCE = (CLibrary) Native.loadLibrary((Platform.isWindows() ? "msvcrt" : "c"), CLibrary.class);
+        CLibrary INSTANCE = Native.loadLibrary((Platform.isWindows() ? "msvcrt" : "c"), CLibrary.class);
 
         /**
          * Returns a random int from 0 to RAND_MAX.

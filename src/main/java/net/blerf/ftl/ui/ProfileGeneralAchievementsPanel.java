@@ -15,8 +15,6 @@ import net.blerf.ftl.model.AchievementRecord;
 import net.blerf.ftl.model.Profile;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.xml.Achievement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class ProfileGeneralAchievementsPanel extends JPanel {
@@ -28,9 +26,9 @@ public class ProfileGeneralAchievementsPanel extends JPanel {
 
     private static final String NEWBIE_TIP_LEVEL = "Newbie Tip Level";
 
-    private FTLFrame frame;
+    private final FTLFrame frame;
 
-    private HashMap<Achievement, IconCycleButton> generalAchBoxes = new HashMap<Achievement, IconCycleButton>();
+    private final HashMap<Achievement, IconCycleButton> generalAchBoxes = new HashMap<Achievement, IconCycleButton>();
 
     private FieldEditorPanel newbiePanel = null;
 

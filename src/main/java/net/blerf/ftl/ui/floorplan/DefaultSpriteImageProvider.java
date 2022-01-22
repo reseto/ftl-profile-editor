@@ -20,9 +20,9 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.model.state.CrewType;
+import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.SavedGameParser.DroneType;
-import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.ui.ImageUtilities;
 import net.blerf.ftl.ui.ImageUtilities.Tint;
 import net.blerf.ftl.xml.Anim;
@@ -38,16 +38,16 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
 
     private final Color dummyColor = new Color(150, 150, 200);
 
-    private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    private GraphicsDevice gs = ge.getDefaultScreenDevice();
-    private GraphicsConfiguration gc = gs.getDefaultConfiguration();
+    private final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    private final GraphicsDevice gs = ge.getDefaultScreenDevice();
+    private final GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
     private DoorAtlas cachedDoorAtlas = null;
-    private Map<SystemType, BufferedImage> cachedSystemRoomsMap = new EnumMap<SystemType, BufferedImage>(SystemType.class);
-    private Map<String, AnimAtlas> cachedAnimAtlasMap = new HashMap<String, AnimAtlas>();
+    private final Map<SystemType, BufferedImage> cachedSystemRoomsMap = new EnumMap<SystemType, BufferedImage>(SystemType.class);
+    private final Map<String, AnimAtlas> cachedAnimAtlasMap = new HashMap<String, AnimAtlas>();
 
-    private Map<String, Map<Rectangle, BufferedImage>> cachedImagesMap = new HashMap<String, Map<Rectangle, BufferedImage>>();
-    private Map<BufferedImage, Map<Tint, BufferedImage>> cachedTintedImagesMap = new HashMap<BufferedImage, Map<Tint, BufferedImage>>();
+    private final Map<String, Map<Rectangle, BufferedImage>> cachedImagesMap = new HashMap<String, Map<Rectangle, BufferedImage>>();
+    private final Map<BufferedImage, Map<Tint, BufferedImage>> cachedTintedImagesMap = new HashMap<BufferedImage, Map<Tint, BufferedImage>>();
 
 
     public DefaultSpriteImageProvider() {
@@ -481,7 +481,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
      * <p>
      * The result will NOT be cached.
      */
-    public BufferedImage readResourceImage(String innerPath) throws FileNotFoundException, IOException {
+    public BufferedImage readResourceImage(String innerPath) throws IOException {
         InputStream in = null;
         try {
             in = DataManager.get().getResourceInputStream(innerPath);

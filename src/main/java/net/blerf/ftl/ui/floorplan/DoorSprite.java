@@ -24,8 +24,8 @@ public class DoorSprite extends JComponent implements ReferenceSprite<DoorState>
 
     private Point currentFrame = null;
 
-    private SpriteReference<DoorState> doorRef;
-    private DoorAtlas doorAtlas;
+    private final SpriteReference<DoorState> doorRef;
+    private final DoorAtlas doorAtlas;
     private int level;
     private DoorCoordinate doorCoord;
 

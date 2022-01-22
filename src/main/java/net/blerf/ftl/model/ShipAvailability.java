@@ -3,7 +3,7 @@ package net.blerf.ftl.model;
 
 public class ShipAvailability {
 
-    private String shipId;
+    private final String shipId;
     private boolean unlockedA;
     private boolean unlockedC;
 
