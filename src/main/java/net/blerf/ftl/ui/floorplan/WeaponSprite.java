@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.font.LineMetrics;
 import javax.swing.JComponent;
-import net.blerf.ftl.parser.SavedGameParser.WeaponState;
+import net.blerf.ftl.model.state.WeaponState;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;
 
@@ -62,7 +62,8 @@ public class WeaponSprite extends JComponent implements ReferenceSprite<WeaponSt
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        int w = this.getWidth(), h = this.getHeight();
+        int w = this.getWidth();
+        int h = this.getHeight();
         g2d.drawRect(0, 0, w - 1, h - 1);
 
         LineMetrics lineMetrics = g2d.getFontMetrics().getLineMetrics(slotString, g2d);

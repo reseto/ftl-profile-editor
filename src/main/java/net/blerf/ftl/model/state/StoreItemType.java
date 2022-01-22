@@ -1,14 +1,14 @@
 package net.blerf.ftl.model.state;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
+@AllArgsConstructor
 public enum StoreItemType {
     WEAPON("Weapon"), DRONE("Drone"), AUGMENT("Augment"), CREW("Crew"), SYSTEM("System");
 
     private final String title;
-
-    StoreItemType(String title) {
-        this.title = title;
-    }
 
     public static StoreItemType fromInt(int i) {
         if (i < 0 || i > StoreItemType.values().length) {
@@ -21,6 +21,7 @@ public enum StoreItemType {
         return ordinal();
     }
 
+    @Override
     public String toString() {
         return title;
     }

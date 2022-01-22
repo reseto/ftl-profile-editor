@@ -121,7 +121,7 @@ public class WeaponModuleState {
      *
      * @param n a positive int less than, or equal to, the goal (0 when not armed)
      * @see #setCooldownTicksGoal(int)
-     * @see SavedGameParser.WeaponState#setCooldownTicks(int)
+     * @see WeaponState#setCooldownTicks(int)
      */
     public void setCooldownTicks(int n) {
         cooldownTicks = n;

@@ -6,7 +6,22 @@ package net.blerf.ftl.model.state;
  * This was introduced in FTL 1.5.4.
  */
 public class ExtendedDroneInfo {
+    /**
+     * Sets whether the drone's body/pod exists.
+     * <p>
+     * Re-arming an already deployed drone doesn't cost a drone part.
+     * <p>
+     * After defeating a nearby ship, and the window disappears, player
+     * drone pods there are lost and this is set to false.
+     */
     private boolean deployed = false;
+    /**
+     * Sets whether this drone is powered.
+     * <p>
+     * TODO: See what happens when this conflists with the DroneState.
+     *
+     * @see DroneState#setArmed(boolean)
+     */
     private boolean armed = false;
     private DronePodState dronePod = null;
 
@@ -51,14 +66,7 @@ public class ExtendedDroneInfo {
         }
     }
 
-    /**
-     * Sets whether the drone's body/pod exists.
-     * <p>
-     * Re-arming an already deployed drone doesn't cost a drone part.
-     * <p>
-     * After defeating a nearby ship, and the window disappears, player
-     * drone pods there are lost and this is set to false.
-     */
+
     public void setDeployed(boolean b) {
         deployed = b;
     }
@@ -67,13 +75,7 @@ public class ExtendedDroneInfo {
         return deployed;
     }
 
-    /**
-     * Sets whether this drone is powered.
-     * <p>
-     * TODO: See what happens when this conflists with the DroneState.
-     *
-     * @see DroneState#setArmed(boolean)
-     */
+
     public void setArmed(boolean b) {
         armed = b;
     }

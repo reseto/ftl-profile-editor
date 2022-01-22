@@ -1,56 +1,32 @@
 package net.blerf.ftl.model.state;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class AsteroidFieldState {
-    private int unknownAlpha = -1000;
-    private int strayRockTicks = 0;
-    private int unknownGamma = 0;
-    private int bgDriftTicks = 0;
-    private int currentTarget = 0;
-
-
-    public AsteroidFieldState() {
-    }
-
     /**
      * Unknown.
      * <p>
      * Observed values: 3, 0; 4.
      */
-    public void setUnknownAlpha(int n) {
-        unknownAlpha = n;
-    }
-
-    public int getUnknownAlpha() {
-        return unknownAlpha;
-    }
-
+    private int unknownAlpha = -1000;
     /**
      * Unknown.
      * <p>
      * Observed values: 15853, 15195, 14786, 12873, 12741, 12931. It's been
      * seen at 6545 immediately after reaching 0 (random starting value?).
      */
-    public void setStrayRockTicks(int n) {
-        strayRockTicks = n;
-    }
-
-    public int getStrayRockTicks() {
-        return strayRockTicks;
-    }
-
+    private int strayRockTicks = 0;
     /**
      * Unknown.
      * <p>
      * Observed values: 0, 1, 2, 0, 1.
      */
-    public void setUnknownGamma(int n) {
-        unknownGamma = n;
-    }
-
-    public int getUnknownGamma() {
-        return unknownGamma;
-    }
-
+    private int unknownGamma = 0;
     /**
      * Sets time elapsed while the background shifts left.
      * <p>
@@ -58,14 +34,7 @@ public class AsteroidFieldState {
      * stuck at 143 until strayRockTicks hit 0, then became 1102!? Then
      * seen decrementing to 0, then became 1399.
      */
-    public void setBgDriftTicks(int n) {
-        bgDriftTicks = n;
-    }
-
-    public int getBgDriftTicks() {
-        return bgDriftTicks;
-    }
-
+    private int bgDriftTicks = 0;
     /**
      * Unknown.
      * <p>
@@ -73,13 +42,7 @@ public class AsteroidFieldState {
      * <p>
      * Observed values: 1, 8, 13.
      */
-    public void setCurrentTarget(int n) {
-        currentTarget = n;
-    }
-
-    public int getCurrentTarget() {
-        return currentTarget;
-    }
+    private int currentTarget = 0;
 
     @Override
     public String toString() {

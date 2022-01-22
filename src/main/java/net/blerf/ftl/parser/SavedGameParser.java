@@ -39,16 +39,20 @@ import net.blerf.ftl.model.state.BeaconState;
 import net.blerf.ftl.model.state.CrewState;
 import net.blerf.ftl.model.state.CrewType;
 import net.blerf.ftl.model.state.DamageState;
+import net.blerf.ftl.model.state.DoorState;
 import net.blerf.ftl.model.state.DronePodState;
 import net.blerf.ftl.model.state.DroneState;
 import net.blerf.ftl.model.state.DroneType;
 import net.blerf.ftl.model.state.EncounterState;
 import net.blerf.ftl.model.state.EnvironmentState;
 import net.blerf.ftl.model.state.ExtendedDroneInfo;
+import net.blerf.ftl.model.state.LockdownCrystal;
 import net.blerf.ftl.model.state.NearbyShipAIState;
 import net.blerf.ftl.model.state.RebelFlagshipState;
+import net.blerf.ftl.model.state.RoomState;
 import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.model.state.ShipState;
+import net.blerf.ftl.model.state.SquareState;
 import net.blerf.ftl.model.state.StandaloneDroneState;
 import net.blerf.ftl.model.state.StartingCrewState;
 import net.blerf.ftl.model.state.StoreItem;
@@ -58,8 +62,8 @@ import net.blerf.ftl.model.state.StoreState;
 import net.blerf.ftl.model.state.SystemState;
 import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.model.state.WeaponModuleState;
+import net.blerf.ftl.model.state.WeaponState;
 import net.blerf.ftl.xml.DroneBlueprint;
-import net.blerf.ftl.xml.WeaponBlueprint;
 import net.blerf.ftl.xml.ship.ShipBlueprint;
 import net.blerf.ftl.xml.ship.SystemRoom;
 
@@ -1277,7 +1281,7 @@ public class SavedGameParser extends Parser {
         writeInt(out, crystal.getSpeed());
         writeInt(out, crystal.getGoalPositionX());
         writeInt(out, crystal.getGoalPositionY());
-        writeBool(out, crystal.hasArrived());
+        writeBool(out, crystal.isArrived());
         writeBool(out, crystal.isDone());
         writeInt(out, crystal.getLifetime());
         writeBool(out, crystal.isSuperFreeze());
@@ -1287,7 +1291,8 @@ public class SavedGameParser extends Parser {
     }
 
     private DroneState readDrone(InputStream in) throws IOException {
-        DroneState drone = new DroneState(readString(in));
+        DroneState drone = new DroneState();
+        drone.setDroneId(readString(in));
         drone.setArmed(readBool(in));
         drone.setPlayerControlled(readBool(in));
         drone.setBodyX(readInt(in));
@@ -1668,7 +1673,7 @@ public class SavedGameParser extends Parser {
     }
 
     private ProjectileState readProjectile(FileInputStream in, int fileFormat) throws IOException {
-        //log.debug( String.format( "Projectile: @%d", in.getChannel().position() ) );
+//        log.debug( "Projectile: {}", in.getChannel().position() )
 
         ProjectileState projectile = new ProjectileState();
 
@@ -2014,713 +2019,9 @@ public class SavedGameParser extends Parser {
 
 
     /**
-     * Counters used for event criteria and achievements.
-     * <p>
-     * FTL 1.5.4 introduced HIGH_O2 and SUFFOCATED_CREW.
-     */
-    public enum StateVar {
-        // TODO: Magic strings.
-        BLUE_ALIEN("blue_alien", "Blue event choices clicked. (Only ones that require a race.)"),
-        DEAD_CREW("dead_crew", "Ships defeated by killing all enemy crew."),
-        DESTROYED_ROCK("destroyed_rock", "Rock ships destroyed, including pirates."),
-        ENV_DANGER("env_danger", "Jumps into beacons with environmental dangers."),
-        FIRED_SHOT("fired_shot", "Individual beams/blasts/projectiles fired. (See also: used_missile)"),
-        HIGH_O2("higho2", "Times oxygen exceeded 20%, incremented when arriving at a beacon. (Bug: Or loading in FTL 1.5.4-1.5.10)"),
-        KILLED_CREW("killed_crew", "Enemy crew killed. (And possibly friendly fire?)"),
-        LOST_CREW("lost_crew", "Crew you've lost: killed, abandoned on nearby ships, taken by events?, but not dismissed. Even if cloned later. (See also: dead_crew)"),
-        NEBULA("nebula", "Jumps into nebula beacons."),
-        OFFENSIVE_DRONE("offensive_drone", "The number of times drones capable of damaging an enemy ship powered up."),
-        REACTOR_UPGRADE("reactor_upgrade", "Reactor (power bar) upgrades beyond the ship's default levels."),
-        STORE_PURCHASE("store_purchase", "Non-repair purchases, such as crew/items. (Selling isn't counted.)"),
-        STORE_REPAIR("store_repair", "Store repair button clicks."),
-        SUFFOCATED_CREW("suffocated_crew", "???"),
-        SYSTEM_UPGRADE("system_upgrade", "System (and subsystem; not reactor) upgrades beyond the ship's default levels."),
-        TELEPORTED("teleported", "Teleporter activations, in either direction."),
-        USED_DRONE("used_drone", "The number of times drone parts were consumed."),
-        USED_MISSILE("used_missile", "Missile/bomb weapon discharges. (See also: fired_shot)"),
-        WEAPON_UPGRADE("weapon_upgrade", "Weapons system upgrades beyond the ship's default levels. (See also: system_upgrade)");
-
-        private final String id;
-        private final String description;
-
-        StateVar(String id, String description) {
-            this.id = id;
-            this.description = description;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public String toString() {
-            return id;
-        }
-
-        public static StateVar findById(String id) {
-            for (StateVar v : values()) {
-                if (v.getId().equals(id)) return v;
-            }
-            return null;
-        }
-
-        public static String getDescription(String id) {
-            StateVar v = StateVar.findById(id);
-            if (v != null) return v.getDescription();
-            return id + " is an unknown var. Please report it on the forum thread.";
-        }
-    }
-
-
-    /**
      * The direction crew will face when standing at a system room's terminal.
      */
     public enum StationDirection {DOWN, RIGHT, UP, LEFT, NONE}
-
-    public static class RoomState {
-        private int oxygen = 100;
-        private final List<SquareState> squareList = new ArrayList<SquareState>();
-        private int stationSquare = -1;
-        private StationDirection stationDirection = StationDirection.NONE;
-
-
-        /**
-         * Constructs an incomplete RoomState.
-         * <p>
-         * It will need squares.
-         */
-        public RoomState() {
-        }
-
-        /**
-         * Copy constructor.
-         * <p>
-         * Each SquareState will be copy-constructed as well.
-         */
-        public RoomState(RoomState srcRoom) {
-            oxygen = srcRoom.getOxygen();
-
-            for (SquareState square : srcRoom.getSquareList()) {
-                squareList.add(new SquareState(square));
-            }
-
-            stationSquare = srcRoom.getStationSquare();
-            stationDirection = srcRoom.getStationDirection();
-        }
-
-        /**
-         * Set's the oxygen percentage in the room.
-         * <p>
-         * When this is below 5, a warning appears.
-         * <p>
-         * At 0, the game changes the room's appearance.
-         * Since 1.03.1, it paints red stripes on the floor.
-         * Before that, it highlighted the walls orange.
-         *
-         * @param n 0-100
-         */
-        public void setOxygen(int n) {
-            oxygen = n;
-        }
-
-        public int getOxygen() {
-            return oxygen;
-        }
-
-        /**
-         * Sets a room square for a station, to man a system.
-         * <p>
-         * When the system's capacity is 0, this is not set.
-         * <p>
-         * The station's direction must be set as well.
-         * <p>
-         * This was introduced in FTL 1.5.4.
-         *
-         * @param n the room square index, or -1 for none
-         */
-        public void setStationSquare(int n) {
-            stationSquare = n;
-        }
-
-        public int getStationSquare() {
-            return stationSquare;
-        }
-
-        /**
-         * Sets which edge of a room square a station should be placed at.
-         * <p>
-         * When the system's capacity is 0, this is not set.
-         * <p>
-         * The station's room square must be set as well.
-         * <p>
-         * This was introduced in FTL 1.5.4.
-         *
-         * @param n 0=D,1=R,2=U,3=L,4=None
-         */
-        public void setStationDirection(StationDirection d) {
-            stationDirection = d;
-        }
-
-        public StationDirection getStationDirection() {
-            return stationDirection;
-        }
-
-
-        /**
-         * Adds a floor square to the room.
-         * <p>
-         * Squares are indexed horizontally, left-to-right, wrapping
-         * into the next row down.
-         */
-        public void addSquare(SquareState square) {
-            squareList.add(square);
-        }
-
-        public SquareState getSquare(int n) {
-            return squareList.get(n);
-        }
-
-        public List<SquareState> getSquareList() {
-            return squareList;
-        }
-
-
-        @Override
-        public String toString() {
-            StringBuilder result = new StringBuilder();
-
-            result.append(String.format("Oxygen: %3d%%%n", oxygen));
-            result.append(String.format("Station Square: %2d, Station Direction: %s%n", stationSquare, stationDirection.toString()));
-
-            result.append("Squares...\n");
-            for (SquareState square : squareList) {
-                result.append(square.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
-            }
-
-            return result.toString();
-        }
-    }
-
-    public static class SquareState {
-        private int fireHealth = 0;
-        private int ignitionProgress = 0;
-        private int extinguishmentProgress = -1;
-
-
-        public SquareState() {
-        }
-
-        public SquareState(int fireHealth, int ignitionProgress, int extinguishmentProgress) {
-            this.fireHealth = fireHealth;
-            this.ignitionProgress = ignitionProgress;
-            this.extinguishmentProgress = extinguishmentProgress;
-        }
-
-        /**
-         * Copy constructor.
-         */
-        public SquareState(SquareState srcSquare) {
-            this.fireHealth = srcSquare.getFireHealth();
-            this.ignitionProgress = srcSquare.getIgnitionProgress();
-            this.extinguishmentProgress = srcSquare.getExtinguishmentProgress();
-        }
-
-        /**
-         * Sets the health of a fire in this square, or 0.
-         *
-         * @param n 0-100
-         */
-        public void setFireHealth(int n) {
-            fireHealth = n;
-        }
-
-        public int getFireHealth() {
-            return fireHealth;
-        }
-
-        /**
-         * Sets the square's ignition progress.
-         * <p>
-         * Squares adjacent to a fire grow closer to igniting as
-         * time passes. Then a new fire spawns in them at full health.
-         *
-         * @param n 0-100
-         */
-        public void setIgnitionProgress(int n) {
-            ignitionProgress = n;
-        }
-
-        public int getIgnitionProgress() {
-            return ignitionProgress;
-        }
-
-        /**
-         * Unknown.
-         * <p>
-         * This is a rapidly decrementing number, as a fire disappears in a puff
-         * of smoke. When not set, this is -1.
-         * <p>
-         * Starving a fire of oxygen does not affect its health.
-         * <p>
-         * In FTL 1.01-1.5.10 this always seemed to be -1. In FTL 1.5.13, other
-         * values were finally observed.
-         * <p>
-         * Observed values: -1 (almost always), 9,8,7,6,5,2,1,0.
-         */
-        public void setExtinguishmentProgress(int n) {
-            extinguishmentProgress = n;
-        }
-
-        public int getExtinguishmentProgress() {
-            return extinguishmentProgress;
-        }
-
-        @Override
-        public String toString() {
-
-            return String.format("Fire HP: %3d, Ignition: %3d%%, Extinguishment: %2d%n", fireHealth, ignitionProgress, extinguishmentProgress);
-        }
-    }
-
-
-    public static class DoorState {
-        private boolean open = false;
-        private boolean walkingThrough = false;
-
-        private int currentMaxHealth = 0;
-        private int health = 0;
-        private int nominalHealth = 0;
-        private int unknownDelta = 0;
-        private int unknownEpsilon = 0;
-
-
-        /**
-         * Constructor.
-         */
-        public DoorState() {
-        }
-
-        /**
-         * Copy constructor.
-         */
-        public DoorState(DoorState srcDoor) {
-            open = srcDoor.isOpen();
-            walkingThrough = srcDoor.isWalkingThrough();
-            currentMaxHealth = srcDoor.getCurrentMaxHealth();
-            health = srcDoor.getHealth();
-            nominalHealth = srcDoor.getNominalHealth();
-            unknownDelta = srcDoor.getUnknownDelta();
-            unknownEpsilon = srcDoor.getUnknownEpsilon();
-        }
-
-        /**
-         * Resets aspects of an existing object to be viable for player use.
-         * <p>
-         * This will be called by the ship object when it is commandeered.
-         * <p>
-         * Warning: Dangerous while values remain undeciphered.
-         */
-        public void commandeer() {
-            setCurrentMaxHealth(getNominalHealth());
-            setHealth(getCurrentMaxHealth());
-
-            setUnknownDelta(0);    // TODO: Vet this default.
-            setUnknownEpsilon(0);  // TODO: Vet this default.
-        }
-
-        public void setOpen(boolean b) {
-            open = b;
-        }
-
-        public void setWalkingThrough(boolean b) {
-            walkingThrough = b;
-        }
-
-        public boolean isOpen() {
-            return open;
-        }
-
-        public boolean isWalkingThrough() {
-            return walkingThrough;
-        }
-
-
-        /**
-         * Sets current max door health.
-         * <p>
-         * This is affected by situational modifiers like Crystal lockdown,
-         * but it likely copies the nominal value at some point.
-         * <p>
-         * This was introduced in FTL 1.5.4.
-         */
-        public void setCurrentMaxHealth(int n) {
-            currentMaxHealth = n;
-        }
-
-        public int getCurrentMaxHealth() {
-            return currentMaxHealth;
-        }
-
-        /**
-         * Sets the current door health.
-         * <p>
-         * Starting at current max, this decreases as someone tries to break it
-         * down.
-         * <p>
-         * TODO: After combat in which a hacking drone boosts the door's health,
-         * the current max returns to normal, but the actual health stays high
-         * for some reason.
-         * <p>
-         * This was introduced in FTL 1.5.4.
-         */
-        public void setHealth(int n) {
-            health = n;
-        }
-
-        public int getHealth() {
-            return health;
-        }
-
-        /**
-         * Sets nominal max door health.
-         * This is the value to which the current max will eventually reset.
-         * <p>
-         * Observed values:
-         * 04 = Level 0 (un-upgraded or damaged Doors system).
-         * 08 = Level 1 (???)
-         * 12 = Level 2 (confirmed)
-         * 16 = Level 3 (confirmed)
-         * 20 = Level 4 (Level 3, plus manned; confirmed)
-         * 18 = Level 3 (max, plus manned) (or is it 15, 10 while unmanned?)
-         * 50 = Lockdown.
-         * <p>
-         * TODO: The Mantis Basilisk ship's doors went from 4 to 12 when the
-         * 1-capacity Doors system was manned. Doors that were already hacked at
-         * the time stayed at 16.
-         * <p>
-         * TODO: Check what the Rock B Ship's doors have (it lacks a Doors
-         * system). Damaged system is 4 (hacked doors were still 16).
-         * <p>
-         * TODO: Investigate why an attached hacking drone adds to ALL THREE
-         * healths (set on contact). Observed diffs: 4 to 16.
-         * <p>
-         * This was introduced in FTL 1.5.4.
-         */
-        public void setNominalHealth(int n) {
-            nominalHealth = n;
-        }
-
-        public int getNominalHealth() {
-            return nominalHealth;
-        }
-
-        /**
-         * Unknown.
-         * <p>
-         * Observed values: 0 (normal), 1 (while level 2 Doors system is
-         * unmanned), 1 (while level 1 Doors system is manned), 2 (while level 3
-         * Doors system is unmanned), 3 (while level 3 Doors system is manned),
-         * 2 (hacking pod passively attached, set on
-         * contact). Still 2 while hack-disrupting.
-         * <p>
-         * This was introduced in FTL 1.5.4.
-         */
-        public void setUnknownDelta(int n) {
-            unknownDelta = n;
-        }
-
-        public int getUnknownDelta() {
-            return unknownDelta;
-        }
-
-        /**
-         * Sets hacking drone lockdown status.
-         * <p>
-         * Observed values:
-         * 0 = N/A
-         * 1 = Hacking drone pod passively attached.
-         * 2 = Hacking drone pod attached and disrupting.
-         * <p>
-         * A hacking system launches a drone pod that will latch onto a target
-         * system room, granting visibility. While the pod is attached and there
-         * is power to the hacking system, the doors of the room turn purple,
-         * locked to the crew of the targeted ship, but passable to the hacker's
-         * crew.
-         * <p>
-         * This was introduced in FTL 1.5.4.
-         */
-        public void setUnknownEpsilon(int n) {
-            unknownEpsilon = n;
-        }
-
-        public int getUnknownEpsilon() {
-            return unknownEpsilon;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder result = new StringBuilder();
-
-            result.append(String.format("Open: %-5b, Walking Through: %-5b%n", open, walkingThrough));
-            result.append(String.format("Full HP: %3d, Current HP: %3d, Nominal HP: %3d, Delta?: %3d, Epsilon?: %3d%n", currentMaxHealth, health, nominalHealth, unknownDelta, unknownEpsilon));
-
-            return result.toString();
-        }
-    }
-
-
-    public static class LockdownCrystal {
-        private int currentPosX = 0, currentPosY = 0;
-        private int speed = 0;
-        private int goalPosX = 0, goalPosY = 0;
-        private boolean arrived = false;
-        private boolean done = false;
-        private int lifetime = 0;
-        private boolean superFreeze = false;
-        private int lockingRoom = 0;
-        private int animDirection = 0;
-        private int shardProgress = 0;
-
-
-        public LockdownCrystal() {
-        }
-
-        public void setCurrentPositionX(int n) {
-            currentPosX = n;
-        }
-
-        public void setCurrentPositionY(int n) {
-            currentPosY = n;
-        }
-
-        public void setSpeed(int n) {
-            speed = n;
-        }
-
-        public void setGoalPositionX(int n) {
-            goalPosX = n;
-        }
-
-        public void setGoalPositionY(int n) {
-            goalPosY = n;
-        }
-
-        public void setArrived(boolean b) {
-            arrived = b;
-        }
-
-        public void setDone(boolean b) {
-            done = b;
-        }
-
-        public void setLifetime(int n) {
-            lifetime = n;
-        }
-
-        public void setSuperFreeze(boolean b) {
-            superFreeze = b;
-        }
-
-        public void setLockingRoom(int n) {
-            lockingRoom = n;
-        }
-
-        public void setAnimDirection(int n) {
-            animDirection = n;
-        }
-
-        public void setShardProgress(int n) {
-            shardProgress = n;
-        }
-
-        public int getCurrentPositionX() {
-            return currentPosX;
-        }
-
-        public int getCurrentPositionY() {
-            return currentPosY;
-        }
-
-        public int getSpeed() {
-            return speed;
-        }
-
-        public int getGoalPositionX() {
-            return goalPosX;
-        }
-
-        public int getGoalPositionY() {
-            return goalPosY;
-        }
-
-        public boolean hasArrived() {
-            return arrived;
-        }
-
-        public boolean isDone() {
-            return done;
-        }
-
-        public int getLifetime() {
-            return lifetime;
-        }
-
-        public boolean isSuperFreeze() {
-            return superFreeze;
-        }
-
-        public int getLockingRoom() {
-            return lockingRoom;
-        }
-
-        public int getAnimDirection() {
-            return animDirection;
-        }
-
-        public int getShardProgress() {
-            return shardProgress;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Current Position:  %8d,%8d (%9.03f,%9.03f)%n", currentPosX, currentPosY, currentPosX / 1000f, currentPosY / 1000f) +
-                    String.format("Speed?:            %8d%n", speed) +
-                    String.format("Goal Position:     %8d,%8d (%9.03f,%9.03f)%n", goalPosX, goalPosY, goalPosX / 1000f, goalPosY / 1000f) +
-                    String.format("Arrived?:          %8b%n", arrived) +
-                    String.format("Done?:             %8b%n", done) +
-                    String.format("Lifetime?:         %8d%n", lifetime) +
-                    String.format("SuperFreeze?:      %8b%n", superFreeze) +
-                    String.format("Locking Room?:     %8d%n", lockingRoom) +
-                    String.format("Anim Direction?:   %8d%n", animDirection) +
-                    String.format("Shard Progress?:   %8d%n", shardProgress);
-        }
-    }
-
-
-    public static class WeaponState {
-        private String weaponId = null;
-        private boolean armed = false;
-        private int cooldownTicks = 0;
-        private WeaponModuleState weaponMod = null;
-
-
-        /**
-         * Constructs an incomplete WeaponState.
-         * <p>
-         * It will need a weaponId.
-         * <p>
-         * For FTL 1.5.4+ saved games, a weapon module will be needed.
-         */
-        public WeaponState() {
-        }
-
-        /**
-         * Copy constructor.
-         * <p>
-         * The weapon module will be copy-constructed as well.
-         */
-        public WeaponState(WeaponState srcWeapon) {
-            weaponId = srcWeapon.getWeaponId();
-            armed = srcWeapon.isArmed();
-            cooldownTicks = srcWeapon.getCooldownTicks();
-
-            if (srcWeapon.getWeaponModule() != null) {
-                weaponMod = new WeaponModuleState(srcWeapon.getWeaponModule());
-            }
-        }
-
-
-        /**
-         * Resets aspects of an existing object to be viable for player use.
-         * <p>
-         * This will be called by the ship object when it is commandeered.
-         * <p>
-         * Warning: Dangerous while values remain undeciphered.
-         */
-        public void commandeer() {
-            setArmed(false);
-            setCooldownTicks(0);
-
-            if (getWeaponModule() != null) {
-                getWeaponModule().commandeer();
-            }
-        }
-
-
-        public void setWeaponId(String s) {
-            weaponId = s;
-        }
-
-        public String getWeaponId() {
-            return weaponId;
-        }
-
-        public void setArmed(boolean b) {
-            armed = b;
-            if (b == false) cooldownTicks = 0;
-        }
-
-        public boolean isArmed() {
-            return armed;
-        }
-
-        /**
-         * Sets time elapsed waiting for the weapon to cool down.
-         * <p>
-         * This increments from 0, by 1 each second. Its goal is the value of
-         * the 'coolown' tag in its WeaponBlueprint xml (0 when not armed).
-         * <p>
-         * Since FTL 1.5.4, this is no longer saved.
-         *
-         * @see WeaponModuleState.setCooldownTicks(int)
-         */
-        public void setCooldownTicks(int n) {
-            cooldownTicks = n;
-        }
-
-        public int getCooldownTicks() {
-            return cooldownTicks;
-        }
-
-        /**
-         * Sets additional weapon fields.
-         * <p>
-         * Advanced Edition added extra weapon fields at the end of saved game
-         * files. They're nested inside this class for convenience.
-         * <p>
-         * This was introduced in FTL 1.5.4.
-         */
-        public void setWeaponModule(WeaponModuleState weaponMod) {
-            this.weaponMod = weaponMod;
-        }
-
-        public WeaponModuleState getWeaponModule() {
-            return weaponMod;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder result = new StringBuilder();
-
-            WeaponBlueprint weaponBlueprint = DataManager.get().getWeapon(weaponId);
-            String cooldownString = (weaponBlueprint != null ? weaponBlueprint.getCooldown() + "" : "?");
-
-            result.append(String.format("WeaponId:       %s%n", weaponId));
-            result.append(String.format("Armed:          %b%n", armed));
-            result.append(String.format("Cooldown Ticks: %2d (max: %2s) (Not used as of FTL 1.5.4)%n", cooldownTicks, cooldownString));
-
-            result.append("\nWeapon Module...\n");
-            if (weaponMod != null) {
-                result.append(weaponMod.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
-            }
-
-            return result.toString();
-        }
-    }
-
 
     public static abstract class ExtendedSystemInfo {
 
@@ -3376,7 +2677,7 @@ public class SavedGameParser extends Parser {
          * subject to disruption. The original room will still have its flag
          * lingering from before, but the hacking system only affects one room
          * and it already picked the left one. Both flagged rooms will be
-         * revealed, but disruption will only affect only the left one.
+         * revealed, but disruption will only affect the left one.
          * <p>
          * When not set, this is null.
          */
@@ -3497,7 +2798,7 @@ public class SavedGameParser extends Parser {
         /**
          * Sets whether an enemy system is currently being disrupted.
          *
-         * @see SystemState.setHackLevel(int)
+         * @see SystemState#setHackLevel(int)
          */
         public void setDisrupting(boolean b) {
             disrupting = b;
@@ -3891,7 +3192,7 @@ public class SavedGameParser extends Parser {
          * A heading of 45 points southeast, pivoting the body around the tip.
          * A heading of 90 points south, with the body above the pivot point.
          *
-         * @param n degrees clockwise (may be negative)
+         * @param n degrees clockwise (can be negative)
          */
         public void setHeading(int n) {
             heading = n;
@@ -4015,7 +3316,7 @@ public class SavedGameParser extends Parser {
         }
 
         /**
-         * Sets an animSheet to play depcting the projectile in flight.
+         * Sets an animSheet to play depicting the projectile in flight.
          * <p>
          * TODO: This has been observed as "" when it's an asteroid!?
          */
@@ -4046,7 +3347,7 @@ public class SavedGameParser extends Parser {
          * Sets the flight anim state, played while in transit.
          * <p>
          * Newly spawned projectiles, and pending ones that haven't been fired
-         * yet, have their flightAnim's playing set to true.
+         * yet, have their flightAnims playing set to true.
          *
          * @see #setFlightAnimId(String)
          */
@@ -4169,7 +3470,7 @@ public class SavedGameParser extends Parser {
          * <p>
          * FTL will have already marked it as having missed first.
          *
-         * @see setMissed(boolean)
+         * @see #setMissed(boolean)
          */
         public void setPassedTarget(boolean b) {
             passedTarget = b;
@@ -4238,7 +3539,7 @@ public class SavedGameParser extends Parser {
             result.append(String.format("Owner Id?:         %8d%n", ownerId));
             result.append(String.format("Self Id?:          %8d%n", selfId));
 
-            result.append(String.format("\nDamage...%n"));
+            result.append(String.format("%nDamage...%n"));
             if (damage != null) {
                 result.append(damage.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
             }
@@ -4253,12 +3554,12 @@ public class SavedGameParser extends Parser {
             result.append(String.format("Death AnimId:      %s%n", deathAnimId));
             result.append(String.format("Flight AnimId:     %s%n", flightAnimId));
 
-            result.append(String.format("\nDeath Anim?...%n"));
+            result.append(String.format("%nDeath Anim?...%n"));
             if (deathAnim != null) {
                 result.append(deathAnim.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
             }
 
-            result.append(String.format("\nFlight Anim?...%n"));
+            result.append(String.format("%nFlight Anim?...%n"));
             if (flightAnim != null) {
                 result.append(flightAnim.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
             }
@@ -4280,7 +3581,7 @@ public class SavedGameParser extends Parser {
             result.append(String.format("Type?:             %8d%n", type));
             result.append(String.format("Broadcast Target:  %8b (Red dot at targeted location)%n", broadcastTarget));
 
-            result.append(String.format("\nExtended Projectile Info...%n"));
+            result.append(String.format("%nExtended Projectile Info...%n"));
             if (extendedInfo != null) {
                 result.append(extendedInfo.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
             }
@@ -4388,7 +3689,7 @@ public class SavedGameParser extends Parser {
 
             result.append(String.format("Type:               Unknown Info%n"));
 
-            result.append(String.format("\nAlpha?...%n"));
+            result.append(String.format("%nAlpha?...%n"));
             for (int i = 0; i < unknownAlpha.length; i++) {
                 result.append(String.format("%7s", prettyInt(unknownAlpha[i])));
 
@@ -4426,16 +3727,23 @@ public class SavedGameParser extends Parser {
      * not considered).
      */
     public static class BeamProjectileInfo extends ExtendedProjectileInfo {
-        private int emissionEndX = 0, emissionEndY = 0;
-        private int strafeSourceX = 0, strafeSourceY = 0;
-        private int strafeEndX = 0, strafeEndY = 0;
-        private int unknownBetaX = 0, unknownBetaY = 0;
-        private int swathEndX = 0, swathEndY = 0;
-        private int swathStartX = 0, swathStartY = 0;
+        private int emissionEndX = 0;
+        private int emissionEndY = 0;
+        private int strafeSourceX = 0;
+        private int strafeSourceY = 0;
+        private int strafeEndX = 0;
+        private int strafeEndY = 0;
+        private int unknownBetaX = 0;
+        private int unknownBetaY = 0;
+        private int swathEndX = 0;
+        private int swathEndY = 0;
+        private int swathStartX = 0;
+        private int swathStartY = 0;
         private int unknownGamma = 0;
         private int swathLength = 0;
         private int unknownDelta = 0;
-        private int unknownEpsilonX = 0, unknownEpsilonY = 0;
+        private int unknownEpsilonX = 0;
+        private int unknownEpsilonY = 0;
         private int unknownZeta = 0;
         private int unknownEta = 0;
         private int emissionAngle = 0;
@@ -4495,7 +3803,7 @@ public class SavedGameParser extends Parser {
          * <p>
          * For Beam drones, this point will be the same as strafeSource, except
          * this y will be shifted upward by -2000. The emission line won't be
-         * drawn in that case, obvisously, since the drone is right there.
+         * drawn in that case, obviously, since the drone is right there.
          * <p>
          * This is relative to the ship space the beam was emitted from
          * (e.g., weapon of a player ship, or a drone hovering over a nearby
@@ -5444,7 +4752,7 @@ public class SavedGameParser extends Parser {
     private DronePodState readDronePod(FileInputStream in, DroneType droneType) throws IOException {
         if (droneType == null) throw new IllegalArgumentException("DroneType cannot be null.");
 
-        //log.debug( String.format( "Drone Pod: @%d", in.getChannel().position() ) );
+//        log.debug("Drone Pod: {}", in.getChannel().position())
 
         DronePodState dronePod = new DronePodState();
         dronePod.setDroneType(droneType);
@@ -5713,9 +5021,7 @@ public class SavedGameParser extends Parser {
         int reticleX = readInt(in);
         int reticleY = readInt(in);
 
-        XYPair reticle = new XYPair(reticleX, reticleY);
-
-        return reticle;
+        return new XYPair(reticleX, reticleY);
     }
 
     public void writeReticleCoordinate(OutputStream out, XYPair reticle) throws IOException {

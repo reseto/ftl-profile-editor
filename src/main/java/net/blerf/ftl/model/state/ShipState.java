@@ -35,12 +35,12 @@ public class ShipState {
     private int reservePowerCapacity = 0;
     private final Map<SystemType, List<SystemState>> systemsMap = new LinkedHashMap<>();
     private List<SavedGameParser.ExtendedSystemInfo> extendedSystemInfoList = new ArrayList<>();
-    private final List<SavedGameParser.RoomState> roomList = new ArrayList<>();
+    private final List<RoomState> roomList = new ArrayList<>();
     private final Map<XYPair, Integer> breachMap = new LinkedHashMap<>();
-    private final Map<DoorCoordinate, SavedGameParser.DoorState> doorMap = new LinkedHashMap<>();
+    private final Map<DoorCoordinate, DoorState> doorMap = new LinkedHashMap<>();
     private int cloakAnimTicks = 0;
-    private List<SavedGameParser.LockdownCrystal> lockdownCrystalList = new ArrayList<>();
-    private final List<SavedGameParser.WeaponState> weaponList = new ArrayList<>();
+    private List<LockdownCrystal> lockdownCrystalList = new ArrayList<>();
+    private final List<WeaponState> weaponList = new ArrayList<>();
     private final List<DroneState> droneList = new ArrayList<>();
     private final List<String> augmentIdList = new ArrayList<>();
     private final List<StandaloneDroneState> standaloneDroneList = new ArrayList<>();
@@ -124,9 +124,9 @@ public class ShipState {
             int squaresH = layoutRoom.squaresH;
             int squaresV = layoutRoom.squaresV;
 
-            SavedGameParser.RoomState roomState = new SavedGameParser.RoomState();
+            RoomState roomState = new RoomState();
             for (int s = 0; s < squaresH * squaresV; s++) {
-                roomState.addSquare(new SavedGameParser.SquareState(0, 0, -1));
+                roomState.addSquare(new SquareState(0, 0, -1));
             }
             addRoom(roomState);
         }
@@ -137,7 +137,7 @@ public class ShipState {
         for (Map.Entry<DoorCoordinate, ShipLayoutDoor> entry : layoutDoorMap.entrySet()) {
             DoorCoordinate doorCoord = entry.getKey();
 
-            setDoor(doorCoord.x, doorCoord.y, doorCoord.v, new SavedGameParser.DoorState());
+            setDoor(doorCoord.x, doorCoord.y, doorCoord.v, new DoorState());
         }
 
         // Augments.
@@ -190,14 +190,14 @@ public class ShipState {
             info.commandeer();
         }
 
-        for (SavedGameParser.DoorState door : getDoorMap().values()) {
+        for (DoorState door : getDoorMap().values()) {
             door.commandeer();
         }
 
         setCloakAnimTicks(0);
         getLockdownCrystalList().clear();
 
-        for (SavedGameParser.WeaponState weapon : getWeaponList()) {
+        for (WeaponState weapon : getWeaponList()) {
             weapon.commandeer();
         }
 
@@ -492,7 +492,7 @@ public class ShipState {
     }
 
     public <T extends SavedGameParser.ExtendedSystemInfo> List<T> getExtendedSystemInfoList(Class<T> infoClass) {
-        List<T> result = new ArrayList<T>(1);
+        List<T> result = new ArrayList<>(1);
         for (SavedGameParser.ExtendedSystemInfo info : extendedSystemInfoList) {
             if (infoClass.isInstance(info)) {
                 result.add(infoClass.cast(info));
@@ -516,15 +516,15 @@ public class ShipState {
     }
 
 
-    public void addRoom(SavedGameParser.RoomState r) {
+    public void addRoom(RoomState r) {
         roomList.add(r);
     }
 
-    public SavedGameParser.RoomState getRoom(int roomId) {
+    public RoomState getRoom(int roomId) {
         return roomList.get(roomId);
     }
 
-    public List<SavedGameParser.RoomState> getRoomList() {
+    public List<RoomState> getRoomList() {
         return roomList;
     }
 
@@ -554,12 +554,12 @@ public class ShipState {
      * @param d        a DoorState
      * @see net.blerf.ftl.model.shiplayout.ShipLayout
      */
-    public void setDoor(int wallX, int wallY, int vertical, SavedGameParser.DoorState d) {
+    public void setDoor(int wallX, int wallY, int vertical, DoorState d) {
         DoorCoordinate doorCoord = new DoorCoordinate(wallX, wallY, vertical);
         doorMap.put(doorCoord, d);
     }
 
-    public SavedGameParser.DoorState getDoor(int wallX, int wallY, int vertical) {
+    public DoorState getDoor(int wallX, int wallY, int vertical) {
         DoorCoordinate doorCoord = new DoorCoordinate(wallX, wallY, vertical);
         return doorMap.get(doorCoord);
     }
@@ -572,7 +572,7 @@ public class ShipState {
      * order setDoor was called, which generally will be in the saved game
      * file's order.
      */
-    public Map<DoorCoordinate, SavedGameParser.DoorState> getDoorMap() {
+    public Map<DoorCoordinate, DoorState> getDoorMap() {
         return doorMap;
     }
 
@@ -601,20 +601,20 @@ public class ShipState {
      * <p>
      * This was introduced in FTL 1.5.12.
      */
-    public void setLockdownCrystalList(List<SavedGameParser.LockdownCrystal> crystalList) {
+    public void setLockdownCrystalList(List<LockdownCrystal> crystalList) {
         lockdownCrystalList = crystalList;
     }
 
-    public List<SavedGameParser.LockdownCrystal> getLockdownCrystalList() {
+    public List<LockdownCrystal> getLockdownCrystalList() {
         return lockdownCrystalList;
     }
 
 
-    public void addWeapon(SavedGameParser.WeaponState w) {
+    public void addWeapon(WeaponState w) {
         weaponList.add(w);
     }
 
-    public List<SavedGameParser.WeaponState> getWeaponList() {
+    public List<WeaponState> getWeaponList() {
         return weaponList;
     }
 
@@ -734,7 +734,7 @@ public class ShipState {
 
         result.append("\nRooms...\n");
         first = true;
-        for (ListIterator<SavedGameParser.RoomState> it = roomList.listIterator(); it.hasNext(); ) {
+        for (ListIterator<RoomState> it = roomList.listIterator(); it.hasNext(); ) {
             if (first) {
                 first = false;
             } else {
@@ -769,7 +769,7 @@ public class ShipState {
         result.append("\nDoors...\n");
         int doorId = -1;
         first = true;
-        for (Map.Entry<DoorCoordinate, SavedGameParser.DoorState> entry : doorMap.entrySet()) {
+        for (Map.Entry<DoorCoordinate, DoorState> entry : doorMap.entrySet()) {
             if (first) {
                 first = false;
             } else {
@@ -777,18 +777,18 @@ public class ShipState {
             }
 
             DoorCoordinate doorCoord = entry.getKey();
-            SavedGameParser.DoorState d = entry.getValue();
+            DoorState d = entry.getValue();
             String orientation = (doorCoord.v == 1) ? "V" : "H";
 
             result.append(String.format("DoorId: %2d (%2d,%2d,%2s)%n", ++doorId, doorCoord.x, doorCoord.y, orientation));
             result.append(d.toString().replaceAll("(^|\n)(.+)", "$1  $2"));
         }
 
-        result.append(String.format("\nCloak Anim Ticks:  %3d (0=Uncloaked to 500=Cloaked)%n", cloakAnimTicks));
+        result.append(String.format("%nCloak Anim Ticks:  %3d (0=Uncloaked to 500=Cloaked)%n", cloakAnimTicks));
 
         result.append("\nLockdown Crystals...\n");
         first = true;
-        for (SavedGameParser.LockdownCrystal c : lockdownCrystalList) {
+        for (LockdownCrystal c : lockdownCrystalList) {
             if (first) {
                 first = false;
             } else {
@@ -799,7 +799,7 @@ public class ShipState {
 
         result.append("\nWeapons...\n");
         first = true;
-        for (SavedGameParser.WeaponState w : weaponList) {
+        for (WeaponState w : weaponList) {
             if (first) {
                 first = false;
             } else {

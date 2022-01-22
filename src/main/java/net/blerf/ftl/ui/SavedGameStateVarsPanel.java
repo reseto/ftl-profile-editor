@@ -8,7 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JPanel;
 import net.blerf.ftl.model.state.SavedGameState;
-import net.blerf.ftl.parser.SavedGameParser.StateVar;
+import net.blerf.ftl.model.state.StateVar;
 
 
 public class SavedGameStateVarsPanel extends JPanel {
@@ -106,6 +106,7 @@ public class SavedGameStateVarsPanel extends JPanel {
                     int value = Integer.parseInt(newString);
                     gameState.setStateVar(id, value);
                 } catch (NumberFormatException e) {
+                    // nothing to do
                 }
             }
         }

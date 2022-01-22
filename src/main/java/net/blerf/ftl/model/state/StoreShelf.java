@@ -6,13 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
 /**
  * Up to 3 StoreItems may to be added (Set the StoreItemType, too.)
  * Fewer StoreItems mean empty space on the shelf.
  */
+@Getter
+@Setter
+@NoArgsConstructor
 public class StoreShelf {
     private StoreItemType itemType = StoreItemType.WEAPON;
     private final List<StoreItem> items = new ArrayList<>();

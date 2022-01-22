@@ -9,7 +9,7 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JComponent;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.model.shiplayout.DoorCoordinate;
-import net.blerf.ftl.parser.SavedGameParser.DoorState;
+import net.blerf.ftl.model.state.DoorState;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;
 

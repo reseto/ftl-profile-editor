@@ -1,10 +1,15 @@
 package net.blerf.ftl.model.state;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Types of drones.
  * <p>
  * FTL 1.5.4 introduced HACKING, BEAM, and SHIELD.
  */
+@Getter
+@AllArgsConstructor
 public enum DroneType {
     // TODO: Magic numbers.
     BATTLE("BATTLE", 150),
@@ -20,19 +25,7 @@ public enum DroneType {
     private final String id;
     private final int maxHealth;
 
-    DroneType(String id, int maxHealth) {
-        this.id = id;
-        this.maxHealth = maxHealth;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
+    @Override
     public String toString() {
         return id;
     }
