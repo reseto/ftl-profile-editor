@@ -124,8 +124,6 @@ public class DefaultDataManager extends DataManager {
     private final Map<String, WeaponAnim> dlcWeaponAnimIdMap;
 
     private PackContainer packContainer = null;
-    private DatParser datParser = null;
-
 
     public DefaultDataManager(File datsDir) throws IOException, JAXBException, JDOMException {
 
@@ -159,8 +157,6 @@ public class DefaultDataManager extends DataManager {
                 throw new IOException(String.format("Could not find either \"%s\" or both \"%s\" and \"%s\"", ftlDatFile.getName(), dataDatFile.getName(), resourceDatFile.getName()));
             }
 
-            datParser = new DatParser();
-
             // Central string lookups (FTL 1.6.1+).
             // Blank tags elsewhere can have an "id" attribute.
             //   Look up a text tag with that "name" attribute.
@@ -187,7 +183,7 @@ public class DefaultDataManager extends DataManager {
                 log.debug(String.format("Reading \"data/%s\"...", textLookupFileName));
                 InputStream tmpStream = getResourceInputStream("data/" + textLookupFileName);
                 streams.add(tmpStream);
-                List<NamedText> tmpNamedTextList = datParser.readNamedTextList(tmpStream, textLookupFileName);
+                List<NamedText> tmpNamedTextList = DatParser.readNamedTextList(tmpStream, textLookupFileName);
                 for (NamedText namedText : tmpNamedTextList) {
                     textLookupMap.put(namedText.getId(), namedText.getText());
                 }
@@ -199,7 +195,7 @@ public class DefaultDataManager extends DataManager {
             log.debug("Reading \"data/achievements.xml\"...");
             InputStream achStream = getResourceInputStream("data/achievements.xml");
             streams.add(achStream);
-            achievements = datParser.readAchievements(achStream, "achievements.xml", textLookupMap);
+            achievements = DatParser.readAchievements(achStream, "achievements.xml", textLookupMap);
 
             log.info("Reading Blueprints...");
 
@@ -221,7 +217,7 @@ public class DefaultDataManager extends DataManager {
                 log.debug(String.format("Reading \"data/%s\"...", blueprintsFileName));
                 InputStream tmpStream = getResourceInputStream("data/" + blueprintsFileName);
                 streams.add(tmpStream);
-                Blueprints tmpBlueprints = datParser.readBlueprints(tmpStream, blueprintsFileName, textLookupMap);
+                Blueprints tmpBlueprints = DatParser.readBlueprints(tmpStream, blueprintsFileName, textLookupMap);
                 stdBlueprintsFileMap.put(blueprintsFileName, tmpBlueprints);
                 dlcBlueprintsFileMap.put(blueprintsFileName, tmpBlueprints);
             }
@@ -232,7 +228,7 @@ public class DefaultDataManager extends DataManager {
                 log.debug(String.format("Reading \"data/%s\"...", blueprintsFileName));
                 InputStream tmpStream = getResourceInputStream("data/" + blueprintsFileName);
                 streams.add(tmpStream);
-                Blueprints tmpBlueprints = datParser.readBlueprints(tmpStream, blueprintsFileName, textLookupMap);
+                Blueprints tmpBlueprints = DatParser.readBlueprints(tmpStream, blueprintsFileName, textLookupMap);
                 dlcBlueprintsFileMap.put(blueprintsFileName, tmpBlueprints);
             }
 
@@ -266,7 +262,7 @@ public class DefaultDataManager extends DataManager {
                 log.debug(String.format("Reading \"data/%s\"...", eventsFileName));
                 InputStream tmpStream = getResourceInputStream("data/" + eventsFileName);
                 streams.add(tmpStream);
-                Encounters tmpEncounters = datParser.readEvents(tmpStream, eventsFileName, textLookupMap);
+                Encounters tmpEncounters = DatParser.readEvents(tmpStream, eventsFileName, textLookupMap);
                 stdEventsFileMap.put(eventsFileName, tmpEncounters);
                 dlcEventsFileMap.put(eventsFileName, tmpEncounters);
             }
@@ -277,7 +273,7 @@ public class DefaultDataManager extends DataManager {
                 log.debug(String.format("Reading \"data/%s\"...", eventsFileName));
                 InputStream tmpStream = getResourceInputStream("data/" + eventsFileName);
                 streams.add(tmpStream);
-                Encounters tmpEncounters = datParser.readEvents(tmpStream, eventsFileName, textLookupMap);
+                Encounters tmpEncounters = DatParser.readEvents(tmpStream, eventsFileName, textLookupMap);
                 dlcEventsFileMap.put(eventsFileName, tmpEncounters);
             }
 
@@ -354,7 +350,7 @@ public class DefaultDataManager extends DataManager {
             log.debug("Reading \"data/names.xml\"...");
             InputStream crewNamesStream = getResourceInputStream("data/names.xml");
             streams.add(crewNamesStream);
-            crewNameLists = datParser.readCrewNames(crewNamesStream, "names.xml");
+            crewNameLists = DatParser.readCrewNames(crewNamesStream, "names.xml");
 
             log.info("Reading Sector Data...");
 
@@ -362,7 +358,7 @@ public class DefaultDataManager extends DataManager {
             log.debug("Reading \"data/sector_data.xml\"...");
             InputStream sectorDataStream = getResourceInputStream("data/sector_data.xml");
             streams.add(sectorDataStream);
-            tmpSectorData = datParser.readSectorData(sectorDataStream, "sector_data.xml", textLookupMap);
+            tmpSectorData = DatParser.readSectorData(sectorDataStream, "sector_data.xml", textLookupMap);
 
             sectorDescriptionIdMap = new LinkedHashMap<String, SectorDescription>();
             for (SectorDescription tmpDesc : tmpSectorData.getSectorDescriptions()) {
@@ -391,7 +387,7 @@ public class DefaultDataManager extends DataManager {
             log.debug("Reading \"data/events_imageList.xml\"...");
             InputStream imageListsStream = getResourceInputStream("data/events_imageList.xml");
             streams.add(imageListsStream);
-            tmpBgImageLists = datParser.readImageLists(imageListsStream, "events_imageList.xml");
+            tmpBgImageLists = DatParser.readImageLists(imageListsStream, "events_imageList.xml");
 
             log.info("Reading Animations...");
 
@@ -399,14 +395,14 @@ public class DefaultDataManager extends DataManager {
             log.debug("Reading \"data/animations.xml\"...");
             InputStream stdAnimationsStream = getResourceInputStream("data/animations.xml");
             streams.add(stdAnimationsStream);
-            stdAnimations = datParser.readAnimations(stdAnimationsStream, "animations.xml");
+            stdAnimations = DatParser.readAnimations(stdAnimationsStream, "animations.xml");
 
             Animations dlcAnimations = null;
             if (hasResourceInputStream("data/dlcAnimations.xml")) {
                 log.debug("Reading \"data/dlcAnimations.xml\"...");
                 InputStream dlcAnimationsStream = getResourceInputStream("data/dlcAnimations.xml");
                 streams.add(dlcAnimationsStream);
-                dlcAnimations = datParser.readAnimations(dlcAnimationsStream, "dlcAnimations.xml");
+                dlcAnimations = DatParser.readAnimations(dlcAnimationsStream, "dlcAnimations.xml");
             }
 
             log.info("Finished reading FTL resources.");
@@ -1092,7 +1088,7 @@ public class DefaultDataManager extends DataManager {
             InputStream in = null;
             try {
                 in = getResourceInputStream("data/" + id + ".txt");
-                result = datParser.readLayout(in, id + ".txt");
+                result = DatParser.readLayout(in, id + ".txt");
                 shipLayoutIdMap.put(id, result);
             } catch (FileNotFoundException e) {
                 log.error("No ShipLayout found for id: {}", id);
@@ -1114,7 +1110,7 @@ public class DefaultDataManager extends DataManager {
      * <p>
      * Should be the same as layoutId.
      *
-     * @see ShipBlueprint.getLayoutId()
+     * @see ShipBlueprint#getLayoutId()
      */
     @Override
     public ShipChassis getShipChassis(String id) {
@@ -1125,7 +1121,7 @@ public class DefaultDataManager extends DataManager {
             try {
                 log.debug(String.format("Reading ship chassis (data/%s.xml)...", id));
                 in = getResourceInputStream("data/" + id + ".xml");
-                result = datParser.readChassis(in, id + ".xml");
+                result = DatParser.readChassis(in, id + ".xml");
                 shipChassisIdMap.put(id, result);
             } catch (JDOMException e) {
                 log.error("Parsing XML failed for ShipChassis id: {}", id, e);

@@ -38,17 +38,16 @@ import org.jdom2.output.DOMOutputter;
 
 public class DatParser {
 
-    private final Pattern xmlDeclPtn = Pattern.compile("<[?]xml [^>]*?[?]>\n*");
-    private final Pattern rootTagPtn = Pattern.compile("</?FTL>\n*");
+    private static final Pattern XML_DECL_PTN = Pattern.compile("<[?]xml [^>]*?[?]>\n*");
+    private static final Pattern ROOT_TAG_PTN = Pattern.compile("</?FTL>\n*");
 
-    private final Pattern scrubPtn = Pattern.compile(xmlDeclPtn.pattern() + "|" + rootTagPtn.pattern());
+    private static final Pattern scrubPtn = Pattern.compile(XML_DECL_PTN.pattern() + "|" + ROOT_TAG_PTN.pattern());
 
 
-    public DatParser() {
+    private DatParser() {
     }
 
-
-    public List<NamedText> readNamedTextList(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
+    public static List<NamedText> readNamedTextList(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -72,8 +71,7 @@ public class DatParser {
         return nts.getNamedTexts();
     }
 
-
-    public List<Achievement> readAchievements(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
+    public static List<Achievement> readAchievements(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -102,7 +100,7 @@ public class DatParser {
     }
 
 
-    public Blueprints readBlueprints(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
+    public static Blueprints readBlueprints(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -115,8 +113,8 @@ public class DatParser {
         // Note: The replacement will be inserted as-is, with no backreference substitution.
 
         Map<Pattern, String> fixMap = new LinkedHashMap<Pattern, String>();
-        fixMap.put(xmlDeclPtn, "");
-        fixMap.put(rootTagPtn, "");
+        fixMap.put(XML_DECL_PTN, "");
+        fixMap.put(ROOT_TAG_PTN, "");
 
         if ("blueprints.xml".equals(fileName)) {
             // blueprints.xml: LONG_ELITE_MED shipBlueprint (FTL 1.03.1)
@@ -149,13 +147,11 @@ public class DatParser {
         Unmarshaller u = jc.createUnmarshaller();
         u.setListener(textLookupListener);
 
-        Blueprints bps = (Blueprints) u.unmarshal(domOutputter.output(doc));
-
-        return bps;
+        return (Blueprints) u.unmarshal(domOutputter.output(doc));
     }
 
 
-    public ShipLayout readLayout(InputStream stream, String fileName) throws IOException {
+    public static ShipLayout readLayout(InputStream stream, String fileName) throws IOException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
         BufferedReader in = new BufferedReader(new StringReader(streamText));
@@ -207,7 +203,7 @@ public class DatParser {
     }
 
 
-    public ShipChassis readChassis(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
+    public static ShipChassis readChassis(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -226,12 +222,10 @@ public class DatParser {
         JAXBContext jc = JAXBContext.newInstance(ShipChassis.class);
         Unmarshaller u = jc.createUnmarshaller();
 
-        ShipChassis sch = (ShipChassis) u.unmarshal(domOutputter.output(doc));
-
-        return sch;
+        return (ShipChassis) u.unmarshal(domOutputter.output(doc));
     }
 
-    public List<CrewNameList> readCrewNames(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
+    public static List<CrewNameList> readCrewNames(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -256,7 +250,7 @@ public class DatParser {
     }
 
 
-    public SectorData readSectorData(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
+    public static SectorData readSectorData(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -279,13 +273,11 @@ public class DatParser {
         Unmarshaller u = jc.createUnmarshaller();
         u.setListener(textLookupListener);
 
-        SectorData sectorData = (SectorData) u.unmarshal(domOutputter.output(doc));
-
-        return sectorData;
+        return (SectorData) u.unmarshal(domOutputter.output(doc));
     }
 
 
-    public Encounters readEvents(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
+    public static Encounters readEvents(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -308,13 +300,11 @@ public class DatParser {
         Unmarshaller u = jc.createUnmarshaller();
         u.setListener(textLookupListener);
 
-        Encounters evts = (Encounters) u.unmarshal(domOutputter.output(doc));
-
-        return evts;
+        return (Encounters) u.unmarshal(domOutputter.output(doc));
     }
 
 
-    public List<ShipEvent> readShipEvents(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
+    public static List<ShipEvent> readShipEvents(InputStream stream, String fileName, Map<String, String> textLookupMap) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -343,7 +333,7 @@ public class DatParser {
     }
 
 
-    public List<BackgroundImageList> readImageLists(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
+    public static List<BackgroundImageList> readImageLists(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -368,7 +358,7 @@ public class DatParser {
     }
 
 
-    public Animations readAnimations(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
+    public static Animations readAnimations(InputStream stream, String fileName) throws IOException, JAXBException, JDOMException {
 
         String streamText = TextUtilities.decodeText(stream, fileName).text;
 
@@ -387,8 +377,6 @@ public class DatParser {
         JAXBContext jc = JAXBContext.newInstance(Animations.class);
         Unmarshaller u = jc.createUnmarshaller();
 
-        Animations animations = (Animations) u.unmarshal(domOutputter.output(doc));
-
-        return animations;
+        return (Animations) u.unmarshal(domOutputter.output(doc));
     }
 }

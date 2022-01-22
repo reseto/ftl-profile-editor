@@ -27,6 +27,9 @@ import org.jdom2.input.SAXBuilder;
 
 public class TextUtilities {
 
+    private TextUtilities() {
+    }
+
     /**
      * Determines text encoding for an InputStream and decodes its bytes as a string.
      * <p>
