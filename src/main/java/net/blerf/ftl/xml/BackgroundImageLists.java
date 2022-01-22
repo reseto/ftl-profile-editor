@@ -18,14 +18,5 @@ import lombok.Setter;
 public class BackgroundImageLists {
 
     @XmlElement(name = "imageList")
-    private List<BackgroundImageList> imageLists = new ArrayList<BackgroundImageList>();
-
-
-    public void setImageLists(List<BackgroundImageList> imageLists) {
-        this.imageLists = imageLists;
-    }
-
-    public List<BackgroundImageList> getImageLists() {
-        return imageLists;
-    }
+    private List<BackgroundImageList> imageLists = new ArrayList<>();
 }

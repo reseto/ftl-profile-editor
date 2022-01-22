@@ -5,8 +5,13 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @XmlRootElement(name = "sectorData")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SectorData {
@@ -16,46 +21,4 @@ public class SectorData {
     @XmlElement(name = "sectorDescription")
     private List<SectorDescription> sectorDescriptions;
 
-    public void setSectorTypes(List<SectorType> sectorTypes) {
-        this.sectorTypes = sectorTypes;
-    }
-
-    public List<SectorType> getSectorTypes() {
-        return sectorTypes;
-    }
-
-    public void setSectorDescriptions(List<SectorDescription> sectorDescriptions) {
-        this.sectorDescriptions = sectorDescriptions;
-    }
-
-    public List<SectorDescription> getSectorDescriptions() {
-        return sectorDescriptions;
-    }
-
-    /**
-     * Returns a SectorType with a given id.
-     */
-    public SectorType getSectorTypeById(String id) {
-        if (id == null || sectorTypes == null) return null;
-
-        for (SectorType tmpType : sectorTypes) {
-            if (id.equals(tmpType.getId())) return tmpType;
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns a SectorDescription with a given id.
-     */
-    public SectorDescription getSectorDescriptionById(String id) {
-        if (id == null || sectorDescriptions == null) return null;
-
-        SectorDescription result = null;
-        for (SectorDescription tmpDesc : sectorDescriptions) {
-            if (id.equals(tmpDesc.getId())) result = tmpDesc;
-        }
-
-        return result;
-    }
 }
