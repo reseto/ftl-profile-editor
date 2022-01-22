@@ -13,9 +13,12 @@ import javax.swing.JPanel;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.HazardVulnerability;
+import net.blerf.ftl.model.state.AsteroidFieldState;
+import net.blerf.ftl.model.state.EncounterState;
+import net.blerf.ftl.model.state.EnvironmentState;
+import net.blerf.ftl.model.state.NearbyShipAIState;
 import net.blerf.ftl.model.state.SavedGameState;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.xml.DroneBlueprint;
 import net.blerf.ftl.xml.WeaponBlueprint;
 
@@ -363,7 +366,7 @@ public class SavedGameGeneralPanel extends JPanel {
                 envPanel.getCombo(ENV_VULN).addItem(h);
             }
 
-            SavedGameParser.EnvironmentState env = gameState.getEnvironment();
+            EnvironmentState env = gameState.getEnvironment();
             envEnabled = (env != null);
             envPanel.getBoolean(ENV_RED_GIANT_PRESENT).setEnabled(envEnabled);
             envPanel.getBoolean(ENV_PULSAR_PRESENT).setEnabled(envEnabled);
@@ -387,7 +390,7 @@ public class SavedGameGeneralPanel extends JPanel {
                 envPanel.setBoolAndReminder(ENV_PDS_PRESENT, env.isPDSPresent());
                 envPanel.setComboAndReminder(ENV_VULN, env.getVulnerableShips());
 
-                SavedGameParser.AsteroidFieldState asteroidField = env.getAsteroidField();
+                AsteroidFieldState asteroidField = env.getAsteroidField();
                 boolean asteroidsPresent = (asteroidField != null);
                 envPanel.getBoolean(ENV_ASTEROID_FIELD).setSelected(asteroidsPresent);
 
@@ -404,7 +407,7 @@ public class SavedGameGeneralPanel extends JPanel {
                 envPanel.setIntAndReminder(ENV_PDS_TICKS, env.getPDSTicks());
             }
 
-            SavedGameParser.NearbyShipAIState ai = gameState.getNearbyShipAI();
+            NearbyShipAIState ai = gameState.getNearbyShipAI();
             aiEnabled = (ai != null);
             aiPanel.getBoolean(AI_SURRENDERED).setEnabled(aiEnabled);
             aiPanel.getBoolean(AI_ESCAPING).setEnabled(aiEnabled);
@@ -438,7 +441,7 @@ public class SavedGameGeneralPanel extends JPanel {
             unknownsPanel.setIntAndReminder(TOP_XI, (gameState.getUnknownXi() != null ? gameState.getUnknownXi() : 0));
             unknownsPanel.setBoolAndReminder(TOP_AUTOFIRE, gameState.getAutofire());
 
-            SavedGameParser.EncounterState enc = gameState.getEncounter();
+            EncounterState enc = gameState.getEncounter();
             encEnabled = (enc != null);
             encPanel.getInt(ENC_SHIP_EVENT_SEED).setEnabled(encEnabled);
             encPanel.getString(ENC_SURRENDER_EVENT).setEnabled(encEnabled);
@@ -505,7 +508,7 @@ public class SavedGameGeneralPanel extends JPanel {
             }
         }
 
-        SavedGameParser.EnvironmentState env = gameState.getEnvironment();
+        EnvironmentState env = gameState.getEnvironment();
         if (env != null && envEnabled) {
             env.setRedGiantPresent(envPanel.getBoolean(ENV_RED_GIANT_PRESENT).isSelected());
             env.setPulsarPresent(envPanel.getBoolean(ENV_PULSAR_PRESENT).isSelected());
@@ -514,9 +517,9 @@ public class SavedGameGeneralPanel extends JPanel {
             Object vulnObj = envPanel.getCombo(ENV_VULN).getSelectedItem();
             env.setVulnerableShips((HazardVulnerability) vulnObj);
 
-            SavedGameParser.AsteroidFieldState asteroidField = null;
+            AsteroidFieldState asteroidField = null;
             if (envPanel.getBoolean(ENV_ASTEROID_FIELD).isSelected()) {
-                asteroidField = new SavedGameParser.AsteroidFieldState();
+                asteroidField = new AsteroidFieldState();
                 try {
                     asteroidField.setUnknownAlpha(envPanel.parseInt(ENV_ASTEROID_ALPHA));
                     asteroidField.setStrayRockTicks(envPanel.parseInt(ENV_ASTEROID_STRAY_TICKS));
@@ -538,7 +541,7 @@ public class SavedGameGeneralPanel extends JPanel {
             }
         }
 
-        SavedGameParser.NearbyShipAIState ai = gameState.getNearbyShipAI();
+        NearbyShipAIState ai = gameState.getNearbyShipAI();
         if (ai != null && aiEnabled) {
             ai.setSurrendered(aiPanel.getBoolean(AI_SURRENDERED).isSelected());
             ai.setEscaping(aiPanel.getBoolean(AI_ESCAPING).isSelected());
@@ -570,7 +573,7 @@ public class SavedGameGeneralPanel extends JPanel {
             frame.setStatusText(WARN_INVALID_INPUTS);
         }
 
-        SavedGameParser.EncounterState enc = gameState.getEncounter();
+        EncounterState enc = gameState.getEncounter();
         if (enc != null && encEnabled) {
             enc.setEscapeEventId(encPanel.getString(ENC_ESCAPE_EVENT).getText());
             enc.setDestroyedEventId(encPanel.getString(ENC_DESTROYED_EVENT).getText());

@@ -43,20 +43,20 @@ public class SavedGameState {
     private int rebelFlagshipBaseTurns = 0;
     private List<Boolean> sectorVisitationList = new ArrayList<>();
     private boolean sectorIsHiddenCrystalWorlds = false;
-    private final List<SavedGameParser.BeaconState> beaconList = new ArrayList<>();
+    private final List<BeaconState> beaconList = new ArrayList<>();
     private final Map<String, Integer> questEventMap = new LinkedHashMap<>();
     private final List<String> distantQuestEventList = new ArrayList<>();
     private int unknownMu = 0;
-    private SavedGameParser.EncounterState encounter = null;
+    private EncounterState encounter = null;
     private boolean rebelFlagshipNearby = false;
     private ShipState nearbyShipState = null;
-    private SavedGameParser.NearbyShipAIState nearbyShipAI = null;
-    private SavedGameParser.EnvironmentState environment = null;
+    private NearbyShipAIState nearbyShipAI = null;
+    private EnvironmentState environment = null;
     private final List<SavedGameParser.ProjectileState> projectileList = new ArrayList<>();
     private int unknownNu = 0;
     private Integer unknownXi = null;
     private boolean autofire = false;
-    private SavedGameParser.RebelFlagshipState rebelFlagshipState = null;
+    private RebelFlagshipState rebelFlagshipState = null;
     private final List<MysteryBytes> mysteryList = new ArrayList<>();
 
 
@@ -245,7 +245,7 @@ public class SavedGameState {
      * TODO: Determine long-term effects of this. The Last Stand is baked
      * into the sector tree, but weird things might happen at or above #7.
      *
-     * @see #addBeacon(SavedGameParser.BeaconState)
+     * @see #addBeacon(BeaconState)
      * @see #setSectorLayoutSeed(int)
      * @see #setSectorTreeSeed(int)
      */
@@ -366,7 +366,7 @@ public class SavedGameState {
      * with each platform. Results will be inconsistent if a saved game is
      * resumed on another operating system.
      *
-     * @see #addBeacon(SavedGameParser.BeaconState)
+     * @see #addBeacon(BeaconState)
      */
     public void setSectorLayoutSeed(int n) {
         sectorLayoutSeed = n;
@@ -463,8 +463,8 @@ public class SavedGameState {
      * This was introduced in FTL 1.5.4.
      *
      * @see #setWaitEventSeed(int)
-     * @see SavedGameParser.EncounterState#setText(String)
-     * @see SavedGameParser.EncounterState#setChoiceList(List<Integer>)
+     * @see EncounterState#setText(String)
+     * @see EncounterState#setChoiceList(List<Integer>)
      */
     public void setWaiting(boolean b) {
         waiting = b;
@@ -675,11 +675,11 @@ public class SavedGameState {
      *
      * @see #setSectorLayoutSeed(int)
      */
-    public void addBeacon(SavedGameParser.BeaconState beacon) {
+    public void addBeacon(BeaconState beacon) {
         beaconList.add(beacon);
     }
 
-    public List<SavedGameParser.BeaconState> getBeaconList() {
+    public List<BeaconState> getBeaconList() {
         return beaconList;
     }
 
@@ -734,11 +734,11 @@ public class SavedGameState {
      * <p>
      * This was introduced in FTL 1.5.4.
      */
-    public void setEncounter(SavedGameParser.EncounterState encounter) {
+    public void setEncounter(EncounterState encounter) {
         this.encounter = encounter;
     }
 
-    public SavedGameParser.EncounterState getEncounter() {
+    public EncounterState getEncounter() {
         return encounter;
     }
 
@@ -764,7 +764,7 @@ public class SavedGameState {
      * <p>
      * Since FTL 1.5.4, when this is non-null, a NearbyShipAI must be set.
      *
-     * @see #setNearbyShipAI(SavedGameParser.NearbyShipAIState)
+     * @see #setNearbyShipAI(NearbyShipAIState)
      */
     public void setNearbyShip(ShipState shipState) {
         this.nearbyShipState = shipState;
@@ -781,11 +781,11 @@ public class SavedGameState {
      * <p>
      * This was introduced in FTL 1.5.4.
      */
-    public void setNearbyShipAI(SavedGameParser.NearbyShipAIState ai) {
+    public void setNearbyShipAI(NearbyShipAIState ai) {
         nearbyShipAI = ai;
     }
 
-    public SavedGameParser.NearbyShipAIState getNearbyShipAI() {
+    public NearbyShipAIState getNearbyShipAI() {
         return nearbyShipAI;
     }
 
@@ -794,11 +794,11 @@ public class SavedGameState {
      * <p>
      * This was introduced in FTL 1.5.4.
      */
-    public void setEnvironment(SavedGameParser.EnvironmentState env) {
+    public void setEnvironment(EnvironmentState env) {
         environment = env;
     }
 
-    public SavedGameParser.EnvironmentState getEnvironment() {
+    public EnvironmentState getEnvironment() {
         return environment;
     }
 
@@ -865,11 +865,11 @@ public class SavedGameState {
     /**
      * Sets info about the next encounter with the rebel flagship.
      */
-    public void setRebelFlagshipState(SavedGameParser.RebelFlagshipState flagshipState) {
+    public void setRebelFlagshipState(RebelFlagshipState flagshipState) {
         this.rebelFlagshipState = flagshipState;
     }
 
-    public SavedGameParser.RebelFlagshipState getRebelFlagshipState() {
+    public RebelFlagshipState getRebelFlagshipState() {
         return rebelFlagshipState;
     }
 
@@ -971,7 +971,7 @@ public class SavedGameState {
         result.append("\nSector Beacons...\n");
         int beaconId = 0;
         first = true;
-        for (SavedGameParser.BeaconState beacon : beaconList) {
+        for (BeaconState beacon : beaconList) {
             if (first) {
                 first = false;
             } else {

@@ -14,11 +14,11 @@ import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.model.state.CrewType;
+import net.blerf.ftl.model.state.StoreItem;
+import net.blerf.ftl.model.state.StoreItemType;
+import net.blerf.ftl.model.state.StoreShelf;
 import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser.StoreItem;
-import net.blerf.ftl.parser.SavedGameParser.StoreItemType;
-import net.blerf.ftl.parser.SavedGameParser.StoreShelf;
 
 @Slf4j
 public class StoreShelfPanel extends JPanel implements ActionListener {

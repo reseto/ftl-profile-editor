@@ -3,7 +3,7 @@ package net.blerf.ftl.model.pod;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.blerf.ftl.parser.SavedGameParser;
+import net.blerf.ftl.model.state.DroneState;
 
 /**
  * Extended boarder drone info.
@@ -14,7 +14,7 @@ import net.blerf.ftl.parser.SavedGameParser;
  * In FTL 1.01-1.03.3, Boarder drone bodies were actual crew on foreign
  * ships.
  *
- * @see SavedGameParser.DroneState
+ * @see DroneState
  */
 @Getter
 @Setter

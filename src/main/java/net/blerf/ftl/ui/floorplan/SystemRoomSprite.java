@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
-import net.blerf.ftl.parser.SavedGameParser.SystemState;
+import net.blerf.ftl.model.state.SystemState;
 import net.blerf.ftl.ui.ImageUtilities;
 import net.blerf.ftl.ui.ImageUtilities.Tint;
 import net.blerf.ftl.ui.ReferenceSprite;

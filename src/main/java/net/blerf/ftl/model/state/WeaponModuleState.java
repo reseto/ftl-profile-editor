@@ -19,12 +19,12 @@ public class WeaponModuleState {
     private boolean autofire = false;
     private boolean fireWhenReady = false;
     private int targetId = -1;
-    private SavedGameParser.AnimState weaponAnim = new SavedGameParser.AnimState();
+    private AnimState weaponAnim = new AnimState();
     private int protractAnimTicks = 0;
     private boolean firing = false;
     private boolean unknownPhi = false;
     private int animCharge = -1;
-    private SavedGameParser.AnimState chargeAnim = new SavedGameParser.AnimState();
+    private AnimState chargeAnim = new AnimState();
     private int lastProjectileId = -1;
 
     private List<SavedGameParser.ProjectileState> pendingProjectiles = new ArrayList<>();
@@ -197,7 +197,7 @@ public class WeaponModuleState {
      * Note: Modded WeaponBlueprints with both the beam "type" and
      * "chargeLevels" crash FTL.
      *
-     * @see #setChargeAnim(SavedGameParser.AnimState)
+     * @see #setChargeAnim(AnimState)
      */
     public void setCharge(int n) {
         charge = n;
@@ -306,11 +306,11 @@ public class WeaponModuleState {
     /**
      * Sets the weapon anim state, depicting idle/cooldown/fire.
      */
-    public void setWeaponAnim(SavedGameParser.AnimState anim) {
+    public void setWeaponAnim(AnimState anim) {
         weaponAnim = anim;
     }
 
-    public SavedGameParser.AnimState getWeaponAnim() {
+    public AnimState getWeaponAnim() {
         return weaponAnim;
     }
 
@@ -369,7 +369,7 @@ public class WeaponModuleState {
      * <p>
      * This was introduced in FTL 1.5.13.
      *
-     * @see #setChargeAnim(SavedGameParser.AnimState)
+     * @see #setChargeAnim(AnimState)
      */
     public void setAnimCharge(int n) {
         animCharge = n;
@@ -394,11 +394,11 @@ public class WeaponModuleState {
      *
      * @see #setAnimCharge(int)
      */
-    public void setChargeAnim(SavedGameParser.AnimState anim) {
+    public void setChargeAnim(AnimState anim) {
         chargeAnim = anim;
     }
 
-    public SavedGameParser.AnimState getChargeAnim() {
+    public AnimState getChargeAnim() {
         return chargeAnim;
     }
 

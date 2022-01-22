@@ -1,14 +1,14 @@
 package net.blerf.ftl.model.pod;
 
-import net.blerf.ftl.parser.SavedGameParser;
+import net.blerf.ftl.model.state.AnimState;
 
 public class HackingDronePodInfo extends ExtendedDronePodInfo {
     private int attachPositionX = 0;
     private int attachPositionY = 0;
     private int unknownGamma = 0;
     private int unknownDelta = 0;
-    private SavedGameParser.AnimState landingAnim = new SavedGameParser.AnimState();
-    private SavedGameParser.AnimState extensionAnim = new SavedGameParser.AnimState();
+    private AnimState landingAnim = new AnimState();
+    private AnimState extensionAnim = new AnimState();
 
     /**
      * Constructor.
@@ -26,8 +26,8 @@ public class HackingDronePodInfo extends ExtendedDronePodInfo {
         attachPositionY = srcInfo.getAttachPositionY();
         unknownGamma = srcInfo.getUnknownGamma();
         unknownDelta = srcInfo.getUnknownDelta();
-        landingAnim = new SavedGameParser.AnimState(srcInfo.getLandingAnim());
-        extensionAnim = new SavedGameParser.AnimState(srcInfo.getExtensionAnim());
+        landingAnim = new AnimState(srcInfo.getLandingAnim());
+        extensionAnim = new AnimState(srcInfo.getExtensionAnim());
     }
 
     @Override
@@ -123,11 +123,11 @@ public class HackingDronePodInfo extends ExtendedDronePodInfo {
      * <p>
      * This begins playing on contact.
      */
-    public void setLandingAnim(SavedGameParser.AnimState anim) {
+    public void setLandingAnim(AnimState anim) {
         landingAnim = anim;
     }
 
-    public SavedGameParser.AnimState getLandingAnim() {
+    public AnimState getLandingAnim() {
         return landingAnim;
     }
 
@@ -136,11 +136,11 @@ public class HackingDronePodInfo extends ExtendedDronePodInfo {
      * <p>
      * This begins playing after the landing anim completes.
      */
-    public void setExtensionAnim(SavedGameParser.AnimState anim) {
+    public void setExtensionAnim(AnimState anim) {
         extensionAnim = anim;
     }
 
-    public SavedGameParser.AnimState getExtensionAnim() {
+    public AnimState getExtensionAnim() {
         return extensionAnim;
     }
 

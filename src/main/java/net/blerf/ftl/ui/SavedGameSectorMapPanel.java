@@ -57,13 +57,14 @@ import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.FleetPresence;
 import net.blerf.ftl.constants.OriginalFTLConstants;
+import net.blerf.ftl.model.state.BeaconState;
+import net.blerf.ftl.model.state.RebelFlagshipState;
 import net.blerf.ftl.model.state.SavedGameState;
+import net.blerf.ftl.model.state.StoreItem;
+import net.blerf.ftl.model.state.StoreItemType;
+import net.blerf.ftl.model.state.StoreShelf;
+import net.blerf.ftl.model.state.StoreState;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser;
-import net.blerf.ftl.parser.SavedGameParser.BeaconState;
-import net.blerf.ftl.parser.SavedGameParser.RebelFlagshipState;
-import net.blerf.ftl.parser.SavedGameParser.StoreShelf;
-import net.blerf.ftl.parser.SavedGameParser.StoreState;
 import net.blerf.ftl.parser.random.FTL_1_6_Random;
 import net.blerf.ftl.parser.random.GNULibCRandom;
 import net.blerf.ftl.parser.random.MsRandom;
@@ -1929,11 +1930,11 @@ public class SavedGameSectorMapPanel extends JPanel {
                 for (StoreShelfPanel shelfPanel : shelfPanels) {
                     StoreShelf newShelf = new StoreShelf();
 
-                    SavedGameParser.StoreItemType itemType = shelfPanel.getItemType();
-                    List<SavedGameParser.StoreItem> items = shelfPanel.getItems();
+                    StoreItemType itemType = shelfPanel.getItemType();
+                    List<StoreItem> items = shelfPanel.getItems();
 
                     newShelf.setItemType(itemType);
-                    for (SavedGameParser.StoreItem item : items) {
+                    for (StoreItem item : items) {
                         newShelf.addItem(item);
                     }
 

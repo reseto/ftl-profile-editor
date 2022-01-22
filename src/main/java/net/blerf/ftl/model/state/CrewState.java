@@ -9,7 +9,6 @@ import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.xml.CrewBlueprint;
 
 /**
@@ -196,7 +195,7 @@ public class CrewState {
     private boolean combatMasteryOne = false;
     private boolean combatMasteryTwo = false;
     private boolean unknownNu = false;
-    private SavedGameParser.AnimState teleportAnim = new SavedGameParser.AnimState();
+    private AnimState teleportAnim = new AnimState();
     private boolean unknownPhi = false;
     private int lockdownRechargeTicks = 0;
     private int lockdownRechargeTicksGoal = 0;
@@ -445,7 +444,7 @@ public class CrewState {
      * <p>
      * This was introduced in FTL 1.5.4.
      */
-    public void setTeleportAnim(SavedGameParser.AnimState anim) {
+    public void setTeleportAnim(AnimState anim) {
         teleportAnim = anim;
     }
 

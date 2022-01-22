@@ -25,7 +25,7 @@ public class ShipState {
     private String shipGfxBaseName;
     private boolean auto;
 
-    private final List<SavedGameParser.StartingCrewState> startingCrewList = new ArrayList<>();
+    private final List<StartingCrewState> startingCrewList = new ArrayList<>();
     private boolean hostile = false;
     private int jumpChargeTicks = 0;
     private boolean jumping = false;
@@ -33,7 +33,7 @@ public class ShipState {
     private int hullAmt = 0, fuelAmt = 0, dronePartsAmt = 0, missilesAmt = 0, scrapAmt = 0;
     private final List<CrewState> crewList = new ArrayList<>();
     private int reservePowerCapacity = 0;
-    private final Map<SystemType, List<SavedGameParser.SystemState>> systemsMap = new LinkedHashMap<>();
+    private final Map<SystemType, List<SystemState>> systemsMap = new LinkedHashMap<>();
     private List<SavedGameParser.ExtendedSystemInfo> extendedSystemInfoList = new ArrayList<>();
     private final List<SavedGameParser.RoomState> roomList = new ArrayList<>();
     private final Map<XYPair, Integer> breachMap = new LinkedHashMap<>();
@@ -41,9 +41,9 @@ public class ShipState {
     private int cloakAnimTicks = 0;
     private List<SavedGameParser.LockdownCrystal> lockdownCrystalList = new ArrayList<>();
     private final List<SavedGameParser.WeaponState> weaponList = new ArrayList<>();
-    private final List<SavedGameParser.DroneState> droneList = new ArrayList<>();
+    private final List<DroneState> droneList = new ArrayList<>();
     private final List<String> augmentIdList = new ArrayList<>();
-    private final List<SavedGameParser.StandaloneDroneState> standaloneDroneList = new ArrayList<>();
+    private final List<StandaloneDroneState> standaloneDroneList = new ArrayList<>();
 
 
     /**
@@ -86,7 +86,7 @@ public class ShipState {
         systemsMap.clear();
         int powerRequired = 0;
         for (SystemType systemType : SystemType.values()) {
-            SavedGameParser.SystemState systemState = new SavedGameParser.SystemState(systemType);
+            SystemState systemState = new SystemState(systemType);
 
             // Set capacity for systems that're initially present.
             SystemRoom[] systemRoom = shipBlueprint.getSystemList().getSystemRoom(systemType);
@@ -180,8 +180,8 @@ public class ShipState {
             crew.commandeer();
         }
 
-        for (Map.Entry<SystemType, List<SavedGameParser.SystemState>> entry : getSystemsMap().entrySet()) {
-            for (SavedGameParser.SystemState s : entry.getValue()) {
+        for (Map.Entry<SystemType, List<SystemState>> entry : getSystemsMap().entrySet()) {
+            for (SystemState s : entry.getValue()) {
                 s.commandeer();
             }
         }
@@ -201,7 +201,7 @@ public class ShipState {
             weapon.commandeer();
         }
 
-        for (SavedGameParser.DroneState drone : getDroneList()) {
+        for (DroneState drone : getDroneList()) {
             drone.commandeer();
         }
 
@@ -397,11 +397,11 @@ public class ShipState {
      * player ship, except to memorialize the crew decided in the hangar at
      * the start of the campaign.
      */
-    public void addStartingCrewMember(SavedGameParser.StartingCrewState sc) {
+    public void addStartingCrewMember(StartingCrewState sc) {
         startingCrewList.add(sc);
     }
 
-    public List<SavedGameParser.StartingCrewState> getStartingCrewList() {
+    public List<StartingCrewState> getStartingCrewList() {
         return startingCrewList;
     }
 
@@ -436,8 +436,8 @@ public class ShipState {
         return reservePowerCapacity;
     }
 
-    public void addSystem(SavedGameParser.SystemState s) {
-        List<SavedGameParser.SystemState> systemList = systemsMap.get(s.getSystemType());
+    public void addSystem(SystemState s) {
+        List<SystemState> systemList = systemsMap.get(s.getSystemType());
         if (systemList == null) {
             systemList = new ArrayList<>(0);
             systemsMap.put(s.getSystemType(), systemList);
@@ -448,8 +448,8 @@ public class ShipState {
     /**
      * Returns the first SystemState of a given type, or null.
      */
-    public SavedGameParser.SystemState getSystem(SystemType systemType) {
-        List<SavedGameParser.SystemState> systemList = systemsMap.get(systemType);
+    public SystemState getSystem(SystemType systemType) {
+        List<SystemState> systemList = systemsMap.get(systemType);
 
         if (systemList != null && !systemList.isEmpty()) {
             return systemList.get(0);
@@ -464,8 +464,8 @@ public class ShipState {
      * If no SystemStates are present, an empty list is returned.
      * That same list object will later contain systems if any are added.
      */
-    public List<SavedGameParser.SystemState> getSystems(SystemType systemType) {
-        List<SavedGameParser.SystemState> systemList = systemsMap.get(systemType);
+    public List<SystemState> getSystems(SystemType systemType) {
+        List<SystemState> systemList = systemsMap.get(systemType);
         if (systemList == null) {
             systemList = new ArrayList<>(0);
             systemsMap.put(systemType, systemList);
@@ -474,7 +474,7 @@ public class ShipState {
         return systemList;
     }
 
-    public Map<SystemType, List<SavedGameParser.SystemState>> getSystemsMap() {
+    public Map<SystemType, List<SystemState>> getSystemsMap() {
         return systemsMap;
     }
 
@@ -619,11 +619,11 @@ public class ShipState {
     }
 
 
-    public void addDrone(SavedGameParser.DroneState d) {
+    public void addDrone(DroneState d) {
         droneList.add(d);
     }
 
-    public List<SavedGameParser.DroneState> getDroneList() {
+    public List<DroneState> getDroneList() {
         return droneList;
     }
 
@@ -645,11 +645,11 @@ public class ShipState {
      * <p>
      * This was introduced in FTL 1.5.4.
      */
-    public void addStandaloneDrone(SavedGameParser.StandaloneDroneState standaloneDrone) {
+    public void addStandaloneDrone(StandaloneDroneState standaloneDrone) {
         standaloneDroneList.add(standaloneDrone);
     }
 
-    public List<SavedGameParser.StandaloneDroneState> getStandaloneDroneList() {
+    public List<StandaloneDroneState> getStandaloneDroneList() {
         return standaloneDroneList;
     }
 
@@ -686,7 +686,7 @@ public class ShipState {
 
         result.append("\nStarting Crew...\n");
         first = true;
-        for (SavedGameParser.StartingCrewState sc : startingCrewList) {
+        for (StartingCrewState sc : startingCrewList) {
             if (first) {
                 first = false;
             } else {
@@ -710,8 +710,8 @@ public class ShipState {
         result.append(String.format("  Reserve Power Capacity: %2d%n", reservePowerCapacity));
         result.append("\n");
         first = true;
-        for (Map.Entry<SystemType, List<SavedGameParser.SystemState>> entry : systemsMap.entrySet()) {
-            for (SavedGameParser.SystemState s : entry.getValue()) {
+        for (Map.Entry<SystemType, List<SystemState>> entry : systemsMap.entrySet()) {
+            for (SystemState s : entry.getValue()) {
                 if (first) {
                     first = false;
                 } else {
@@ -810,7 +810,7 @@ public class ShipState {
 
         result.append("\nDrones...\n");
         first = true;
-        for (SavedGameParser.DroneState d : droneList) {
+        for (DroneState d : droneList) {
             if (first) {
                 first = false;
             } else {
@@ -823,7 +823,7 @@ public class ShipState {
         result.append("\nStandalone Drones... (Surge)\n");
         int standaloneDroneIndex = 0;
         first = true;
-        for (SavedGameParser.StandaloneDroneState standaloneDrone : standaloneDroneList) {
+        for (StandaloneDroneState standaloneDrone : standaloneDroneList) {
             if (first) {
                 first = false;
             } else {
