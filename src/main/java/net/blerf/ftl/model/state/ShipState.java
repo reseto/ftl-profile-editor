@@ -10,8 +10,8 @@ import net.blerf.ftl.model.shiplayout.DoorCoordinate;
 import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
+import net.blerf.ftl.model.systeminfo.ExtendedSystemInfo;
 import net.blerf.ftl.parser.DataManager;
-import net.blerf.ftl.parser.SavedGameParser;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.ship.AugmentId;
 import net.blerf.ftl.xml.ship.ShipBlueprint;
@@ -34,7 +34,7 @@ public class ShipState {
     private final List<CrewState> crewList = new ArrayList<>();
     private int reservePowerCapacity = 0;
     private final Map<SystemType, List<SystemState>> systemsMap = new LinkedHashMap<>();
-    private List<SavedGameParser.ExtendedSystemInfo> extendedSystemInfoList = new ArrayList<>();
+    private List<ExtendedSystemInfo> extendedSystemInfoList = new ArrayList<>();
     private final List<RoomState> roomList = new ArrayList<>();
     private final Map<XYPair, Integer> breachMap = new LinkedHashMap<>();
     private final Map<DoorCoordinate, DoorState> doorMap = new LinkedHashMap<>();
@@ -186,7 +186,7 @@ public class ShipState {
             }
         }
 
-        for (SavedGameParser.ExtendedSystemInfo info : getExtendedSystemInfoList()) {
+        for (ExtendedSystemInfo info : getExtendedSystemInfoList()) {
             info.commandeer();
         }
 
@@ -479,21 +479,21 @@ public class ShipState {
     }
 
 
-    public void addExtendedSystemInfo(SavedGameParser.ExtendedSystemInfo info) {
+    public void addExtendedSystemInfo(ExtendedSystemInfo info) {
         extendedSystemInfoList.add(info);
     }
 
-    public void setExtendedSystemInfoList(List<SavedGameParser.ExtendedSystemInfo> extendedSystemInfoList) {
+    public void setExtendedSystemInfoList(List<ExtendedSystemInfo> extendedSystemInfoList) {
         this.extendedSystemInfoList = extendedSystemInfoList;
     }
 
-    public List<SavedGameParser.ExtendedSystemInfo> getExtendedSystemInfoList() {
+    public List<ExtendedSystemInfo> getExtendedSystemInfoList() {
         return extendedSystemInfoList;
     }
 
-    public <T extends SavedGameParser.ExtendedSystemInfo> List<T> getExtendedSystemInfoList(Class<T> infoClass) {
+    public <T extends ExtendedSystemInfo> List<T> getExtendedSystemInfoList(Class<T> infoClass) {
         List<T> result = new ArrayList<>(1);
-        for (SavedGameParser.ExtendedSystemInfo info : extendedSystemInfoList) {
+        for (ExtendedSystemInfo info : extendedSystemInfoList) {
             if (infoClass.isInstance(info)) {
                 result.add(infoClass.cast(info));
             }
@@ -504,9 +504,9 @@ public class ShipState {
     /**
      * Returns the first extended system info of a given class, or null.
      */
-    public <T extends SavedGameParser.ExtendedSystemInfo> T getExtendedSystemInfo(Class<T> infoClass) {
+    public <T extends ExtendedSystemInfo> T getExtendedSystemInfo(Class<T> infoClass) {
         T result = null;
-        for (SavedGameParser.ExtendedSystemInfo info : extendedSystemInfoList) {
+        for (ExtendedSystemInfo info : extendedSystemInfoList) {
             if (infoClass.isInstance(info)) {
                 result = infoClass.cast(info);
                 break;
@@ -723,7 +723,7 @@ public class ShipState {
 
         result.append("\nExtended System Info...\n");
         first = true;
-        for (SavedGameParser.ExtendedSystemInfo info : extendedSystemInfoList) {
+        for (ExtendedSystemInfo info : extendedSystemInfoList) {
             if (first) {
                 first = false;
             } else {

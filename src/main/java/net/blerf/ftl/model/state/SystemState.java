@@ -1,5 +1,6 @@
 package net.blerf.ftl.model.state;
 
+import net.blerf.ftl.model.systeminfo.BatteryInfo;
 import net.blerf.ftl.parser.SavedGameParser;
 
 public class SystemState {
@@ -248,7 +249,7 @@ public class SystemState {
      * This was introduced in FTL 1.5.4.
      *
      * @see #setPower(int)
-     * @see SavedGameParser.BatteryInfo#setUsedBattery(int)
+     * @see BatteryInfo#setUsedBattery(int)
      */
     public void setBatteryPower(int n) {
         batteryPower = n;
