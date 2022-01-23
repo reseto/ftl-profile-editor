@@ -17,10 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TextLookupUnmarshalListener extends Unmarshaller.Listener {
 
-    private final Map<String, String> lookupMap = new HashMap<>();
-
+    private final Map<String, String> lookupMap;
 
     public TextLookupUnmarshalListener() {
+        lookupMap = new HashMap<>();
     }
 
     /**
@@ -40,8 +40,9 @@ public class TextLookupUnmarshalListener extends Unmarshaller.Listener {
                 String textId = deferredText.getTextId();
 
                 if (lookupMap.containsKey(textId)) {
-                    String resolvedText = lookupMap.get(textId).replaceAll("\\n", "\n");
+                    String resolvedText = lookupMap.get(textId).replace("\\n", "\n");
                     deferredText.setResolvedText(resolvedText);
+                    log.debug("found deferredText {}", deferredText);
                 } else {
                     log.warn("Text lookup failed for id: {}", textId);
                 }
