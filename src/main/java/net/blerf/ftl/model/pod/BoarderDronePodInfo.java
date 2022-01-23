@@ -1,5 +1,7 @@
 package net.blerf.ftl.model.pod;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,92 +21,14 @@ import net.blerf.ftl.model.state.DroneState;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class BoarderDronePodInfo extends ExtendedDronePodInfo {
-    private int unknownAlpha = 0;
-    private int unknownBeta = 0;
-    private int unknownGamma = 0;
-    private int unknownDelta = 0;
+    private int unknownAlpha;
+    private int unknownBeta;
+    private int unknownGamma;
+    private int unknownDelta;
     private int bodyHealth = 1;
-    private int bodyX = -1, bodyY = -1;
-    private int bodyRoomId = -1;
-    private int bodyRoomSquare = -1;
-
-    /**
-     * Copy constructor.
-     */
-    protected BoarderDronePodInfo(BoarderDronePodInfo srcInfo) {
-        super(srcInfo);
-        unknownAlpha = srcInfo.getUnknownAlpha();
-        unknownBeta = srcInfo.getUnknownBeta();
-        unknownGamma = srcInfo.getUnknownGamma();
-        unknownDelta = srcInfo.getUnknownDelta();
-        bodyHealth = srcInfo.getBodyHealth();
-        bodyX = srcInfo.getBodyX();
-        bodyY = srcInfo.getBodyY();
-        bodyRoomId = srcInfo.getBodyRoomId();
-        bodyRoomSquare = srcInfo.getBodyRoomSquare();
-    }
-
-    @Override
-    public BoarderDronePodInfo copy() {
-        return new BoarderDronePodInfo(this);
-    }
-
-
-    /**
-     * Resets aspects of an existing object to be viable for player use.
-     * <p>
-     * This will be called by the ship object when it is commandeered.
-     * <p>
-     * Warning: Dangerous while values remain undeciphered.
-     * TODO: Recurse into all nested objects.
-     */
-    @Override
-    public void commandeer() {
-        // TODO
-    }
-
-
-    public void setUnknownAlpha(int n) {
-        unknownAlpha = n;
-    }
-
-    public int getUnknownAlpha() {
-        return unknownAlpha;
-    }
-
-    public void setUnknownBeta(int n) {
-        unknownBeta = n;
-    }
-
-    public int getUnknownBeta() {
-        return unknownBeta;
-    }
-
-    public void setUnknownGamma(int n) {
-        unknownGamma = n;
-    }
-
-    public int getUnknownGamma() {
-        return unknownGamma;
-    }
-
-    public void setUnknownDelta(int n) {
-        unknownDelta = n;
-    }
-
-    public int getUnknownDelta() {
-        return unknownDelta;
-    }
-
-    public void setBodyHealth(int n) {
-        bodyHealth = n;
-    }
-
-    public int getBodyHealth() {
-        return bodyHealth;
-    }
-
     /**
      * Sets the position of the drone's body image.
      * <p>
@@ -116,22 +40,8 @@ public class BoarderDronePodInfo extends ExtendedDronePodInfo {
      * <p>
      * This value lingers, even after the body is gone.
      */
-    public void setBodyX(int n) {
-        bodyX = n;
-    }
-
-    public void setBodyY(int n) {
-        bodyY = n;
-    }
-
-    public int getBodyX() {
-        return bodyX;
-    }
-
-    public int getBodyY() {
-        return bodyY;
-    }
-
+    private int bodyX = -1;
+    private int bodyY = -1;
     /**
      * Sets the room this drone's body is in (or at least trying to move
      * toward).
@@ -140,21 +50,14 @@ public class BoarderDronePodInfo extends ExtendedDronePodInfo {
      * <p>
      * roomId and roomSquare need to be specified together.
      */
-    public void setBodyRoomId(int n) {
-        bodyRoomId = n;
+    private int bodyRoomId = -1;
+    private int bodyRoomSquare = -1;
+
+    @Override
+    public BoarderDronePodInfo copy() {
+        return toBuilder().build();
     }
 
-    public void setBodyRoomSquare(int n) {
-        bodyRoomSquare = n;
-    }
-
-    public int getBodyRoomId() {
-        return bodyRoomId;
-    }
-
-    public int getBodyRoomSquare() {
-        return bodyRoomSquare;
-    }
 
     @Override
     public String toString() {

@@ -44,7 +44,7 @@ public class Parser {
     /**
      * Reads a little-endian int from a stream.
      */
-    protected int readInt(InputStream in) throws IOException {
+    protected static int readInt(InputStream in) throws IOException {
         int numRead = 0;
         int offset = 0;
         while (offset < intbuf.length && (numRead = in.read(intbuf, offset, intbuf.length)) >= 0) {
@@ -56,7 +56,7 @@ public class Parser {
 
         int v = 0;
         for (int i = 0; i < intbuf.length; i++) {
-            v |= (((int) intbuf[i]) & 0xff) << (i * 8);
+            v |= ((intbuf[i]) & 0xff) << (i * 8);
         }
 
         return v;
@@ -65,7 +65,7 @@ public class Parser {
     /**
      * Writes a little-endian int to a stream.
      */
-    protected void writeInt(OutputStream out, int value) throws IOException {
+    protected static void writeInt(OutputStream out, int value) throws IOException {
         for (int i = 0; i < intbuf.length; i++) {
             intbuf[i] = (byte) (value >> (i * 8));
         }

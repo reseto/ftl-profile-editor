@@ -1,78 +1,32 @@
 package net.blerf.ftl.model.pod;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * Extended Combat/Beam/Ship_Repair drone info.
  * <p>
  * These drones flit to a random (?) point, stop, then move to another,
  * and so on.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class ZigZagDronePodInfo extends ExtendedDronePodInfo {
-    private int lastWaypointX = 0;
-    private int lastWaypointY = 0;
-    private int transitTicks = 0;
-    private int exhaustAngle = 0;
-    private int unknownEpsilon = 0;
-
-    /**
-     * Constructor.
-     */
-    public ZigZagDronePodInfo() {
-        super();
-    }
-
-    /**
-     * Copy constructor.
-     */
-    protected ZigZagDronePodInfo(ZigZagDronePodInfo srcInfo) {
-        super(srcInfo);
-        lastWaypointX = srcInfo.getLastWaypointX();
-        lastWaypointY = srcInfo.getLastWaypointY();
-        transitTicks = srcInfo.getTransitTicks();
-        exhaustAngle = srcInfo.getExhaustAngle();
-        unknownEpsilon = srcInfo.getUnknownEpsilon();
-    }
-
-    @Override
-    public ZigZagDronePodInfo copy() {
-        return new ZigZagDronePodInfo(this);
-    }
-
-
-    /**
-     * Resets aspects of an existing object to be viable for player use.
-     * <p>
-     * This will be called by the ship object when it is commandeered.
-     * <p>
-     * Warning: Dangerous while values remain undeciphered.
-     */
-    @Override
-    public void commandeer() {
-    }
-
-
     /**
      * Sets the cached position from when the drone last stopped.
      * <p>
      * TODO: Modify this value in the editor. In CheatEngine, changing
      * this has no effect, appearing to be read-only field for reference.
-     *
-     * @param n a pseudo-float
+     * a pseudo-float
      */
-    public void setLastWaypointX(int n) {
-        lastWaypointX = n;
-    }
-
-    public void setLastWaypointY(int n) {
-        lastWaypointY = n;
-    }
-
-    public int getLastWaypointX() {
-        return lastWaypointX;
-    }
-
-    public int getLastWaypointY() {
-        return lastWaypointY;
-    }
+    private int lastWaypointX;
+    private int lastWaypointY;
 
     /**
      * Sets time elapsed while this drone moves.
@@ -88,49 +42,27 @@ public class ZigZagDronePodInfo extends ExtendedDronePodInfo {
      * Observed values: 153 (stunned drift begins), 153000 (mid drift),
      * 153000000 (near end of drift).
      * <p>
-     * TODO: Modify this value in the editor. In CheatEngine, changing
-     * this has no effect, appearing to be read-only field for reference.
-     *
-     * @see #setExhaustAngle(int)
+     * TODO: Modify this value in the editor.
+     * In CheatEngine, changing this has no effect, appearing to be read-only field for reference.
      */
-    public void setTransitTicks(int n) {
-        transitTicks = n;
-    }
-
-    public int getTransitTicks() {
-        return transitTicks;
-    }
-
+    private int transitTicks;
     /**
      * Sets the angle to display exhaust flames thrusting toward.
-     * <p>
+     * Pseudo-float (n degrees clockwise from east)
      * When not set, this is MIN_INT.
      * <p>
-     * TODO: Modify this value in the editor. In CheatEngine, changing
-     * this DOES work.
-     *
-     * @param n a pseudo-float (n degrees clockwise from east)
-     * @see #setTransitTicks(int)
+     * TODO: Modify this value in the editor.
+     * In CheatEngine, changing this DOES work.
      */
-    public void setExhaustAngle(int n) {
-        exhaustAngle = n;
-    }
-
-    public int getExhaustAngle() {
-        return exhaustAngle;
-    }
-
+    private int exhaustAngle;
     /**
-     * Unknown.
-     * <p>
      * When not set, this is MIN_INT.
      */
-    public void setUnknownEpsilon(int n) {
-        unknownEpsilon = n;
-    }
+    private int unknownEpsilon;
 
-    public int getUnknownEpsilon() {
-        return unknownEpsilon;
+    @Override
+    public ZigZagDronePodInfo copy() {
+        return toBuilder().build();
     }
 
     @Override

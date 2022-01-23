@@ -23,15 +23,6 @@ public class ShieldDronePodInfo extends ExtendedDronePodInfo {
         return new ShieldDronePodInfo(this);
     }
 
-
-    /**
-     * Resets aspects of an existing object to be viable for player use.
-     * <p>
-     * This will be called by the ship object when it is commandeered.
-     * <p>
-     * Warning: Dangerous while values remain undeciphered.
-     * TODO: Recurse into all nested objects.
-     */
     @Override
     public void commandeer() {
         setUnknownAlpha(-1000);

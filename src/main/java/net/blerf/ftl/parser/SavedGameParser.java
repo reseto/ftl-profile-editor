@@ -23,7 +23,7 @@ import net.blerf.ftl.constants.FleetPresence;
 import net.blerf.ftl.constants.HazardVulnerability;
 import net.blerf.ftl.model.XYPair;
 import net.blerf.ftl.model.pod.BoarderDronePodInfo;
-import net.blerf.ftl.model.pod.EmptyDronePodInfo;
+import net.blerf.ftl.model.pod.DefenseDronePodInfo;
 import net.blerf.ftl.model.pod.ExtendedDronePodInfo;
 import net.blerf.ftl.model.pod.HackingDronePodInfo;
 import net.blerf.ftl.model.pod.IntegerDronePodInfo;
@@ -2968,7 +2968,7 @@ public class SavedGameParser extends Parser {
             zigPodInfo.setUnknownEpsilon(readMinMaxedInt(in));
             extendedInfo = zigPodInfo;
         } else if (DroneType.DEFENSE.equals(droneType)) {
-            extendedInfo = new EmptyDronePodInfo();
+            extendedInfo = new DefenseDronePodInfo();
         } else if (DroneType.SHIELD.equals(droneType)) {
             ShieldDronePodInfo shieldPodInfo = new ShieldDronePodInfo();
             shieldPodInfo.setUnknownAlpha(readInt(in));
@@ -3061,7 +3061,7 @@ public class SavedGameParser extends Parser {
             writeMinMaxedInt(out, zigPodInfo.getTransitTicks());
             writeMinMaxedInt(out, zigPodInfo.getExhaustAngle());
             writeMinMaxedInt(out, zigPodInfo.getUnknownEpsilon());
-        } else if (extendedInfo instanceof EmptyDronePodInfo) {
+        } else if (extendedInfo instanceof DefenseDronePodInfo) {
             // No-op.
         } else {
             throw new IOException("Unsupported extended drone pod info: " + extendedInfo.getClass().getSimpleName());

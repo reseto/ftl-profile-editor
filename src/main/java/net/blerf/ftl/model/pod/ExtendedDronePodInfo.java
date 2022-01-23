@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class ExtendedDronePodInfo {
 
-    // TODO remove, never used
     protected ExtendedDronePodInfo(ExtendedDronePodInfo srcInfo) {
     }
 
@@ -25,5 +24,6 @@ public abstract class ExtendedDronePodInfo {
      * Warning: Dangerous while values remain undeciphered.
      * TODO: Recurse into all nested objects.
      */
-    public abstract void commandeer();
+    public void commandeer() {
+    }
 }
