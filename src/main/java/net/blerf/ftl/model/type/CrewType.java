@@ -1,4 +1,4 @@
-package net.blerf.ftl.model.state;
+package net.blerf.ftl.model.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

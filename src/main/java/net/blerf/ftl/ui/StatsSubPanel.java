@@ -24,7 +24,7 @@ import javax.swing.SwingConstants;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
-import net.blerf.ftl.model.state.CrewType;
+import net.blerf.ftl.model.type.CrewType;
 import net.blerf.ftl.parser.DataManager;
 
 @Slf4j

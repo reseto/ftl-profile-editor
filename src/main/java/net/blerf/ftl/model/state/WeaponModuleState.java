@@ -3,7 +3,6 @@ package net.blerf.ftl.model.state;
 import java.util.ArrayList;
 import java.util.List;
 import net.blerf.ftl.model.XYPair;
-import net.blerf.ftl.parser.SavedGameParser;
 
 public class WeaponModuleState {
     private int cooldownTicks = 0;
@@ -27,7 +26,7 @@ public class WeaponModuleState {
     private AnimState chargeAnim = new AnimState();
     private int lastProjectileId = -1;
 
-    private List<SavedGameParser.ProjectileState> pendingProjectiles = new ArrayList<>();
+    private List<ProjectileState> pendingProjectiles = new ArrayList<>();
 
 
     /**
@@ -67,8 +66,8 @@ public class WeaponModuleState {
         chargeAnim = srcMod.getChargeAnim();
         lastProjectileId = srcMod.getLastProjectileId();
 
-        for (SavedGameParser.ProjectileState projectile : srcMod.getPendingProjectiles()) {
-            pendingProjectiles.add(new SavedGameParser.ProjectileState(projectile));
+        for (ProjectileState projectile : srcMod.getPendingProjectiles()) {
+            pendingProjectiles.add(new ProjectileState(projectile));
         }
     }
 
@@ -423,11 +422,11 @@ public class WeaponModuleState {
      * weapon will momentarily queue at least one projectile an instant
      * before firing.
      */
-    public void setPendingProjectiles(List<SavedGameParser.ProjectileState> pendingProjectiles) {
+    public void setPendingProjectiles(List<ProjectileState> pendingProjectiles) {
         this.pendingProjectiles = pendingProjectiles;
     }
 
-    public List<SavedGameParser.ProjectileState> getPendingProjectiles() {
+    public List<ProjectileState> getPendingProjectiles() {
         return pendingProjectiles;
     }
 
@@ -495,7 +494,7 @@ public class WeaponModuleState {
         result.append("\nPending Projectiles... (Queued before firing)\n");
         int projectileIndex = 0;
         first = true;
-        for (SavedGameParser.ProjectileState projectile : pendingProjectiles) {
+        for (ProjectileState projectile : pendingProjectiles) {
             if (first) {
                 first = false;
             } else {

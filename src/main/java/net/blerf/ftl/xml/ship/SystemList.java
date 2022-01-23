@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.blerf.ftl.model.state.SystemType;
+import net.blerf.ftl.model.type.SystemType;
 
 @Getter
 @Setter

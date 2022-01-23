@@ -2,13 +2,13 @@ package net.blerf.ftl.model.state;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.blerf.ftl.parser.SavedGameParser;
+import net.blerf.ftl.model.type.StationDirection;
 
 public class RoomState {
     private int oxygen = 100;
     private final List<SquareState> squareList = new ArrayList<>();
     private int stationSquare = -1;
-    private SavedGameParser.StationDirection stationDirection = SavedGameParser.StationDirection.NONE;
+    private StationDirection stationDirection = StationDirection.NONE;
 
 
     /**
@@ -84,11 +84,11 @@ public class RoomState {
      *
      * @param d 0=D,1=R,2=U,3=L,4=None
      */
-    public void setStationDirection(SavedGameParser.StationDirection d) {
+    public void setStationDirection(StationDirection d) {
         stationDirection = d;
     }
 
-    public SavedGameParser.StationDirection getStationDirection() {
+    public StationDirection getStationDirection() {
         return stationDirection;
     }
 

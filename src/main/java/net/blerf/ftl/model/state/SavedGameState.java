@@ -7,7 +7,6 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.MysteryBytes;
-import net.blerf.ftl.parser.SavedGameParser;
 
 @Slf4j
 public class SavedGameState {
@@ -52,7 +51,7 @@ public class SavedGameState {
     private ShipState nearbyShipState = null;
     private NearbyShipAIState nearbyShipAI = null;
     private EnvironmentState environment = null;
-    private final List<SavedGameParser.ProjectileState> projectileList = new ArrayList<>();
+    private final List<ProjectileState> projectileList = new ArrayList<>();
     private int unknownNu = 0;
     private Integer unknownXi = null;
     private boolean autofire = false;
@@ -808,11 +807,11 @@ public class SavedGameState {
      * <p>
      * This was introduced in FTL 1.5.4.
      */
-    public void addProjectile(SavedGameParser.ProjectileState projectile) {
+    public void addProjectile(ProjectileState projectile) {
         projectileList.add(projectile);
     }
 
-    public List<SavedGameParser.ProjectileState> getProjectileList() {
+    public List<ProjectileState> getProjectileList() {
         return projectileList;
     }
 
@@ -1022,7 +1021,7 @@ public class SavedGameState {
         result.append("\nProjectiles...\n");
         int projectileIndex = 0;
         first = true;
-        for (SavedGameParser.ProjectileState projectile : projectileList) {
+        for (ProjectileState projectile : projectileList) {
             if (first) {
                 first = false;
             } else {

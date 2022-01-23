@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.blerf.ftl.model.type.StoreItemType;
 
 /**
  * Up to 3 StoreItems may to be added (Set the StoreItemType, too.)

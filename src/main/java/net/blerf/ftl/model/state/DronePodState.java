@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.blerf.ftl.model.pod.ExtendedDronePodInfo;
+import net.blerf.ftl.model.type.DroneType;
 
 @Getter
 @Setter

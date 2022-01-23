@@ -3,7 +3,7 @@ package net.blerf.ftl.model.systeminfo;
 import net.blerf.ftl.model.state.DoorState;
 import net.blerf.ftl.model.state.DronePodState;
 import net.blerf.ftl.model.state.SystemState;
-import net.blerf.ftl.model.state.SystemType;
+import net.blerf.ftl.model.type.SystemType;
 
 /**
  * Extended info about the Hacking system.

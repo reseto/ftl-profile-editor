@@ -1,9 +1,9 @@
 package net.blerf.ftl.ui.floorplan;
 
 import java.awt.image.BufferedImage;
-import net.blerf.ftl.model.state.CrewType;
-import net.blerf.ftl.model.state.DroneType;
-import net.blerf.ftl.model.state.SystemType;
+import net.blerf.ftl.model.type.CrewType;
+import net.blerf.ftl.model.type.DroneType;
+import net.blerf.ftl.model.type.SystemType;
 
 
 public interface SpriteImageProvider {

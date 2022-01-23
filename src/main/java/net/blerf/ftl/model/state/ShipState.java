@@ -11,6 +11,7 @@ import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
 import net.blerf.ftl.model.systeminfo.ExtendedSystemInfo;
+import net.blerf.ftl.model.type.SystemType;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.xml.SystemBlueprint;
 import net.blerf.ftl.xml.ship.AugmentId;

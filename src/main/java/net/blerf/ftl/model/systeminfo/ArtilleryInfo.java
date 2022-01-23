@@ -1,7 +1,7 @@
 package net.blerf.ftl.model.systeminfo;
 
-import net.blerf.ftl.model.state.SystemType;
 import net.blerf.ftl.model.state.WeaponModuleState;
+import net.blerf.ftl.model.type.SystemType;
 
 public class ArtilleryInfo extends ExtendedSystemInfo {
     private WeaponModuleState weaponMod = null;

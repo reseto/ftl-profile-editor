@@ -3,6 +3,7 @@ package net.blerf.ftl.model.state;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.blerf.ftl.model.type.CrewType;
 
 @Getter
 @Setter

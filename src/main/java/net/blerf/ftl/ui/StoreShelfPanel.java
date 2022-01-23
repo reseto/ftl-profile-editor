@@ -13,11 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.FTLConstants;
-import net.blerf.ftl.model.state.CrewType;
 import net.blerf.ftl.model.state.StoreItem;
-import net.blerf.ftl.model.state.StoreItemType;
 import net.blerf.ftl.model.state.StoreShelf;
-import net.blerf.ftl.model.state.SystemType;
+import net.blerf.ftl.model.type.CrewType;
+import net.blerf.ftl.model.type.StoreItemType;
+import net.blerf.ftl.model.type.SystemType;
 import net.blerf.ftl.parser.DataManager;
 
 @Slf4j

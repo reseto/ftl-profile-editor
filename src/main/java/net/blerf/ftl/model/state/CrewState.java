@@ -8,6 +8,7 @@ import lombok.Setter;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
+import net.blerf.ftl.model.type.CrewType;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.xml.CrewBlueprint;
 

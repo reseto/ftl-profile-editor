@@ -1,6 +1,6 @@
 package net.blerf.ftl.model.systeminfo;
 
-import net.blerf.ftl.model.state.SystemType;
+import net.blerf.ftl.model.type.SystemType;
 
 public class ClonebayInfo extends ExtendedSystemInfo {
     private int buildTicks = 0;

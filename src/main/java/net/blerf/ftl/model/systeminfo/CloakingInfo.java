@@ -1,6 +1,6 @@
 package net.blerf.ftl.model.systeminfo;
 
-import net.blerf.ftl.model.state.SystemType;
+import net.blerf.ftl.model.type.SystemType;
 
 public class CloakingInfo extends ExtendedSystemInfo {
     private int unknownAlpha = 0;

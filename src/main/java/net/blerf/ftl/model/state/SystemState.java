@@ -1,6 +1,7 @@
 package net.blerf.ftl.model.state;
 
 import net.blerf.ftl.model.systeminfo.BatteryInfo;
+import net.blerf.ftl.model.type.SystemType;
 import net.blerf.ftl.parser.SavedGameParser;
 
 public class SystemState {

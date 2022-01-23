@@ -1,4 +1,4 @@
-package net.blerf.ftl.model.state;
+package net.blerf.ftl.model.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum StoreItemType {
-    WEAPON("Weapon"), DRONE("Drone"), AUGMENT("Augment"), CREW("Crew"), SYSTEM("System");
+    WEAPON("Weapon"),
+    DRONE("Drone"),
+    AUGMENT("Augment"),
+    CREW("Crew"),
+    SYSTEM("System");
 
     private final String title;
 
