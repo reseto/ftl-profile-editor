@@ -128,7 +128,7 @@ public class DefaultDataManager extends DataManager {
     public DefaultDataManager(File datsDir) throws IOException, JAXBException, JDOMException {
 
         boolean meltdown = false;
-        List<InputStream> streams = new ArrayList<InputStream>();
+        List<InputStream> streams = new ArrayList<>();
 
         try {
             File ftlDatFile = new File(datsDir, "ftl.dat");
@@ -162,7 +162,7 @@ public class DefaultDataManager extends DataManager {
             //   Look up a text tag with that "name" attribute.
             //   Take that value, replace "\\n" with "\n".
             //   Make that the value of the original tag.
-            List<String> textLookupFileNames = new ArrayList<String>();
+            List<String> textLookupFileNames = new ArrayList<>();
             // FTL 1.5.4-1.5.13.
             textLookupFileNames.add("misc.xml");
             // FTL 1.6.1.
@@ -176,7 +176,7 @@ public class DefaultDataManager extends DataManager {
 
             log.info("Reading text...");
 
-            textLookupMap = new HashMap<String, String>();
+            textLookupMap = new HashMap<>();
             for (String textLookupFileName : textLookupFileNames) {
                 if (!hasResourceInputStream("data/" + textLookupFileName)) continue;
 
@@ -199,18 +199,18 @@ public class DefaultDataManager extends DataManager {
 
             log.info("Reading Blueprints...");
 
-            List<String> stdBlueprintsFileNames = new ArrayList<String>();
+            List<String> stdBlueprintsFileNames = new ArrayList<>();
             stdBlueprintsFileNames.add("blueprints.xml");
             stdBlueprintsFileNames.add("autoBlueprints.xml");
             stdBlueprintsFileNames.add("bosses.xml");  // FTL 1.5.4+
 
-            List<String> dlcBlueprintsFileNames = new ArrayList<String>();
+            List<String> dlcBlueprintsFileNames = new ArrayList<>();
             dlcBlueprintsFileNames.add("dlcBlueprints.xml");
             dlcBlueprintsFileNames.add("dlcBlueprintsOverwrite.xml");
             dlcBlueprintsFileNames.add("dlcPirateBlueprints.xml");
 
-            stdBlueprintsFileMap = new LinkedHashMap<String, Blueprints>(stdBlueprintsFileNames.size());
-            dlcBlueprintsFileMap = new LinkedHashMap<String, Blueprints>(dlcBlueprintsFileNames.size() + stdBlueprintsFileNames.size());
+            stdBlueprintsFileMap = new LinkedHashMap<>(stdBlueprintsFileNames.size());
+            dlcBlueprintsFileMap = new LinkedHashMap<>(dlcBlueprintsFileNames.size() + stdBlueprintsFileNames.size());
             for (String blueprintsFileName : stdBlueprintsFileNames) {
                 if (!hasResourceInputStream("data/" + blueprintsFileName)) continue;
 
@@ -234,7 +234,7 @@ public class DefaultDataManager extends DataManager {
 
             log.info("Reading Events...");
 
-            List<String> stdEventsFileNames = new ArrayList<String>();
+            List<String> stdEventsFileNames = new ArrayList<>();
             stdEventsFileNames.add("events.xml");
             stdEventsFileNames.add("newEvents.xml");
             stdEventsFileNames.add("events_crystal.xml");
@@ -251,13 +251,13 @@ public class DefaultDataManager extends DataManager {
             stdEventsFileNames.add("events_boss.xml");
             stdEventsFileNames.add("events_ships.xml");
 
-            List<String> dlcEventsFileNames = new ArrayList<String>();
+            List<String> dlcEventsFileNames = new ArrayList<>();
             dlcEventsFileNames.add("dlcEvents.xml");
             dlcEventsFileNames.add("dlcEventsOverwrite.xml");
             dlcEventsFileNames.add("dlcEvents_anaerobic.xml");
 
-            stdEventsFileMap = new LinkedHashMap<String, Encounters>(stdEventsFileNames.size());
-            dlcEventsFileMap = new LinkedHashMap<String, Encounters>(dlcEventsFileNames.size() + stdEventsFileNames.size());
+            stdEventsFileMap = new LinkedHashMap<>(stdEventsFileNames.size());
+            dlcEventsFileMap = new LinkedHashMap<>(dlcEventsFileNames.size() + stdEventsFileNames.size());
             for (String eventsFileName : stdEventsFileNames) {
                 log.debug(String.format("Reading \"data/%s\"...", eventsFileName));
                 InputStream tmpStream = getResourceInputStream("data/" + eventsFileName);
@@ -279,9 +279,9 @@ public class DefaultDataManager extends DataManager {
 
             final Pattern overridePtn = Pattern.compile("^OVERRIDE_(.*)");
 
-            stdEventIdMap = new LinkedHashMap<String, FTLEvent>();
-            stdEventListIdMap = new LinkedHashMap<String, FTLEventList>();
-            stdTextListIdMap = new LinkedHashMap<String, TextList>();
+            stdEventIdMap = new LinkedHashMap<>();
+            stdEventListIdMap = new LinkedHashMap<>();
+            stdTextListIdMap = new LinkedHashMap<>();
 
             for (Map.Entry<String, Encounters> entry : stdEventsFileMap.entrySet()) {
                 Encounters tmpEncounters = entry.getValue();
@@ -304,9 +304,9 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            dlcEventIdMap = new LinkedHashMap<String, FTLEvent>(stdEventIdMap);
-            dlcEventListIdMap = new LinkedHashMap<String, FTLEventList>(stdEventListIdMap);
-            dlcTextListIdMap = new LinkedHashMap<String, TextList>(stdTextListIdMap);
+            dlcEventIdMap = new LinkedHashMap<>(stdEventIdMap);
+            dlcEventListIdMap = new LinkedHashMap<>(stdEventListIdMap);
+            dlcTextListIdMap = new LinkedHashMap<>(stdTextListIdMap);
 
             for (Map.Entry<String, Encounters> entry : dlcEventsFileMap.entrySet()) {
                 Encounters tmpEncounters = entry.getValue();
@@ -360,19 +360,19 @@ public class DefaultDataManager extends DataManager {
             streams.add(sectorDataStream);
             tmpSectorData = DatParser.readSectorData(sectorDataStream, "sector_data.xml", textLookupMap);
 
-            sectorDescriptionIdMap = new LinkedHashMap<String, SectorDescription>();
+            sectorDescriptionIdMap = new LinkedHashMap<>();
             for (SectorDescription tmpDesc : tmpSectorData.getSectorDescriptions()) {
                 sectorDescriptionIdMap.put(tmpDesc.getId(), tmpDesc);
             }
 
-            stdSectorTypeIdMap = new LinkedHashMap<String, SectorType>();
+            stdSectorTypeIdMap = new LinkedHashMap<>();
             for (SectorType tmpType : tmpSectorData.getSectorTypes()) {
                 if (overridePtn.matcher(tmpType.getId()).matches()) continue;
 
                 stdSectorTypeIdMap.put(tmpType.getId(), tmpType);
             }
 
-            dlcSectorTypeIdMap = new LinkedHashMap<String, SectorType>(stdSectorTypeIdMap);
+            dlcSectorTypeIdMap = new LinkedHashMap<>(stdSectorTypeIdMap);
             for (SectorType tmpType : tmpSectorData.getSectorTypes()) {
                 Matcher m = overridePtn.matcher(tmpType.getId());
                 if (m.matches()) {
@@ -407,7 +407,7 @@ public class DefaultDataManager extends DataManager {
 
             log.info("Finished reading FTL resources.");
 
-            achievementIdMap = new LinkedHashMap<String, Achievement>();
+            achievementIdMap = new LinkedHashMap<>();
             for (Achievement ach : achievements) {
                 achievementIdMap.put(ach.getId(), ach);
             }
@@ -415,7 +415,7 @@ public class DefaultDataManager extends DataManager {
             // Add hardcoded ship Quest and Victory achievements. (FTL 1.5.4+)
             // TODO: Magic strings.
 
-            Map<String, String> questAchIds = new LinkedHashMap<String, String>();
+            Map<String, String> questAchIds = new LinkedHashMap<>();
             // No Kestrel quest.
             questAchIds.put("PLAYER_SHIP_STEALTH", "PLAYER_SHIP_STEALTH_QUEST");
             questAchIds.put("PLAYER_SHIP_MANTIS", "PLAYER_SHIP_MANTIS_QUEST");
@@ -441,7 +441,7 @@ public class DefaultDataManager extends DataManager {
                 questAch.setQuest(true);
             }
 
-            Map<String, String> victoryAchIds = new LinkedHashMap<String, String>();
+            Map<String, String> victoryAchIds = new LinkedHashMap<>();
             victoryAchIds.put("PLAYER_SHIP_HARD", "PLAYER_SHIP_HARD_VICTORY");
             victoryAchIds.put("PLAYER_SHIP_STEALTH", "PLAYER_SHIP_STEALTH_VICTORY");
             victoryAchIds.put("PLAYER_SHIP_MANTIS", "PLAYER_SHIP_MANTIS_VICTORY");
@@ -467,14 +467,14 @@ public class DefaultDataManager extends DataManager {
                 victoryAch.setVictory(true);
             }
 
-            generalAchievements = new ArrayList<Achievement>();
+            generalAchievements = new ArrayList<>();
             for (Achievement ach : achievementIdMap.values()) {
                 if (ach.getShipId() == null) {
                     generalAchievements.add(ach);
                 }
             }
 
-            stdAugmentIdMap = new TreeMap<String, AugBlueprint>();
+            stdAugmentIdMap = new TreeMap<>();
             for (Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -482,7 +482,7 @@ public class DefaultDataManager extends DataManager {
                     stdAugmentIdMap.put(augment.getId(), augment);
                 }
             }
-            dlcAugmentIdMap = new TreeMap<String, AugBlueprint>(stdAugmentIdMap);
+            dlcAugmentIdMap = new TreeMap<>(stdAugmentIdMap);
             for (Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -491,7 +491,7 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            stdCrewIdMap = new TreeMap<String, CrewBlueprint>();
+            stdCrewIdMap = new TreeMap<>();
             for (Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -499,7 +499,7 @@ public class DefaultDataManager extends DataManager {
                     stdCrewIdMap.put(crew.getId(), crew);
                 }
             }
-            dlcCrewIdMap = new TreeMap<String, CrewBlueprint>(stdCrewIdMap);
+            dlcCrewIdMap = new TreeMap<>(stdCrewIdMap);
             for (Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -508,7 +508,7 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            stdDroneIdMap = new TreeMap<String, DroneBlueprint>();
+            stdDroneIdMap = new TreeMap<>();
             for (Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -516,7 +516,7 @@ public class DefaultDataManager extends DataManager {
                     stdDroneIdMap.put(drone.getId(), drone);
                 }
             }
-            dlcDroneIdMap = new TreeMap<String, DroneBlueprint>(stdDroneIdMap);
+            dlcDroneIdMap = new TreeMap<>(stdDroneIdMap);
             for (Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -525,7 +525,7 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            stdSystemIdMap = new LinkedHashMap<String, SystemBlueprint>();
+            stdSystemIdMap = new LinkedHashMap<>();
             for (Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -533,7 +533,7 @@ public class DefaultDataManager extends DataManager {
                     stdSystemIdMap.put(system.getId(), system);
                 }
             }
-            dlcSystemIdMap = new LinkedHashMap<String, SystemBlueprint>(stdSystemIdMap);
+            dlcSystemIdMap = new LinkedHashMap<>(stdSystemIdMap);
             for (Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -542,7 +542,7 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            stdWeaponIdMap = new TreeMap<String, WeaponBlueprint>();
+            stdWeaponIdMap = new TreeMap<>();
             for (Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -550,7 +550,7 @@ public class DefaultDataManager extends DataManager {
                     stdWeaponIdMap.put(weapon.getId(), weapon);
                 }
             }
-            dlcWeaponIdMap = new TreeMap<String, WeaponBlueprint>(stdWeaponIdMap);
+            dlcWeaponIdMap = new TreeMap<>(stdWeaponIdMap);
             for (Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -559,7 +559,7 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            stdShipIdMap = new LinkedHashMap<String, ShipBlueprint>();
+            stdShipIdMap = new LinkedHashMap<>();
             for (Map.Entry<String, Blueprints> entry : stdBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -567,7 +567,7 @@ public class DefaultDataManager extends DataManager {
                     stdShipIdMap.put(ship.getId(), ship);
                 }
             }
-            dlcShipIdMap = new LinkedHashMap<String, ShipBlueprint>(stdShipIdMap);
+            dlcShipIdMap = new LinkedHashMap<>(stdShipIdMap);
             for (Map.Entry<String, Blueprints> entry : dlcBlueprintsFileMap.entrySet()) {
                 Blueprints blueprints = entry.getValue();
 
@@ -576,7 +576,7 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            stdPlayerShipBaseIds = new ArrayList<String>();     // TODO: Magic strings.
+            stdPlayerShipBaseIds = new ArrayList<>();     // TODO: Magic strings.
             stdPlayerShipBaseIds.add("PLAYER_SHIP_HARD");
             stdPlayerShipBaseIds.add("PLAYER_SHIP_STEALTH");
             stdPlayerShipBaseIds.add("PLAYER_SHIP_MANTIS");
@@ -587,15 +587,15 @@ public class DefaultDataManager extends DataManager {
             stdPlayerShipBaseIds.add("PLAYER_SHIP_ENERGY");
             stdPlayerShipBaseIds.add("PLAYER_SHIP_CRYSTAL");
 
-            dlcPlayerShipBaseIds = new ArrayList<String>(stdPlayerShipBaseIds);
+            dlcPlayerShipBaseIds = new ArrayList<>(stdPlayerShipBaseIds);
             dlcPlayerShipBaseIds.add("PLAYER_SHIP_ANAEROBIC");
 
-            stdPlayerShipIds = new ArrayList<String>();
-            stdPlayerShipVariantsMap = new LinkedHashMap<String, List<ShipBlueprint>>(stdPlayerShipBaseIds.size());
+            stdPlayerShipIds = new ArrayList<>();
+            stdPlayerShipVariantsMap = new LinkedHashMap<>(stdPlayerShipBaseIds.size());
             for (String baseId : stdPlayerShipBaseIds) {
                 stdPlayerShipIds.add(baseId);
 
-                List<ShipBlueprint> variantList = new ArrayList<ShipBlueprint>(2);
+                List<ShipBlueprint> variantList = new ArrayList<>(2);
                 stdPlayerShipVariantsMap.put(baseId, variantList);
                 variantList.add(stdShipIdMap.get(baseId));
 
@@ -604,12 +604,12 @@ public class DefaultDataManager extends DataManager {
                 stdPlayerShipIds.add(variantId);
                 variantList.add(stdShipIdMap.get(variantId));
             }
-            dlcPlayerShipIds = new ArrayList<String>();
-            dlcPlayerShipVariantsMap = new LinkedHashMap<String, List<ShipBlueprint>>(dlcPlayerShipBaseIds.size());
+            dlcPlayerShipIds = new ArrayList<>();
+            dlcPlayerShipVariantsMap = new LinkedHashMap<>(dlcPlayerShipBaseIds.size());
             for (String baseId : dlcPlayerShipBaseIds) {
                 dlcPlayerShipIds.add(baseId);
 
-                List<ShipBlueprint> variantList = new ArrayList<ShipBlueprint>(3);
+                List<ShipBlueprint> variantList = new ArrayList<>(3);
                 dlcPlayerShipVariantsMap.put(baseId, variantList);
                 variantList.add(dlcShipIdMap.get(baseId));
 
@@ -628,26 +628,26 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            stdPlayerShipIdMap = new LinkedHashMap<String, ShipBlueprint>(stdPlayerShipIds.size());
+            stdPlayerShipIdMap = new LinkedHashMap<>(stdPlayerShipIds.size());
             for (String playerShipId : stdPlayerShipIds) {
                 ShipBlueprint ship = stdShipIdMap.get(playerShipId);
                 if (ship == null) continue;
                 stdPlayerShipIdMap.put(playerShipId, ship);
             }
-            dlcPlayerShipIdMap = new LinkedHashMap<String, ShipBlueprint>(dlcPlayerShipIds.size());
+            dlcPlayerShipIdMap = new LinkedHashMap<>(dlcPlayerShipIds.size());
             for (String playerShipId : dlcPlayerShipIds) {
                 ShipBlueprint ship = dlcShipIdMap.get(playerShipId);
                 if (ship == null) continue;
                 dlcPlayerShipIdMap.put(playerShipId, ship);
             }
 
-            stdAutoShipIdMap = new LinkedHashMap<String, ShipBlueprint>();
+            stdAutoShipIdMap = new LinkedHashMap<>();
             for (Map.Entry<String, ShipBlueprint> entry : stdShipIdMap.entrySet()) {
                 if (!stdPlayerShipIdMap.containsKey(entry.getKey())) {
                     stdAutoShipIdMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            dlcAutoShipIdMap = new LinkedHashMap<String, ShipBlueprint>();
+            dlcAutoShipIdMap = new LinkedHashMap<>();
             for (Map.Entry<String, ShipBlueprint> entry : dlcShipIdMap.entrySet()) {
                 if (!dlcPlayerShipIdMap.containsKey(entry.getKey())) {
                     dlcAutoShipIdMap.put(entry.getKey(), entry.getValue());
@@ -655,9 +655,9 @@ public class DefaultDataManager extends DataManager {
             }
 
             // Ship achievements are only tied to "Type A" variants.
-            stdShipAchievementIdMap = new HashMap<ShipBlueprint, List<Achievement>>();
+            stdShipAchievementIdMap = new HashMap<>();
             for (Map.Entry<String, ShipBlueprint> entry : stdPlayerShipIdMap.entrySet()) {
-                List<Achievement> shipAchs = new ArrayList<Achievement>();
+                List<Achievement> shipAchs = new ArrayList<>();
                 for (Achievement ach : achievementIdMap.values()) {
                     if (entry.getKey().equals(ach.getShipId())) {
                         shipAchs.add(ach);
@@ -665,9 +665,9 @@ public class DefaultDataManager extends DataManager {
                 }
                 stdShipAchievementIdMap.put(entry.getValue(), shipAchs);
             }
-            dlcShipAchievementIdMap = new HashMap<ShipBlueprint, List<Achievement>>(stdShipAchievementIdMap);
+            dlcShipAchievementIdMap = new HashMap<>(stdShipAchievementIdMap);
             for (Map.Entry<String, ShipBlueprint> entry : dlcPlayerShipIdMap.entrySet()) {
-                List<Achievement> shipAchs = new ArrayList<Achievement>();
+                List<Achievement> shipAchs = new ArrayList<>();
                 for (Achievement ach : achievementIdMap.values()) {
                     if (entry.getKey().equals(ach.getShipId())) {
                         shipAchs.add(ach);
@@ -677,11 +677,11 @@ public class DefaultDataManager extends DataManager {
             }
 
             // These'll populate as files are requested.
-            shipLayoutIdMap = new HashMap<String, ShipLayout>();
-            shipChassisIdMap = new HashMap<String, ShipChassis>();
+            shipLayoutIdMap = new HashMap<>();
+            shipChassisIdMap = new HashMap<>();
 
-            crewNamesMale = new ArrayList<CrewNameList.CrewName>();
-            crewNamesFemale = new ArrayList<CrewNameList.CrewName>();
+            crewNamesMale = new ArrayList<>();
+            crewNamesFemale = new ArrayList<>();
             for (CrewNameList crewNameList : crewNameLists) {
                 if ("male".equals(crewNameList.getSex())) {
                     crewNamesMale.addAll(crewNameList.getNames());
@@ -690,12 +690,12 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            backgroundImageListIdMap = new LinkedHashMap<String, BackgroundImageList>();
+            backgroundImageListIdMap = new LinkedHashMap<>();
             for (BackgroundImageList imageList : tmpBgImageLists) {
                 backgroundImageListIdMap.put(imageList.getId(), imageList);
             }
 
-            stdShipEventIdMap = new LinkedHashMap<String, ShipEvent>();
+            stdShipEventIdMap = new LinkedHashMap<>();
             for (Map.Entry<String, Encounters> entry : stdEventsFileMap.entrySet()) {
                 Encounters tmpEncounters = entry.getValue();
                 List<ShipEvent> shipEventList = tmpEncounters.getShipEvents();
@@ -703,7 +703,7 @@ public class DefaultDataManager extends DataManager {
                     stdShipEventIdMap.put(shipEvent.getId(), shipEvent);
                 }
             }
-            dlcShipEventIdMap = new LinkedHashMap<String, ShipEvent>(stdShipEventIdMap);
+            dlcShipEventIdMap = new LinkedHashMap<>(stdShipEventIdMap);
             for (Map.Entry<String, Encounters> entry : dlcEventsFileMap.entrySet()) {
                 Encounters tmpEncounters = entry.getValue();
                 List<ShipEvent> shipEventList = tmpEncounters.getShipEvents();
@@ -716,9 +716,9 @@ public class DefaultDataManager extends DataManager {
                 }
             }
 
-            stdAnimSheetIdMap = new LinkedHashMap<String, AnimSheet>();
-            stdAnimIdMap = new LinkedHashMap<String, Anim>();
-            stdWeaponAnimIdMap = new LinkedHashMap<String, WeaponAnim>();
+            stdAnimSheetIdMap = new LinkedHashMap<>();
+            stdAnimIdMap = new LinkedHashMap<>();
+            stdWeaponAnimIdMap = new LinkedHashMap<>();
 
             for (AnimSheet sheet : stdAnimations.getSheets()) {
                 stdAnimSheetIdMap.put(sheet.getId(), sheet);
@@ -730,9 +730,9 @@ public class DefaultDataManager extends DataManager {
                 stdWeaponAnimIdMap.put(weaponAnim.getId(), weaponAnim);
             }
 
-            dlcAnimSheetIdMap = new LinkedHashMap<String, AnimSheet>(stdAnimSheetIdMap);
-            dlcAnimIdMap = new LinkedHashMap<String, Anim>(stdAnimIdMap);
-            dlcWeaponAnimIdMap = new LinkedHashMap<String, WeaponAnim>(stdWeaponAnimIdMap);
+            dlcAnimSheetIdMap = new LinkedHashMap<>(stdAnimSheetIdMap);
+            dlcAnimIdMap = new LinkedHashMap<>(stdAnimIdMap);
+            dlcWeaponAnimIdMap = new LinkedHashMap<>(stdWeaponAnimIdMap);
 
             if (dlcAnimations != null) {
                 for (AnimSheet sheet : dlcAnimations.getSheets()) {

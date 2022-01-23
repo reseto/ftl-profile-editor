@@ -73,12 +73,10 @@ public class EditorConfig {
 
     public void writeConfig() throws IOException {
 
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(configFile);
+        try (OutputStream out = new FileOutputStream(configFile)) {
 
-            Map<String, String> userFieldsMap = new LinkedHashMap<String, String>();
-            Map<String, String> appFieldsMap = new LinkedHashMap<String, String>();
+            Map<String, String> userFieldsMap = new LinkedHashMap<>();
+            Map<String, String> appFieldsMap = new LinkedHashMap<>();
 
             userFieldsMap.put(FTL_DATS_PATH, "The path to FTL's resources folder. If invalid, you'll be prompted.");
             userFieldsMap.put(USE_DEFAULT_UI, "If true, no attempt will be made to resemble a native GUI. Default: false.");
@@ -88,7 +86,7 @@ public class EditorConfig {
             appFieldsMap.put(APP_UPDATE_ETAG, "Last update check's ETag.");
             appFieldsMap.put(APP_UPDATE_AVAILABLE, "Last update check's result.");
 
-            List<String> allFieldsList = new ArrayList<String>(userFieldsMap.size() + appFieldsMap.size());
+            List<String> allFieldsList = new ArrayList<>();
             allFieldsList.addAll(userFieldsMap.keySet());
             allFieldsList.addAll(appFieldsMap.keySet());
             int fieldWidth = 0;
@@ -108,11 +106,6 @@ public class EditorConfig {
             OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
             config.store(writer, commentsBuf.toString());
             writer.flush();
-        } finally {
-            try {
-                if (out != null) out.close();
-            } catch (IOException e) {
-            }
         }
     }
 }

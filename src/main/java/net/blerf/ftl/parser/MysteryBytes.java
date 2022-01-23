@@ -44,9 +44,9 @@ public class MysteryBytes {
         StringBuilder ascii = new StringBuilder();
 
         if (offset >= 0)
-            result.append(String.format("Location: %d-%d\n", offset, offset + bytes.length));
+            result.append(String.format("Location: %d-%d%n", offset, offset + bytes.length));
         else
-            result.append(String.format("Length: %d\n", bytes.length));
+            result.append(String.format("Length: %d%n", bytes.length));
 
         for (int i = 0; i < bytes.length; i++) {
             result.append((char) (HEX_CHARS[(bytes[i] & 0x00F0) >> 4]));

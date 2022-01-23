@@ -1,6 +1,5 @@
 package net.blerf.ftl.ui;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,8 +21,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 @Slf4j
 public class EditorInitThread extends Thread {
 
-    private final String latestVersionUrl = "https://raw.github.com/reseto/ftl-profile-editor/master/latest-version.txt";
-    private final String versionHistoryUrl = "https://raw.github.com/reseto/ftl-profile-editor/master/release-notes.txt";
+    private static final String BASE_URL = "https://raw.github.com/reseto/ftl-profile-editor/master/";
+    private static final String LATEST_VERSION_URL = BASE_URL + "latest-version.txt";
+    private static final String VERSION_HISTORY_URL = BASE_URL + "release-notes.txt";
 
     private final FTLFrame frame;
     private final EditorConfig initConfig;
@@ -92,19 +92,17 @@ public class EditorInitThread extends Thread {
                     .setRedirectsEnabled(true)
                     .build();
 
-            CloseableHttpClient httpClient = HttpClientBuilder.create()
+            HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
                     .setDefaultRequestConfig(requestConfig)
+                    //.setUserAgent( "" )
                     .disableAuthCaching()
                     .disableAutomaticRetries()
                     .disableConnectionState()
-                    .disableCookieManagement()
-                    //.setUserAgent( "" )
-                    .build();
+                    .disableCookieManagement();
 
             String eTagCached = null;  // TODO.
-
             HttpGet request = null;
-            try {
+            try (CloseableHttpClient httpClient = httpClientBuilder.build()) {
                 TaggedStringResponseHandler responseHandler = new TaggedStringResponseHandler();
 
                 final long updateTimestamp = System.currentTimeMillis() / 1000L;
@@ -112,11 +110,9 @@ public class EditorInitThread extends Thread {
                 final boolean updateAvailable;
                 final Map<Integer, List<String>> historyMap;
 
-                // Fetch the latest version number.
-
                 log.debug("Checking for the latest version");
 
-                request = new HttpGet(latestVersionUrl);
+                request = new HttpGet(LATEST_VERSION_URL);
 
                 if (eTagCached != null) request.addHeader("If-None-Match", eTagCached);
 
@@ -138,11 +134,9 @@ public class EditorInitThread extends Thread {
                 updateAvailable = (latestVersion > appVersion);
 
                 if (updateAvailable) {
-                    // Fetch the detailed version history.
-
                     log.debug("A newer version is available, fetching version history...");
 
-                    request = new HttpGet(versionHistoryUrl);
+                    request = new HttpGet(VERSION_HISTORY_URL);
                     TaggedString historyResult = httpClient.execute(request, responseHandler);
 
                     historyMap = parseVersionHistory(historyResult.text);
@@ -165,14 +159,9 @@ public class EditorInitThread extends Thread {
                 };
                 SwingUtilities.invokeLater(r);
             } catch (ClientProtocolException e) {
-                log.error("GET request failed for url: " + request.getURI().toString(), e);
+                log.error("GET request failed for url: {}", request.getURI().toString(), e);
             } catch (Exception e) {
                 log.error("Checking for latest version failed", e);
-            } finally {
-                try {
-                    httpClient.close();
-                } catch (IOException e) {
-                }
             }
         }
     }
@@ -182,12 +171,12 @@ public class EditorInitThread extends Thread {
      * Parses history text to a Map of release versions with itemized changes.
      */
     private Map<Integer, List<String>> parseVersionHistory(String historyText) {
-        Map<Integer, List<String>> historyMap = new LinkedHashMap<Integer, List<String>>();
+        Map<Integer, List<String>> historyMap = new LinkedHashMap<>();
 
         Scanner historyScanner = new Scanner(historyText);
         while (historyScanner.hasNextLine()) {
             int releaseVersion = Integer.parseInt(historyScanner.nextLine());
-            List<String> releaseChangeList = new ArrayList<String>();
+            List<String> releaseChangeList = new ArrayList<>();
             historyMap.put(releaseVersion, releaseChangeList);
 
             while (historyScanner.hasNextLine()) {

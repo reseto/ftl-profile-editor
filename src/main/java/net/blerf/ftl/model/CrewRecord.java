@@ -1,20 +1,21 @@
 package net.blerf.ftl.model;
 
+import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class CrewRecord implements Comparable<CrewRecord> {
 
     private String name;
     private String race;
     private boolean male;
     private int value;
-
-
-    public CrewRecord(String name, String race, boolean male, int value) {
-        this.name = name;
-        this.race = race;
-        this.male = male;
-        this.value = value;
-    }
 
     /**
      * Copy constructor.
@@ -26,53 +27,26 @@ public class CrewRecord implements Comparable<CrewRecord> {
         value = srcRec.getValue();
     }
 
-    public void setName(String s) {
-        name = s;
+    @Override
+    public int compareTo(CrewRecord that) {
+        return Integer.compare(this.value, that.value);
     }
-
-    public void setRace(String s) {
-        race = s;
-    }
-
-    public void setMale(boolean b) {
-        male = b;
-    }
-
-    public void setValue(int n) {
-        value = n;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getRace() {
-        return race;
-    }
-
-    public boolean isMale() {
-        return male;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
 
     @Override
-    public int compareTo(CrewRecord other) {
-        if (this.getValue() > other.getValue()) return 1;
-        if (this.getValue() < other.getValue()) return -1;
-        return 0;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CrewRecord that = (CrewRecord) o;
+        return value == that.value;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-
-        result.append(String.format("Name: %-20s  Race: %-9s  Sex: %s  Score: %4d%n", name, race, (male ? "M" : "F"), value));
-
-        return result.toString();
+        return String.format("Name: %-20s  Race: %-9s  Sex: %s  Score: %4d%n", name, race, (male ? "M" : "F"), value);
     }
 }

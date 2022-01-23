@@ -30,12 +30,12 @@ public class Profile {
     public Profile(Profile srcProfile) {
         fileFormat = srcProfile.getFileFormat();
 
-        achievements = new ArrayList<AchievementRecord>();
+        achievements = new ArrayList<>();
         for (AchievementRecord rec : srcProfile.getAchievements()) {
             achievements.add(new AchievementRecord(rec));
         }
 
-        shipUnlockMap = new LinkedHashMap<String, ShipAvailability>();
+        shipUnlockMap = new LinkedHashMap<>();
         for (Map.Entry<String, ShipAvailability> entry : srcProfile.getShipUnlockMap().entrySet()) {
             shipUnlockMap.put(entry.getKey(), new ShipAvailability(entry.getValue()));
         }
