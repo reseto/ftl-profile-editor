@@ -114,7 +114,7 @@ public final class RandomEvent {
         log.debug("Load event {}", event);
 
         /* If unique, check if it was already chosen */
-        if (event.getUnique()) {
+        if (event.isUnique()) {
             if (uniqueSectors.contains(event.getId()))
                 return null;
             uniqueSectors.add(event.getId());

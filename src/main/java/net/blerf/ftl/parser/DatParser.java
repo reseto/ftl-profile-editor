@@ -110,9 +110,9 @@ public class DatParser {
         streamBuf.append("</blueprints>");
 
         // Edit the buffer in place.
-        // Note: The replacement will be inserted as-is, with no backreference substitution.
+        // Note: The replacement will be inserted as-is, with no back-reference substitution.
 
-        Map<Pattern, String> fixMap = new LinkedHashMap<Pattern, String>();
+        Map<Pattern, String> fixMap = new LinkedHashMap<>();
         fixMap.put(XML_DECL_PTN, "");
         fixMap.put(ROOT_TAG_PTN, "");
 
@@ -158,9 +158,7 @@ public class DatParser {
 
         ShipLayout shipLayout = new ShipLayout();
 
-        String line = null;
-        boolean firstLine = true;
-        boolean comment = false;
+        String line;
 
         while ((line = in.readLine()) != null) {
             if (line.length() == 0) continue;

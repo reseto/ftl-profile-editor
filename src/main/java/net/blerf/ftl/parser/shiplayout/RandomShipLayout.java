@@ -23,8 +23,7 @@ public class RandomShipLayout {
 
     private static Set<Integer> uniqueCrewNames = null;
 
-    ShipLayout shipLayout = null;
-    List<RoomSquare> roomSquares = new ArrayList<RoomSquare>();
+    List<RoomSquare> roomSquares = new ArrayList<>();
     boolean[] squarePairs;
 
     public RandomShipLayout(String shipLayoutId, Set<Integer> un) {
@@ -71,8 +70,7 @@ public class RandomShipLayout {
         rng.srand(seed);
         int roomCount = roomSquares.size();
 
-        for (int r = 0; r < roomCount; r++) {
-            RoomSquare square = roomSquares.get(r);
+        for (RoomSquare square : roomSquares) {
             int squareId = rng.rand() % (square.roomW * square.roomH);
             square.x = square.roomX + squareId % square.roomW;
             square.y = square.roomY + squareId / square.roomW;
@@ -101,7 +99,7 @@ public class RandomShipLayout {
                     if (isPair) continue;
 
                     /* The following code is only useful the first time we
-                     * enconter a pair. When we are processing the swapped pair,
+                     * encounter a pair. When we are processing the swapped pair,
                      * we can skip most of it
                      */
                     if (square2.roomId < square1.roomId) {

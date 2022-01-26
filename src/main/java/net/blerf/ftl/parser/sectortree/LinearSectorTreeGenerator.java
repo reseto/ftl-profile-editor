@@ -16,10 +16,10 @@ import net.blerf.ftl.model.sectortree.SectorDot;
 public class LinearSectorTreeGenerator {
 
     public List<List<SectorDot>> generateSectorTree(int columnCount) {
-        List<List<SectorDot>> result = new ArrayList<List<SectorDot>>(columnCount);
+        List<List<SectorDot>> result = new ArrayList<>(columnCount);
 
         for (int c = 0; c < columnCount; c++) {
-            List<SectorDot> columnDots = new ArrayList<SectorDot>(1);
+            List<SectorDot> columnDots = new ArrayList<>(1);
 
             SectorDot dot = new SectorDot(null, null, "Unknown");
             columnDots.add(dot);
@@ -39,10 +39,10 @@ public class LinearSectorTreeGenerator {
      * The final column will hold any excess dots.
      */
     public List<List<SectorDot>> generateSectorTree(List<Boolean> route, int columnCount) {
-        List<List<SectorDot>> result = new ArrayList<List<SectorDot>>(columnCount);
+        List<List<SectorDot>> result = new ArrayList<>(columnCount);
 
         int lastVisitedR = route.lastIndexOf(Boolean.TRUE);
-        List<SectorDot> columnDots = new ArrayList<SectorDot>(1);
+        List<SectorDot> columnDots = new ArrayList<>(1);
         result.add(columnDots);
 
         for (int r = 0; r < route.size(); r++) {
@@ -51,7 +51,7 @@ public class LinearSectorTreeGenerator {
             columnDots.add(dot);
 
             if ((r == 0 || dot.isVisited() || r > lastVisitedR) && result.size() < columnCount) {
-                columnDots = new ArrayList<SectorDot>();
+                columnDots = new ArrayList<>();
                 result.add(columnDots);
             }
         }

@@ -8,10 +8,16 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.xml.ship.ShipEvent;
 
 @Slf4j
+@Getter
+@Setter
+@ToString(of = {"id", "load", "text"})
 @XmlRootElement(name = "event")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FTLEvent implements Cloneable {
@@ -150,13 +156,15 @@ public class FTLEvent implements Cloneable {
         } catch (CloneNotSupportedException cnse) {
             log.error("Failed to clone. ", cnse);
         }
-
+        if (o == null) {
+            o = new FTLEvent();
+        }
         o.id = id;
         o.load = load;
         o.unique = unique;
 
         if (text != null) {
-            o.text = (NamedText) text.clone();
+            o.text = text.toBuilder().build();
         }
 
         if (choiceList != null) {
@@ -167,18 +175,14 @@ public class FTLEvent implements Cloneable {
                 newC.setReq(c.getReq());
                 newC.setLevel(c.getLevel());
                 if (c.getText() != null)
-                    newC.setText((NamedText) c.getText().clone());
+                    newC.setText(c.getText().toBuilder().build());
                 if (c.getEvent() != null)
                     newC.setEvent((FTLEvent) c.getEvent().clone());
                 o.choiceList.add(newC);
             }
         }
         if (ship != null) {
-            o.ship = new ShipEvent();
-            o.ship.setId(ship.getId());
-            o.ship.setHostile(ship.isHostile());
-            o.ship.setLoad(ship.getLoad());
-            o.ship.setAutoBlueprintId(ship.getAutoBlueprintId());
+            o.setShip(ship.toBuilder().build());
         }
 
         if (itemList != null) {
@@ -239,127 +243,26 @@ public class FTLEvent implements Cloneable {
         }
 
         return o;
-    }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getLoad() {
-        return load;
-    }
-
-    public void setLoad(String load) {
-        this.load = load;
-    }
-
-    public NamedText getText() {
-        return text;
-    }
-
-    public void setText(NamedText text) {
-        this.text = text;
-    }
-
-    public BackgroundImage getImg() {
-        return image;
-    }
-
-    public void setImg(BackgroundImage image) {
-        this.image = image;
-    }
-
-    public boolean getUnique() {
-        return unique;
-    }
-
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
-
-    public List<Choice> getChoiceList() {
-        return choiceList;
-    }
-
-    public void setChoiceList(List<Choice> choiceList) {
-        this.choiceList = choiceList;
-    }
-
-    public ItemList getItemList() {
-        return itemList;
-    }
-
-    public void setItemList(ItemList itemList) {
-        this.itemList = itemList;
-    }
-
-    public ShipEvent getShip() {
-        return ship;
-    }
-
-    public void setShip(ShipEvent ship) {
-        this.ship = ship;
-    }
-
-    public AutoReward getAutoReward() {
-        return autoReward;
-    }
-
-    public void setAutoReward(AutoReward autoReward) {
-        this.autoReward = autoReward;
-    }
-
-    public CrewMember getCrewMember() {
-        return crewMember;
-    }
-
-    public void setCrewMember(CrewMember crewMember) {
-        this.crewMember = crewMember;
-    }
-
-    public Item getWeapon() {
-        return weapon;
-    }
-
-    public void setWeapon(Item weapon) {
-        this.weapon = weapon;
-    }
-
-    public Item getAugment() {
-        return augment;
-    }
-
-    public void setAugment(Item augment) {
-        this.augment = augment;
-    }
-
-    public Item getDrone() {
-        return drone;
-    }
-
-    public void setDrone(Item drone) {
-        this.drone = drone;
-    }
-
-    public Boarders getBoarders() {
-        return boarders;
-    }
-
-    public void setBoarders(Boarders boarders) {
-        this.boarders = boarders;
-    }
-
-    @Override
-    public String toString() {
-        if (id != null)
-            return "" + id;
-        else if (load != null)
-            return "" + load;
-        return "<NONAME>";
+//        Field[] declaredFields = this.getClass().getDeclaredFields();
+//        FTLEvent other = new FTLEvent();
+//        try {
+//            for (Field field : declaredFields) {
+//                Object f = field.get(this);
+//                field.set(other, f);
+//            }
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//        FTLEvent o = toBuilder().build();
+//        o.setText(getText().toBuilder().build());
+//        o.setShip(getShip().toBuilder().build());
+//        o.setAutoReward(getAutoReward().toBuilder().build());
+//        o.setCrewMember(getCrewMember().toBuilder().build());
+//        o.setWeapon(getWeapon().toBuilder().build());
+//        o.setAugment(getAugment().toBuilder().build());
+//        o.setDrone(getDrone().toBuilder().build());
+//        o.setBoarders(getBoarders().toBuilder().build());
     }
 
     private StringBuilder indent(StringBuilder sb, int level) {

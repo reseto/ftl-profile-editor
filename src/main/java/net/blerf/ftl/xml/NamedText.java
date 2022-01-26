@@ -5,9 +5,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -17,10 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
+@Builder(toBuilder = true)
+@AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @XmlRootElement(name = "text")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class NamedText implements Cloneable {
+public class NamedText {
 
     @XmlAttribute(name = "name")
     private String id;
@@ -31,19 +37,4 @@ public class NamedText implements Cloneable {
     @XmlValue
     private String text;
 
-    public Object clone() {
-        NamedText o = null;
-        try {
-            o = (NamedText) super.clone();
-        } catch (CloneNotSupportedException e) {
-            log.error("Failed to clone.", e);
-        }
-
-        // TODO NPE, refactor this
-        o.setId(getId());
-        o.setLoad(getLoad());
-        o.setText(getText());
-
-        return o;
-    }
 }

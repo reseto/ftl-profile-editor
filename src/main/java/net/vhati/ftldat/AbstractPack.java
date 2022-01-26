@@ -3,7 +3,6 @@
 
 package net.vhati.ftldat;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,14 +19,14 @@ public abstract class AbstractPack {
     }
 
     /**
-     * Returns an list of all innerPaths.
+     * Returns a list of all innerPaths.
      */
     public List<String> list() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns a list of pairs of (innerPath, filesize).
+     * Returns a list of pairs of (innerPath, file size).
      */
     public List<PathAndSize> listSizes() {
         throw new UnsupportedOperationException();
@@ -81,7 +80,7 @@ public abstract class AbstractPack {
     /**
      * Tidies up the dat before closing (possibly mandatory).
      *
-     * @returns a result, or null if nothing happened
+     * @return a result, or null if nothing happened
      */
     public RepackResult repack() throws IOException {
         return null;

@@ -4,6 +4,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,19 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
+@Builder(toBuilder = true)
+@AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement(name = "ship")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ShipEvent {
-
-    // copy constructor instead of cloning the object later
-//	public ShipEvent(ShipEvent o) {
-//		this.id = o.getId();
-//		this.load = o.getLoad();
-//		this.hostile = o.isHostile();
-//		this.seed = o.getSeed();
-//		this.autoBlueprintId = o.getAutoBlueprintId();
-//	}
 
     @XmlAttribute(name = "name")
     private String id;

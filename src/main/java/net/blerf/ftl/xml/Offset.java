@@ -16,5 +16,7 @@ import net.blerf.ftl.xml.ship.ShipChassis;
 public class Offset {
 
     @XmlAttribute
-    public int x, y;
+    public int x;
+    @XmlAttribute
+    public int y;
 }

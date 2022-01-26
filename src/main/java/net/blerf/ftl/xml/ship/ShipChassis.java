@@ -60,13 +60,16 @@ public class ShipChassis {
         public FloatRange velocity;
         public FloatRange direction;
         public FloatRange angular;
-        public int x, y;
+        public int x;
+        public int y;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class FloatRange {
         @XmlAttribute
-        public float min, max;
+        public float min;
+        @XmlAttribute
+        public float max;
     }
 
 }

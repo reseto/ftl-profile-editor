@@ -75,11 +75,11 @@ public class RandomSectorTreeGenerator {
 
         int n;
         int colSize = 0;
-        List<String> existingUniqueIds = new ArrayList<String>();
-        List<List<SectorDot>> dotColumns = new ArrayList<List<SectorDot>>(8);
+        List<String> existingUniqueIds = new ArrayList<>();
+        List<List<SectorDot>> dotColumns = new ArrayList<>(8);
 
         for (int c = 0; c < 8; c++) {
-            List<SectorDot> columnDots = new ArrayList<SectorDot>(4);
+            List<SectorDot> columnDots = new ArrayList<>(4);
 
             if (c == 0) {
                 String type = getRandomSectorType();  // Eat a rand() call and disregard the result.
@@ -98,7 +98,7 @@ public class RandomSectorTreeGenerator {
             } else {
                 colSize = getRandomSectorColumnSize(c, colSize);
 
-                List<String> sectorTypesInColumn = new ArrayList<String>(4);
+                List<String> sectorTypesInColumn = new ArrayList<>(4);
 
                 for (int d = 0; d < colSize; d++) {
                     String sectorTypeId = getRandomSectorType();
@@ -116,7 +116,7 @@ public class RandomSectorTreeGenerator {
                         sectorPool = nebulaSectors;
                     }
 
-                    List<Sector> candidates = new ArrayList<Sector>();
+                    List<Sector> candidates = new ArrayList<>();
                     for (Sector s : sectorPool) {
                         if (s.min <= c && !existingUniqueIds.contains(s.getId())) {
                             candidates.add(s);
@@ -201,7 +201,7 @@ public class RandomSectorTreeGenerator {
     }
 
     private List<Sector> getTestCivilianSectors(boolean preAE, boolean dlcEnabled) {
-        List<Sector> civilianSectors = new ArrayList<Sector>();
+        List<Sector> civilianSectors = new ArrayList<>();
         civilianSectors.add(new Sector(false, 0, "CIVILIAN_SECTOR", Arrays.asList("Civilian Sector")));
         civilianSectors.add(new Sector(false, 0, "ENGI_SECTOR", Arrays.asList("Engi Controlled Sector")));
         civilianSectors.add(new Sector(true, 2, "ENGI_HOME", Arrays.asList("Engi Homeworlds")));
@@ -222,7 +222,7 @@ public class RandomSectorTreeGenerator {
     }
 
     private List<Sector> getTestNebulaSectors(boolean preAE, boolean dlcEnabled) {
-        List<Sector> nebulaSectors = new ArrayList<Sector>();
+        List<Sector> nebulaSectors = new ArrayList<>();
         nebulaSectors.add(new Sector(false, 0, "NEBULA_SECTOR", Arrays.asList("Uncharted Nebula")));
         nebulaSectors.add(new Sector(true, 3, "SLUG_HOME", Arrays.asList("Slug Home Nebula")));
         nebulaSectors.add(new Sector(false, 3, "SLUG_SECTOR", Arrays.asList("Slug Controlled Nebula")));
@@ -231,7 +231,7 @@ public class RandomSectorTreeGenerator {
     }
 
     private List<Sector> getTestHostileSectors(boolean preAE, boolean dlcEnabled) {
-        List<Sector> hostileSectors = new ArrayList<Sector>();
+        List<Sector> hostileSectors = new ArrayList<>();
         hostileSectors.add(new Sector(false, 0, "REBEL_SECTOR", Arrays.asList("Rebel Controlled Sector")));
         hostileSectors.add(new Sector(true, 4, "REBEL_SECTOR_MINIBOSS", Arrays.asList("Rebel Stronghold")));
         hostileSectors.add(new Sector(false, 0, "PIRATE_SECTOR", Arrays.asList("Pirate Controlled Sector")));

@@ -14,7 +14,11 @@ import lombok.Setter;
 public class WeaponMount {
 
     @XmlAttribute
-    public int x, y, gib;
+    public int x;
+    @XmlAttribute
+    public int y;
+    @XmlAttribute
+    public int gib;
 
     @XmlAttribute
     public boolean rotate;
