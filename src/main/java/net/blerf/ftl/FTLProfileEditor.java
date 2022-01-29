@@ -1,5 +1,6 @@
 package net.blerf.ftl;
 
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -32,6 +33,32 @@ public class FTLProfileEditor {
 
 
     public static void main(String[] args) {
+        initLogger();
+
+        // Log a welcome message.
+        log.debug("Started: {}", new Date());
+        log.debug("{} v{}", APP_NAME, APP_VERSION);
+        log.debug("OS: {} {}", System.getProperty("os.name"), System.getProperty("os.version"));
+        log.debug("VM: {}, {}, {}", System.getProperty("java.vm.name"), System.getProperty("java.version"), System.getProperty("os.arch"));
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                log.error("Uncaught exception in thread: {}", t, e);
+            }
+        });
+
+        // Ensure all popups are triggered from the event dispatch thread.
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                initGUI();
+            }
+        });
+    }
+
+    private static void initLogger() {
         // Redirect any libraries' java.util.Logging messages.
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
@@ -57,31 +84,13 @@ public class FTLProfileEditor {
         fileAppender.start();
 
         lc.getLogger(Logger.ROOT_LOGGER_NAME).addAppender(fileAppender);
-
-        // Log a welcome message.
-        log.debug("Started: {}", new Date());
-        log.debug("{} v{}", APP_NAME, APP_VERSION);
-        log.debug("OS: {} {}", System.getProperty("os.name"), System.getProperty("os.version"));
-        log.debug("VM: {}, {}, {}", System.getProperty("java.vm.name"), System.getProperty("java.version"), System.getProperty("os.arch"));
-
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable e) {
-                log.error("Uncaught exception in thread: {}", t, e);
-            }
-        });
-
-        // Ensure all popups are triggered from the event dispatch thread.
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                guiInit();
-            }
-        });
+        for (ch.qos.logback.classic.Logger logger : lc.getLoggerList()) {
+            logger.setLevel(Level.INFO);
+        }
+        lc.getLogger(Logger.ROOT_LOGGER_NAME).setLevel(Level.WARN);
     }
 
-    private static void guiInit() {
+    private static void initGUI() {
         try {
             // Don't use the hard drive to buffer streams during ImageIO.read().
             ImageIO.setUseCache(false);  // Small images don't need extra buffering.
@@ -93,37 +102,7 @@ public class FTLProfileEditor {
             boolean useDefaultUI = "true".equals(appConfig.getProperty(EditorConfig.USE_DEFAULT_UI, "false"));
 
             if (!useDefaultUI) {
-                LookAndFeel defaultLaf = UIManager.getLookAndFeel();
-                log.debug("Default look and feel is: {}", defaultLaf.getName());
-
-                try {
-                    log.debug("Setting system look and feel: {}", UIManager.getSystemLookAndFeelClassName());
-
-                    // SystemLaf is risky. It may throw an exception, or lead to graphical bugs.
-                    // Problems are generally caused by custom Windows themes.
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception e) {
-                    log.error("Failed to set system look and feel", e);
-                    log.info("Setting " + EditorConfig.USE_DEFAULT_UI + "=true in the config file to prevent this error...");
-
-                    appConfig.setProperty(EditorConfig.USE_DEFAULT_UI, "true");
-                    writeConfig = true;
-
-                    try {
-                        UIManager.setLookAndFeel(defaultLaf);
-                    } catch (Exception f) {
-                        log.error("Error returning to the default look and feel after failing to set system look and feel", f);
-
-                        // Write an emergency config and exit.
-                        try {
-                            appConfig.writeConfigFile();
-                        } catch (IOException g) {
-                            log.error("Error writing config to {}", appConfig.getConfigFile().getPath(), g);
-                        }
-
-                        throw new ExitException();
-                    }
-                }
+                writeConfig &= initLookAndFeel(appConfig);
             } else {
                 log.debug("Using default Look and Feel");
             }
@@ -158,8 +137,8 @@ public class FTLProfileEditor {
 
                 if (datsDir != null) {
                     appConfig.setProperty(EditorConfig.FTL_DATS_PATH, datsDir.getAbsolutePath());
-                    writeConfig = true;
                     log.info("FTL dats located at: {}", datsDir.getAbsolutePath());
+                    writeConfig = true;
                 }
             }
 
@@ -245,12 +224,53 @@ public class FTLProfileEditor {
                 throw new ExitException();
             }
 
-            SeedSearch ss = new SeedSearch();
-            ss.search();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SeedSearch ss = new SeedSearch();
+                    ss.search();
+                }
+            }).start();
 
         } catch (ExitException e) {
             log.debug("exiting with exception", e);
         }
+    }
+
+    private static boolean initLookAndFeel(EditorConfig appConfig) {
+        boolean writeConfig = false;
+        LookAndFeel defaultLaf = UIManager.getLookAndFeel();
+        log.debug("Default look and feel is: {}", defaultLaf.getName());
+
+        try {
+            String systemLookAndFeelClassName = UIManager.getSystemLookAndFeelClassName();
+            log.debug("Setting system look and feel: {}", systemLookAndFeelClassName);
+
+            // SystemLaf is risky. It may throw an exception, or lead to graphical bugs.
+            // Problems are generally caused by custom Windows themes.
+            UIManager.setLookAndFeel(systemLookAndFeelClassName);
+        } catch (Exception e) {
+            log.warn("Failed to set system look and feel", e);
+            log.info("Setting " + EditorConfig.USE_DEFAULT_UI + "=true in the config file to prevent this error...");
+            appConfig.setProperty(EditorConfig.USE_DEFAULT_UI, "true");
+            writeConfig = true;
+
+            try {
+                UIManager.setLookAndFeel(defaultLaf);
+            } catch (Exception f) {
+                log.error("Error returning to the default look and feel after failing to set system look and feel", f);
+
+                // Write an emergency config and exit.
+                try {
+                    appConfig.writeConfigFile();
+                } catch (IOException g) {
+                    log.error("Error writing config to {}", appConfig.getConfigFile().getPath(), g);
+                }
+
+                throw new ExitException();
+            }
+        }
+        return writeConfig;
     }
 
     private static void showErrorDialog(String message) {

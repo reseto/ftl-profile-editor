@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.Difficulty;
 import net.blerf.ftl.parser.random.NativeRandom;
@@ -28,9 +29,11 @@ public class SeedSearch {
     boolean dlcEnabled = true;
     Difficulty difficulty = Difficulty.HARD;
 
-    private static final Set<Integer> uniqueCrewNames = new HashSet<Integer>();
+    private static final Set<Integer> uniqueCrewNames = new HashSet<>();
 
-    RandomShipLayout ship = new RandomShipLayout("kestral", uniqueCrewNames); // TODO maybe kestrel?
+    RandomShipLayout ship = new RandomShipLayout("kestral", uniqueCrewNames); // kestral is not a typo
+    @Getter
+    private boolean found;
 
     /* Generate a whole seed, and look at the sector map for a valid path.
      * Returns if one was found.
@@ -91,7 +94,7 @@ public class SeedSearch {
     /* Iterate for each seed value and look at a valid path */
     public void search() {
 
-        RandRNG rng = new NativeRandom("Native");
+        rng = new NativeRandom("Native");
 
         /* 20677891
          * 40823384
@@ -184,8 +187,7 @@ public class SeedSearch {
         // sectorMapGen.sectorNumber = 6;
         // sectorMapGen.generateSectorMap(rng, 9);
 
-        Set<Integer> backCrewNames = new HashSet<Integer>();
-        backCrewNames.addAll(uniqueCrewNames);
+        Set<Integer> backCrewNames = new HashSet<>(uniqueCrewNames);
 
         for (int l = 200; l < 600; l++) {
 
@@ -209,7 +211,7 @@ public class SeedSearch {
             // 	continue;
 
             rng.srand(seed8);
-            log.info(String.format("Sector 8 map generation for l %d, seed: %d", l, seed8));
+            log.debug(String.format("Sector 8 map generation for l %d, seed: %d", l, seed8));
 
             sectorMapGen.sectorId = "FINAL";
             sectorMapGen.sectorNumber = 7;
@@ -295,6 +297,7 @@ public class SeedSearch {
                     sectorMapGen.minDistanceMap(map, 20);
                     if (bfsStart(map))
                         log.info("Found!");
+                    found = true;
 
                 }
             }
