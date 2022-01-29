@@ -149,13 +149,11 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
     private final HyperlinkListener linkListener;
 
     private final EditorConfig appConfig;
-    private final String appName;
     private final int appVersion;
 
 
     public FTLFrame(EditorConfig appConfig, String appName, int appVersion) throws IOException {
         this.appConfig = appConfig;
-        this.appName = appName;
         this.appVersion = appVersion;
 
         openIcon = new ImageIcon(ImageUtilities.getBundledImage("open.gif", FTLFrame.class));
@@ -294,17 +292,18 @@ public class FTLFrame extends JFrame implements ActionListener, Statusbar, Threa
                 EditorConfig appConfig = FTLFrame.this.appConfig;
 
                 try {
-                    appConfig.writeConfig();
+                    int width = (int) Math.max(FTLFrame.this.getBounds().getWidth(), EditorConfig.DEFAULT_WIDTH);
+                    int height = (int) Math.max(FTLFrame.this.getBounds().getHeight(), EditorConfig.DEFAULT_HEIGHT);
+                    appConfig.setProperty(EditorConfig.FRAME_WIDTH, "" + width);
+                    appConfig.setProperty(EditorConfig.FRAME_HEIGHT, "" + height);
+                    appConfig.writeConfigFile();
                 } catch (IOException f) {
                     log.error(String.format("Error writing config to \"%s\"", appConfig.getConfigFile().getName()), f);
                 }
-
-                System.gc();
-                //System.exit( 0 );  // Don't do this (InterruptedException). Let EDT end gracefully.
             }
         });
 
-        this.setSize(800, 700);
+        this.setSize(appConfig.getWidth(), appConfig.getHeight());
         this.setLocationRelativeTo(null);
 
         // Load blank profile (sets Kestrel unlock).

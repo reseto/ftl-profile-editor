@@ -5,14 +5,9 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.LookAndFeel;
@@ -53,7 +48,7 @@ public class FTLProfileEditor {
         encoder.setPattern("%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
         encoder.start();
 
-        FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
+        FileAppender<ILoggingEvent> fileAppender = new FileAppender<>();
         fileAppender.setContext(lc);
         fileAppender.setName("LogFile");
         fileAppender.setFile(new File("./ftl-editor-log.txt").getAbsolutePath());
@@ -90,39 +85,9 @@ public class FTLProfileEditor {
         try {
             // Don't use the hard drive to buffer streams during ImageIO.read().
             ImageIO.setUseCache(false);  // Small images don't need extra buffering.
-
-            File configFile = new File("ftl-editor.cfg");
-
-            boolean writeConfig = false;
-            Properties props = new Properties();
-            props.setProperty(EditorConfig.FTL_DATS_PATH, "");  // Prompt.
-            props.setProperty(EditorConfig.UPDATE_APP, "");     // Prompt.
-            props.setProperty(EditorConfig.USE_DEFAULT_UI, "false");
-            // "app_update_timestamp" doesn't have a default.
-            // "app_update_etag" doesn't have a default.
-            // "app_update_available" doesn't have a default.
-
-            // Read the config file.
-            InputStream in = null;
-            try {
-                if (configFile.exists()) {
-                    log.trace("Loading properties from config file.");
-                    in = new FileInputStream(configFile);
-                    props.load(new InputStreamReader(in, StandardCharsets.UTF_8));
-                } else {
-                    writeConfig = true; // Create a new cfg, but only if necessary.
-                }
-            } catch (IOException e) {
-                log.error("Error loading config", e);
-                showErrorDialog("Error loading config from " + configFile.getPath());
-            } finally {
-                try {
-                    if (in != null) in.close();
-                } catch (IOException e) {
-                }
-            }
-
-            EditorConfig appConfig = new EditorConfig(props, configFile);
+            EditorConfig appConfig = new EditorConfig();
+            appConfig.readConfigFile();
+            boolean writeConfig = appConfig.isFirstLaunch();
 
             // Look-and-Feel.
             boolean useDefaultUI = "true".equals(appConfig.getProperty(EditorConfig.USE_DEFAULT_UI, "false"));
@@ -135,7 +100,7 @@ public class FTLProfileEditor {
                     log.debug("Setting system look and feel: {}", UIManager.getSystemLookAndFeelClassName());
 
                     // SystemLaf is risky. It may throw an exception, or lead to graphical bugs.
-                    // Problems are geneally caused by custom Windows themes.
+                    // Problems are generally caused by custom Windows themes.
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 } catch (Exception e) {
                     log.error("Failed to set system look and feel", e);
@@ -151,9 +116,9 @@ public class FTLProfileEditor {
 
                         // Write an emergency config and exit.
                         try {
-                            appConfig.writeConfig();
+                            appConfig.writeConfigFile();
                         } catch (IOException g) {
-                            log.error("Error writing config to {}", configFile.getPath(), g);
+                            log.error("Error writing config to {}", appConfig.getConfigFile().getPath(), g);
                         }
 
                         throw new ExitException();
@@ -170,7 +135,7 @@ public class FTLProfileEditor {
             if (datsPath.length() > 0) {
                 log.info("Using FTL dats path from config: {}", datsPath);
                 datsDir = new File(datsPath);
-                if (FTLUtilities.isDatsDirValid(datsDir) == false) {
+                if (!FTLUtilities.isDatsDirValid(datsDir)) {
                     log.error("The config's " + EditorConfig.FTL_DATS_PATH + " does not exist, or it is invalid");
                     datsDir = null;
                 }
@@ -221,33 +186,29 @@ public class FTLProfileEditor {
             }
 
             if (writeConfig) {
-                OutputStream out = null;
                 try {
-                    appConfig.writeConfig();
+                    appConfig.writeConfigFile();
+                    String wipMsg = ""
+                            + "FTL has revised its file formats several times, and not everything is deciphered \n"
+                            + "yet, which limits what can be safely edited.\n"
+                            + "\n"
+                            + "FTL 1.5.4-1.6.3 profiles are fully editable. (ae_prof.sav)\n"
+                            + "FTL 1.01-1.03.3 profiles are fully editable. (prof.sav)\n"
+                            + "\n"
+                            + "FTL 1.5.4-1.6.3 saved games are partially editable.\n"
+                            + "FTL 1.01-1.03.3 saved games are fully editable.\n"
+                            + "\n"
+                            + "Choose the appropriate tab (Profile or Saved Game) and click the \"Open\" button.\n"
+                            + "\n"
+                            + "If you encounter a read error opening a file, that means the editor saw something \n"
+                            + "new that it doesn't recognize. Submitting a bug report would be helpful.";
+
+                    JOptionPane.showMessageDialog(null, wipMsg, "Work in Progress", JOptionPane.PLAIN_MESSAGE);
                 } catch (IOException e) {
-                    String errorMsg = String.format("Error writing config to \"%s\"", configFile.getPath());
+                    String errorMsg = String.format("Error writing config to \"%s\"", appConfig.getConfigFile().getPath());
                     log.error(errorMsg, e);
                     showErrorDialog(errorMsg);
                 }
-            }
-
-            if (writeConfig) {
-                String wipMsg = ""
-                        + "FTL has revised its file formats several times, and not everything is deciphered \n"
-                        + "yet, which limits what can be safely edited.\n"
-                        + "\n"
-                        + "FTL 1.5.4-1.6.3 profiles are fully editable. (ae_prof.sav)\n"
-                        + "FTL 1.01-1.03.3 profiles are fully editable. (prof.sav)\n"
-                        + "\n"
-                        + "FTL 1.5.4-1.6.3 saved games are partially editable.\n"
-                        + "FTL 1.01-1.03.3 saved games are fully editable.\n"
-                        + "\n"
-                        + "Choose the appropriate tab (Profile or Saved Game) and click the \"Open\" button.\n"
-                        + "\n"
-                        + "If you encounter a read error opening a file, that means the editor saw something \n"
-                        + "new that it doesn't recognize. Submitting a bug report would be helpful.";
-
-                JOptionPane.showMessageDialog(null, wipMsg, "Work in Progress", JOptionPane.PLAIN_MESSAGE);
             }
 
             // Parse the dats.
@@ -288,11 +249,8 @@ public class FTLProfileEditor {
             ss.search();
 
         } catch (ExitException e) {
-            System.gc();
-            // System.exit( 1 );  // Don't do this (InterruptedException). Let EDT end gracefully.
-            return;
+            log.debug("exiting with exception", e);
         }
-
     }
 
     private static void showErrorDialog(String message) {

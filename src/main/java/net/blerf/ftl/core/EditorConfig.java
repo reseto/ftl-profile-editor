@@ -1,8 +1,10 @@
 package net.blerf.ftl.core;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -11,38 +13,54 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 public class EditorConfig {
 
+
+    public static final String CONFIG_FILE_NAME = "ftl-editor.cfg";
     public static final String FTL_DATS_PATH = "ftl_dats_path";
     public static final String UPDATE_APP = "update_app";
     public static final String USE_DEFAULT_UI = "use_default_ui";
     public static final String APP_UPDATE_TIMESTAMP = "app_update_timestamp";
     public static final String APP_UPDATE_ETAG = "app_update_etag";
     public static final String APP_UPDATE_AVAILABLE = "app_update_available";
+    public static final String LAUNCHES = "number_of_launches";
+    public static final String FRAME_WIDTH = "editor_width";
+    public static final String FRAME_HEIGHT = "editor_height";
+    public static final int DEFAULT_WIDTH = 800;
+    public static final int DEFAULT_HEIGHT = 700;
 
-    private final Properties config;
+    private final Properties properties;
     private final File configFile;
 
-
-    public EditorConfig(Properties config, File configFile) {
-        this.config = config;
-        this.configFile = configFile;
+    public EditorConfig() {
+        configFile = new File(CONFIG_FILE_NAME);
+        properties = new Properties();
+        properties.setProperty(FTL_DATS_PATH, "");  // Prompt.
+        properties.setProperty(UPDATE_APP, "");     // Prompt.
+        properties.setProperty(USE_DEFAULT_UI, "false");
+        properties.setProperty(LAUNCHES, "0");
+        properties.setProperty(FRAME_WIDTH, "" + DEFAULT_WIDTH);
+        properties.setProperty(FRAME_HEIGHT, "" + DEFAULT_HEIGHT);
+        // "app_update_timestamp" doesn't have a default.
+        // "app_update_etag" doesn't have a default.
+        // "app_update_available" doesn't have a default.
     }
 
     /**
      * Copy constructor.
      */
     public EditorConfig(EditorConfig srcConfig) {
-        this.configFile = srcConfig.getConfigFile();
-        this.config = new Properties();
-        this.config.putAll(srcConfig.getConfig());
+        configFile = srcConfig.getConfigFile();
+        properties = new Properties();
+        properties.putAll(srcConfig.getProperties());
     }
 
 
-    public Properties getConfig() {
-        return config;
+    public Properties getProperties() {
+        return properties;
     }
 
     public File getConfigFile() {
@@ -50,12 +68,12 @@ public class EditorConfig {
     }
 
 
-    public Object setProperty(String key, String value) {
-        return config.setProperty(key, value);
+    public void setProperty(String key, String value) {
+        properties.setProperty(key, value);
     }
 
     public int getPropertyAsInt(String key, int defaultValue) {
-        String s = config.getProperty(key);
+        String s = properties.getProperty(key);
         if (s != null && s.matches("^\\d+$"))
             return Integer.parseInt(s);
         else
@@ -63,15 +81,38 @@ public class EditorConfig {
     }
 
     public String getProperty(String key, String defaultValue) {
-        return config.getProperty(key, defaultValue);
+        return properties.getProperty(key, defaultValue);
     }
 
     public String getProperty(String key) {
-        return config.getProperty(key);
+        return properties.getProperty(key);
+    }
+
+    public boolean isFirstLaunch() {
+        return 0 == getPropertyAsInt(EditorConfig.LAUNCHES, 0);
+    }
+
+    public int getWidth() {
+        return getPropertyAsInt(FRAME_WIDTH, DEFAULT_WIDTH);
+    }
+
+    public int getHeight() {
+        return getPropertyAsInt(FRAME_HEIGHT, DEFAULT_HEIGHT);
+    }
+
+    public void readConfigFile() {
+        if (configFile.exists()) {
+            log.trace("Loading properties from config file {}", configFile.getAbsolutePath());
+            try (InputStreamReader in = new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8)) {
+                properties.load(in);
+            } catch (IOException e) {
+                log.error("Error loading config {}", configFile.getAbsolutePath(), e);
+            }
+        }
     }
 
 
-    public void writeConfig() throws IOException {
+    public void writeConfigFile() throws IOException {
 
         try (OutputStream out = new FileOutputStream(configFile)) {
 
@@ -103,8 +144,10 @@ public class EditorConfig {
                 commentsBuf.append(String.format(" %-" + fieldWidth + "s - %s%n", entry.getKey(), entry.getValue()));
             }
 
+            int launches = getPropertyAsInt(LAUNCHES, 0) + 1;
+            properties.setProperty(LAUNCHES, "" + launches);
             OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
-            config.store(writer, commentsBuf.toString());
+            properties.store(writer, commentsBuf.toString());
             writer.flush();
         }
     }
