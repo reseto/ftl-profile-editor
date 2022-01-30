@@ -20,17 +20,16 @@ public class WeaponBlueprint {
 
     @XmlAttribute(name = "name")
     private String id;
-
     private String type;
     private DefaultDeferredText title;
+    private Integer locked;
 
     @XmlElement(name = "short")
     private DefaultDeferredText shortTitle;
 
-    @XmlElement()
-    private Integer locked;
-
-    private DefaultDeferredText desc;
+    @XmlElement(name = "desc")
+    private DefaultDeferredText description;
+    @XmlElement(name = "tooltip")
     private DefaultDeferredText tooltip;
 
     @XmlElement(name = "sp")

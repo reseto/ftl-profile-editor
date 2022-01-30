@@ -23,10 +23,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import static javax.swing.SwingConstants.CENTER;
+import static javax.swing.SwingConstants.HORIZONTAL;
+import static javax.swing.SwingConstants.RIGHT;
 
 
 public class FieldEditorPanel extends JPanel {
@@ -118,7 +121,7 @@ public class FieldEditorPanel extends JPanel {
         } else if (contentType == ContentType.LABEL) {
             gridC.anchor = GridBagConstraints.WEST;
             JLabel valueLbl = new JLabel();
-            valueLbl.setHorizontalAlignment(SwingConstants.CENTER);
+            valueLbl.setHorizontalAlignment(CENTER);
             labelMap.put(valueName, valueLbl);
             this.add(valueLbl, gridC);
         } else if (contentType == ContentType.STRING) {
@@ -141,27 +144,27 @@ public class FieldEditorPanel extends JPanel {
         } else if (contentType == ContentType.INTEGER) {
             gridC.anchor = GridBagConstraints.WEST;
             JTextField valueField = new JTextField();
-            valueField.setHorizontalAlignment(JTextField.RIGHT);
+            valueField.setHorizontalAlignment(RIGHT);
             valueField.setDocument(new RegexDocument("[0-9]*"));
             intMap.put(valueName, valueField);
             this.add(valueField, gridC);
         } else if (contentType == ContentType.BOOLEAN) {
             gridC.anchor = GridBagConstraints.CENTER;
             JCheckBox valueCheck = new JCheckBox();
-            valueCheck.setHorizontalAlignment(SwingConstants.CENTER);
+            valueCheck.setHorizontalAlignment(CENTER);
             boolMap.put(valueName, valueCheck);
             this.add(valueCheck, gridC);
         } else if (contentType == ContentType.SLIDER) {
             gridC.anchor = GridBagConstraints.CENTER;
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-            final JSlider valueSlider = new JSlider(JSlider.HORIZONTAL);
+            final JSlider valueSlider = new JSlider(HORIZONTAL);
             valueSlider.setPreferredSize(new Dimension(50, valueSlider.getPreferredSize().height));
             sliderMap.put(valueName, valueSlider);
             panel.add(valueSlider);
             final JTextField valueField = new JTextField(3);
             valueField.setMaximumSize(valueField.getPreferredSize());
-            valueField.setHorizontalAlignment(JTextField.RIGHT);
+            valueField.setHorizontalAlignment(RIGHT);
             valueField.setEditable(false);
             panel.add(valueField);
             this.add(panel, gridC);

@@ -50,6 +50,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.blerf.ftl.constants.AdvancedFTLConstants;
 import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.constants.OriginalFTLConstants;
+import net.blerf.ftl.core.EditorConfig;
 import net.blerf.ftl.model.XYPair;
 import net.blerf.ftl.model.pod.BoarderDronePodInfo;
 import net.blerf.ftl.model.shiplayout.DoorCoordinate;
@@ -232,6 +233,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         defaultSelector.setCallback(new SpriteSelectionCallback() {
             @Override
             public boolean spriteSelected(SpriteSelector spriteSelector, JComponent sprite) {
+                boolean showWarning = SavedGameFloorplanPanel.this.frame.getConfig().getPropertyAsInt(EditorConfig.LAUNCHES, 0) % 12 == 0;
                 if (sprite instanceof DoorSprite) {
                     SpriteReference<DoorState> doorRef = ((DoorSprite) sprite).getReference();
 
@@ -245,35 +247,41 @@ public class SavedGameFloorplanPanel extends JPanel {
 
                     showDoorEditor(shipBundle, doorRef);
                 } else if (sprite instanceof DroneBoxSprite) {
-                    if (ftlConstants instanceof AdvancedFTLConstants) {  // TODO: Remove this.
-                        JOptionPane.showMessageDialog(SavedGameFloorplanPanel.this.frame, "Drone editing is not possible yet for Advanced Edition saved games.\n\nHowever, cargo (General tab) and stores (Sector Map tab) can be edited.", "Work in Progress", JOptionPane.WARNING_MESSAGE);
-                    } else {
-                        SpriteReference<DroneState> droneRef = ((DroneBoxSprite) sprite).getReference();
+                    if (ftlConstants instanceof AdvancedFTLConstants && showWarning) {
+                        JOptionPane.showMessageDialog(SavedGameFloorplanPanel.this.frame, "Drone editing is not recommended yet for Advanced Edition saved games.\n\nHowever, cargo (General tab) and stores (Sector Map tab) can be edited.", "Work in Progress", JOptionPane.WARNING_MESSAGE);
+                        showWarning = false;
+                    }
+                    SpriteReference<DroneState> droneRef = ((DroneBoxSprite) sprite).getReference();
 
-                        ShipBundle shipBundle = null;
-                        for (ShipBundle bundle : shipBundles) {
-                            if (bundle.getDroneRefs().contains(droneRef)) {
-                                shipBundle = bundle;
-                                break;
-                            }
+                    ShipBundle shipBundle = null;
+                    for (ShipBundle bundle : shipBundles) {
+                        if (bundle.getDroneRefs().contains(droneRef)) {
+                            shipBundle = bundle;
+                            break;
                         }
-
+                    }
+                    if (shipBundle == null) {
+                        log.warn("shipBundle not found for sprite {}", sprite);
+                    } else {
                         showDroneEditor(shipBundle, droneRef);
                     }
                 } else if (sprite instanceof WeaponSprite) {
-                    if (ftlConstants instanceof AdvancedFTLConstants) {  // TODO: Remove this.
-                        JOptionPane.showMessageDialog(SavedGameFloorplanPanel.this.frame, "Weapon editing is not possible yet for Advanced Edition saved games.\n\nHowever, cargo (General tab) and stores (Sector Map tab) can be edited.", "Work in Progress", JOptionPane.WARNING_MESSAGE);
-                    } else {
-                        SpriteReference<WeaponState> weaponRef = ((WeaponSprite) sprite).getReference();
+                    if (ftlConstants instanceof AdvancedFTLConstants && showWarning) {
+                        JOptionPane.showMessageDialog(SavedGameFloorplanPanel.this.frame, "Weapon editing is not recommended yet for Advanced Edition saved games.\n\nHowever, cargo (General tab) and stores (Sector Map tab) can be edited.", "Work in Progress", JOptionPane.WARNING_MESSAGE);
+                        showWarning = false;
+                    }
+                    SpriteReference<WeaponState> weaponRef = ((WeaponSprite) sprite).getReference();
 
-                        ShipBundle shipBundle = null;
-                        for (ShipBundle bundle : shipBundles) {
-                            if (bundle.getWeaponRefs().contains(weaponRef)) {
-                                shipBundle = bundle;
-                                break;
-                            }
+                    ShipBundle shipBundle = null;
+                    for (ShipBundle bundle : shipBundles) {
+                        if (bundle.getWeaponRefs().contains(weaponRef)) {
+                            shipBundle = bundle;
+                            break;
                         }
-
+                    }
+                    if (shipBundle == null) {
+                        log.warn("shipBundle not found for sprite {}", sprite);
+                    } else {
                         showWeaponEditor(shipBundle, weaponRef);
                     }
                 }
@@ -789,7 +797,7 @@ public class SavedGameFloorplanPanel extends JPanel {
 
         for (int i = 0; i < actualDroneSlots; i++) {
             // It's fine if droneState is null. Empty slot.
-            SpriteReference<DroneState> droneRef = new SpriteReference<DroneState>(null);
+            SpriteReference<DroneState> droneRef = new SpriteReference<>(null);
             if (droneList.size() > i) droneRef.set(new DroneState(droneList.get(i)));
 
             shipBundle.getDroneRefs().add(droneRef);
@@ -879,7 +887,7 @@ public class SavedGameFloorplanPanel extends JPanel {
                     SystemState systemState = shipState.getSystem(systemType);
                     if (systemState == null) break;  // TODO: Support systems that aren't on the shipState.
 
-                    SpriteReference<SystemState> systemRef = new SpriteReference<SystemState>(new SystemState(systemState));
+                    SpriteReference<SystemState> systemRef = new SpriteReference<>(new SystemState(systemState));
                     shipBundle.getSystemRefs().add(systemRef);
 
                     addSystemRoomSprite(shipBundle, systemRef, systemX, systemY);
@@ -1796,7 +1804,7 @@ public class SavedGameFloorplanPanel extends JPanel {
     }
 
     private void addDroneSprite(ShipBundle shipBundle, SpriteReference<DroneState> droneRef, int centerX, int centerY, int slot) {
-        // Represent the slot whether or not there's a drone equipped in it.
+        // Represent the slot whether there's a drone equipped in it.
         DroneBoxSprite droneBoxSprite = new DroneBoxSprite(droneRef, slot);
         droneBoxSprite.setSize(droneBoxSprite.getPreferredSize());
         droneBoxSprite.setLocation(centerX - droneBoxSprite.getPreferredSize().width / 2, centerY - droneBoxSprite.getPreferredSize().height / 2);
@@ -2555,7 +2563,11 @@ public class SavedGameFloorplanPanel extends JPanel {
                             throw new IllegalArgumentException("Selected blueprint has an unsupported DroneType: " + selectedBlueprint.getType());
                         }
 
-                        editorPanel.getWrappedLabel(DESC).setText("" + selectedBlueprint.getDescription());
+                        String desc = "";
+                        if (selectedBlueprint.getDescription() != null) {
+                            desc = selectedBlueprint.getDescription().getTextValue();
+                        }
+                        editorPanel.getWrappedLabel(DESC).setText(desc);
                         editorPanel.getLabel(POWER_REQ).setText("" + selectedBlueprint.getPower());
                         healthSlider.setMaximum(selectedType.getMaxHealth());
                         healthSlider.setValue(selectedType.getMaxHealth());
@@ -2603,6 +2615,12 @@ public class SavedGameFloorplanPanel extends JPanel {
         final String POWER_REQ = "Power Req";
         final String ARMED = "Armed";
         final String COOLDOWN_TICKS = "Cooldown Ticks";
+// todo add these values to editor in some nice layout
+//        private int damage;
+//        private int shots;
+//        private int fireChance;
+//        private int breachChance;
+//        private int cooldown;
 
         final Map<String, WeaponBlueprint> allWeaponsMap = DataManager.get().getWeapons();
 
@@ -2645,9 +2663,11 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.getSlider(COOLDOWN_TICKS).setMaximum(0);
         editorPanel.getSlider(COOLDOWN_TICKS).addMouseListener(new StatusbarMouseListener(frame, "Seconds spent cooling down."));
 
+        // build list of all weapons in the combo box
         editorPanel.getCombo(ID).addItem("");
-        for (WeaponBlueprint weaponBlueprint : allWeaponsMap.values())
+        for (WeaponBlueprint weaponBlueprint : allWeaponsMap.values()) {
             editorPanel.getCombo(ID).addItem(weaponBlueprint);
+        }
 
         if (weaponRef.get() != null) {
             WeaponBlueprint selectedBlueprint = allWeaponsMap.get(weaponRef.get().getWeaponId());
@@ -2655,7 +2675,11 @@ public class SavedGameFloorplanPanel extends JPanel {
 
             editorPanel.getSlider(AVAILABLE_POWER).setValue(availablePower - (weaponRef.get().isArmed() ? selectedBlueprint.getPower() : 0));
             editorPanel.getCombo(ID).setSelectedItem(selectedBlueprint);
-            editorPanel.getWrappedLabel(DESC).setText(selectedBlueprint.getTooltip().getTextValue());
+            String desc = "";
+            if (selectedBlueprint.getDescription() != null && selectedBlueprint.getTooltip() != null) {
+                desc = selectedBlueprint.getDescription().getTextValue() + "\n" + selectedBlueprint.getTooltip().getTextValue();
+            }
+            editorPanel.getWrappedLabel(DESC).setText(desc);
             editorPanel.getLabel(POWER_REQ).setText("" + selectedBlueprint.getPower());
             editorPanel.getBoolean(ARMED).setSelected((weaponRef.get().isArmed() && armable));
             editorPanel.getBoolean(ARMED).setEnabled(armable);
@@ -2766,7 +2790,11 @@ public class SavedGameFloorplanPanel extends JPanel {
                         WeaponBlueprint selectedBlueprint = (WeaponBlueprint) blueprintObj;
                         boolean armable = (availablePower >= selectedBlueprint.getPower());
 
-                        editorPanel.getWrappedLabel(DESC).setText(selectedBlueprint.getTooltip().getTextValue());
+                        String desc = "";
+                        if (selectedBlueprint.getDescription() != null && selectedBlueprint.getTooltip() != null) {
+                            desc = selectedBlueprint.getDescription().getTextValue() + "\n" + selectedBlueprint.getTooltip().getTextValue();
+                        }
+                        editorPanel.getWrappedLabel(DESC).setText(desc);
                         editorPanel.getLabel(POWER_REQ).setText("" + selectedBlueprint.getPower());
                         if (armable) {
                             armedCheck.setEnabled(true);
@@ -2960,8 +2988,8 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.getSlider(DAMAGE_PROGRESS).setValue(systemRef.get().getDamageProgress());
         editorPanel.getInt(DEIONIZATION_TICKS).setText("" + systemRef.get().getDeionizationTicks());
 
+        editorPanel.getSlider(RESERVE_CAPACITY).setEnabled(false);
         if (isSubsystem) {
-            editorPanel.getSlider(RESERVE_CAPACITY).setEnabled(false);
             editorPanel.getSlider(RESERVE_POWER).setValue(excludedReservePool);
             editorPanel.getSlider(POWER).setMaximum(systemRef.get().getCapacity());
             editorPanel.getSlider(POWER).setValue(systemRef.get().getPower());
@@ -3096,18 +3124,15 @@ public class SavedGameFloorplanPanel extends JPanel {
                 int systemBattery = editorPanel.getSlider(BATTERY).getValue();
 
                 systemRef.get().setDamagedBars(editorPanel.getSlider(DAMAGED_BARS).getValue());
-
-                try {
-                    systemRef.get().setIonizedBars(editorPanel.parseInt(IONIZED_BARS));
-                } catch (NumberFormatException e) {
-                }
-
                 systemRef.get().setRepairProgress(editorPanel.getSlider(REPAIR_PROGRESS).getValue());
                 systemRef.get().setDamageProgress(editorPanel.getSlider(DAMAGE_PROGRESS).getValue());
 
                 try {
+                    systemRef.get().setIonizedBars(editorPanel.parseInt(IONIZED_BARS));
                     systemRef.get().setDeionizationTicks(editorPanel.parseInt(DEIONIZATION_TICKS));
                 } catch (NumberFormatException e) {
+                    log.debug("failed to parse int", e);
+                    frame.setStatusText(WARN_INVALID_INPUTS);
                 }
 
                 if (SystemType.WEAPONS.equals(systemRef.get().getSystemType())) {
@@ -3194,7 +3219,7 @@ public class SavedGameFloorplanPanel extends JPanel {
             noticeBuf.append("and power is always as full as possible.\n\n");
         }
         if (SystemType.SHIELDS.equals(systemRef.get().getSystemType())) {
-            noticeBuf.append("* Partialy powered shields will steal an extra bar upon loading, ");
+            noticeBuf.append("* Partially powered shields will steal an extra bar upon loading, ");
             noticeBuf.append("from another system if need be.\n\n");
         } else if (SystemType.WEAPONS.equals(systemRef.get().getSystemType())) {
             noticeBuf.append("* Power can't be directly changed for the Weapons system. ");
@@ -3207,7 +3232,7 @@ public class SavedGameFloorplanPanel extends JPanel {
             noticeBuf.append("If capacity/damage reduce power, ");
             noticeBuf.append("things will get disarmed.\n\n");
         }
-        noticeBuf.append("* Ion -1: in Cloaking initates cloak; ");
+        noticeBuf.append("* Ion -1: in Cloaking initiates cloak; ");
         noticeBuf.append("in Teleporter might not be useful; ");
         noticeBuf.append("elsewhere sets a locked appearance indefinitely ");
         noticeBuf.append("until hit with an ion weapon.\n");
@@ -3312,7 +3337,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.addRow(WALKING_THROUGH, FieldEditorPanel.ContentType.BOOLEAN);
         editorPanel.getBoolean(WALKING_THROUGH).addMouseListener(new StatusbarMouseListener(frame, "Momentarily open as someone walks through."));
         editorPanel.addRow(MAX_HEALTH, FieldEditorPanel.ContentType.INTEGER);
-        editorPanel.getInt(MAX_HEALTH).addMouseListener(new StatusbarMouseListener(frame, "Nominal Health, plus situatinal modifiers like hacking?"));
+        editorPanel.getInt(MAX_HEALTH).addMouseListener(new StatusbarMouseListener(frame, "Nominal Health, plus situational modifiers like hacking?"));
         editorPanel.addRow(HEALTH, FieldEditorPanel.ContentType.INTEGER);
         editorPanel.addRow(NOMINAL_HEALTH, FieldEditorPanel.ContentType.INTEGER);
         editorPanel.getInt(NOMINAL_HEALTH).addMouseListener(new StatusbarMouseListener(frame, "Default to reset Health to... sometime after combat?"));
@@ -3337,27 +3362,13 @@ public class SavedGameFloorplanPanel extends JPanel {
 
                 try {
                     doorRef.get().setCurrentMaxHealth(editorPanel.parseInt(MAX_HEALTH));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     doorRef.get().setHealth(editorPanel.parseInt(HEALTH));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     doorRef.get().setNominalHealth(editorPanel.parseInt(NOMINAL_HEALTH));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     doorRef.get().setUnknownDelta(editorPanel.parseInt(DELTA));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     doorRef.get().setUnknownEpsilon(editorPanel.parseInt(EPSILON));
                 } catch (NumberFormatException e) {
+                    log.debug("failed to parse int", e);
+                    frame.setStatusText(WARN_INVALID_INPUTS);
                 }
 
                 doorRef.fireReferenceChange();
@@ -3563,8 +3574,8 @@ public class SavedGameFloorplanPanel extends JPanel {
                     int weaponInterval = ftlConstants.getMasteryIntervalWeapon(crewType);
                     int repairInterval = ftlConstants.getMasteryIntervalRepair(crewType);
                     int combatInterval = ftlConstants.getMasteryIntervalCombat(crewType);
-
-                    healthField.setText("" + crewType.getMaxHealth());
+                    int health = crewType == null ? CrewType.HUMAN.getMaxHealth() : crewType.getMaxHealth();
+                    healthField.setText("" + health);
 
                     editorPanel.getSlider(PILOT_SKILL).setMaximum(pilotInterval * 2);
                     editorPanel.getSlider(ENGINE_SKILL).setMaximum(engineInterval * 2);
