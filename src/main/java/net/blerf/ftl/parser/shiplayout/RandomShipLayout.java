@@ -10,6 +10,8 @@ import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
 import net.blerf.ftl.parser.DataManager;
 import net.blerf.ftl.parser.random.RandRNG;
 
+import static net.blerf.ftl.ui.UIConstants.SQUARE_SIZE;
+
 /**
  * A generator of ship layout.
  *
@@ -76,8 +78,8 @@ public class RandomShipLayout {
             square.y = square.roomY + squareId / square.roomW;
 
             /* Translate to game coordinates */
-            square.x = square.x * 35 + 17;
-            square.y = square.y * 35 + 87;
+            square.x = square.x * SQUARE_SIZE + 17;
+            square.y = square.y * SQUARE_SIZE + 87;
 
             log.debug("Room {} has coords {} - {}", square.roomId, square.x, square.y);
         }

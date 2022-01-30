@@ -15,6 +15,8 @@ import net.blerf.ftl.model.shiplayout.ShipLayout;
 import net.blerf.ftl.model.shiplayout.ShipLayoutDoor;
 import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
 
+import static net.blerf.ftl.ui.UIConstants.SQUARE_SIZE;
+
 
 /**
  * A ship's floor cracks, decor, and walls.
@@ -24,7 +26,7 @@ import net.blerf.ftl.model.shiplayout.ShipLayoutRoom;
  */
 public class ShipInteriorComponent extends JComponent {
 
-    private static final int squareSize = 35;
+    private static final int squareSize = SQUARE_SIZE;
     private static final int jambLength = 5;
     private static final int margin = 4;  // Claim to be a little bigger to avoid clipping thick walls.
 

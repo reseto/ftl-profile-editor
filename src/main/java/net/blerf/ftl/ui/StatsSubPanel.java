@@ -27,6 +27,8 @@ import net.blerf.ftl.constants.FTLConstants;
 import net.blerf.ftl.model.type.CrewType;
 import net.blerf.ftl.parser.DataManager;
 
+import static net.blerf.ftl.ui.UIConstants.SQUARE_SIZE;
+
 @Slf4j
 public class StatsSubPanel extends JPanel implements ActionListener {
 
@@ -173,7 +175,8 @@ public class StatsSubPanel extends JPanel implements ActionListener {
         if (imgRace == null || imgRace.length() == 0) return null;
 
         ImageIcon result = null;
-        int offsetX = 0, offsetY = 0, w = 35, h = 35;
+        int offsetX = 0;
+        int offsetY = 0;
         String innerPath = null;
 
         String[] candidatePaths = new String[2];
@@ -189,22 +192,13 @@ public class StatsSubPanel extends JPanel implements ActionListener {
             return null;
         }
 
-        InputStream in = null;
-        try {
-            in = DataManager.get().getResourceInputStream(innerPath);
+        try (InputStream in = DataManager.get().getResourceInputStream(innerPath)) {
             BufferedImage bigImage = ImageIO.read(in);
-            BufferedImage croppedImage = bigImage.getSubimage(offsetX, offsetY, w, h);
+            BufferedImage croppedImage = bigImage.getSubimage(offsetX, offsetY, SQUARE_SIZE, SQUARE_SIZE);
 
             result = new ImageIcon(ImageUtilities.getTrimmedImage(croppedImage, null));
-        } catch (RasterFormatException e) {
+        } catch (RasterFormatException | IOException e) {
             log.error(String.format("Failed to load and trim crew icon (%s)", imgRace), e);
-        } catch (IOException e) {
-            log.error(String.format("Failed to load and trim crew icon (%s)", imgRace), e);
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException e) {
-            }
         }
         return result;
     }

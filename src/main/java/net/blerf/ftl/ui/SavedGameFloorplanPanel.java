@@ -106,6 +106,8 @@ import net.blerf.ftl.xml.ship.ShipChassis;
 import net.blerf.ftl.xml.ship.SystemRoom;
 import net.blerf.ftl.xml.ship.WeaponMount;
 
+import static net.blerf.ftl.ui.UIConstants.SQUARE_SIZE;
+
 @Slf4j
 public class SavedGameFloorplanPanel extends JPanel {
 
@@ -130,8 +132,10 @@ public class SavedGameFloorplanPanel extends JPanel {
     private static final int NEARBY_CENTER_X = 1075;
     private static final int NEARBY_CENTER_Y = 322;
 
-    private static final int squareSize = 35;
+    private static final int squareSize = SQUARE_SIZE; // todo replace everywhere in separate commit
     private static final int tileEdge = 1;
+
+    private static final String WARN_INVALID_INPUTS = "ERROR: Could not parse all values, please provide valid number inputs!";
 
     private final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private final GraphicsDevice gs = ge.getDefaultScreenDevice();
@@ -140,12 +144,12 @@ public class SavedGameFloorplanPanel extends JPanel {
     private final FTLFrame frame;
 
     private FTLConstants ftlConstants = new OriginalFTLConstants();
-    private final List<ShipBundle> shipBundles = new ArrayList(2);
+    private final List<ShipBundle> shipBundles = new ArrayList<>(2);
     private ShipBundle playerBundle = null;
     private ShipBundle nearbyBundle = null;
 
     private final DefaultSpriteImageProvider spriteImageProvider = new DefaultSpriteImageProvider();
-    private final Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<String, Map<Rectangle, BufferedImage>>();
+    private final Map<String, Map<Rectangle, BufferedImage>> cachedImages = new HashMap<>();
 
     private JLayeredPane shipPanel = null;
     private StatusViewport shipViewport = null;
@@ -937,7 +941,7 @@ public class SavedGameFloorplanPanel extends JPanel {
             int doorX = shipBundle.getLayoutX() + doorCoord.x * squareSize + (doorCoord.v == 1 ? 0 : squareSize / 2);
             int doorY = shipBundle.getLayoutY() + doorCoord.y * squareSize + (doorCoord.v == 1 ? squareSize / 2 : 0);
 
-            SpriteReference<DoorState> doorRef = new SpriteReference<DoorState>(new DoorState(doorState));
+            SpriteReference<DoorState> doorRef = new SpriteReference<>(new DoorState(doorState));
             shipBundle.getDoorRefs().add(doorRef);
 
             addDoorSprite(shipBundle, doorRef, doorX, doorY, doorLevel, doorCoord);
@@ -952,8 +956,10 @@ public class SavedGameFloorplanPanel extends JPanel {
             SpriteReference<CrewState> crewRef = new SpriteReference<CrewState>(new CrewState(crewState));
             shipBundle.getCrewRefs().add(crewRef);
 
-            int crewX = 0, crewY = 0;
-            int goalX = 0, goalY = 0;
+            int crewX = 0;
+            int crewY = 0;
+            int goalX = 0;
+            int goalY = 0;
 
             if (crewState.getRoomId() != -1) {
                 crewX = shipBundle.getOriginX() + crewState.getSpriteX();
@@ -1071,7 +1077,7 @@ public class SavedGameFloorplanPanel extends JPanel {
                         }
 
                         BoarderDronePodInfo boarderPodInfo = dronePod.getExtendedInfo(BoarderDronePodInfo.class);
-                        if (dronePod == null) {
+                        if (boarderPodInfo == null) {
                             log.warn("Boarder drone has extended info and a pod but lacks extended pod info!?");
                             continue;
                         }
@@ -2228,30 +2234,16 @@ public class SavedGameFloorplanPanel extends JPanel {
 
                 try {
                     shipBundle.setFuelAmt(editorPanel.parseInt(FUEL));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     shipBundle.setDronePartsAmt(editorPanel.parseInt(DRONE_PARTS));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     shipBundle.setMissilesAmt(editorPanel.parseInt(MISSILES));
-                } catch (NumberFormatException e) {
-                }
-
-                try {
                     shipBundle.setScrapAmt(editorPanel.parseInt(SCRAP));
+                    shipBundle.setJumpChargeTicks(editorPanel.parseInt(JUMP_CHARGE_TICKS));
                 } catch (NumberFormatException e) {
+                    log.debug("failed to parse int", e);
+                    frame.setStatusText(WARN_INVALID_INPUTS);
                 }
 
                 shipBundle.setHostile(editorPanel.getBoolean(HOSTILE).isSelected());
-
-                try {
-                    shipBundle.setJumpChargeTicks(editorPanel.parseInt(JUMP_CHARGE_TICKS));
-                } catch (NumberFormatException e) {
-                }
 
                 shipBundle.setJumping(editorPanel.getBoolean(JUMPING).isSelected());
 
@@ -2323,9 +2315,10 @@ public class SavedGameFloorplanPanel extends JPanel {
                     if (source == augCombo) {
                         Object augObj = augCombo.getSelectedItem();
                         if (augObj instanceof AugBlueprint) {
-                            editorPanel.getWrappedLabel(DESC).setText(((AugBlueprint) augObj).getDescription().getTextValue());
+                            AugBlueprint blueprint = (AugBlueprint) augObj;
+                            editorPanel.getWrappedLabel(DESC).setText(blueprint.getDescription().getTextValue());
 
-                            if (((AugBlueprint) augObj).isStackable() == false) {
+                            if (!blueprint.isStackable()) {
                                 // Clear other slots' copies of this unique augment.
                                 for (int j = 0; j < augSlots.length; j++) {
                                     if (j == i) continue;

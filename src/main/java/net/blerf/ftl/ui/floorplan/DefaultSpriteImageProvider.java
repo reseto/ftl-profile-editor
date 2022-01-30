@@ -28,13 +28,15 @@ import net.blerf.ftl.ui.ImageUtilities.Tint;
 import net.blerf.ftl.xml.Anim;
 import net.blerf.ftl.xml.AnimSheet;
 
+import static net.blerf.ftl.ui.UIConstants.SQUARE_SIZE;
+
 @Slf4j
 public class DefaultSpriteImageProvider implements SpriteImageProvider {
 
     private static final String BREACH_ANIM = "breach";
     private static final String FIRE_ANIM = "fire_large";
 
-    private static final int squareSize = 35;
+    private static final int squareSize = SQUARE_SIZE;
 
     private final Color dummyColor = new Color(150, 150, 200);
 
@@ -213,20 +215,21 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
             throw new IllegalArgumentException("Requested a body for a DroneType that doesn't need one: " + droneType.getId());
         }
 
-        int offsetX = 0, offsetY = 0, w = 35, h = 35;
+        int offsetX = 0;
+        int offsetY = 0;
         String basePath = "img/people/" + imgRace + "_base.png";
         String originalPath = "img/people/" + imgRace + originalSuffix + ".png";
 
         if (DataManager.get().hasResourceInputStream(basePath)) {
             // FTL 1.5.4+
-            result = ImageUtilities.getCroppedImage(basePath, offsetX, offsetY, w, h, cachedImagesMap);
+            result = ImageUtilities.getCroppedImage(basePath, offsetX, offsetY, SQUARE_SIZE, SQUARE_SIZE, cachedImagesMap);
         } else if (DataManager.get().hasResourceInputStream(originalPath)) {
             // FTL 1.01-1.03.3
-            result = ImageUtilities.getCroppedImage(originalPath, offsetX, offsetY, w, h, cachedImagesMap);
+            result = ImageUtilities.getCroppedImage(originalPath, offsetX, offsetY, SQUARE_SIZE, SQUARE_SIZE, cachedImagesMap);
         } else {
             log.error("No body image found for drone: {}, {}", droneType.getId(), (playerControlled ? "playerControlled" : "NPC"));
 
-            result = gc.createCompatibleImage(w, h, Transparency.OPAQUE);
+            result = gc.createCompatibleImage(SQUARE_SIZE, SQUARE_SIZE, Transparency.OPAQUE);
             Graphics2D g2d = result.createGraphics();
             g2d.setColor(dummyColor);
             g2d.fillRect(0, 0, result.getWidth() - 1, result.getHeight() - 1);
@@ -482,19 +485,15 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
      * The result will NOT be cached.
      */
     public BufferedImage readResourceImage(String innerPath) throws IOException {
-        InputStream in = null;
-        try {
-            in = DataManager.get().getResourceInputStream(innerPath);
+        try (InputStream in = DataManager.get().getResourceInputStream(innerPath)) {
             BufferedImage result = ImageIO.read(in);
 
-            if (result == null) throw new IOException("ImageIO did not recognize the file type");
+            if (result == null) {
+                log.warn("Image with path {} may have unexpected format", innerPath);
+                throw new IOException("ImageIO did not recognize the file type");
+            }
 
             return result;
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException e) {
-            }
         }
     }
 
@@ -548,9 +547,7 @@ public class DefaultSpriteImageProvider implements SpriteImageProvider {
         if (sheetImage == null) {
             frameW = 1;  // Future-proof against divide-by-zero errors.
             frameH = 1;  // But sheet pixels must be greater than requested rows/cols.
-            int dummyW = 35;
-            int dummyH = 35;
-            sheetImage = createDummyImage(dummyW, dummyH);
+            sheetImage = createDummyImage(SQUARE_SIZE, SQUARE_SIZE);
         }
 
         AnimAtlas animAtlas;

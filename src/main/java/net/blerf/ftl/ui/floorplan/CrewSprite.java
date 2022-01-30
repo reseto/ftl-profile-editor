@@ -9,11 +9,11 @@ import net.blerf.ftl.model.state.CrewState;
 import net.blerf.ftl.ui.ReferenceSprite;
 import net.blerf.ftl.ui.SpriteReference;
 
+import static net.blerf.ftl.ui.UIConstants.SQUARE_SIZE;
+
 
 public class CrewSprite extends JComponent implements ReferenceSprite<CrewState> {
 
-    private final int w = 35;
-    private final int h = 35;
     private BufferedImage crewImage = null;
 
     private final SpriteReference<CrewState> crewRef;
@@ -24,7 +24,7 @@ public class CrewSprite extends JComponent implements ReferenceSprite<CrewState>
         this.crewRef = crewRef;
         this.spriteImageProvider = spriteImageProvider;
 
-        this.setPreferredSize(new Dimension(w, h));
+        this.setPreferredSize(new Dimension(SQUARE_SIZE, SQUARE_SIZE));
         this.setOpaque(false);
 
         crewRef.addSprite(this);
