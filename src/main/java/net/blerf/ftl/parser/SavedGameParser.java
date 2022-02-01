@@ -827,6 +827,9 @@ public class SavedGameParser extends Parser {
             SystemState cloakingState = shipState.getSystem(SystemType.CLOAKING);
             if (cloakingState != null && cloakingState.getCapacity() > 0) {
                 CloakingInfo cloakingInfo = shipState.getExtendedSystemInfo(CloakingInfo.class);
+                if (cloakingInfo == null) {
+                    cloakingInfo = new CloakingInfo();
+                }
                 // This should not be null.
                 writeInt(out, cloakingInfo.getUnknownAlpha());
                 writeInt(out, cloakingInfo.getUnknownBeta());
@@ -2521,6 +2524,9 @@ public class SavedGameParser extends Parser {
     }
 
     public void writeWeaponModule(OutputStream out, WeaponModuleState weaponMod, int fileFormat) throws IOException {
+        if (weaponMod == null) {
+            weaponMod = new WeaponModuleState();
+        }
         writeInt(out, weaponMod.getCooldownTicks());
         writeInt(out, weaponMod.getCooldownTicksGoal());
         writeInt(out, weaponMod.getSubcooldownTicks());

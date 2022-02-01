@@ -137,6 +137,7 @@ public class SavedGameFloorplanPanel extends JPanel {
     private static final int tileEdge = 1;
 
     private static final String WARN_INVALID_INPUTS = "ERROR: Could not parse all values, please provide valid number inputs!";
+    public static final String FAILED_TO_PARSE_INT = "failed to parse int";
 
     private final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private final GraphicsDevice gs = ge.getDefaultScreenDevice();
@@ -2185,6 +2186,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         final String DRONE_PARTS = "Drone Parts";
         final String MISSILES = "Missiles";
         final String SCRAP = "Scrap";
+        final String TOTAL_POWER = "Power Capacity";
         final String HOSTILE = "Hostile";
         final String JUMP_CHARGE_TICKS = "Jump Charge Ticks";
         final String JUMPING = "Jumping";
@@ -2201,6 +2203,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.addRow(DRONE_PARTS, FieldEditorPanel.ContentType.INTEGER);
         editorPanel.addRow(MISSILES, FieldEditorPanel.ContentType.INTEGER);
         editorPanel.addRow(SCRAP, FieldEditorPanel.ContentType.INTEGER);
+        editorPanel.addRow(TOTAL_POWER, FieldEditorPanel.ContentType.SLIDER);
         editorPanel.addBlankRow();
         editorPanel.addRow(HOSTILE, FieldEditorPanel.ContentType.BOOLEAN);
         editorPanel.addBlankRow();
@@ -2219,12 +2222,16 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.getInt(DRONE_PARTS).setText("" + shipBundle.getDronePartsAmt());
         editorPanel.getInt(MISSILES).setText("" + shipBundle.getMissilesAmt());
         editorPanel.getInt(SCRAP).setText("" + shipBundle.getScrapAmt());
+        editorPanel.getSlider(TOTAL_POWER).setMinimum(shipBundle.getShipBlueprint().getMaxPower().amount);
+        editorPanel.getSlider(TOTAL_POWER).setMaximum(ftlConstants.getMaxReservePoolCapacity() * 2);
+        editorPanel.getSlider(TOTAL_POWER).setValue(shipBundle.getReservePowerCapacity());
         editorPanel.getBoolean(HOSTILE).setSelected(shipBundle.isHostile());
         editorPanel.getInt(JUMP_CHARGE_TICKS).setText("" + shipBundle.getJumpChargeTicks());
         editorPanel.getBoolean(JUMPING).setSelected(shipBundle.isJumping());
         editorPanel.getSlider(JUMP_ANIM_TICKS).setValue(shipBundle.getJumpAnimTicks());
         editorPanel.getSlider(CLOAK_ANIM_TICKS).setValue(shipBundle.getCloakAnimTicks());
 
+        editorPanel.getSlider(TOTAL_POWER).addMouseListener(new StatusbarMouseListener(frame, "Total Power bars capacity (can go over 25 allowed in game)."));
         editorPanel.getBoolean(HOSTILE).addMouseListener(new StatusbarMouseListener(frame, "Toggle hostile/neutral status (No effect on player ships)."));
         editorPanel.getInt(JUMP_CHARGE_TICKS).addMouseListener(new StatusbarMouseListener(frame, "Time elapsed waiting for the FTL to charge (Counts to 85000)."));
         editorPanel.getBoolean(JUMPING).addMouseListener(new StatusbarMouseListener(frame, "Toggle whether the ship is jumping away (No effect on player ships)."));
@@ -2247,9 +2254,10 @@ public class SavedGameFloorplanPanel extends JPanel {
                     shipBundle.setScrapAmt(editorPanel.parseInt(SCRAP));
                     shipBundle.setJumpChargeTicks(editorPanel.parseInt(JUMP_CHARGE_TICKS));
                 } catch (NumberFormatException e) {
-                    log.debug("failed to parse int", e);
+                    log.debug(FAILED_TO_PARSE_INT, e);
                     frame.setStatusText(WARN_INVALID_INPUTS);
                 }
+                shipBundle.setReservePowerCapacity(editorPanel.getSlider(TOTAL_POWER).getValue());
 
                 shipBundle.setHostile(editorPanel.getBoolean(HOSTILE).isSelected());
 
@@ -2372,8 +2380,6 @@ public class SavedGameFloorplanPanel extends JPanel {
         }
 
         DroneBoxSprite droneBoxSprite = droneRef.getSprite(DroneBoxSprite.class);
-        int droneSystemCapacity = droneSystemRef.get().getCapacity();
-        int droneSystemDamage = droneSystemRef.get().getDamagedBars();
         final int excludedReservePool = shipBundle.getReservePool(droneSystemRef);
         final int excludedBatteryPool = shipBundle.getBatteryPool(droneSystemRef);
         final int zoltanBars = shipBundle.getRoomZoltanEnergy(shipBundle.getSpriteRoomId(droneBoxSprite));
@@ -2970,7 +2976,7 @@ public class SavedGameFloorplanPanel extends JPanel {
         editorPanel.getInt(DEIONIZATION_TICKS).setDocument(new RegexDocument());
         editorPanel.getInt(DEIONIZATION_TICKS).addMouseListener(new StatusbarMouseListener(frame, "Time elapsed deionizing a bar: 0-5000 (Resets upon loading, weird values sometimes, -2147...=N/A, 0 is safe)."));
 
-        editorPanel.getSlider(RESERVE_CAPACITY).setMaximum(ftlConstants.getMaxReservePoolCapacity());
+        editorPanel.getSlider(RESERVE_CAPACITY).setMaximum(ftlConstants.getMaxReservePoolCapacity() * 2);
         editorPanel.getSlider(RESERVE_CAPACITY).setMinimum(ftlConstants.getMaxReservePoolCapacity() - excludedReservePool);  // otherSystemsPower
         editorPanel.getSlider(RESERVE_CAPACITY).setValue(shipBundle.getReservePowerCapacity());
         editorPanel.getSlider(RESERVE_POWER).setMaximum(shipBundle.getReservePowerCapacity());

@@ -20,6 +20,7 @@ public class AugBlueprint {
     private String id;
 
     private DefaultDeferredText title;
+    @XmlElement(name = "desc")
     private DefaultDeferredText description;
 
     @XmlElement(name = "bp")

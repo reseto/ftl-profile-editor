@@ -153,7 +153,7 @@ public class ShipBundle {
         Rectangle roomRect = null;
 
         for (Map.Entry<Rectangle, Integer> regionEntry : roomRegionRoomIdMap.entrySet()) {
-            if (regionEntry.getValue().intValue() == roomId) {
+            if (roomId == regionEntry.getValue()) {
                 roomRect = regionEntry.getKey();
                 break;
             }
